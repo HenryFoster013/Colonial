@@ -41,7 +41,7 @@ public class Troop : MonoBehaviour{
         faction = fac;
         
         transform.eulerAngles = new Vector3(0f, 90f, 0f);
-        used_move = true;
+        used_move = false;
         used_special = true;
 
         SetupMaterial();

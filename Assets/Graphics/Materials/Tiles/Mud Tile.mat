@@ -2,14 +2,15 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Mud Tile
   m_Shader: {fileID: -6465566751694194690, guid: 17dd28b36032de24bb59bbf40bf23410, type: 3}
-  m_ShaderKeywords: 
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -75,10 +76,11 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - Vector1_29f2f9f13d0c49c19084026e51a9d26c: 32
-    - Vector1_3afcca00c2624d6aaf4676abf3ac9c09: 0.46
-    - Vector1_635140bdfcce40dca75a6e83de0b067b: -0.73
+    - Vector1_3afcca00c2624d6aaf4676abf3ac9c09: -1.27
+    - Vector1_635140bdfcce40dca75a6e83de0b067b: 2
     - Vector1_a12252eaf1b44cc0ba74ce0ce7fa881e: 1
     - _AlphaClip: 0
     - _Blend: 0
@@ -97,6 +99,8 @@ Material:
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
+    - _Power: 2
+    - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Smoothness: 0.5
@@ -109,7 +113,7 @@ Material:
     m_Colors:
     - Tile: {r: 0.5, g: 0.5, b: 0, a: 0}
     - Vector2_b2349a1d28084e04af85a0bf6793d8d3: {r: 0, g: 0, b: 0, a: 0}
-    - _BaseColor: {r: 0.3207547, g: 0.2592263, b: 0.22846209, a: 1}
+    - _BaseColor: {r: 0.1981132, g: 0.16634034, b: 0.1504539, a: 1}
     - _Color: {r: 0.0740289, g: 0.8207547, b: 0, a: 1}
     - _Darkest_Colour: {r: 0.5, g: 0.32861638, b: 0.24292454, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
@@ -127,4 +131,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 4
+  version: 5

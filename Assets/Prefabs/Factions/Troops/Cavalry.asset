@@ -17,5 +17,5 @@ MonoBehaviour:
   _Cost: 3
   _MoveDistance: 3
   _AttackDistance: 1
-  _Vision: 2
+  _Vision: 10
   _Prefab: {fileID: 5269036604996546843, guid: c0ccc9b8ceb31d14696e66cd892c9021, type: 3}

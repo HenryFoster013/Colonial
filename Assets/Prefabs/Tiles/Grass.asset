@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Type: Grass
   _Name: Plains
-  _TabColour: {r: 0.45223403, g: 0.78, b: 0.5767021, a: 1}
-  _TextColour: {r: 0.18039216, g: 0.37254903, b: 0.2509804, a: 1}
+  _TabColour: {r: 0.64705884, g: 0.4039216, b: 0.20784315, a: 1}
+  _TextColour: {r: 0.6, g: 0.34117648, b: 0.13333334, a: 1}
   _Prefab: {fileID: 6122221097300164211, guid: 7314feadd3c91814995bbabaf5d50449, type: 3}
   _Walkable: 1

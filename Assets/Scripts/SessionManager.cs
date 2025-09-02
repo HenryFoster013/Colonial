@@ -78,6 +78,8 @@ public class SessionManager : MonoBehaviour
     // Local Communication //
 
     public Troop SpawnLocalTroop(TroopData troop_data, int tile){
+        print(tile);
+
         if(!_MapManager.CheckTileOwnership(tile, LocalPlayerFaction()))
             return null;
 

@@ -2,14 +2,15 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Outline
-  m_Shader: {fileID: -6465566751694194690, guid: 204436701296c0f4894efec31dd707ef, type: 3}
-  m_ShaderKeywords: 
+  m_Name: Grass Tile (Orange)
+  m_Shader: {fileID: -6465566751694194690, guid: 17dd28b36032de24bb59bbf40bf23410, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -44,7 +45,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 254eed7f18f53aa47a0de38af0b27a7a, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -75,10 +76,12 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
-    - Vector1_5f48e2113dd04d13a4012f0104b4c4df: 0.03
-    - Vector1_a12252eaf1b44cc0ba74ce0ce7fa881e: 0.5
-    - Vector1_e422ea0cdf2348e8b5bad53e492dd115: 0.001
+    - Vector1_29f2f9f13d0c49c19084026e51a9d26c: 32
+    - Vector1_3afcca00c2624d6aaf4676abf3ac9c09: -0.61
+    - Vector1_635140bdfcce40dca75a6e83de0b067b: 2
+    - Vector1_a12252eaf1b44cc0ba74ce0ce7fa881e: 1
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -90,13 +93,14 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EnvironmentReflections: 1
-    - _GlossMapScale: 1
+    - _GlossMapScale: 0
     - _Glossiness: 0
-    - _GlossyReflections: 1
+    - _GlossyReflections: 0
     - _Metallic: 0
-    - _Mode: 0
     - _OcclusionStrength: 1
-    - _Parallax: 0.02
+    - _Parallax: 0.005
+    - _Power: 1.5
+    - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Smoothness: 0.5
@@ -104,22 +108,18 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Surface: 0
-    - _UVSec: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_f6a3872952d047f8889311f843fe86e1: {r: 1, g: 0.93875563, b: 0.7216981, a: 1}
-    - Tile: {r: 1, g: 1, b: 0, a: 0}
-    - Vector2_97965dc31aac462f84f5822466811507: {r: 1, g: 1, b: 1, a: 1}
-    - Vector2_b9e2611989824b2196b18aea0072a614: {r: 0, g: 0, b: 0, a: 0}
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
+    - Tile: {r: 5.18, g: 18.61, b: 0, a: 0}
+    - Vector2_b2349a1d28084e04af85a0bf6793d8d3: {r: 0, g: 0, b: 0, a: 0}
+    - _BaseColor: {r: 0.81960785, g: 0.6272151, b: 0.40000004, a: 1}
+    - _Color: {r: 0.0740289, g: 0.8207547, b: 0, a: 1}
+    - _Darkest_Colour: {r: 0.5849056, g: 0.30597433, b: 0.08552865, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - offy: {r: 0, g: 0, b: 0, a: 0}
-    - tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &4612104596589816930
+--- !u!114 &1583911685546243552
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,4 +131,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 4
+  version: 5
