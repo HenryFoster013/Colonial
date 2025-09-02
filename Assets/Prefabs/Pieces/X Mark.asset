@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27076cdd8188395419b12c7eae2156a5, type: 3}
+  m_Name: X Mark
+  m_EditorClassIdentifier: 
+  _Type: X Mark
+  _Name: Buried Treasure
+  _Prefab: {fileID: 6122221097300164211, guid: cbb0f7c38048de94f96301a0fc59d8dd, type: 3}
+  _TroopOffset: 0
+  _RandomiseRotation: 1
+  _Walkable: 1

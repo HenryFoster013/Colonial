@@ -1,0 +1,37 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "New Piece Lookup", menuName = "Custom/Pieces/Lookup")]
+public class PieceLookup : ScriptableObject
+{
+    [SerializeField] PieceData[] Pieces;
+
+    public PieceData Piece(int i){
+        return Pieces[i];
+    }   
+
+    public int ID(string name){
+        int return_val = 0;
+        bool done = false;
+        for(int i = 0; i < Pieces.Length && !done; i++){
+            if(Pieces[i].CheckType(name)){
+                done = true;
+                return_val = i;
+            }
+        }
+        return return_val;
+    }
+
+    public int ID(PieceData reference){
+        int return_val = 0;
+        bool done = false;
+        for(int i = 0; i < Pieces.Length && !done; i++){
+            if(Pieces[i] == reference){
+                done = true;
+                return_val = i;
+            }
+        }
+        return return_val;
+    }
+}

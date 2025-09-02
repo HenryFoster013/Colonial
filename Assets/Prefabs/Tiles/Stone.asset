@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2baabb38b26e484e99be2d37298df16, type: 3}
+  m_Name: Stone
+  m_EditorClassIdentifier: 
+  _Type: Stone
+  _Name: Cliffs
+  _TabColour: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 1}
+  _TextColour: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 1}
+  _Prefab: {fileID: 6122221097300164211, guid: dccc9ec191f2efe45bf38d8029301660, type: 3}
+  _Walkable: 1

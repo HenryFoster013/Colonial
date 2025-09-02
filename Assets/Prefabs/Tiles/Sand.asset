@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2baabb38b26e484e99be2d37298df16, type: 3}
+  m_Name: Sand
+  m_EditorClassIdentifier: 
+  _Type: Sand
+  _Name: Beach
+  _TabColour: {r: 0.70980394, g: 0.63158065, b: 0.5181569, a: 1}
+  _TextColour: {r: 0.291, g: 0.24862137, b: 0.19494176, a: 1}
+  _Prefab: {fileID: 6122221097300164211, guid: eda93755a7e0bc141923b468a21c8a9a, type: 3}
+  _Walkable: 1
