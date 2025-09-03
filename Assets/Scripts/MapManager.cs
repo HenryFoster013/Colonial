@@ -40,6 +40,9 @@ public class MapManager : MonoBehaviour
     [SerializeField] Material BorderMaterial;
     [SerializeField] GameObject[] BorderPrefabs;
 
+    bool ready = false;
+    public bool Ready(){return ready;}
+
     float GrassLimit = -0.4f;
     float StoneLimit = 0.5f;
     bool generated_bg;
@@ -224,7 +227,7 @@ public class MapManager : MonoBehaviour
     // MAP ANIMATION //
 
     void AnimateMap(){
-        if(!AnimatedWater)
+        if(!AnimatedWater || !ready)
             return;
         
         for(int i = 0; i < water_transforms.Length; i++){
@@ -347,6 +350,8 @@ public class MapManager : MonoBehaviour
 
         st.Stop();
         Debug.Log(string.Format("New map generated in {0} ms", st.ElapsedMilliseconds));
+
+        ready = true;
     }
 
     void SetupPlayerBorders(){

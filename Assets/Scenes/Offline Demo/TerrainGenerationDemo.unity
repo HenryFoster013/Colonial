@@ -129,6 +129,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 191067346449507553, guid: e28c51e9daa3da14380daa6ecafec442, type: 3}
+      propertyPath: SortKey
+      value: 1805241140
+      objectReference: {fileID: 0}
     - target: {fileID: 2059460241265114268, guid: e28c51e9daa3da14380daa6ecafec442, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -209,6 +213,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 191067346449507553, guid: e28c51e9daa3da14380daa6ecafec442, type: 3}
+      propertyPath: SortKey
+      value: 2031463720
+      objectReference: {fileID: 0}
     - target: {fileID: 2059460241265114268, guid: e28c51e9daa3da14380daa6ecafec442, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -333,6 +341,10 @@ PrefabInstance:
       propertyPath: OurInstance
       value: 
       objectReference: {fileID: 2058492340}
+    - target: {fileID: 8244973812198184787, guid: 210b32b6a1f7e4540abcf23665b6781a, type: 3}
+      propertyPath: _PlayerManager
+      value: 
+      objectReference: {fileID: 1715902575}
     - target: {fileID: 8244973812198184789, guid: 210b32b6a1f7e4540abcf23665b6781a, type: 3}
       propertyPath: m_Name
       value: '- LOCAL MANAGER -'

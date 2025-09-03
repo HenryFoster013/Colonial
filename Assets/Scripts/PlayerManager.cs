@@ -74,7 +74,7 @@ public class PlayerManager : MonoBehaviour
 
     // BASE //
 
-    void Start(){
+    public void Setup(){
         GeneralSetup();
         Deselect();
     }
@@ -129,7 +129,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     void WateryHighlights(){
-        if(!Map.AnimatedWater)
+        if(!Map.AnimatedWater || !Map.Ready())
             return;
 
         if(_TileLookup.Tile(Map.GetTileType(current_tile)).CheckType("WATER")){
