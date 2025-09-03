@@ -47,6 +47,8 @@ public class LobbyUI : MonoBehaviour
     // UI //
 
     void Start(){
+        _ConnectionManager._LobbyUI = this;
+        _ConnectionManager.ConnectToLobby();
         GeneralUISetup();
     }
 

@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Networking/Auto Matchmaking.unity
+    guid: 3385ca678115596449924f73bdb2a01e
+  - enabled: 1
     path: Assets/Scenes/Networking/Lobby Browser.unity
     guid: 0f2fc8d7a6998ce49ba778e0e9bab4e9
   - enabled: 1
