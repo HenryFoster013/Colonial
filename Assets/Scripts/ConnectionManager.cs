@@ -12,13 +12,11 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
     
     [Header("Main")]
     public NetworkPrefabRef PlayerInstancePrefab;
-    
-    [Header("Scene References")]
-    [SerializeField] int GameplaySceneIndex = 1;
-    [SerializeField] string DisconnectScene;
 
-    [Header("Interactions")]
-    public LobbyUI _LobbyUI;
+    const int GameplaySceneIndex = 2;
+    const string DisconnectScene = "Empty Menu";
+    [HideInInspector] public LobbyUI _LobbyUI;
+    [HideInInspector] public AutoMatchmake _AutoMatchmake;
     
     
     private NetworkRunner _runner;
@@ -26,15 +24,9 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
     bool connected_to_lobby;
     public bool ConnectedToLobby(){return connected_to_lobby;}
 
-    // UI //
-
-    void Start(){
-        ConnectToLobby();
-    }
-
     // Lobbies //
 
-    async void ConnectToLobby(){
+    public async void ConnectToLobby(){
         connected_to_lobby = false;
         _runner = gameObject.AddComponent<NetworkRunner>();
         _runner.ProvideInput = true;
@@ -130,6 +122,9 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList){ 
         if(_LobbyUI != null)
             _LobbyUI.OnSessionListUpdated(sessionList);
+
+        if(_AutoMatchmake != null)
+            _AutoMatchmake.GotSessions(sessionList);   
     }
 
     public void OnInput(NetworkRunner runner, NetworkInput input) { }
