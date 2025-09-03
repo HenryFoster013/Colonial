@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class SessionManager : MonoBehaviour
 {
-    [SerializeField] PlayerInstance OurInstance;
+    [Header("References")]
     [SerializeField] FactionLookup _FactionLookup;
     [SerializeField] MapManager _MapManager;
+    [SerializeField] PlayerManager _PlayerManager;
+    [Header("Player Instances")]
+    [SerializeField] PlayerInstance OurInstance;
     
     int current_turn = 0;
     int current_stars = 3;
@@ -17,22 +20,34 @@ public class SessionManager : MonoBehaviour
     const float texture_length_pixels = 16;
     MaterialPropertyBlock[] troop_skins;
 
-    // GAME SETUP //
+    // Lobby Setup //
 
     void Start(){
         SetupTroopMaterials();
-        StartGame();
+        LobbySetup();
     }
 
-    void StartGame(){
+    void LobbySetup(){
+        _PlayerManager.transform.parent.gameObject.SetActive(false);
+    }
+
+    // Game Setup //
+
+    public void StartGame(){
         DefaultValues();
         GetPlayers();
         MakeMap();
+        InitialisePlayer();
     }
 
     void DefaultValues(){
         current_stars = 3;
         current_turn = 1;
+    }
+
+    void InitialisePlayer(){
+        _PlayerManager.transform.parent.gameObject.SetActive(true);
+        _PlayerManager.Setup();
     }
 
     // Map Setup //
