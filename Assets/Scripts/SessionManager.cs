@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using Fusion.Sockets;
+using Fusion;
 
 public class SessionManager : MonoBehaviour
 {
@@ -10,28 +13,55 @@ public class SessionManager : MonoBehaviour
     [SerializeField] PlayerManager _PlayerManager;
     [Header("Player Instances")]
     [SerializeField] PlayerInstance OurInstance;
+    public PlayerInstance[] player_instances;
     
+    // 0 = Lobby
+    // 1 = Gameplay
+    // 2 = Postmatch
+    int game_state = 0;
+
+    bool game_host = true;
+    ConnectionManager _ConnectionManager;
+
     int current_turn = 0;
     int current_stars = 3;
     int stars_per_turn = 3;
-    bool local = true;
     
-    PlayerInstance[] player_instances;
     const float texture_length_pixels = 16;
     MaterialPropertyBlock[] troop_skins;
 
-    // Lobby Setup //
+    // BASE //
 
     void Start(){
         SetupTroopMaterials();
         LobbySetup();
     }
 
+    void Update(){
+        LobbyLogic();
+        CheckConnection();
+    }
+
+    void CheckConnection(){
+        if(_ConnectionManager == null)
+            SceneManager.LoadScene("Network Error");
+    }
+
+    // LOBBY GAMEPLAY //
+
+    void LobbyLogic(){
+        if(game_state != 0)
+            return;
+        
+        GetPlayers();
+    }
+
     void LobbySetup(){
+        _ConnectionManager = GameObject.FindGameObjectWithTag("Connection Manager").GetComponent<ConnectionManager>();
         _PlayerManager.transform.parent.gameObject.SetActive(false);
     }
 
-    // Game Setup //
+    // MAIN GAMEPLAY //
 
     public void StartGame(){
         DefaultValues();
@@ -55,7 +85,7 @@ public class SessionManager : MonoBehaviour
     void MakeMap(){
         _MapManager.SetSession(this);
 
-        if(local){ // Otherwise, will have to download the perline noise and piece data
+        if(game_host){ // Otherwise, will have to download the perline noise and piece data
             _MapManager.EstablishNoiseMap();
             _MapManager.EstablishOtherRandoms();
         }
@@ -68,8 +98,17 @@ public class SessionManager : MonoBehaviour
     void GetPlayers(){
         GameObject[] player_objects = GameObject.FindGameObjectsWithTag("Player");
         player_instances = new PlayerInstance[player_objects.Length];
+
         for(int i = 0; i < player_objects.Length; i++){
+
             player_instances[i] = player_objects[i].GetComponent<PlayerInstance>();
+            NetworkObject NO = player_instances[i].GetComponent<NetworkObject>();
+
+            player_instances[i].SetOwner(NO.InputAuthority);
+            player_instances[i].SetLocal(NO.HasInputAuthority);
+
+            if(NO.HasInputAuthority)
+                OurInstance = player_instances[i];
         }
     }
 

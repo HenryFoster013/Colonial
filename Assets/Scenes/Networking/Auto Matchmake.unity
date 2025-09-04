@@ -679,7 +679,7 @@ GameObject:
   - component: {fileID: 1687217439}
   m_Layer: 0
   m_Name: Connection Manager
-  m_TagString: Untagged
+  m_TagString: Connection Manager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -713,7 +713,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerInstancePrefab:
     RawGuidValue: e28c51e9daa3da14380daa6ecafec442
-  GameplaySceneIndex: 1
-  DisconnectScene: Empty Menu
   _LobbyUI: {fileID: 0}
   _AutoMatchmake: {fileID: 0}
