@@ -8,6 +8,7 @@ TagManager:
   - Tile
   - Troop
   - Hoverable
+  - Connection Manager
   layers:
   - Default
   - TransparentFX

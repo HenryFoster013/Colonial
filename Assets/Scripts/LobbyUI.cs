@@ -63,6 +63,15 @@ public class LobbyUI : MonoBehaviour
         EnterPasswordMenu.SetActive(false);
     }
 
+    void Update(){
+        CheckConnection();
+    }
+
+    void CheckConnection(){
+        if(_ConnectionManager == null)
+            SceneManager.LoadScene("Network Error");
+    }
+
     // Connection Interactions //
 
     public void JoinGame(string session_id, string password, string name){
@@ -178,7 +187,7 @@ public class LobbyUI : MonoBehaviour
 
     public void BackToTitle(){
         LoadingScreen();
-        _ConnectionManager.DisconnectFromLobby();
+        _ConnectionManager.DisconnectFromLobby("Title Screen");
     }
 
     // Random //

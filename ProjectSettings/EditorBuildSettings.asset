@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Menus/Immediate Setup.unity
     guid: fb54647e9b7fc7b488d9cd71c19760e2
   - enabled: 1
-    path: Assets/Scenes/Networking/Online Test.unity
+    path: Assets/Scenes/Networking/Online Gameplay.unity
     guid: fd7c84b5077dcb3478a7c6f78f378d21
   - enabled: 1
     path: Assets/Scenes/Menus/Account Creation.unity
@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Menus/Empty Menu.unity
     guid: 61ddf43164bad96489d6750237a99e6b
+  - enabled: 1
+    path: Assets/Scenes/Networking/Network Error.unity
+    guid: ae1e39aced0afea439fbde2aefe43ff0
   m_configObjects: {}

@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
-public class PlayerInstance : MonoBehaviour
-{
-    [SerializeField] int PlayerID;
+public class PlayerInstance : MonoBehaviour{
+    
     [SerializeField] Faction _Faction;
     [SerializeField] FactionLookup _FactionLookup;
 
-    public bool local_player;
-    public PlayerManager player_manager;
+    bool local_player;
+    PlayerManager player_manager;
+    PlayerRef Owner;
 
     public void SnapCameraToPosition(Vector3 position){
         if(local_player && player_manager != null){
@@ -17,5 +18,12 @@ public class PlayerInstance : MonoBehaviour
         }
     }
 
+    // Setters //
+    public void SetOwner(PlayerRef owner){Owner = owner;}
+    public void SetManager(PlayerManager manager){player_manager = manager;}
+    public void SetLocal(bool local){local_player = local;}
+
+    // Getters //
     public Faction FactionData(){return _Faction;}
+    public PlayerRef GetOwner(){return Owner;}
 }

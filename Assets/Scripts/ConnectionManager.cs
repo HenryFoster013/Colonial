@@ -14,7 +14,6 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
     public NetworkPrefabRef PlayerInstancePrefab;
 
     const int GameplaySceneIndex = 1;
-    const string DisconnectScene = "Title Screen";
     [HideInInspector] public LobbyUI _LobbyUI;
     [HideInInspector] public AutoMatchmake _AutoMatchmake;
     
@@ -35,9 +34,9 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
         RefreshLobbyConnection();
     }
 
-    public async void DisconnectFromLobby(){
+    public async void DisconnectFromLobby(string next_scene){
         await _runner.Shutdown();
-        SceneManager.LoadScene(DisconnectScene);
+        SceneManager.LoadScene(next_scene);
     }
 
     public async void RefreshLobbyConnection(){
@@ -125,13 +124,13 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
             _AutoMatchmake.GotSessions(sessionList);   
     }
 
+    public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason){}
+    public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason){}
     public void OnInput(NetworkRunner runner, NetworkInput input) { }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
     public void OnConnectedToServer(NetworkRunner runner) { }
-    public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason) { }
     public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { }
-    public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { }
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
     public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
