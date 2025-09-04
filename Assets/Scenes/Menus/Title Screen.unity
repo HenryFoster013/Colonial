@@ -260,7 +260,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.101960786, g: 0.23529412, b: 0.29411766, a: 1}
+  m_BackGroundColor: {r: 0.101960786, g: 0.29411766, b: 0.25490198, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1281,6 +1281,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ee76d08ff46a624c988ebc0b133218c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  QuickplayScene: Auto Matchmake
+  ServerBrowserScene: Server Browser
 --- !u!1 &2058947795
 GameObject:
   m_ObjectHideFlags: 0

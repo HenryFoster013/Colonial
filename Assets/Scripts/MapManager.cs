@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics;
 using Debug=UnityEngine.Debug;
+using Fusion;
 
 public class MapManager : MonoBehaviour
 {
     [Header(" - Main - ")]
     [SerializeField] NoiseManager _NoiseManager;
     [SerializeField] Renderer PreviewRenderer;
+    SessionManager _SessionManager;
     public bool AnimatedWater = true;
 
     [Header(" - Map - ")]
@@ -40,22 +42,21 @@ public class MapManager : MonoBehaviour
     [SerializeField] Material BorderMaterial;
     [SerializeField] GameObject[] BorderPrefabs;
 
+
+    // Local only
     bool ready = false;
     public bool Ready(){return ready;}
 
     float GrassLimit = -0.4f;
     float StoneLimit = 0.5f;
     bool generated_bg;
-    
-    int[] tile_data;
-    float[] map_data_raw;
+
     Transform[] piece_transforms;
-    float[] tile_positions;
-    int[] tile_pieces;
-    int[] tiles_owned;
     bool[] tiles_visible;
     bool[] tiles_created;
     bool[] requires_piece_refresh;
+    float[] tile_positions;
+    int[] tile_data;
     List<MeshFilter> grass_mesh = new List<MeshFilter>();
     List<MeshFilter> sand_mesh = new List<MeshFilter>();
     List<MeshFilter> water_mesh = new List<MeshFilter>();
@@ -63,8 +64,17 @@ public class MapManager : MonoBehaviour
     List<Transform> player_border_holders = new List<Transform>();
     List<MeshFilter> bg_mesh = new List<MeshFilter>();
     Transform[] water_transforms;
+
+    // Synced from Host
+    float[] map_data_raw;
+    public float[] GetRawMapData(){return map_data_raw;}
+
+    int[] tile_pieces;
+    public int[] GetTilePieces(){return tile_pieces;}
+
+    int[] tiles_owned;
+    public int[] GetTileOwnership(){return tiles_owned;}
     
-    SessionManager _SessionManager;
 
     // MAIN FUNCTIONS //
 
@@ -252,6 +262,19 @@ public class MapManager : MonoBehaviour
         ResetMapData();
         
         // Base pass
+        BaseTilePass();
+
+        // Towers pass
+        PlaceTowers(_SessionManager.GetPlayerCount());
+        VisibleTilesPass();
+        
+        // Extras pass
+        for(int i = 0; i < tile_data.Length; i++){
+            CheckTileExtras(i);
+        }
+    }
+
+    public void BaseTilePass(){
         for(int i = 0; i < map_data_raw.Length; i++){
             MarkTileType(i);
         }
@@ -259,14 +282,6 @@ public class MapManager : MonoBehaviour
         // Sand pass
         for(int i = 0; i < tile_data.Length; i++){
             MarkSandTiles(i);
-        }
-
-        // Towers pass
-        PlaceTowers(_SessionManager.GetPlayerCount());
-        
-        // Extras pass
-        for(int i = 0; i < tile_data.Length; i++){
-            CheckTileExtras(i);
         }
     }
 
@@ -403,7 +418,38 @@ public class MapManager : MonoBehaviour
         mesh_holder.transform.parent = parenty;
     }
 
-    void ResetMapData(){
+    public void ClientGenerateMap(){
+        water_transforms = new Transform[map_data_raw.Length];
+        tiles_visible = new bool[map_data_raw.Length];
+        tiles_created = new bool[map_data_raw.Length];
+        piece_transforms = new Transform[map_data_raw.Length];
+        tile_positions = new float[map_data_raw.Length];
+        tile_data = new int[map_data_raw.Length];
+        requires_piece_refresh = new bool[map_data_raw.Length];
+        
+        for(int i = 0; i < tile_data.Length; i++){
+            tile_data[i] = _TileLookup.ID("Unmarked");
+            requires_piece_refresh[i] = true;
+        }
+
+        VisibleTilesPass();
+        BaseTilePass();
+        GenerateMap();
+    }
+
+    public void VisibleTilesPass(){
+        for(int i = 0; i < tiles_owned.Length; i++){
+            if(tiles_owned[i] == _FactionLookup.ID(_SessionManager.LocalInstance().FactionData())){
+                MarkTileAsVisible(i);
+            }
+
+            if(tile_pieces[i] == _PieceLookup.ID(_SessionManager.LocalInstance().FactionData().Tower())){
+                _SessionManager.LocalInstance().SnapCameraToPosition(GetTilePosition(i) + new Vector3(8,0,0));
+            }
+        }
+    }
+
+    public void ResetMapData(){
         water_transforms = new Transform[map_data_raw.Length];
         tile_pieces = new int[map_data_raw.Length];
         tiles_owned = new int[map_data_raw.Length];
@@ -419,7 +465,7 @@ public class MapManager : MonoBehaviour
         }
         
         for(int i = 0; i < tile_data.Length; i++){
-            tile_data[i] = _TileLookup.ID("Unmarked"); // Unmarked
+            tile_data[i] = _TileLookup.ID("Unmarked");
         }
     }
 
@@ -491,12 +537,6 @@ public class MapManager : MonoBehaviour
 
                             MarkRadiusAsOwned(local, 2, _owner);
                             MarkTileAsOwned(local, _owner);
-
-                            if(player == _SessionManager.LocalInstance()){
-                                MarkRadiusAsVisible(local, 2);
-                                MarkTileAsVisible(local);
-                                _SessionManager.LocalInstance().SnapCameraToPosition(GetTilePosition(local) + new Vector3(8,0,0));
-                            }
                         }
                         else{
                             distance_fails++;
@@ -713,4 +753,19 @@ public class MapManager : MonoBehaviour
     void SetImage(){
         PreviewRenderer.material.mainTexture = _NoiseManager.NoiseAsImage(_NoiseManager.GetCachedNoise(), _NoiseManager.ImageWidth, _NoiseManager.ImageHeight);
     }
+
+    // LARGE DATA SETTING //
+
+    public void SetMapDataRaw(float[] data){
+        map_data_raw = data;
+    }
+
+    public void SetTileOwnership(int[] data){
+        tiles_owned = data;
+    }
+
+    public void SetTilePieces(int[] data){
+        tile_pieces = data;
+    }
+
 }
