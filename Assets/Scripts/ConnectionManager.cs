@@ -23,10 +23,27 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
     bool connected_to_lobby;
     public bool ConnectedToLobby(){return connected_to_lobby;}
     int current_key;
+    string password_buffer;
 
 
 
     // Gameplay //
+
+    public bool HasGameStarted(){
+        return _runner.SessionInfo.Properties["Game_Started"];
+    }
+
+    public void CloseOffSession(){
+        if(_runner.IsServer){
+            var updatedProps = new Dictionary<string, SessionProperty>()
+            {
+                {"Owner", PlayerPrefs.GetString("USERNAME")},
+                {"Password", password_buffer},
+                {"Game_Started", true}
+            };
+            _runner.SessionInfo.UpdateCustomProperties(updatedProps);
+        }
+    }
 
     public void SendLargeIntArray(int header, int[] array){
 
@@ -39,8 +56,6 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
 
         foreach(PlayerRef player in _runner.ActivePlayers){
             if(player != _runner.LocalPlayer){
-                print("send to player");
-                print(player);
                 _runner.SendReliableDataToPlayer(player, ReliableKey.FromInts(current_key, 0, 0, 0), data);
                 current_key++;
             }
@@ -58,8 +73,6 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
 
         foreach(PlayerRef player in _runner.ActivePlayers){
             if(player != _runner.LocalPlayer){
-                print("send to player");
-                print(player);
                 _runner.SendReliableDataToPlayer(player, ReliableKey.FromInts(current_key, 0, 0, 0), data);
                 current_key++;
             }
@@ -67,9 +80,6 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
     }
 
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data){
-
-        print("We recived something");
-
         int type = System.BitConverter.ToInt32(data.Array, data.Offset);
         int data_start = data.Offset + sizeof(int);
         
@@ -140,12 +150,16 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
 
     public async void StartGame(GameMode mode, string session_id, int players, string password)
     {
+        PlayerPrefs.SetString("Error Details", "Session closed unexpectantly.");
+        
         // Create the NetworkSceneInfo from the current scene
         var scene = SceneRef.FromIndex(GameplaySceneIndex);
         var sceneInfo = new NetworkSceneInfo();
         if (scene.IsValid) {
             sceneInfo.AddSceneRef(scene, LoadSceneMode.Additive);
         }
+
+        password_buffer = password;
 
         // Start or join (depends on gamemode) a session with a specific name
         await _runner.StartGame(new StartGameArgs()
@@ -157,7 +171,8 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>(),
             SessionProperties = new Dictionary<string, SessionProperty>(){
                 {"Owner", PlayerPrefs.GetString("USERNAME")},
-                {"Password", password}
+                {"Password", password},
+                {"Game_Started", false}
             }
         });
     }
@@ -172,22 +187,15 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
 
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
-    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
-    {
-        if (runner.IsServer)
-        {
-            // Create a unique position for the player
-            Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3, 1, 0);
-            NetworkObject networkPlayerObject = runner.Spawn(PlayerInstancePrefab, spawnPosition, Quaternion.identity, player);
-            // Keep track of the player avatars for easy access
+    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player){
+        if (AreWeHost()){
+            NetworkObject networkPlayerObject = runner.Spawn(PlayerInstancePrefab, Vector3.zero, Quaternion.identity, player);
             _spawnedCharacters.Add(player, networkPlayerObject);
         }
     }
 
-    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
-    {
-        if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
-        {
+    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player){
+        if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject)){
             runner.Despawn(networkObject);
             _spawnedCharacters.Remove(player);
         }

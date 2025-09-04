@@ -20,7 +20,7 @@ public class AutoMatchmake : MonoBehaviour
         string session_name = "";
 
         for(int i = 0; i < sessionList.Count && session_name == ""; i++){
-            if(sessionList[i].Properties["Password"] == "" && sessionList[i].PlayerCount < sessionList[i].MaxPlayers){
+            if(sessionList[i].Properties["Password"] == "" && !sessionList[i].Properties["Game_Started"] && sessionList[i].PlayerCount < sessionList[i].MaxPlayers){
                 session_name = sessionList[i].Name;
             }
         }

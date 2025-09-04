@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Menus/Title Screen.unity
     guid: 87b8ef27dde8e9f4ea3bcc2903d72236
   - enabled: 1
-    path: Assets/Scenes/Auto Matchmake.unity
+    path: Assets/Scenes/Networking/Auto Matchmake.unity
     guid: 3385ca678115596449924f73bdb2a01e
   - enabled: 1
     path: Assets/Scenes/Networking/Server Browser.unity
