@@ -14,14 +14,19 @@ public class SessionManager : MonoBehaviour
     [Header("Player Instances")]
     [SerializeField] PlayerInstance OurInstance;
     public PlayerInstance[] player_instances;
+    [Header("Lobby")]
+    [SerializeField] GameObject LobbyMaster;
+    [SerializeField] GameObject L_HostOnly;
     
     // 0 = Lobby
     // 1 = Gameplay
     // 2 = Postmatch
     int game_state = 0;
 
-    bool game_host = true;
+    bool game_host = false;
     ConnectionManager _ConnectionManager;
+    int map_data_recieved;
+    bool generated_map = false;
 
     int current_turn = 0;
     int current_stars = 3;
@@ -57,25 +62,46 @@ public class SessionManager : MonoBehaviour
     }
 
     void LobbySetup(){
+        map_data_recieved = 0;
+        generated_map = false;
         _ConnectionManager = GameObject.FindGameObjectWithTag("Connection Manager").GetComponent<ConnectionManager>();
+        _ConnectionManager._SessionManager = this;
         _PlayerManager.transform.parent.gameObject.SetActive(false);
+        game_host = _ConnectionManager.AreWeHost();
+        LobbyMaster.SetActive(true);
+        L_HostOnly.SetActive(game_host);
+    }
+
+    void CloseLobby(){
+        LobbyMaster.SetActive(false);
     }
 
     // MAIN GAMEPLAY //
 
-    public void StartGame(){
+    public void HostStartGame(){
+        CloseLobby();
         DefaultValues();
         GetPlayers();
+        InitialisePlayerManager();
         MakeMap();
-        InitialisePlayer();
+    }
+
+    public void ClientStartGame(){
+        _MapManager.SetSession(this);
+        GetPlayers();
+        CloseLobby();
+        DefaultValues();
+        InitialisePlayerManager();
+        _MapManager.ClientGenerateMap();
     }
 
     void DefaultValues(){
         current_stars = 3;
         current_turn = 1;
+        game_state = 1;
     }
 
-    void InitialisePlayer(){
+    void InitialisePlayerManager(){
         _PlayerManager.transform.parent.gameObject.SetActive(true);
         _PlayerManager.Setup();
     }
@@ -91,6 +117,45 @@ public class SessionManager : MonoBehaviour
         }
 
         _MapManager.GenerateMap();
+
+        _ConnectionManager.SendLargeFloatArray(0, _MapManager.GetRawMapData());
+        _ConnectionManager.SendLargeIntArray(1, _MapManager.GetTilePieces());
+        _ConnectionManager.SendLargeIntArray(2, _MapManager.GetTileOwnership());
+    }
+
+    public void GotMapDataRaw(float[] data){
+        if(game_host)
+            return;
+        _MapManager.SetMapDataRaw(data);
+        map_data_recieved++;
+        CheckWeHaveAllData();
+    }
+
+    public void GotTileOwnership(int[] data){
+        if(game_host)
+            return;
+        _MapManager.SetTileOwnership(data);
+        map_data_recieved++;
+        CheckWeHaveAllData();
+    }
+
+    public void GotTilePieces(int[] data){
+        if(game_host)
+            return;
+        _MapManager.SetTilePieces(data);
+        map_data_recieved++;
+        CheckWeHaveAllData();
+    }
+
+    void CheckWeHaveAllData(){
+        if(game_host)
+            return;
+        
+        if(map_data_recieved > 2 && !generated_map){
+            print("Data Constructed");
+            generated_map = true;
+            ClientStartGame();
+        }
     }
 
     // Player Setup //
@@ -107,8 +172,10 @@ public class SessionManager : MonoBehaviour
             player_instances[i].SetOwner(NO.InputAuthority);
             player_instances[i].SetLocal(NO.HasInputAuthority);
 
-            if(NO.HasInputAuthority)
+            if(NO.HasInputAuthority){
                 OurInstance = player_instances[i];
+                player_instances[i].SetManager(_PlayerManager);
+            }
         }
     }
 
@@ -175,6 +242,10 @@ public class SessionManager : MonoBehaviour
 
     public int GetPlayerCount(){
         return player_instances.Length;
+    }
+
+    public PlayerInstance[] GetAllPlayerInstances(){
+        return player_instances;
     }
 
     public PlayerInstance LocalInstance(){
