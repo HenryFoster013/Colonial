@@ -176,6 +176,11 @@ public class LobbyUI : MonoBehaviour
         MCM_PlayerCount.text = mcm_player_count.ToString();
     }
 
+    public void BackToTitle(){
+        LoadingScreen();
+        _ConnectionManager.DisconnectFromLobby();
+    }
+
     // Random //
 
     public static string RandomString(int length){

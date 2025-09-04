@@ -1,0 +1,22 @@
+King
+Lord
+General
+Queen
+Prince
+Princess
+Duke
+Priest
+Great Leader
+President
+Prime Minister
+Baron
+Knight
+Kaiser
+Sir
+Mr
+Mrs
+Master
+Royal
+Captain
+Big
+Lil'
