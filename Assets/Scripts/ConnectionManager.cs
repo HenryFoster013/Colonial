@@ -13,8 +13,8 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
     [Header("Main")]
     public NetworkPrefabRef PlayerInstancePrefab;
 
-    const int GameplaySceneIndex = 2;
-    const string DisconnectScene = "Empty Menu";
+    const int GameplaySceneIndex = 1;
+    const string DisconnectScene = "Title Screen";
     [HideInInspector] public LobbyUI _LobbyUI;
     [HideInInspector] public AutoMatchmake _AutoMatchmake;
     
@@ -36,8 +36,6 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
     }
 
     public async void DisconnectFromLobby(){
-        connected_to_lobby = false;
-        UpdateLobbyUI();
         await _runner.Shutdown();
         SceneManager.LoadScene(DisconnectScene);
     }
