@@ -4,7 +4,7 @@ using UnityEngine;
 using Fusion;
 
 public class PlayerInstance : MonoBehaviour{
-    
+
     [SerializeField] Faction _Faction;
     [SerializeField] FactionLookup _FactionLookup;
 

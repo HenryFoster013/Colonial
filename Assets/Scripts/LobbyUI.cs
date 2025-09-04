@@ -120,15 +120,18 @@ public class LobbyUI : MonoBehaviour
             Destroy(t.gameObject);
         }
 
-        if(sessionList.Count > 0){
-            foreach(var session in sessionList){
+        int valid_sessions = 0;
+        foreach(var session in sessionList){
+            if(!session.Properties["Game_Started"]){
+                valid_sessions++;
                 GameObject new_list_prefab = GameObject.Instantiate(LL_ListPrefab);
                 new_list_prefab.transform.SetParent(LL_ScrollContentRect.transform);
                 new_list_prefab.transform.localScale = new Vector3(1,1,1);
                 new_list_prefab.GetComponent<LobbyOption>().Setup(this, session.Name, session.Properties["Owner"], session.PlayerCount, session.MaxPlayers, session.Properties["Password"]);
             }
         }
-        else{   
+
+        if(valid_sessions == 0){   
             GameObject g = GameObject.Instantiate(LL_EmptyListPrefab);
             g.transform.SetParent(LL_ScrollContentRect.transform);
             g.transform.localScale = new Vector3(1,1,1);

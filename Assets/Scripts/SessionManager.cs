@@ -40,6 +40,7 @@ public class SessionManager : MonoBehaviour
     void Start(){
         SetupTroopMaterials();
         LobbySetup();
+        AreWeLate();
     }
 
     void Update(){
@@ -50,6 +51,15 @@ public class SessionManager : MonoBehaviour
     void CheckConnection(){
         if(_ConnectionManager == null)
             SceneManager.LoadScene("Network Error");
+    }
+
+    void AreWeLate(){
+        if(!_ConnectionManager.AreWeHost()){
+            if(_ConnectionManager.HasGameStarted()){
+                PlayerPrefs.SetString("Error Details", "Game already full.");
+                _ConnectionManager.DisconnectFromLobby("Network Error");
+            }
+        }
     }
 
     // LOBBY GAMEPLAY //
@@ -72,14 +82,15 @@ public class SessionManager : MonoBehaviour
         L_HostOnly.SetActive(game_host);
     }
 
-    void CloseLobby(){
+    void CloseLobbyUI(){
         LobbyMaster.SetActive(false);
     }
 
     // MAIN GAMEPLAY //
 
     public void HostStartGame(){
-        CloseLobby();
+        _ConnectionManager.CloseOffSession();
+        CloseLobbyUI();
         DefaultValues();
         GetPlayers();
         InitialisePlayerManager();
@@ -89,7 +100,7 @@ public class SessionManager : MonoBehaviour
     public void ClientStartGame(){
         _MapManager.SetSession(this);
         GetPlayers();
-        CloseLobby();
+        CloseLobbyUI();
         DefaultValues();
         InitialisePlayerManager();
         _MapManager.ClientGenerateMap();
