@@ -9,7 +9,7 @@ public class PlayerInstance : NetworkBehaviour{
     [Networked, Capacity(32)] public string Username { get; set; }
     [Networked] public bool Host { get; set; }
     [Networked] public bool Ready { get; set; }
-    
+    [Networked] public int ID { get; set; }
 
     [SerializeField] FactionLookup _FactionLookup;
     PlayerManager player_manager;
@@ -45,6 +45,7 @@ public class PlayerInstance : NetworkBehaviour{
     // Setters //
     public void SetManager(PlayerManager manager){player_manager = manager;}
     public void WeAreHost(){Host = true;}
+    public void SetID(int id){ID = id;}
 
     // Getters //
     public Faction FactionData(){return _FactionLookup.GetFaction(Faction_ID);}

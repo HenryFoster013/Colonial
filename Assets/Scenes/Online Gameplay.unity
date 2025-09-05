@@ -524,6 +524,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
+  _SessionManager: {fileID: 308904221}
   UI_Holder: {fileID: 277091331}
   InteractableButtonsHolder: {fileID: 587031210}
   HostOnly_UI: {fileID: 589810320}
@@ -1408,8 +1409,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 308904221}
-        m_TargetAssemblyTypeName: SessionManager, Assembly-CSharp
+      - m_Target: {fileID: 54888803}
+        m_TargetAssemblyTypeName: PreGameManager, Assembly-CSharp
         m_MethodName: ChangeFaction
         m_Mode: 3
         m_Arguments:
@@ -2038,6 +2039,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87987978b22a8044dbd6679fa00b11eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
+  _PlayerManager: {fileID: 2146075082}
 --- !u!1 &246462560
 GameObject:
   m_ObjectHideFlags: 0
@@ -4685,7 +4688,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2146075082}
         m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
         m_MethodName: SpawnTroopButton
         m_Mode: 3
@@ -6947,7 +6950,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2146075082}
         m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
         m_MethodName: SpawnTroopButton
         m_Mode: 3
@@ -8307,7 +8310,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2146075082}
         m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
         m_MethodName: SpawnTroopButton
         m_Mode: 3
@@ -11329,7 +11332,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2146075082}
         m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
         m_MethodName: SpawnTroopButton
         m_Mode: 3
@@ -12134,8 +12137,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 308904221}
-        m_TargetAssemblyTypeName: SessionManager, Assembly-CSharp
+      - m_Target: {fileID: 54888803}
+        m_TargetAssemblyTypeName: PreGameManager, Assembly-CSharp
         m_MethodName: ChangeFaction
         m_Mode: 3
         m_Arguments:
@@ -13695,7 +13698,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1715902574}
   m_Layer: 0
-  m_Name: Player Manager
+  m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18081,7 +18084,7 @@ GameObject:
   - component: {fileID: 2146075081}
   - component: {fileID: 2146075082}
   m_Layer: 0
-  m_Name: Local Player
+  m_Name: Player Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18123,13 +18126,12 @@ MonoBehaviour:
   _Camera: {fileID: 86466292}
   CameraHook: {fileID: 776516041}
   CameraSpine: {fileID: 1029655847}
-  OurTroops: []
-  TroopSpawnMenu: {fileID: 48529154}
   SpawnableTroops:
   - {fileID: 11400000, guid: 257afc0480c85e04bb1fe939e7169d4a, type: 2}
   - {fileID: 11400000, guid: 19f52be431cf2da418d4950e5061470f, type: 2}
   - {fileID: 11400000, guid: dd81d14c8929a2d4eb002c7e6d2659db, type: 2}
   - {fileID: 11400000, guid: 0e152362814ac4b4eacae5aface73094, type: 2}
+  TroopSpawnMenu: {fileID: 48529154}
   TileInfoDisplay: {fileID: 1025633090}
   TileRenderCamera: {fileID: 1944513289}
   TileRenderPoint: {fileID: 1109132460}

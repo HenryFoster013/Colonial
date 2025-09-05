@@ -18,7 +18,7 @@ public class FactionLookup : ScriptableObject
     }
 
     public int ID(string name){
-        int return_val = 0;
+        int return_val = -1;
         bool done = false;
         for(int i = 0; i < _Factions.Length && !done; i++){
             if(_Factions[i].CheckType(name)){
@@ -26,11 +26,12 @@ public class FactionLookup : ScriptableObject
                 return_val = i;
             }
         }
+
         return return_val;
     }
 
     public int ID(Faction fac){
-        int return_val = 0;
+        int return_val = -1;
         bool done = false;
         for(int i = 0; i < _Factions.Length && !done; i++){
             if(_Factions[i] == fac){
@@ -38,6 +39,7 @@ public class FactionLookup : ScriptableObject
                 return_val = i;
             }
         }
+
         return return_val;
     }
 }

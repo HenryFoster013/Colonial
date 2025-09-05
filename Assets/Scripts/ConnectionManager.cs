@@ -20,9 +20,8 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
     
     private NetworkRunner _runner;
     private static Random random = new Random();
-    bool connected_to_lobby;
-    public bool ConnectedToLobby(){return connected_to_lobby;}
-    int current_key;
+    public bool connected_to_lobby {get; private set;}
+    int key_counter, player_counter;
     string password_buffer;
 
 
@@ -55,8 +54,8 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
 
         foreach(PlayerRef player in _runner.ActivePlayers){
             if(player != _runner.LocalPlayer){
-                _runner.SendReliableDataToPlayer(player, ReliableKey.FromInts(current_key, 0, 0, 0), data);
-                current_key++;
+                _runner.SendReliableDataToPlayer(player, ReliableKey.FromInts(key_counter, 0, 0, 0), data);
+                key_counter++;
             }
         }
     }
@@ -72,8 +71,8 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
 
         foreach(PlayerRef player in _runner.ActivePlayers){
             if(player != _runner.LocalPlayer){
-                _runner.SendReliableDataToPlayer(player, ReliableKey.FromInts(current_key, 0, 0, 0), data);
-                current_key++;
+                _runner.SendReliableDataToPlayer(player, ReliableKey.FromInts(key_counter, 0, 0, 0), data);
+                key_counter++;
             }
         }
     }
@@ -188,12 +187,21 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player){
         if (Hosting()){
-            NetworkObject networkPlayerObject = runner.Spawn(PlayerInstancePrefab, Vector3.zero, Quaternion.identity, player);
-            _spawnedCharacters.Add(player, networkPlayerObject);
+            NetworkObject new_player = runner.Spawn(PlayerInstancePrefab, Vector3.zero, Quaternion.identity, player);
+            PlayerInstance new_player_instance = new_player.GetComponent<PlayerInstance>();
+            
+            new_player_instance.SetID(player_counter);
+            player_counter++;
+
+            _spawnedCharacters.Add(player, new_player);
             if(player == _runner.LocalPlayer){
-                networkPlayerObject.GetComponent<PlayerInstance>().WeAreHost();
+                new_player_instance.WeAreHost();
             }
         }
+    }
+
+    public NetworkObject SpawnObject(NetworkPrefabRef prefab){
+        return _runner.Spawn(prefab, Vector3.zero, Quaternion.identity, _runner.LocalPlayer);
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player){
