@@ -8,6 +8,7 @@ public class PlayerInstance : NetworkBehaviour{
     [Networked] public int Faction_ID { get; set; }
     [Networked, Capacity(32)] public string Username { get; set; }
     [Networked] public bool Host { get; set; }
+    [Networked] public bool Ready { get; set; }
     
 
     [SerializeField] FactionLookup _FactionLookup;
@@ -26,11 +27,11 @@ public class PlayerInstance : NetworkBehaviour{
     public void RPC_SetCoreData(string username, int faction_id, RpcInfo info = default){
         Username = username;
         Faction_ID = faction_id;
+        Ready = true;
     }
 
     public void UpdateFaction(){
         if(Object.HasInputAuthority){
-            //Faction_ID = PlayerPrefs.GetInt("FACTION");
             RPC_SetCoreData(PlayerPrefs.GetString("USERNAME"), PlayerPrefs.GetInt("FACTION"));
         }
     }

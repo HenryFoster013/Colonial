@@ -19,6 +19,7 @@ public class SessionManager : MonoBehaviour
     public List<PlayerInstance> player_instances = new List<PlayerInstance>();
     [Header(" - LOBBY - ")]
     [SerializeField] GameObject LobbyMaster;
+    [SerializeField] GameObject L_UI_Holder;
     [SerializeField] GameObject L_HostOnly;
     [SerializeField] GameObject L_StartButton;
     [SerializeField] GameObject L_CantStartText;
@@ -115,6 +116,11 @@ public class SessionManager : MonoBehaviour
                 PlayerIconHostStars[i].SetActive(player_instances[i].Host);
             }
         }
+
+        if(OurInstance == null)
+            L_UI_Holder.SetActive(false);
+        else
+            L_UI_Holder.SetActive(OurInstance.Ready);
     }
 
     public void ChangeFaction(int modifier){
@@ -231,22 +237,27 @@ public class SessionManager : MonoBehaviour
         bool can_war = false;
 
         for(int i = 0; i < player_objects.Length; i++){
-            player_instances.Add(player_objects[i].GetComponent<PlayerInstance>());
-            NetworkObject NO = player_instances[i].GetComponent<NetworkObject>();
+            PlayerInstance player_inst_temp = player_objects[i].GetComponent<PlayerInstance>();
 
-            if(initial_faction == -1)
-                initial_faction = player_instances[i].Faction_ID;
+            if(player_inst_temp.Ready){
 
-            if(initial_faction != player_instances[i].Faction_ID)
-                can_war = true;
+                player_instances.Add(player_inst_temp);
+                NetworkObject NO = player_instances[i].GetComponent<NetworkObject>();
 
-            if(NO.HasInputAuthority){
-                OurInstance = player_instances[i];
-                player_instances[i].SetManager(_PlayerManager);
+                if(initial_faction == -1)
+                    initial_faction = player_instances[i].Faction_ID;
+
+                if(initial_faction != player_instances[i].Faction_ID)
+                    can_war = true;
+
+                if(NO.HasInputAuthority){
+                    OurInstance = player_instances[i];
+                    player_instances[i].SetManager(_PlayerManager);
+                }
             }
         }
 
-        player_instances = player_instances.OrderBy(p => p.ToString()).ToList();
+        player_instances = player_instances.OrderBy(p => p.Username).ToList();
 
         L_CantStartText.SetActive(!can_war);
         L_StartButton.SetActive(can_war);
