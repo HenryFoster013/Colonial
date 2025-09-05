@@ -15,7 +15,8 @@ public class Faction : ScriptableObject
     [SerializeField] Color _Colour = new Color(1f,1f,1f,1f);
     [SerializeField] Color _BorderColour = new Color(1f,1f,1f,1f);
     [SerializeField] int _TextureOffset;
-    [SerializeField] Texture2D _Flag;
+    [SerializeField] Sprite _Flag;
+    [SerializeField] Sprite _Mini_Flag;
     
 
     public bool CheckType(string s){
@@ -26,7 +27,8 @@ public class Faction : ScriptableObject
     public string Name(){return _Name;}
     public Color Colour(){return _Colour;}
     public Color BorderColour(){return _BorderColour;}
-    public Texture2D Flag(){return _Flag;}
+    public Sprite Flag(){return _Flag;}
+    public Sprite Mini_Flag(){return _Mini_Flag;}
     public List<TroopData> Troops(){return _Troops;}
     public PieceData Tower(){return _Tower;}
     public int TextureOffset(){return _TextureOffset;}

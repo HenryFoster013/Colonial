@@ -45,11 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bba0a7c6585d7043b8bf2c375b4061d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerID: 0
-  _Faction: {fileID: 11400000, guid: ecbbd71c470ee314eb7019539f207cd7, type: 2}
+  __FactionID: 0
+  _host: 0
   _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
-  local_player: 1
-  player_manager: {fileID: 0}
 --- !u!114 &191067346449507553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,5 +64,6 @@ MonoBehaviour:
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []
-  NetworkedBehaviours: []
+  NetworkedBehaviours:
+  - {fileID: 2059460241265114275}
   ForceRemoteRenderTimeframe: 0

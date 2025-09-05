@@ -26,7 +26,6 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
     string password_buffer;
 
 
-
     // Gameplay //
 
     public bool HasGameStarted(){
@@ -191,6 +190,9 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
         if (AreWeHost()){
             NetworkObject networkPlayerObject = runner.Spawn(PlayerInstancePrefab, Vector3.zero, Quaternion.identity, player);
             _spawnedCharacters.Add(player, networkPlayerObject);
+            if(player == _runner.LocalPlayer){
+                networkPlayerObject.GetComponent<PlayerInstance>().WeAreHost();
+            }
         }
     }
 

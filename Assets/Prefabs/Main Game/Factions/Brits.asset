@@ -22,4 +22,6 @@ MonoBehaviour:
   _Tower: {fileID: 11400000, guid: 1d295ffb3a847b949a67ec5623e6305b, type: 2}
   _Colour: {r: 1, g: 0.69411767, b: 0.69411767, a: 1}
   _BorderColour: {r: 1, g: 0.3137255, b: 0.25882354, a: 1}
-  _Flag: {fileID: 2800000, guid: e82a823a2aadf2a44898a542f32ed9de, type: 3}
+  _TextureOffset: 0
+  _Flag: {fileID: 21300000, guid: d94ba6d3c20acad43ade893033c7d74e, type: 3}
+  _Mini_Flag: {fileID: 21300000, guid: 6ad405fb545e3f34fb25a5c10f5069e3, type: 3}
