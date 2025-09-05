@@ -14,6 +14,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] PieceLookup _PieceLookup;
     [SerializeField] FactionLookup _FactionLookup;
     SessionManager _SessionManager;
+    GameplayManager _GameplayManager;
     
     [Header(" --- CAMERA --- ")]
     [SerializeField] Camera _Camera;
@@ -74,7 +75,8 @@ public class PlayerManager : MonoBehaviour
 
     // BASE //
 
-    public void Setup(SessionManager sm){
+    public void Setup(SessionManager sm, GameplayManager gm){
+        _GameplayManager = gm;
         _SessionManager = sm;
         GeneralSetup();
         Deselect();
@@ -89,10 +91,10 @@ public class PlayerManager : MonoBehaviour
 
     public void EndTurn(){
         Deselect();
-        _SessionManager.UpTurn();
-        _SessionManager.UpStars();
-        TurnDisplay.text = _SessionManager.CurrentTurn().ToString();
-        StarsDisplay.text = _SessionManager.CurrentStars().ToString();
+        _GameplayManager.UpTurn();
+        _GameplayManager.UpStars();
+        TurnDisplay.text = _GameplayManager.current_turn.ToString();
+        StarsDisplay.text = _GameplayManager.current_stars.ToString();
         foreach(Troop t in OurTroops)
             t.NewTurn();
     }
@@ -109,7 +111,7 @@ public class PlayerManager : MonoBehaviour
     void SetupTroops(){
         OurTroops = new List<Troop>();
         SpawnableTroops = new List<TroopData>();
-        SpawnableTroops.AddRange(_SessionManager.OurInstance.FactionData().Troops());
+        SpawnableTroops.AddRange(_SessionManager.LocalFactionData().Troops());
     }
 
     void ResetCameraRot(){
@@ -119,8 +121,8 @@ public class PlayerManager : MonoBehaviour
 
     void ResetUI(){
         TroopSpawnMenu.SetActive(false);
-        StarsDisplay.text = _SessionManager.CurrentStars().ToString();
-        TurnDisplay.text = _SessionManager.CurrentTurn().ToString();
+        StarsDisplay.text = _GameplayManager.current_stars.ToString();
+        TurnDisplay.text = _GameplayManager.current_turn.ToString();
     }
 
     // ANIMATION //
@@ -191,9 +193,9 @@ public class PlayerManager : MonoBehaviour
     // SELECTION //
 
     public void SpawnTroopButton(int i){
-        if(SpawnableTroops[i].Cost() <= _SessionManager.CurrentStars()){
-            _SessionManager.SpendStars(SpawnableTroops[i].Cost());
-            StarsDisplay.text = _SessionManager.CurrentStars().ToString();
+        if(SpawnableTroops[i].Cost() <= _GameplayManager.current_stars){
+            _GameplayManager.SpendStars(SpawnableTroops[i].Cost());
+            StarsDisplay.text = _GameplayManager.current_stars.ToString();
 
             block_world_clicks = true;
             TroopSpawnMenu.SetActive(false);
@@ -205,7 +207,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     void SpawnTroop(TroopData troop_data, int tile){
-        if(!Map.CheckTileOwnership(tile, _SessionManager.LocalPlayerFaction()))
+        if(!Map.CheckTileOwnership(tile, _SessionManager.LocalFactionID()))
             return;
         
         OurTroops.Add(_SessionManager.SpawnLocalTroop(troop_data, tile));
@@ -367,7 +369,7 @@ public class PlayerManager : MonoBehaviour
     void CheckTileData(int id, TileData tile_data, PieceData piece_data){
         TroopSpawnMenu.SetActive(false);
         if(piece_data.CanSpawnTroops()){
-            if(!DoWeHaveTroopAt(id) && Map.CheckTileOwnership(id, _SessionManager.LocalPlayerFaction())){
+            if(!DoWeHaveTroopAt(id) && Map.CheckTileOwnership(id, _SessionManager.LocalFactionID())){
                 OpenSpawnMenu();
             }
         }
@@ -392,16 +394,16 @@ public class PlayerManager : MonoBehaviour
 
         for(int i = 0; i < SpawnableTroops.Count; i++){
             if(TroopModelHolders[i].childCount == 0){
-                SpawnModelHolderTroop(SpawnableTroops[i], TroopModelHolders[i], _SessionManager.LocalPlayerFaction());
-                TroopButtons[i].GetChild(0).GetComponent<Image>().color = _SessionManager.OurInstance.FactionData().Colour();
-                TroopButtons[i].GetChild(2).GetComponent<Image>().color = _SessionManager.OurInstance.FactionData().Colour();
+                SpawnModelHolderTroop(SpawnableTroops[i], TroopModelHolders[i], _SessionManager.LocalFactionID());
+                TroopButtons[i].GetChild(0).GetComponent<Image>().color = _SessionManager.LocalFactionData().Colour();
+                TroopButtons[i].GetChild(2).GetComponent<Image>().color = _SessionManager.LocalFactionData().Colour();
                 TroopButtons[i].GetChild(3).GetComponent<TMP_Text>().text = SpawnableTroops[i].Cost().ToString();
             }
 
             TMP_Text cost_text = TroopButtons[i].GetChild(3).GetComponent<TMP_Text>();
             cost_text.text = SpawnableTroops[i].Cost().ToString();
             cost_text.color = Color.white;
-            if(SpawnableTroops[i].Cost() > _SessionManager.CurrentStars())
+            if(SpawnableTroops[i].Cost() > _GameplayManager.current_stars)
                 cost_text.color = Color.red;
 
             TroopButtons[i].gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2((i * offy) + centering, 0);
@@ -419,7 +421,7 @@ public class PlayerManager : MonoBehaviour
         BaseHighlight.transform.position = Map.GetTilePosition(troop.GetTile());
 
         if(!troop.TurnOver())
-            BaseHighlightMaterial.SetColor("_BaseColor", _SessionManager.OurInstance.FactionData().Colour());
+            BaseHighlightMaterial.SetColor("_BaseColor", _SessionManager.LocalFactionData().Colour());
         else
             BaseHighlightMaterial.SetColor("_BaseColor", DisabledColour);
 
@@ -428,7 +430,7 @@ public class PlayerManager : MonoBehaviour
         SpawnModelHolderTroop(troop.Data, TileModelHolder, troop.FactionID());
 
         TileInfoDisplay.SetActive(true);
-        DisplayBG.color = _SessionManager.OurInstance.FactionData().Colour();
+        DisplayBG.color = _SessionManager.LocalFactionData().Colour();
         
         GetTroopRanges(troop);
     }
