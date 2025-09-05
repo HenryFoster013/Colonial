@@ -149,6 +149,9 @@ public class SessionManager : MonoBehaviour
     // GAME START //
 
     public void HostStartGame(){
+        if(!AllPlayersReady())
+            return;
+
         _ConnectionManager.CloseOffSession();
         CloseLobbyUI();
         DefaultValues();
@@ -235,32 +238,42 @@ public class SessionManager : MonoBehaviour
         player_instances = new List<PlayerInstance>();
         int initial_faction = -1;
         bool can_war = false;
+        bool all_ready = true;
 
         for(int i = 0; i < player_objects.Length; i++){
             PlayerInstance player_inst_temp = player_objects[i].GetComponent<PlayerInstance>();
 
-            if(player_inst_temp.Ready){
+            player_instances.Add(player_inst_temp);
+            NetworkObject NO = player_instances[i].GetComponent<NetworkObject>();
 
-                player_instances.Add(player_inst_temp);
-                NetworkObject NO = player_instances[i].GetComponent<NetworkObject>();
+            if(!player_instances[i].Ready)
+                all_ready = false;
 
-                if(initial_faction == -1)
-                    initial_faction = player_instances[i].Faction_ID;
+            if(initial_faction == -1)
+                initial_faction = player_instances[i].Faction_ID;
 
-                if(initial_faction != player_instances[i].Faction_ID)
-                    can_war = true;
+            if(initial_faction != player_instances[i].Faction_ID)
+                can_war = true;
 
-                if(NO.HasInputAuthority){
-                    OurInstance = player_instances[i];
-                    player_instances[i].SetManager(_PlayerManager);
-                }
+            if(NO.HasInputAuthority){
+                OurInstance = player_instances[i];
+                player_instances[i].SetManager(_PlayerManager);
             }
         }
 
         player_instances = player_instances.OrderBy(p => p.Username).ToList();
 
-        L_CantStartText.SetActive(!can_war);
-        L_StartButton.SetActive(can_war);
+        L_CantStartText.SetActive(!can_war || !all_ready);
+        L_StartButton.SetActive(can_war && all_ready);
+    }
+
+    public bool AllPlayersReady(){
+        bool ready = true;
+        foreach(PlayerInstance pi in player_instances){
+            if(!pi.Ready)
+                ready = false;
+        }
+        return ready;
     }
 
     void SetupTroopMaterials(){
