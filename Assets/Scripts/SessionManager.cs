@@ -125,7 +125,7 @@ public class SessionManager : MonoBehaviour
         _PreGameManager.gameObject.SetActive(false);
         _GameplayManager.gameObject.SetActive(true);
         _GameplayManager.SetSession(this);
-        _PlayerManager.Setup(this);
+        _PlayerManager.Setup(this, _GameplayManager);
     }
 
 
@@ -244,16 +244,10 @@ public class SessionManager : MonoBehaviour
 
     // all here is temp and v wip
 
-    public void UpTurn(){_GameplayManager.UpTurn();}
-    public void UpStars(){_GameplayManager.UpStars();}
-    public void SpendStars(int cost){_GameplayManager.SpendStars(cost);}
-    public int CurrentTurn(){return _GameplayManager.current_turn;}
-    public int CurrentStars(){return _GameplayManager.current_stars;}
-
     public Troop SpawnLocalTroop(TroopData troop_data, int tile){
         print(tile);
 
-        if(!_MapManager.CheckTileOwnership(tile, LocalPlayerFaction()))
+        if(!_MapManager.CheckTileOwnership(tile, LocalFactionID()))
             return null;
 
         GameObject g = GameObject.Instantiate(troop_data.Prefab(), Vector3.zero, Quaternion.identity);
@@ -278,7 +272,8 @@ public class SessionManager : MonoBehaviour
     }
 
     public PlayerInstance GetPlayer(int i){return player_instances[i];}
-    public int LocalPlayerFaction(){return _FactionLookup.ID(OurInstance.FactionData());}
+    public int LocalFactionID(){return _FactionLookup.ID(OurInstance.FactionData());}
+    public Faction LocalFactionData(){return OurInstance.FactionData();}
     public int GetPlayerCount(){return player_instances.Count;}
     public List<PlayerInstance> GetAllPlayerInstances(){return player_instances;}
 }

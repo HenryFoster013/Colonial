@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameplayManager : MonoBehaviour
 {
+    [SerializeField] PlayerManager _PlayerManager;
     SessionManager _SessionManager;
     
     public int current_turn { get; private set; }
