@@ -1,22 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Linq;
 using UnityEngine.SceneManagement;
 using Fusion.Sockets;
 using Fusion;
+using TMPro;
 
 public class SessionManager : MonoBehaviour
 {
-    [Header("References")]
+    [Header(" - MAIN - ")]
     [SerializeField] FactionLookup _FactionLookup;
     [SerializeField] MapManager _MapManager;
     [SerializeField] PlayerManager _PlayerManager;
     [Header("Player Instances")]
     [SerializeField] PlayerInstance OurInstance;
-    public PlayerInstance[] player_instances;
-    [Header("Lobby")]
+    public List<PlayerInstance> player_instances = new List<PlayerInstance>();
+    [Header(" - LOBBY - ")]
     [SerializeField] GameObject LobbyMaster;
     [SerializeField] GameObject L_HostOnly;
+    [SerializeField] GameObject L_StartButton;
+    [SerializeField] GameObject L_CantStartText;
+    [SerializeField] Image L_Flag;
+    [Header("Lobby - Player Icons")]
+    [SerializeField] RectTransform[] PlayerIcons;
+    [SerializeField] TMP_Text[] PlayerIconUsernames;
+    [SerializeField] Image[] PlayerIconBackgrounds;
+    [SerializeField] Image[] PlayerIconFlags;
+    [SerializeField] MeshRenderer[] PlayerIconBodies;
+    [SerializeField] GameObject[] PlayerIconHostStars;
     
     // 0 = Lobby
     // 1 = Gameplay
@@ -53,6 +66,20 @@ public class SessionManager : MonoBehaviour
             SceneManager.LoadScene("Network Error");
     }
 
+    // SETUP //
+
+    void LobbySetup(){
+        map_data_recieved = 0;
+        generated_map = false;
+        _ConnectionManager = GameObject.FindGameObjectWithTag("Connection Manager").GetComponent<ConnectionManager>();
+        _ConnectionManager._SessionManager = this;
+        _PlayerManager.transform.parent.gameObject.SetActive(false);
+        game_host = _ConnectionManager.AreWeHost();
+        LobbyMaster.SetActive(true);
+        L_HostOnly.SetActive(game_host);
+        UpdateL_Flag();
+    }
+
     void AreWeLate(){
         if(!_ConnectionManager.AreWeHost()){
             if(_ConnectionManager.HasGameStarted()){
@@ -69,24 +96,51 @@ public class SessionManager : MonoBehaviour
             return;
         
         GetPlayers();
+        UpdateLobbyPlayerIcons();
     }
 
-    void LobbySetup(){
-        map_data_recieved = 0;
-        generated_map = false;
-        _ConnectionManager = GameObject.FindGameObjectWithTag("Connection Manager").GetComponent<ConnectionManager>();
-        _ConnectionManager._SessionManager = this;
-        _PlayerManager.transform.parent.gameObject.SetActive(false);
-        game_host = _ConnectionManager.AreWeHost();
-        LobbyMaster.SetActive(true);
-        L_HostOnly.SetActive(game_host);
+    void UpdateLobbyPlayerIcons(){
+        int player_count = player_instances.Count;
+        float icon_dist = 185;
+        float offset = -0.5f * icon_dist * (player_count - 1);
+
+        for(int i = 0; i < PlayerIcons.Length; i++){
+            PlayerIcons[i].gameObject.SetActive(i < player_count);
+            if(i < player_count){
+                PlayerIcons[i].anchoredPosition = new Vector2((icon_dist * i) + offset, PlayerIcons[i].anchoredPosition.y);
+                PlayerIconUsernames[i].text = player_instances[i].Username;
+                PlayerIconBackgrounds[i].color = player_instances[i].FactionData().Colour();
+                PlayerIconFlags[i].sprite = player_instances[i].FactionData().Mini_Flag();
+                PlayerIconBodies[i].SetPropertyBlock(GetTroopMaterials(player_instances[i].Faction_ID)[0]);
+                PlayerIconHostStars[i].SetActive(player_instances[i].Host);
+            }
+        }
+    }
+
+    public void ChangeFaction(int modifier){
+        if(game_state != 0)
+            return;
+
+        int new_faction = PlayerPrefs.GetInt("FACTION") + modifier;
+        if(new_faction < 0)
+            new_faction = _FactionLookup.Length() - 1;
+        if(new_faction >= _FactionLookup.Length())
+            new_faction = 0;
+        PlayerPrefs.SetInt("FACTION", new_faction);
+
+        OurInstance.UpdateFaction();
+        UpdateL_Flag();
+    }
+
+    void UpdateL_Flag(){
+        L_Flag.sprite = _FactionLookup.GetFaction(PlayerPrefs.GetInt("FACTION")).Flag();
     }
 
     void CloseLobbyUI(){
         LobbyMaster.SetActive(false);
     }
 
-    // MAIN GAMEPLAY //
+    // GAME START //
 
     public void HostStartGame(){
         _ConnectionManager.CloseOffSession();
@@ -117,7 +171,7 @@ public class SessionManager : MonoBehaviour
         _PlayerManager.Setup();
     }
 
-    // Map Setup //
+    // MAP SETUP //
     
     void MakeMap(){
         _MapManager.SetSession(this);
@@ -163,31 +217,39 @@ public class SessionManager : MonoBehaviour
             return;
         
         if(map_data_recieved > 2 && !generated_map){
-            print("Data Constructed");
             generated_map = true;
             ClientStartGame();
         }
     }
 
-    // Player Setup //
+    // PLAYER SETUP //
 
     void GetPlayers(){
         GameObject[] player_objects = GameObject.FindGameObjectsWithTag("Player");
-        player_instances = new PlayerInstance[player_objects.Length];
+        player_instances = new List<PlayerInstance>();
+        int initial_faction = -1;
+        bool can_war = false;
 
         for(int i = 0; i < player_objects.Length; i++){
-
-            player_instances[i] = player_objects[i].GetComponent<PlayerInstance>();
+            player_instances.Add(player_objects[i].GetComponent<PlayerInstance>());
             NetworkObject NO = player_instances[i].GetComponent<NetworkObject>();
 
-            player_instances[i].SetOwner(NO.InputAuthority);
-            player_instances[i].SetLocal(NO.HasInputAuthority);
+            if(initial_faction == -1)
+                initial_faction = player_instances[i].Faction_ID;
+
+            if(initial_faction != player_instances[i].Faction_ID)
+                can_war = true;
 
             if(NO.HasInputAuthority){
                 OurInstance = player_instances[i];
                 player_instances[i].SetManager(_PlayerManager);
             }
         }
+
+        player_instances = player_instances.OrderBy(p => p.ToString()).ToList();
+
+        L_CantStartText.SetActive(!can_war);
+        L_StartButton.SetActive(can_war);
     }
 
     void SetupTroopMaterials(){
@@ -207,7 +269,9 @@ public class SessionManager : MonoBehaviour
         }
     }
 
-    // Local Communication //
+    // MAIN GAMEPLAY //
+
+    // all here is temp and v wip
 
     public Troop SpawnLocalTroop(TroopData troop_data, int tile){
         print(tile);
@@ -227,7 +291,7 @@ public class SessionManager : MonoBehaviour
         troop.SetPosition(id);
     }
 
-    // Turns //
+    // Turn Logic //
 
     public void UpTurn(){
         current_turn++;
@@ -243,26 +307,6 @@ public class SessionManager : MonoBehaviour
 
     // GETTERS //
 
-    public PlayerInstance GetPlayer(int i){
-        return player_instances[i];
-    }
-
-    public int LocalPlayerFaction(){
-        return _FactionLookup.ID(OurInstance.FactionData());
-    }
-
-    public int GetPlayerCount(){
-        return player_instances.Length;
-    }
-
-    public PlayerInstance[] GetAllPlayerInstances(){
-        return player_instances;
-    }
-
-    public PlayerInstance LocalInstance(){
-        return OurInstance;
-    }
-
     public MaterialPropertyBlock[] GetTroopMaterials(int faction_id){
         MaterialPropertyBlock[] return_mats = new MaterialPropertyBlock[2];
         return_mats[0] = troop_skins[faction_id * 2];
@@ -270,11 +314,11 @@ public class SessionManager : MonoBehaviour
         return return_mats;
     }
 
-    public int CurrentTurn(){
-        return current_turn;
-    }
-
-    public int CurrentStars(){
-        return current_stars;
-    }
+    public PlayerInstance GetPlayer(int i){return player_instances[i];}
+    public int LocalPlayerFaction(){return _FactionLookup.ID(OurInstance.FactionData());}
+    public int GetPlayerCount(){return player_instances.Count;}
+    public List<PlayerInstance> GetAllPlayerInstances(){return player_instances;}
+    public PlayerInstance LocalInstance(){return OurInstance;}
+    public int CurrentTurn(){return current_turn;}
+    public int CurrentStars(){return current_stars;}
 }
