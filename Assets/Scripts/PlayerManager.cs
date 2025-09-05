@@ -201,7 +201,7 @@ public class PlayerManager : MonoBehaviour
             block_world_clicks = true;
             TroopSpawnMenu.SetActive(false);
             if(i > -1 && i < SpawnableTroops.Count){
-                _GameplayManager.SpawnTroop(SpawnableTroops[i], current_tile, _SessionManager.OurInstance.ID);
+                _GameplayManager.AskToSpawnTroop(SpawnableTroops[i], current_tile, _SessionManager.OurInstance.ID);
             }
             Deselect();
         }
