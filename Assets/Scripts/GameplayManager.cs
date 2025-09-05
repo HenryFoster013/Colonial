@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 
-public class GameplayManager : MonoBehaviour
+public class GameplayManager : NetworkBehaviour
 {
     [SerializeField] FactionLookup _FactionLookup;
+    [SerializeField] TroopLookup _TroopLookup;
     [SerializeField] PlayerManager _PlayerManager;
     SessionManager _SessionManager;
     ConnectionManager _ConnectionManager;
@@ -33,6 +34,24 @@ public class GameplayManager : MonoBehaviour
 
     public List<Troop> GetTroops(int id){
         return AllTroops[id];
+    }
+
+    // Troop Spawning //
+
+    public void AskToSpawnTroop(TroopData troop_data, int tile, int owner){
+        if(_SessionManager.Hosting){
+            SpawnTroop(troop_data, tile, owner);
+        }
+        else{
+            print("cool");
+            RPC_SpawnTroop(_TroopLookup.ID(troop_data), tile, owner);
+        }
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RPC_SpawnTroop(int troop_id, int tile, int owner, RpcInfo info = default){
+        print("beans");
+        SpawnTroop(_TroopLookup.Troop(troop_id), tile, owner);
     }
 
     public void SpawnTroop(TroopData troop_data, int tile, int owner){
