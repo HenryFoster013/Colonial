@@ -439,12 +439,12 @@ public class MapManager : MonoBehaviour
 
     public void VisibleTilesPass(){
         for(int i = 0; i < tiles_owned.Length; i++){
-            if(tiles_owned[i] == _FactionLookup.ID(_SessionManager.LocalInstance().FactionData())){
+            if(tiles_owned[i] == _FactionLookup.ID(_SessionManager.OurInstance.FactionData())){
                 MarkTileAsVisible(i);
             }
 
-            if(tile_pieces[i] == _PieceLookup.ID(_SessionManager.LocalInstance().FactionData().Tower())){
-                _SessionManager.LocalInstance().SnapCameraToPosition(GetTilePosition(i) + new Vector3(8,0,0));
+            if(tile_pieces[i] == _PieceLookup.ID(_SessionManager.OurInstance.FactionData().Tower())){
+                _SessionManager.OurInstance.SnapCameraToPosition(GetTilePosition(i) + new Vector3(8,0,0));
             }
         }
     }

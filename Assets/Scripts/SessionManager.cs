@@ -12,39 +12,22 @@ public class SessionManager : MonoBehaviour
 {
     [Header(" - MAIN - ")]
     [SerializeField] FactionLookup _FactionLookup;
-    [SerializeField] MapManager _MapManager;
+    [SerializeField] PreGameManager _PreGameManager;
+    [SerializeField] GameplayManager _GameplayManager;
     [SerializeField] PlayerManager _PlayerManager;
-    [Header("Player Instances")]
-    [SerializeField] PlayerInstance OurInstance;
-    public List<PlayerInstance> player_instances = new List<PlayerInstance>();
-    [Header(" - LOBBY - ")]
-    [SerializeField] GameObject LobbyMaster;
-    [SerializeField] GameObject L_UI_Holder;
-    [SerializeField] GameObject L_HostOnly;
-    [SerializeField] GameObject L_StartButton;
-    [SerializeField] GameObject L_CantStartText;
-    [SerializeField] Image L_Flag;
-    [Header("Lobby - Player Icons")]
-    [SerializeField] RectTransform[] PlayerIcons;
-    [SerializeField] TMP_Text[] PlayerIconUsernames;
-    [SerializeField] Image[] PlayerIconBackgrounds;
-    [SerializeField] Image[] PlayerIconFlags;
-    [SerializeField] MeshRenderer[] PlayerIconBodies;
-    [SerializeField] GameObject[] PlayerIconHostStars;
+    [SerializeField] MapManager _MapManager;
     
-    // 0 = Lobby
-    // 1 = Gameplay
-    // 2 = Postmatch
-    int game_state = 0;
+    [Header("Player Instances")]
+    public List<PlayerInstance> player_instances = new List<PlayerInstance>();
+    public PlayerInstance OurInstance { get; private set; }
 
-    bool game_host = false;
+    // 0 = Lobby, 1 = Gameplay, 2 = Postmatch
+    int game_state = 0;
     ConnectionManager _ConnectionManager;
+    public bool Hosting { get; private set; }
+   
     int map_data_recieved;
     bool generated_map = false;
-
-    int current_turn = 0;
-    int current_stars = 3;
-    int stars_per_turn = 3;
     
     const float texture_length_pixels = 16;
     MaterialPropertyBlock[] troop_skins;
@@ -53,12 +36,12 @@ public class SessionManager : MonoBehaviour
 
     void Start(){
         SetupTroopMaterials();
-        LobbySetup();
+        InitialSetup();
         AreWeLate();
     }
 
     void Update(){
-        LobbyLogic();
+        PreGame();
         CheckConnection();
     }
 
@@ -69,20 +52,19 @@ public class SessionManager : MonoBehaviour
 
     // SETUP //
 
-    void LobbySetup(){
+    void InitialSetup(){
         map_data_recieved = 0;
         generated_map = false;
         _ConnectionManager = GameObject.FindGameObjectWithTag("Connection Manager").GetComponent<ConnectionManager>();
         _ConnectionManager._SessionManager = this;
-        _PlayerManager.transform.parent.gameObject.SetActive(false);
-        game_host = _ConnectionManager.AreWeHost();
-        LobbyMaster.SetActive(true);
-        L_HostOnly.SetActive(game_host);
-        UpdateL_Flag();
+        Hosting = _ConnectionManager.Hosting();
+        _PreGameManager.gameObject.SetActive(true);
+        _GameplayManager.gameObject.SetActive(false);
+        _PreGameManager.Setup(this);
     }
 
     void AreWeLate(){
-        if(!_ConnectionManager.AreWeHost()){
+        if(!_ConnectionManager.Hosting()){
             if(_ConnectionManager.HasGameStarted()){
                 PlayerPrefs.SetString("Error Details", "Game already full.");
                 _ConnectionManager.DisconnectFromLobby("Network Error");
@@ -92,35 +74,12 @@ public class SessionManager : MonoBehaviour
 
     // LOBBY GAMEPLAY //
 
-    void LobbyLogic(){
+    void PreGame(){
         if(game_state != 0)
             return;
         
         GetPlayers();
-        UpdateLobbyPlayerIcons();
-    }
-
-    void UpdateLobbyPlayerIcons(){
-        int player_count = player_instances.Count;
-        float icon_dist = 185;
-        float offset = -0.5f * icon_dist * (player_count - 1);
-
-        for(int i = 0; i < PlayerIcons.Length; i++){
-            PlayerIcons[i].gameObject.SetActive(i < player_count);
-            if(i < player_count){
-                PlayerIcons[i].anchoredPosition = new Vector2((icon_dist * i) + offset, PlayerIcons[i].anchoredPosition.y);
-                PlayerIconUsernames[i].text = player_instances[i].Username;
-                PlayerIconBackgrounds[i].color = player_instances[i].FactionData().Colour();
-                PlayerIconFlags[i].sprite = player_instances[i].FactionData().Mini_Flag();
-                PlayerIconBodies[i].SetPropertyBlock(GetTroopMaterials(player_instances[i].Faction_ID)[0]);
-                PlayerIconHostStars[i].SetActive(player_instances[i].Host);
-            }
-        }
-
-        if(OurInstance == null)
-            L_UI_Holder.SetActive(false);
-        else
-            L_UI_Holder.SetActive(OurInstance.Ready);
+        _PreGameManager.UpdateUI();
     }
 
     public void ChangeFaction(int modifier){
@@ -135,15 +94,7 @@ public class SessionManager : MonoBehaviour
         PlayerPrefs.SetInt("FACTION", new_faction);
 
         OurInstance.UpdateFaction();
-        UpdateL_Flag();
-    }
-
-    void UpdateL_Flag(){
-        L_Flag.sprite = _FactionLookup.GetFaction(PlayerPrefs.GetInt("FACTION")).Flag();
-    }
-
-    void CloseLobbyUI(){
-        LobbyMaster.SetActive(false);
+        _PreGameManager.UpdateFlag();
     }
 
     // GAME START //
@@ -151,45 +102,42 @@ public class SessionManager : MonoBehaviour
     public void HostStartGame(){
         if(!AllPlayersReady())
             return;
-
+        
+        game_state = 1;
         _ConnectionManager.CloseOffSession();
-        CloseLobbyUI();
-        DefaultValues();
+        _GameplayManager.DefaultValues();
         GetPlayers();
-        InitialisePlayerManager();
-        MakeMap();
+        SwitchToGameplay();
+        HostMakeMap();
     }
 
     public void ClientStartGame(){
+        game_state = 1;
         _MapManager.SetSession(this);
+        _GameplayManager.DefaultValues();
         GetPlayers();
-        CloseLobbyUI();
-        DefaultValues();
-        InitialisePlayerManager();
+        SwitchToGameplay();
         _MapManager.ClientGenerateMap();
     }
 
-    void DefaultValues(){
-        current_stars = 3;
-        current_turn = 1;
-        game_state = 1;
+    public void SwitchToGameplay(){
+        _PreGameManager.CloseUI();
+        _PreGameManager.gameObject.SetActive(false);
+        _GameplayManager.gameObject.SetActive(true);
+        _GameplayManager.SetSession(this);
+        _PlayerManager.Setup(this);
     }
 
-    void InitialisePlayerManager(){
-        _PlayerManager.transform.parent.gameObject.SetActive(true);
-        _PlayerManager.Setup();
-    }
 
     // MAP SETUP //
     
-    void MakeMap(){
+    void HostMakeMap(){
+        if(!Hosting)
+            return;
+
         _MapManager.SetSession(this);
-
-        if(game_host){ // Otherwise, will have to download the perline noise and piece data
-            _MapManager.EstablishNoiseMap();
-            _MapManager.EstablishOtherRandoms();
-        }
-
+        _MapManager.EstablishNoiseMap();
+        _MapManager.EstablishOtherRandoms();
         _MapManager.GenerateMap();
 
         _ConnectionManager.SendLargeFloatArray(0, _MapManager.GetRawMapData());
@@ -198,7 +146,7 @@ public class SessionManager : MonoBehaviour
     }
 
     public void GotMapDataRaw(float[] data){
-        if(game_host)
+        if(Hosting)
             return;
         _MapManager.SetMapDataRaw(data);
         map_data_recieved++;
@@ -206,7 +154,7 @@ public class SessionManager : MonoBehaviour
     }
 
     public void GotTileOwnership(int[] data){
-        if(game_host)
+        if(Hosting)
             return;
         _MapManager.SetTileOwnership(data);
         map_data_recieved++;
@@ -214,7 +162,7 @@ public class SessionManager : MonoBehaviour
     }
 
     public void GotTilePieces(int[] data){
-        if(game_host)
+        if(Hosting)
             return;
         _MapManager.SetTilePieces(data);
         map_data_recieved++;
@@ -222,7 +170,7 @@ public class SessionManager : MonoBehaviour
     }
 
     void CheckWeHaveAllData(){
-        if(game_host)
+        if(Hosting)
             return;
         
         if(map_data_recieved > 2 && !generated_map){
@@ -263,8 +211,7 @@ public class SessionManager : MonoBehaviour
 
         player_instances = player_instances.OrderBy(p => p.Username).ToList();
 
-        L_CantStartText.SetActive(!can_war || !all_ready);
-        L_StartButton.SetActive(can_war && all_ready);
+        _PreGameManager.SetStartButtons(can_war, all_ready);
     }
 
     public bool AllPlayersReady(){
@@ -297,6 +244,12 @@ public class SessionManager : MonoBehaviour
 
     // all here is temp and v wip
 
+    public void UpTurn(){_GameplayManager.UpTurn();}
+    public void UpStars(){_GameplayManager.UpStars();}
+    public void SpendStars(int cost){_GameplayManager.SpendStars(cost);}
+    public int CurrentTurn(){return _GameplayManager.current_turn;}
+    public int CurrentStars(){return _GameplayManager.current_stars;}
+
     public Troop SpawnLocalTroop(TroopData troop_data, int tile){
         print(tile);
 
@@ -315,20 +268,6 @@ public class SessionManager : MonoBehaviour
         troop.SetPosition(id);
     }
 
-    // Turn Logic //
-
-    public void UpTurn(){
-        current_turn++;
-    }
-
-    public void UpStars(){
-        current_stars += stars_per_turn;
-    }
-
-    public void SpendStars(int cost){
-        current_stars -= cost;
-    }
-
     // GETTERS //
 
     public MaterialPropertyBlock[] GetTroopMaterials(int faction_id){
@@ -342,7 +281,4 @@ public class SessionManager : MonoBehaviour
     public int LocalPlayerFaction(){return _FactionLookup.ID(OurInstance.FactionData());}
     public int GetPlayerCount(){return player_instances.Count;}
     public List<PlayerInstance> GetAllPlayerInstances(){return player_instances;}
-    public PlayerInstance LocalInstance(){return OurInstance;}
-    public int CurrentTurn(){return current_turn;}
-    public int CurrentStars(){return current_stars;}
 }
