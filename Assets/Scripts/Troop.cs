@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
 public class Troop : MonoBehaviour{
-
+    
     [Header(" - MAIN - ")]
     public TroopData Data;
     [SerializeField] Collider Col;
+    [Networked] public int Owner {get; private set;}
 
     [Header(" - DISPLAY - ")]
     [SerializeField] Animator Anim;
@@ -34,7 +36,8 @@ public class Troop : MonoBehaviour{
         transform.eulerAngles = new Vector3(0f, 90f, 0f);
     }
 
-    public void InitialSetup(SessionManager sm, MapManager map, FactionLookup fm, Faction fac){
+    public void InitialSetup(SessionManager sm, MapManager map, FactionLookup fm, Faction fac, int owner){
+        Owner = owner;
         session_manager = sm;
         map_manager = map;
         faction_lookup = fm;

@@ -22,11 +22,10 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] Transform CameraSpine;
 
     [Header(" --- TROOPS --- ")]
-    public List<Troop> OurTroops = new List<Troop>();
+    public List<TroopData> SpawnableTroops = new List<TroopData>();
 
     [Header(" --- UI --- ")]
     [SerializeField] GameObject TroopSpawnMenu;
-    public List<TroopData> SpawnableTroops = new List<TroopData>();
 
     [Header("Tile Popup")]
     [SerializeField] GameObject TileInfoDisplay;
@@ -89,13 +88,17 @@ public class PlayerManager : MonoBehaviour
         Animate();
     }
 
+    List<Troop> OurTroops(){
+        return _GameplayManager.GetTroops(_SessionManager.OurInstance.ID);
+    }
+
     public void EndTurn(){
         Deselect();
         _GameplayManager.UpTurn();
         _GameplayManager.UpStars();
         TurnDisplay.text = _GameplayManager.current_turn.ToString();
         StarsDisplay.text = _GameplayManager.current_stars.ToString();
-        foreach(Troop t in OurTroops)
+        foreach(Troop t in OurTroops())
             t.NewTurn();
     }
 
@@ -107,9 +110,7 @@ public class PlayerManager : MonoBehaviour
         ResetUI();
     }
 
-
     void SetupTroops(){
-        OurTroops = new List<Troop>();
         SpawnableTroops = new List<TroopData>();
         SpawnableTroops.AddRange(_SessionManager.LocalFactionData().Troops());
     }
@@ -200,17 +201,10 @@ public class PlayerManager : MonoBehaviour
             block_world_clicks = true;
             TroopSpawnMenu.SetActive(false);
             if(i > -1 && i < SpawnableTroops.Count){
-                SpawnTroop(SpawnableTroops[i], current_tile);
+                _GameplayManager.SpawnTroop(SpawnableTroops[i], current_tile, _SessionManager.OurInstance.ID);
             }
             Deselect();
         }
-    }
-
-    void SpawnTroop(TroopData troop_data, int tile){
-        if(!Map.CheckTileOwnership(tile, _SessionManager.LocalFactionID()))
-            return;
-        
-        OurTroops.Add(_SessionManager.SpawnLocalTroop(troop_data, tile));
     }
 
     void SelectionLogic(){
@@ -246,12 +240,15 @@ public class PlayerManager : MonoBehaviour
     }
 
     List<int> WalkableTileFilter(List<int> tiles){
-        foreach(Troop t in OurTroops)
+        foreach(Troop t in OurTroops())
             tiles.Remove(t.GetTile());
         return tiles;
     }
 
     void GetTroopRanges(Troop troop){
+
+        if(troop.Owner != _SessionManager.OurInstance.ID)
+            return;
 
         // In order of priority, with attacking overwriting all
         walkable_tiles = new List<int>();
@@ -304,7 +301,7 @@ public class PlayerManager : MonoBehaviour
     void SelectTile(int id){
         if(current_troop != null){
             if(NumInList(id, walkable_tiles)){
-                _SessionManager.MoveLocalTroop(current_troop, id);
+                _GameplayManager.MoveTroop(current_troop, id);
                 Deselect();
             }
             else if(NumInList(id, attackable_tiles)){
@@ -377,8 +374,8 @@ public class PlayerManager : MonoBehaviour
 
     bool DoWeHaveTroopAt(int tile){
         bool found = false;
-        for(int i = 0; i < OurTroops.Count && !found; i++){
-            if(OurTroops[i].GetTile() == tile)
+        for(int i = 0; i < OurTroops().Count && !found; i++){
+            if(OurTroops()[i].GetTile() == tile)
                 found = true;
         }
         return found;
@@ -417,10 +414,11 @@ public class PlayerManager : MonoBehaviour
         Deselect();
         current_troop = troop;
 
+
         BaseHighlight.SetActive(true);
         BaseHighlight.transform.position = Map.GetTilePosition(troop.GetTile());
 
-        if(!troop.TurnOver())
+        if(!troop.TurnOver() || troop.Owner != _SessionManager.OurInstance.ID)
             BaseHighlightMaterial.SetColor("_BaseColor", _SessionManager.LocalFactionData().Colour());
         else
             BaseHighlightMaterial.SetColor("_BaseColor", DisabledColour);
@@ -430,9 +428,10 @@ public class PlayerManager : MonoBehaviour
         SpawnModelHolderTroop(troop.Data, TileModelHolder, troop.FactionID());
 
         TileInfoDisplay.SetActive(true);
-        DisplayBG.color = _SessionManager.LocalFactionData().Colour();
+        DisplayBG.color = _SessionManager.PlayerFaction(troop.Owner).Colour();
         
-        GetTroopRanges(troop);
+        if(troop.Owner == _SessionManager.OurInstance.ID)
+            GetTroopRanges(troop);
     }
 
     void SpawnModelHolderTroop(TroopData troop, Transform holder, int fact_owner){

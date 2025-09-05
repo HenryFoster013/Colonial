@@ -8,7 +8,7 @@ public class PreGameManager : MonoBehaviour
 {
     [Header(" - References - ")]
     [SerializeField] FactionLookup _FactionLookup;
-    SessionManager _SessionManager;
+    [SerializeField] SessionManager _SessionManager;
     
     [Header(" - UI - ")]
     [SerializeField] GameObject UI_Holder;
@@ -26,8 +26,7 @@ public class PreGameManager : MonoBehaviour
     [SerializeField] MeshRenderer[] PI_TorsoMeshes;
     [SerializeField] GameObject[] PI_HostStars;
     
-    public void Setup(SessionManager sm){
-        _SessionManager = sm;
+    public void Setup(){
         UI_Holder.SetActive(true);
         HostOnly_UI.SetActive(_SessionManager.Hosting);
         UpdateFlag();
@@ -69,5 +68,20 @@ public class PreGameManager : MonoBehaviour
     public void SetStartButtons(bool can_war, bool all_ready){
         CantStartText.SetActive(!can_war || !all_ready);
         StartButton.SetActive(can_war && all_ready);
+    }
+
+    public void ChangeFaction(int modifier){
+        if(_SessionManager.game_state != 0)
+            return;
+
+        int new_faction = PlayerPrefs.GetInt("FACTION") + modifier;
+        if(new_faction < 0)
+            new_faction = _FactionLookup.Length() - 1;
+        if(new_faction >= _FactionLookup.Length())
+            new_faction = 0;
+        PlayerPrefs.SetInt("FACTION", new_faction);
+
+        _SessionManager.OurInstance.UpdateFaction();
+        UpdateFlag();
     }
 }

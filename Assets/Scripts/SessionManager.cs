@@ -16,15 +16,14 @@ public class SessionManager : MonoBehaviour
     [SerializeField] GameplayManager _GameplayManager;
     [SerializeField] PlayerManager _PlayerManager;
     [SerializeField] MapManager _MapManager;
+    ConnectionManager _ConnectionManager;
     
     [Header("Player Instances")]
     public List<PlayerInstance> player_instances = new List<PlayerInstance>();
     public PlayerInstance OurInstance { get; private set; }
 
-    // 0 = Lobby, 1 = Gameplay, 2 = Postmatch
-    int game_state = 0;
-    ConnectionManager _ConnectionManager;
     public bool Hosting { get; private set; }
+    public int game_state { get; private set; } // 0 = Lobby, 1 = Gameplay, 2 = Postmatch
    
     int map_data_recieved;
     bool generated_map = false;
@@ -60,7 +59,7 @@ public class SessionManager : MonoBehaviour
         Hosting = _ConnectionManager.Hosting();
         _PreGameManager.gameObject.SetActive(true);
         _GameplayManager.gameObject.SetActive(false);
-        _PreGameManager.Setup(this);
+        _PreGameManager.Setup();
     }
 
     void AreWeLate(){
@@ -82,21 +81,6 @@ public class SessionManager : MonoBehaviour
         _PreGameManager.UpdateUI();
     }
 
-    public void ChangeFaction(int modifier){
-        if(game_state != 0)
-            return;
-
-        int new_faction = PlayerPrefs.GetInt("FACTION") + modifier;
-        if(new_faction < 0)
-            new_faction = _FactionLookup.Length() - 1;
-        if(new_faction >= _FactionLookup.Length())
-            new_faction = 0;
-        PlayerPrefs.SetInt("FACTION", new_faction);
-
-        OurInstance.UpdateFaction();
-        _PreGameManager.UpdateFlag();
-    }
-
     // GAME START //
 
     public void HostStartGame(){
@@ -107,6 +91,7 @@ public class SessionManager : MonoBehaviour
         _ConnectionManager.CloseOffSession();
         _GameplayManager.DefaultValues();
         GetPlayers();
+        ReapplyPlayerIDs();
         SwitchToGameplay();
         HostMakeMap();
     }
@@ -125,9 +110,10 @@ public class SessionManager : MonoBehaviour
         _PreGameManager.gameObject.SetActive(false);
         _GameplayManager.gameObject.SetActive(true);
         _GameplayManager.SetSession(this);
+        _GameplayManager.SetConnection(_ConnectionManager);
+        _GameplayManager.SetMap(_MapManager);
         _PlayerManager.Setup(this, _GameplayManager);
     }
-
 
     // MAP SETUP //
     
@@ -209,9 +195,23 @@ public class SessionManager : MonoBehaviour
             }
         }
 
-        player_instances = player_instances.OrderBy(p => p.Username).ToList();
+        player_instances = player_instances.OrderBy(p => p.ID).ToList();
 
         _PreGameManager.SetStartButtons(can_war, all_ready);
+    }
+
+    void ReapplyPlayerIDs(){
+        for(int i = 0; i < player_instances.Count; i++){
+            player_instances[i].SetID(i);
+        }
+    }
+
+    public Faction PlayerFaction(int player_id){
+        return player_instances[player_id].FactionData();
+    }
+
+    public int PlayerFactionID(int player_id){
+        return player_instances[player_id].Faction_ID;
     }
 
     public bool AllPlayersReady(){
@@ -238,28 +238,6 @@ public class SessionManager : MonoBehaviour
             troop_skins[i * 2] = default_skin;
             troop_skins[(i * 2) + 1] = disabled_skin;
         }
-    }
-
-    // MAIN GAMEPLAY //
-
-    // all here is temp and v wip
-
-    public Troop SpawnLocalTroop(TroopData troop_data, int tile){
-        print(tile);
-
-        if(!_MapManager.CheckTileOwnership(tile, LocalFactionID()))
-            return null;
-
-        GameObject g = GameObject.Instantiate(troop_data.Prefab(), Vector3.zero, Quaternion.identity);
-        Troop troop = g.GetComponent<Troop>();
-        troop.InitialSetup(this, _MapManager, _FactionLookup, OurInstance.FactionData());
-        troop.SetPosition(tile);
-
-        return troop;
-    }
-
-    public void MoveLocalTroop(Troop troop, int id){
-        troop.SetPosition(id);
     }
 
     // GETTERS //

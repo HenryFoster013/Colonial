@@ -109,9 +109,9 @@ public class LobbyUI : MonoBehaviour
     }
 
     public void UpdateLobbyUI(){
-        LL_LoadingIcon.SetActive(!_ConnectionManager.ConnectedToLobby());
+        LL_LoadingIcon.SetActive(!_ConnectionManager.connected_to_lobby);
         foreach(GameObject g in LL_EnabledWhenLobbiesLoad){
-            g.SetActive(_ConnectionManager.ConnectedToLobby());
+            g.SetActive(_ConnectionManager.connected_to_lobby);
         }
     }
 

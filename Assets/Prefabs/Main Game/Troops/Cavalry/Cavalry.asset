@@ -10,12 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f515b31b64faf524992a34452a563d5a, type: 3}
-  m_Name: Generic
+  m_Name: Cavalry
   m_EditorClassIdentifier: 
-  _Type: Generic
-  _Name: Villager
-  _Cost: 1
-  _MoveDistance: 1
+  _Type: Cavalry
+  _Name: Cavalry
+  _Cost: 3
+  _MoveDistance: 3
   _AttackDistance: 1
-  _Vision: 1
-  _Prefab: {fileID: 7115972115337629991, guid: eb1434828b4dfd54d8c516b14dd49e48, type: 3}
+  _Vision: 10
+  _Prefab: {fileID: 5269036604996546843, guid: 408cf4ba78b764546b1fb9432ce3a9ae, type: 3}
+  _NetPrefabRef:
+    RawGuidValue: c0ccc9b8ceb31d14696e66cd892c9021
