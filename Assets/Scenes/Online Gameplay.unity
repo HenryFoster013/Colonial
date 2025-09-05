@@ -485,13 +485,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 54888802}
+  - component: {fileID: 54888803}
   m_Layer: 0
-  m_Name: '- LOBBY -'
+  m_Name: '- PRE GAME -'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &54888802
 Transform:
   m_ObjectHideFlags: 0
@@ -510,6 +511,61 @@ Transform:
   m_Father: {fileID: 308904220}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &54888803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54888801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f20a87062088f54bbc382c6fc3c0c83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
+  UI_Holder: {fileID: 277091331}
+  InteractableButtonsHolder: {fileID: 587031210}
+  HostOnly_UI: {fileID: 589810320}
+  StartButton: {fileID: 376889965}
+  CantStartText: {fileID: 1452406725}
+  Flag: {fileID: 1546114817}
+  PlayerIcons:
+  - {fileID: 2109625810}
+  - {fileID: 1201391896}
+  - {fileID: 1447033238}
+  - {fileID: 1817512301}
+  - {fileID: 848333292}
+  PI_Usernames:
+  - {fileID: 1781492489}
+  - {fileID: 373031562}
+  - {fileID: 1865099740}
+  - {fileID: 1791947106}
+  - {fileID: 400310761}
+  PI_Backgrounds:
+  - {fileID: 1256841763}
+  - {fileID: 344400834}
+  - {fileID: 2040212105}
+  - {fileID: 1551650939}
+  - {fileID: 408111276}
+  PI_Flags:
+  - {fileID: 1579073264}
+  - {fileID: 1411117441}
+  - {fileID: 847906251}
+  - {fileID: 900119541}
+  - {fileID: 1331877532}
+  PI_TorsoMeshes:
+  - {fileID: 3631952886692844904}
+  - {fileID: 589038421}
+  - {fileID: 496388056}
+  - {fileID: 1803303222}
+  - {fileID: 2002001473}
+  PI_HostStars:
+  - {fileID: 1839958075}
+  - {fileID: 19638541}
+  - {fileID: 281647909}
+  - {fileID: 1104610314}
+  - {fileID: 1958960062}
 --- !u!1 &64126539
 GameObject:
   m_ObjectHideFlags: 0
@@ -1728,7 +1784,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1715902575}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
         m_MethodName: SpawnTroopButton
         m_Mode: 3
@@ -1937,6 +1993,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 216659844}
   m_CullTransparentMesh: 1
+--- !u!1 &236702217
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 236702218}
+  - component: {fileID: 236702219}
+  m_Layer: 0
+  m_Name: '- GAMEPLAY -'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &236702218
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236702217}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2146075081}
+  m_Father: {fileID: 308904220}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &236702219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236702217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87987978b22a8044dbd6679fa00b11eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &246462560
 GameObject:
   m_ObjectHideFlags: 0
@@ -2707,7 +2808,7 @@ GameObject:
   - component: {fileID: 308904220}
   - component: {fileID: 308904221}
   m_Layer: 0
-  m_Name: '- LOCAL MANAGER -'
+  m_Name: '- LOCAL SESSION MANAGER -'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2727,7 +2828,7 @@ Transform:
   m_Children:
   - {fileID: 951703144}
   - {fileID: 54888802}
-  - {fileID: 2146075081}
+  - {fileID: 236702218}
   - {fileID: 1780067898}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -2745,52 +2846,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
+  _PreGameManager: {fileID: 54888803}
+  _GameplayManager: {fileID: 236702219}
+  _PlayerManager: {fileID: 2146075082}
   _MapManager: {fileID: 1780067900}
-  _PlayerManager: {fileID: 1715902575}
-  OurInstance: {fileID: 0}
   player_instances: []
-  LobbyMaster: {fileID: 54888801}
-  L_UI_Holder: {fileID: 587031210}
-  L_HostOnly: {fileID: 589810320}
-  L_StartButton: {fileID: 376889965}
-  L_CantStartText: {fileID: 1452406725}
-  L_Flag: {fileID: 1546114817}
-  PlayerIcons:
-  - {fileID: 2109625810}
-  - {fileID: 1201391896}
-  - {fileID: 1447033238}
-  - {fileID: 1817512301}
-  - {fileID: 848333292}
-  PlayerIconUsernames:
-  - {fileID: 1781492489}
-  - {fileID: 373031562}
-  - {fileID: 1865099740}
-  - {fileID: 1791947106}
-  - {fileID: 400310761}
-  PlayerIconBackgrounds:
-  - {fileID: 1256841763}
-  - {fileID: 344400834}
-  - {fileID: 2040212105}
-  - {fileID: 1551650939}
-  - {fileID: 408111276}
-  PlayerIconFlags:
-  - {fileID: 1579073264}
-  - {fileID: 1411117441}
-  - {fileID: 847906251}
-  - {fileID: 900119541}
-  - {fileID: 1331877532}
-  PlayerIconBodies:
-  - {fileID: 3631952886692844904}
-  - {fileID: 589038421}
-  - {fileID: 496388056}
-  - {fileID: 1803303222}
-  - {fileID: 2002001473}
-  PlayerIconHostStars:
-  - {fileID: 1839958075}
-  - {fileID: 19638541}
-  - {fileID: 281647909}
-  - {fileID: 1104610314}
-  - {fileID: 1958960062}
 --- !u!1 &310321566
 GameObject:
   m_ObjectHideFlags: 0
@@ -3290,7 +3350,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &376889966
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4625,7 +4685,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1715902575}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
         m_MethodName: SpawnTroopButton
         m_Mode: 3
@@ -4731,7 +4791,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &587031211
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4890,7 +4950,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &589810321
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5216,7 +5276,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1715902575}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
         m_MethodName: EndTurn
         m_Mode: 1
@@ -6887,7 +6947,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1715902575}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
         m_MethodName: SpawnTroopButton
         m_Mode: 3
@@ -8247,7 +8307,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1715902575}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
         m_MethodName: SpawnTroopButton
         m_Mode: 3
@@ -10766,7 +10826,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1452406726
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11269,7 +11329,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1715902575}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
         m_MethodName: SpawnTroopButton
         m_Mode: 3
@@ -13634,7 +13694,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1715902574}
-  - component: {fileID: 1715902575}
   m_Layer: 0
   m_Name: Player Manager
   m_TagString: Untagged
@@ -13660,60 +13719,6 @@ Transform:
   m_Father: {fileID: 2146075081}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1715902575
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1715902573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0da17c24e1dcaa4eb602cba489ed981, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Map: {fileID: 1780067900}
-  _TileLookup: {fileID: 11400000, guid: ce6d8e292a733dc4b9656b1c225fba2c, type: 2}
-  _PieceLookup: {fileID: 11400000, guid: 91ca4b05291bee14098208e490613db6, type: 2}
-  _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
-  _SessionManager: {fileID: 308904221}
-  _Camera: {fileID: 86466292}
-  CameraHook: {fileID: 776516041}
-  CameraSpine: {fileID: 1029655847}
-  OurTroops: []
-  TroopSpawnMenu: {fileID: 48529154}
-  SpawnableTroops:
-  - {fileID: 11400000, guid: 257afc0480c85e04bb1fe939e7169d4a, type: 2}
-  - {fileID: 11400000, guid: 19f52be431cf2da418d4950e5061470f, type: 2}
-  - {fileID: 11400000, guid: dd81d14c8929a2d4eb002c7e6d2659db, type: 2}
-  - {fileID: 11400000, guid: 0e152362814ac4b4eacae5aface73094, type: 2}
-  TileInfoDisplay: {fileID: 1025633090}
-  TileRenderCamera: {fileID: 1944513289}
-  TileRenderPoint: {fileID: 1109132460}
-  TileModelHolder: {fileID: 886801114}
-  DisplayBG: {fileID: 1617952547}
-  TroopButtons:
-  - {fileID: 559711260}
-  - {fileID: 101206249}
-  - {fileID: 25219933}
-  - {fileID: 1179102997}
-  TroopModelHolders:
-  - {fileID: 535108014}
-  - {fileID: 1847977061}
-  - {fileID: 2065548081}
-  - {fileID: 1152806671}
-  StarsDisplay: {fileID: 1212188065}
-  TurnDisplay: {fileID: 458615973}
-  ClickableLayers:
-    serializedVersion: 2
-    m_Bits: 256
-  BaseHighlight: {fileID: 6264462413249290008}
-  BaseHighlightMaterial: {fileID: 2100000, guid: 45ee5a3b17dffd44f8ef06dd2a1b2742, type: 2}
-  BlueHighlightPrefab: {fileID: 6264462412396003950, guid: 183142141b9d04449b043a9f9d7e37a2, type: 3}
-  BlueHighlightHook: {fileID: 1249113446}
-  RedHighlightPrefab: {fileID: 6264462412396003950, guid: 50716c7f79448874a92b83a004d3b288, type: 3}
-  RedHighlightHook: {fileID: 687229923}
-  DisabledColour: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
 --- !u!1 &1726486199
 GameObject:
   m_ObjectHideFlags: 0
@@ -17774,7 +17779,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2109625810
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18074,13 +18079,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2146075081}
+  - component: {fileID: 2146075082}
   m_Layer: 0
-  m_Name: ' - PLAYER - '
+  m_Name: Local Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2146075081
 Transform:
   m_ObjectHideFlags: 0
@@ -18088,16 +18094,69 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2146075080}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1715902574}
   - {fileID: 1986801054}
-  m_Father: {fileID: 308904220}
-  m_RootOrder: 2
+  m_Father: {fileID: 236702218}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2146075082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2146075080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0da17c24e1dcaa4eb602cba489ed981, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Map: {fileID: 1780067900}
+  _TileLookup: {fileID: 11400000, guid: ce6d8e292a733dc4b9656b1c225fba2c, type: 2}
+  _PieceLookup: {fileID: 11400000, guid: 91ca4b05291bee14098208e490613db6, type: 2}
+  _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
+  _Camera: {fileID: 86466292}
+  CameraHook: {fileID: 776516041}
+  CameraSpine: {fileID: 1029655847}
+  OurTroops: []
+  TroopSpawnMenu: {fileID: 48529154}
+  SpawnableTroops:
+  - {fileID: 11400000, guid: 257afc0480c85e04bb1fe939e7169d4a, type: 2}
+  - {fileID: 11400000, guid: 19f52be431cf2da418d4950e5061470f, type: 2}
+  - {fileID: 11400000, guid: dd81d14c8929a2d4eb002c7e6d2659db, type: 2}
+  - {fileID: 11400000, guid: 0e152362814ac4b4eacae5aface73094, type: 2}
+  TileInfoDisplay: {fileID: 1025633090}
+  TileRenderCamera: {fileID: 1944513289}
+  TileRenderPoint: {fileID: 1109132460}
+  TileModelHolder: {fileID: 886801114}
+  DisplayBG: {fileID: 1617952547}
+  TroopButtons:
+  - {fileID: 559711260}
+  - {fileID: 101206249}
+  - {fileID: 25219933}
+  - {fileID: 1179102997}
+  TroopModelHolders:
+  - {fileID: 535108014}
+  - {fileID: 1847977061}
+  - {fileID: 2065548081}
+  - {fileID: 1152806671}
+  StarsDisplay: {fileID: 1212188065}
+  TurnDisplay: {fileID: 458615973}
+  ClickableLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  BaseHighlight: {fileID: 6264462413249290008}
+  BaseHighlightMaterial: {fileID: 2100000, guid: 45ee5a3b17dffd44f8ef06dd2a1b2742, type: 2}
+  BlueHighlightPrefab: {fileID: 6264462412396003950, guid: 183142141b9d04449b043a9f9d7e37a2, type: 3}
+  BlueHighlightHook: {fileID: 1249113446}
+  RedHighlightPrefab: {fileID: 6264462412396003950, guid: 50716c7f79448874a92b83a004d3b288, type: 3}
+  RedHighlightHook: {fileID: 687229923}
+  DisabledColour: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
 --- !u!1 &2147257432
 GameObject:
   m_ObjectHideFlags: 0

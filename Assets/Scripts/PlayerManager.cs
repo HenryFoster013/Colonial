@@ -13,7 +13,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] TileLookup _TileLookup;
     [SerializeField] PieceLookup _PieceLookup;
     [SerializeField] FactionLookup _FactionLookup;
-    [SerializeField] SessionManager _SessionManager;
+    SessionManager _SessionManager;
     
     [Header(" --- CAMERA --- ")]
     [SerializeField] Camera _Camera;
@@ -74,7 +74,8 @@ public class PlayerManager : MonoBehaviour
 
     // BASE //
 
-    public void Setup(){
+    public void Setup(SessionManager sm){
+        _SessionManager = sm;
         GeneralSetup();
         Deselect();
     }
@@ -108,7 +109,7 @@ public class PlayerManager : MonoBehaviour
     void SetupTroops(){
         OurTroops = new List<Troop>();
         SpawnableTroops = new List<TroopData>();
-        SpawnableTroops.AddRange(_SessionManager.LocalInstance().FactionData().Troops());
+        SpawnableTroops.AddRange(_SessionManager.OurInstance.FactionData().Troops());
     }
 
     void ResetCameraRot(){
@@ -392,8 +393,8 @@ public class PlayerManager : MonoBehaviour
         for(int i = 0; i < SpawnableTroops.Count; i++){
             if(TroopModelHolders[i].childCount == 0){
                 SpawnModelHolderTroop(SpawnableTroops[i], TroopModelHolders[i], _SessionManager.LocalPlayerFaction());
-                TroopButtons[i].GetChild(0).GetComponent<Image>().color = _SessionManager.LocalInstance().FactionData().Colour();
-                TroopButtons[i].GetChild(2).GetComponent<Image>().color = _SessionManager.LocalInstance().FactionData().Colour();
+                TroopButtons[i].GetChild(0).GetComponent<Image>().color = _SessionManager.OurInstance.FactionData().Colour();
+                TroopButtons[i].GetChild(2).GetComponent<Image>().color = _SessionManager.OurInstance.FactionData().Colour();
                 TroopButtons[i].GetChild(3).GetComponent<TMP_Text>().text = SpawnableTroops[i].Cost().ToString();
             }
 
@@ -418,7 +419,7 @@ public class PlayerManager : MonoBehaviour
         BaseHighlight.transform.position = Map.GetTilePosition(troop.GetTile());
 
         if(!troop.TurnOver())
-            BaseHighlightMaterial.SetColor("_BaseColor", _SessionManager.LocalInstance().FactionData().Colour());
+            BaseHighlightMaterial.SetColor("_BaseColor", _SessionManager.OurInstance.FactionData().Colour());
         else
             BaseHighlightMaterial.SetColor("_BaseColor", DisabledColour);
 
@@ -427,7 +428,7 @@ public class PlayerManager : MonoBehaviour
         SpawnModelHolderTroop(troop.Data, TileModelHolder, troop.FactionID());
 
         TileInfoDisplay.SetActive(true);
-        DisplayBG.color = _SessionManager.LocalInstance().FactionData().Colour();
+        DisplayBG.color = _SessionManager.OurInstance.FactionData().Colour();
         
         GetTroopRanges(troop);
     }

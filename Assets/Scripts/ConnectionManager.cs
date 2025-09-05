@@ -26,7 +26,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
     string password_buffer;
 
 
-    // Gameplay //
+    // Session //
 
     public bool HasGameStarted(){
         return _runner.SessionInfo.Properties["Game_Started"];
@@ -129,7 +129,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
         UpdateLobbyUI();
     }
 
-    // Lobby UI Interactions //
+    // Lobby UI Interactions (Server Browser) //
 
     void UpdateLobbyContentSize(){
         if(_LobbyUI != null)
@@ -143,7 +143,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
 
     // Session Hosting and Creation //
 
-    public bool AreWeHost(){
+    public bool Hosting(){
         return _runner.IsServer;
     }
 
@@ -187,7 +187,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player){
-        if (AreWeHost()){
+        if (Hosting()){
             NetworkObject networkPlayerObject = runner.Spawn(PlayerInstancePrefab, Vector3.zero, Quaternion.identity, player);
             _spawnedCharacters.Add(player, networkPlayerObject);
             if(player == _runner.LocalPlayer){
