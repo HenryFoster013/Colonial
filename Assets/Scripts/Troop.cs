@@ -95,7 +95,6 @@ public class Troop : NetworkBehaviour{
         Anim.Play("Hop", -1, 0);
         Vector3 new_pos = _MapManager.GetTroopPosition(current_tile);
         transform.LookAt(new Vector3(new_pos.x,transform.position.y,new_pos.z));
-        print(new_pos.y);
         transform.position = new_pos;
 
         if(_SessionManager.OurInstance.ID == Owner){
@@ -165,7 +164,6 @@ public class Troop : NetworkBehaviour{
     public bool UsedMove(){return used_move;}
     public bool UsedSpecial(){return used_special;}
     public bool TurnOver(){return (used_move && used_special);}
-    public int GetTile(){return current_tile;}
     public Faction FactionData(){return faction;}
     public int FactionID(){return Faction_ID;}
 }

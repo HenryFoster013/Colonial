@@ -46,7 +46,7 @@ public class GameplayManager : NetworkBehaviour
 
     public List<int> WalkableTileFilter(List<int> tiles){
         foreach(Troop t in AllTroops){
-            tiles.Remove(t.GetTile());
+            tiles.Remove(t.current_tile);
         }
         return tiles;
     }
