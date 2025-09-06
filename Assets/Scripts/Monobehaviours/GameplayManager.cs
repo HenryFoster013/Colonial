@@ -19,6 +19,8 @@ public class GameplayManager : NetworkBehaviour
 
     public List<Troop> AllTroops;
 
+    // Defaults
+
     public void DefaultValues(){
         current_stars = 3;
         current_turn = 1;

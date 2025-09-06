@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ce17719c79d53ba4bae87c9445a2ed30, type: 3}
-  m_Name: _TroopLookup
+  m_Name: _ Troop Lookup
   m_EditorClassIdentifier: 
   Troops:
   - {fileID: 11400000, guid: 257afc0480c85e04bb1fe939e7169d4a, type: 2}
