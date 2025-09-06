@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using System.Diagnostics;
 using Debug=UnityEngine.Debug;
 using Fusion;
@@ -119,6 +120,10 @@ public class MapManager : MonoBehaviour
 
             result.Remove(origin_tile);
         }
+
+        // Remove dupes
+        result = result.Distinct().ToList();
+
         return result;
     }
 

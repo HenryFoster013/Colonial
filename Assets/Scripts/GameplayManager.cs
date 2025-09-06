@@ -17,7 +17,7 @@ public class GameplayManager : NetworkBehaviour
     int stars_per_turn = 3;
     int troop_counter = 1;
 
-    List<Troop>[] AllTroops;
+    public List<Troop> AllTroops;
 
     public void DefaultValues(){
         current_stars = 3;
@@ -28,25 +28,34 @@ public class GameplayManager : NetworkBehaviour
     // TROOPS //
 
     void ResetTroops(){
-        AllTroops = new List<Troop>[5];
-        for(int i = 0; i < AllTroops.Length; i++)
-            AllTroops[i] = new List<Troop>();
+        AllTroops = new List<Troop>();   
     }
 
-    public List<Troop> GetTroopList(int id){
-        return AllTroops[id];
+    public List<Troop> GetTroopList(){
+        return AllTroops;
     }
 
-    public Troop GetTroop(int list, int id){
+    public Troop GetTroop(int id){
         Troop troop = null;
-        for(int i = 0; i < GetTroopList(list).Count && troop == null; i++){
-            if(GetTroopList(list)[i].UniqueID == id)
-                troop = GetTroopList(list)[i];
+        for(int i = 0; i < AllTroops.Count && troop == null; i++){
+            if(AllTroops[i].UniqueID == id)
+                troop = AllTroops[i];
         }
         return troop;
     }
 
+    public List<int> WalkableTileFilter(List<int> tiles){
+        foreach(Troop t in AllTroops){
+            tiles.Remove(t.GetTile());
+        }
+        return tiles;
+    }
+
     // Troop Spawning //
+
+    public void AddTroop(Troop troop){
+        AllTroops.Add(troop);
+    }
 
     public void AskToSpawnTroop(TroopData troop_data, int tile, int owner){
         if(_SessionManager.Hosting){
@@ -72,7 +81,6 @@ public class GameplayManager : NetworkBehaviour
 
         NetworkObject new_troop = _ConnectionManager.SpawnObject(troop_data.NetPrefabRef());
         Troop troop = new_troop.gameObject.GetComponent<Troop>();
-        GetTroopList(owner).Add(troop);
         troop.Owner = owner;
         troop.Faction_ID = _SessionManager.PlayerFactionID(owner);
         troop.UniqueID = troop_counter;
@@ -91,7 +99,7 @@ public class GameplayManager : NetworkBehaviour
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_SetTroopPos(int troop_id, int tile, int owner){
-        Troop troop = GetTroop(owner, troop_id);
+        Troop troop = GetTroop(troop_id);
         SetTroopPos(troop, tile, owner);
     }
 

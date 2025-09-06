@@ -238,13 +238,6 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    List<int> WalkableTileFilter(List<int> tiles){
-        foreach(Troop t in OurTroops){
-            if(t != null)
-                tiles.Remove(t.GetTile());
-        }
-        return tiles;
-    }
 
     void GetTroopRanges(Troop troop){
 
@@ -263,8 +256,8 @@ public class PlayerManager : MonoBehaviour
         }
 
         if(!troop.UsedMove()){
-            walkable_tiles = WalkableTileFilter(Map.TilesByDistance(troop.GetTile(), troop.Data.MoveDistance(), true));
-            walkable_tiles = walkable_tiles.Except(attackable_tiles).ToList();
+            walkable_tiles = _GameplayManager.WalkableTileFilter(Map.TilesByDistance(troop.GetTile(), troop.Data.MoveDistance(), true));
+            //walkable_tiles = walkable_tiles.Except(attackable_tiles).ToList();
             walkable_tiles = walkable_tiles.Except(special_tiles).ToList();
         }
 
@@ -422,7 +415,7 @@ public class PlayerManager : MonoBehaviour
         BaseHighlight.transform.position = Map.GetTilePosition(troop.GetTile());
 
         if(!troop.TurnOver() || troop.Owner != _SessionManager.OurInstance.ID)
-            BaseHighlightMaterial.SetColor("_BaseColor", _SessionManager.LocalFactionData().Colour());
+            BaseHighlightMaterial.SetColor("_BaseColor", troop.FactionData().Colour());
         else
             BaseHighlightMaterial.SetColor("_BaseColor", DisabledColour);
 
