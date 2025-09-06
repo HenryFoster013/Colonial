@@ -11,6 +11,7 @@ TagManager:
   - Connection Manager
   - Map Manager
   - Session Manager
+  - Player Manager
   layers:
   - Default
   - TransparentFX

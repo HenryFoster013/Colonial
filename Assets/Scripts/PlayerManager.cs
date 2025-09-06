@@ -60,6 +60,7 @@ public class PlayerManager : MonoBehaviour
     float camera_spin;
     float target_spine_rot = -90;
 
+    List<Troop> OurTroops = new List<Troop>();
     List<Transform> blue_grid_highlights = new List<Transform>();
     List<Transform> red_grid_highlights = new List<Transform>();
     List<int> walkable_tiles = new List<int>();
@@ -88,18 +89,16 @@ public class PlayerManager : MonoBehaviour
         Animate();
     }
 
-    List<Troop> OurTroops(){
-        return _GameplayManager.GetTroops(_SessionManager.OurInstance.ID);
-    }
-
     public void EndTurn(){
         Deselect();
         _GameplayManager.UpTurn();
         _GameplayManager.UpStars();
         TurnDisplay.text = _GameplayManager.current_turn.ToString();
         StarsDisplay.text = _GameplayManager.current_stars.ToString();
-        foreach(Troop t in OurTroops())
-            t.NewTurn();
+        foreach(Troop t in OurTroops){
+            if(t != null)
+                t.NewTurn();
+        }
     }
 
     // SETUP //
@@ -240,8 +239,10 @@ public class PlayerManager : MonoBehaviour
     }
 
     List<int> WalkableTileFilter(List<int> tiles){
-        foreach(Troop t in OurTroops())
-            tiles.Remove(t.GetTile());
+        foreach(Troop t in OurTroops){
+            if(t != null)
+                tiles.Remove(t.GetTile());
+        }
         return tiles;
     }
 
@@ -301,7 +302,7 @@ public class PlayerManager : MonoBehaviour
     void SelectTile(int id){
         if(current_troop != null){
             if(NumInList(id, walkable_tiles)){
-                _GameplayManager.MoveTroop(current_troop, id);
+                _GameplayManager.AskToMoveTroop(current_troop, id, _SessionManager.OurInstance.ID);
                 Deselect();
             }
             else if(NumInList(id, attackable_tiles)){
@@ -374,9 +375,11 @@ public class PlayerManager : MonoBehaviour
 
     bool DoWeHaveTroopAt(int tile){
         bool found = false;
-        for(int i = 0; i < OurTroops().Count && !found; i++){
-            if(OurTroops()[i].GetTile() == tile)
-                found = true;
+        for(int i = 0; i < OurTroops.Count && !found; i++){
+            if(OurTroops[i] != null){
+                if(OurTroops[i].GetTile() == tile)
+                    found = true;
+            }
         }
         return found;
     }
@@ -432,6 +435,10 @@ public class PlayerManager : MonoBehaviour
         
         if(troop.Owner == _SessionManager.OurInstance.ID)
             GetTroopRanges(troop);
+    }
+
+    public void AddTroop(Troop t){
+        OurTroops.Add(t);
     }
 
     void SpawnModelHolderTroop(TroopData troop, Transform holder, int fact_owner){
