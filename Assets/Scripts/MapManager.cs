@@ -427,6 +427,7 @@ public class MapManager : MonoBehaviour
         for(int i = 0; i < tile_data.Length; i++){
             tile_data[i] = _TileLookup.ID("Unmarked");
             requires_piece_refresh[i] = true;
+            tile_positions[i] = map_data_raw[i] * TileHeightVariation;
         }
 
         VisibleTilesPass();
