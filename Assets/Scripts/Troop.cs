@@ -19,6 +19,7 @@ public class Troop : NetworkBehaviour{
     [Networked] public int Owner {get; set;}
     [Networked] public int Faction_ID {get; set;}
     [Networked] public bool Ready_Marker {get; set;}
+    [Networked] public int current_tile {get; set;}
     
     MapManager _MapManager;
     SessionManager _SessionManager;
@@ -27,14 +28,18 @@ public class Troop : NetworkBehaviour{
     MaterialPropertyBlock[] skins;
     const int mesh_default_layer = 0;
     const int mesh_highlight_layer = 9;
-    int current_tile;
+    int tile_buffer;
     bool used_move, used_special, setup, spawned;
 
     // SETUP //
 
     void Start(){Setup();}
     public override void Spawned(){spawned = true;}
-    void Update(){CheckForDataSetup();}
+
+    void Update(){
+        CheckForDataSetup();
+        CheckForMovement();
+    }
 
     void Setup(){
         transform.eulerAngles = new Vector3(0f, 90f, 0f);
@@ -51,12 +56,21 @@ public class Troop : NetworkBehaviour{
                 GotDataSetup();
         }
     }
+
+    void CheckForMovement(){
+        if(!Ready_Marker)
+            return;
+        
+        if(current_tile != tile_buffer)
+            SetPosition();
+    }
     
     void GotDataSetup(){
         setup = true;
         faction = _FactionLookup.GetFaction(Faction_ID);
         SetupMaterial();
         ModelHolder.SetActive(true);
+        SetPosition();
     }
 
     void SetupMaterial(){
@@ -66,20 +80,22 @@ public class Troop : NetworkBehaviour{
 
     // MOVEMENT //
 
-    public void SetPosition(int i){
-        if(used_move)
-            return;
+    void SetPosition(){
+        //if(used_move)
+        //    return;
 
-        current_tile = i;
+        tile_buffer = current_tile;
         Anim.Play("Hop", -1, 0);
-        _MapManager.MarkRadiusAsVisible(i, Data.Vision());
-        _MapManager.CheckForMapRegen();
-
         Vector3 new_pos = _MapManager.GetTroopPosition(current_tile);
         transform.LookAt(new Vector3(new_pos.x,transform.position.y,new_pos.z));
         transform.position = new_pos;
+
+        if(Owner == _SessionManager.OurInstance.ID){
+            _MapManager.MarkRadiusAsVisible(current_tile, Data.Vision());
+            _MapManager.CheckForMapRegen();
+        }
         
-        UseMove();  
+        //UseMove();  
     }
 
     // GRAPHICS //

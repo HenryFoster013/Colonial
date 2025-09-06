@@ -536,7 +536,6 @@ public class MapManager : MonoBehaviour
                             PlacePiece(local, _PieceLookup.ID(player.FactionData().Tower()));
 
                             MarkRadiusAsOwned(local, 2, _owner);
-                            MarkTileAsOwned(local, _owner);
                         }
                         else{
                             distance_fails++;
@@ -560,6 +559,7 @@ public class MapManager : MonoBehaviour
     }
 
     void MarkRadiusAsOwned(int id, int radius, int owner){
+        MarkTileAsOwned(id, owner);
         foreach(int tile in TilesByDistance(id, radius, false)){
             MarkTileAsOwned(tile, owner);
         }
@@ -574,6 +574,7 @@ public class MapManager : MonoBehaviour
 
     bool map_regen_marker = false;
     public void MarkRadiusAsVisible(int id, int radius){
+        MarkTileAsVisible(id);
         foreach(int tile in TilesByDistance(id, radius, false)){
             MarkTileAsVisible(tile);
         }

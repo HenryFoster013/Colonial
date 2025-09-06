@@ -38,17 +38,20 @@ public class PreGameManager : MonoBehaviour
         float offset = -0.5f * icon_dist * (player_count - 1);
 
         for(int i = 0; i < PlayerIcons.Length; i++){
-            PlayerIcons[i].gameObject.SetActive(i < player_count);
+            bool valid = false;
             if(i < player_count){
-                PlayerInstance playa = _SessionManager.GetPlayer(i);
-
-                PlayerIcons[i].anchoredPosition = new Vector2((icon_dist * i) + offset, PlayerIcons[i].anchoredPosition.y);
-                PI_Usernames[i].text = playa.Username;
-                PI_Backgrounds[i].color = playa.FactionData().Colour();
-                PI_Flags[i].sprite = playa.FactionData().Mini_Flag();
-                PI_TorsoMeshes[i].SetPropertyBlock(_SessionManager.GetTroopMaterials(playa.Faction_ID)[0]);
-                PI_HostStars[i].SetActive(playa.Host);
+                PlayerInstance playa = _SessionManager.GetPlayer(i); 
+                valid = (playa.Username != "");
+                if(valid){
+                    PlayerIcons[i].anchoredPosition = new Vector2((icon_dist * i) + offset, PlayerIcons[i].anchoredPosition.y);
+                    PI_Usernames[i].text = playa.Username;
+                    PI_Backgrounds[i].color = playa.FactionData().Colour();
+                    PI_Flags[i].sprite = playa.FactionData().Mini_Flag();
+                    PI_TorsoMeshes[i].SetPropertyBlock(_SessionManager.GetTroopMaterials(playa.Faction_ID)[0]);
+                    PI_HostStars[i].SetActive(playa.Host);
+                }
             }
+            PlayerIcons[i].gameObject.SetActive(valid);
         }
 
         if(_SessionManager.OurInstance == null)

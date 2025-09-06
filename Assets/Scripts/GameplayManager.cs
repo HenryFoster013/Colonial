@@ -65,11 +65,11 @@ public class GameplayManager : NetworkBehaviour
         troop.Owner = owner;
         troop.Faction_ID = _SessionManager.PlayerFactionID(owner);
         troop.Ready_Marker = true;
-        //troop.SetPosition(tile);
+        troop.current_tile = tile;
     }
 
     public void MoveTroop(Troop troop, int id){
-        //troop.SetPosition(id);
+        troop.current_tile = id;
     }
 
     public void UpTurn(){current_turn++;}
