@@ -12,6 +12,7 @@ TagManager:
   - Map Manager
   - Session Manager
   - Player Manager
+  - Gameplay Manager
   layers:
   - Default
   - TransparentFX

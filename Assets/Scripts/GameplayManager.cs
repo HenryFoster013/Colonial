@@ -100,6 +100,14 @@ public class GameplayManager : NetworkBehaviour
             troop.current_tile = id;
     }
 
+    public void RecheckTroopsVisible(){
+        foreach(List<Troop> listy in AllTroops){
+            foreach(Troop troop in listy){
+                troop.CheckVisibility();
+            }
+        }
+    }
+
     public void UpTurn(){current_turn++;}
     public void UpStars(){current_stars += stars_per_turn;}
     public void SpendStars(int cost){current_stars -= cost;}
