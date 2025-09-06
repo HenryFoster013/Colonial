@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5710f67d7f2388b4aa84b5ff2eb91b21, type: 3}
-  m_Name: _Faction Lookup
+  m_Name: _ Faction Lookup
   m_EditorClassIdentifier: 
   _Factions:
   - {fileID: 11400000, guid: ecbbd71c470ee314eb7019539f207cd7, type: 2}
