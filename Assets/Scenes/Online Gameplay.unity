@@ -737,8 +737,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 71625341}
-  - component: {fileID: 71625343}
-  - component: {fileID: 71625342}
   m_Layer: 7
   m_Name: Generic (3)
   m_TagString: Troop
@@ -763,41 +761,6 @@ Transform:
   m_Father: {fileID: 601657938}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!136 &71625342
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 71625340}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.28
-  m_Height: 0.8949783
-  m_Direction: 1
-  m_Center: {x: 0, y: 1.45, z: 0}
---- !u!114 &71625343
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 71625340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd440fa933e7704429dacb02760bdf1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Data: {fileID: 11400000, guid: 257afc0480c85e04bb1fe939e7169d4a, type: 2}
-  Col: {fileID: 71625342}
-  Anim: {fileID: 2042203187}
-  BaseMaterial: {fileID: 2100000, guid: 0cd6c36be2f049f4db0a7a4717cfdf84, type: 2}
-  Meshes:
-  - {fileID: 1803303222}
-  - {fileID: 931421699}
-  - {fileID: 1752183659}
-  - {fileID: 135390794}
 --- !u!1 &86466288
 GameObject:
   m_ObjectHideFlags: 0
@@ -2814,7 +2777,7 @@ GameObject:
   - component: {fileID: 308904222}
   m_Layer: 0
   m_Name: '- LOCAL SESSION MANAGER -'
-  m_TagString: Untagged
+  m_TagString: Session Manager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6177,8 +6140,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 801738761}
-  - component: {fileID: 801738763}
-  - component: {fileID: 801738762}
   m_Layer: 7
   m_Name: Generic (1)
   m_TagString: Troop
@@ -6203,41 +6164,6 @@ Transform:
   m_Father: {fileID: 2048371382}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!136 &801738762
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 801738760}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.28
-  m_Height: 0.8949783
-  m_Direction: 1
-  m_Center: {x: 0, y: 1.45, z: 0}
---- !u!114 &801738763
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 801738760}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd440fa933e7704429dacb02760bdf1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Data: {fileID: 11400000, guid: 257afc0480c85e04bb1fe939e7169d4a, type: 2}
-  Col: {fileID: 801738762}
-  Anim: {fileID: 184912605}
-  BaseMaterial: {fileID: 2100000, guid: 0cd6c36be2f049f4db0a7a4717cfdf84, type: 2}
-  Meshes:
-  - {fileID: 589038421}
-  - {fileID: 1384657796}
-  - {fileID: 1000205032}
-  - {fileID: 1198496082}
 --- !u!1 &807084177
 GameObject:
   m_ObjectHideFlags: 0
@@ -14000,7 +13926,7 @@ GameObject:
   - component: {fileID: 1780067899}
   m_Layer: 0
   m_Name: '- MAP -'
-  m_TagString: Untagged
+  m_TagString: Map Manager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17296,8 +17222,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2042930474}
-  - component: {fileID: 2042930476}
-  - component: {fileID: 2042930475}
   m_Layer: 7
   m_Name: Generic (2)
   m_TagString: Troop
@@ -17322,41 +17246,6 @@ Transform:
   m_Father: {fileID: 1562618707}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!136 &2042930475
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2042930473}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.28
-  m_Height: 0.8949783
-  m_Direction: 1
-  m_Center: {x: 0, y: 1.45, z: 0}
---- !u!114 &2042930476
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2042930473}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd440fa933e7704429dacb02760bdf1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Data: {fileID: 11400000, guid: 257afc0480c85e04bb1fe939e7169d4a, type: 2}
-  Col: {fileID: 2042930475}
-  Anim: {fileID: 713501772}
-  BaseMaterial: {fileID: 2100000, guid: 0cd6c36be2f049f4db0a7a4717cfdf84, type: 2}
-  Meshes:
-  - {fileID: 496388056}
-  - {fileID: 207295853}
-  - {fileID: 1962347274}
-  - {fileID: 1518807590}
 --- !u!1 &2048371381
 GameObject:
   m_ObjectHideFlags: 0
@@ -17838,8 +17727,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2111097693}
-  - component: {fileID: 2111097695}
-  - component: {fileID: 2111097694}
   m_Layer: 7
   m_Name: Generic (4)
   m_TagString: Troop
@@ -17864,41 +17751,6 @@ Transform:
   m_Father: {fileID: 1413610080}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!136 &2111097694
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2111097692}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.28
-  m_Height: 0.8949783
-  m_Direction: 1
-  m_Center: {x: 0, y: 1.45, z: 0}
---- !u!114 &2111097695
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2111097692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd440fa933e7704429dacb02760bdf1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Data: {fileID: 11400000, guid: 257afc0480c85e04bb1fe939e7169d4a, type: 2}
-  Col: {fileID: 2111097694}
-  Anim: {fileID: 2124577002}
-  BaseMaterial: {fileID: 2100000, guid: 0cd6c36be2f049f4db0a7a4717cfdf84, type: 2}
-  Meshes:
-  - {fileID: 2002001473}
-  - {fileID: 139978622}
-  - {fileID: 1189752295}
-  - {fileID: 831647841}
 --- !u!1 &2114788700
 GameObject:
   m_ObjectHideFlags: 0
@@ -18374,27 +18226,6 @@ Transform:
   m_Father: {fileID: 6985727977261774389}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1232649065821257143
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7115972115842555468}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd440fa933e7704429dacb02760bdf1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Data: {fileID: 11400000, guid: 257afc0480c85e04bb1fe939e7169d4a, type: 2}
-  Col: {fileID: 3194187414283794200}
-  Anim: {fileID: 5429601324527668318}
-  BaseMaterial: {fileID: 2100000, guid: 0cd6c36be2f049f4db0a7a4717cfdf84, type: 2}
-  Meshes:
-  - {fileID: 3631952886692844904}
-  - {fileID: 8557891403150077004}
-  - {fileID: 5529826842635240659}
-  - {fileID: 4269236959598840042}
 --- !u!23 &1318410233095895784
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -18547,20 +18378,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &3194187414283794200
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7115972115842555468}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.28
-  m_Height: 0.8949783
-  m_Direction: 1
-  m_Center: {x: 0, y: 1.45, z: 0}
 --- !u!33 &3453503791699467684
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -19288,8 +19105,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7115972115842555471}
-  - component: {fileID: 1232649065821257143}
-  - component: {fileID: 3194187414283794200}
   m_Layer: 7
   m_Name: Generic
   m_TagString: Troop

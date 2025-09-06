@@ -9,6 +9,8 @@ TagManager:
   - Troop
   - Hoverable
   - Connection Manager
+  - Map Manager
+  - Session Manager
   layers:
   - Default
   - TransparentFX
