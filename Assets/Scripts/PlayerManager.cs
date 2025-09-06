@@ -440,7 +440,7 @@ public class PlayerManager : MonoBehaviour
         GameObject t = GameObject.Instantiate(troop.Prefab(), holder.position - (Vector3.up * 1f), Quaternion.identity);
         t.transform.localScale = new Vector3(1,1,1) * 1.4f;
         t.transform.parent = holder;
-        t.GetComponent<Troop>().DisplayInitialSetup(_SessionManager, fact_owner, HiddenLayer);
+        t.GetComponent<DisplayTroop>().DisplayInitialSetup(_SessionManager, fact_owner);
         SetLayer(t, HiddenLayer);
     }
 

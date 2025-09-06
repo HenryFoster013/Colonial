@@ -3,62 +3,68 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 
-public class Troop : MonoBehaviour{
+public class Troop : NetworkBehaviour{
     
     [Header(" - MAIN - ")]
     public TroopData Data;
+    [SerializeField] FactionLookup _FactionLookup;
     [SerializeField] Collider Col;
-    [Networked] public int Owner {get; private set;}
 
     [Header(" - DISPLAY - ")]
+    [SerializeField] GameObject ModelHolder;
     [SerializeField] Animator Anim;
     public Material BaseMaterial;
     [SerializeField] MeshRenderer[] Meshes;
     
-    MapManager map_manager;
-    SessionManager session_manager;
-    FactionLookup faction_lookup;
-
+    [Networked] public int Owner {get; set;}
+    [Networked] public int Faction_ID {get; set;}
+    [Networked] public bool Ready_Marker {get; set;}
+    
+    MapManager _MapManager;
+    SessionManager _SessionManager;
     Faction faction;
-
+    
     MaterialPropertyBlock[] skins;
     const int mesh_default_layer = 0;
     const int mesh_highlight_layer = 9;
-
     int current_tile;
-    bool used_move = false;
-    bool used_special = false;
-    
+    bool used_move, used_special, setup, spawned;
 
-    // MAIN LOGIC //
+    // SETUP //
 
-    void Start(){
+    void Start(){Setup();}
+    public override void Spawned(){spawned = true;}
+    void Update(){CheckForDataSetup();}
+
+    void Setup(){
         transform.eulerAngles = new Vector3(0f, 90f, 0f);
-    }
-
-    public void InitialSetup(SessionManager sm, MapManager map, FactionLookup fm, Faction fac, int owner){
-        Owner = owner;
-        session_manager = sm;
-        map_manager = map;
-        faction_lookup = fm;
-        faction = fac;
-        
-        transform.eulerAngles = new Vector3(0f, 90f, 0f);
+        _SessionManager = GameObject.FindGameObjectWithTag("Session Manager").GetComponent<SessionManager>();
+        _MapManager = GameObject.FindGameObjectWithTag("Map Manager").GetComponent<MapManager>();
         used_move = false;
         used_special = true;
+        ModelHolder.SetActive(false);
+    }
 
+    void CheckForDataSetup(){
+        if(!setup && spawned){
+            if(Ready_Marker)
+                GotDataSetup();
+        }
+    }
+    
+    void GotDataSetup(){
+        setup = true;
+        faction = _FactionLookup.GetFaction(Faction_ID);
         SetupMaterial();
+        ModelHolder.SetActive(true);
     }
 
     void SetupMaterial(){
-        skins = session_manager.GetTroopMaterials(faction_lookup.ID(faction));
+        skins = _SessionManager.GetTroopMaterials(Faction_ID);
         UpdateModel();
     }
 
-    public void DisplayInitialSetup(SessionManager sm, int faction_id, int hidden_layer){
-        skins = sm.GetTroopMaterials(faction_id);
-        SetSkin(hidden_layer, 0);
-    }
+    // MOVEMENT //
 
     public void SetPosition(int i){
         if(used_move)
@@ -66,10 +72,10 @@ public class Troop : MonoBehaviour{
 
         current_tile = i;
         Anim.Play("Hop", -1, 0);
-        map_manager.MarkRadiusAsVisible(i, Data.Vision());
-        map_manager.CheckForMapRegen();
+        _MapManager.MarkRadiusAsVisible(i, Data.Vision());
+        _MapManager.CheckForMapRegen();
 
-        Vector3 new_pos = map_manager.GetTroopPosition(current_tile);
+        Vector3 new_pos = _MapManager.GetTroopPosition(current_tile);
         transform.LookAt(new Vector3(new_pos.x,transform.position.y,new_pos.z));
         transform.position = new_pos;
         
@@ -79,16 +85,12 @@ public class Troop : MonoBehaviour{
     // GRAPHICS //
 
     void UpdateModel(){
-
-        int layer = mesh_highlight_layer;
-        int state = 0; // default
-
-        if(TurnOver()){
-            layer = mesh_default_layer;
-            state = 1; // desaturated
-        }
-
-        SetSkin(layer, state);
+        if(Owner != _SessionManager.OurInstance.ID)
+            SetSkin(mesh_default_layer, 0);
+        if(TurnOver())
+            SetSkin(mesh_default_layer, 1);
+        else
+            SetSkin(mesh_highlight_layer, 0);
     }
 
     void SetSkin(int layer, int state){
@@ -131,5 +133,5 @@ public class Troop : MonoBehaviour{
     public bool TurnOver(){return (used_move && used_special);}
     public int GetTile(){return current_tile;}
     public Faction FactionData(){return faction;}
-    public int FactionID(){return faction_lookup.ID(faction);}
+    public int FactionID(){return Faction_ID;}
 }

@@ -43,14 +43,12 @@ public class GameplayManager : NetworkBehaviour
             SpawnTroop(troop_data, tile, owner);
         }
         else{
-            print("cool");
             RPC_SpawnTroop(_TroopLookup.ID(troop_data), tile, owner);
         }
     }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_SpawnTroop(int troop_id, int tile, int owner, RpcInfo info = default){
-        print("beans");
         SpawnTroop(_TroopLookup.Troop(troop_id), tile, owner);
     }
 
@@ -64,7 +62,9 @@ public class GameplayManager : NetworkBehaviour
 
         NetworkObject new_troop = _ConnectionManager.SpawnObject(troop_data.NetPrefabRef());
         Troop troop = new_troop.gameObject.GetComponent<Troop>();
-        troop.InitialSetup(_SessionManager, _MapManager, _FactionLookup, _SessionManager.PlayerFaction(owner), owner);
+        troop.Owner = owner;
+        troop.Faction_ID = _SessionManager.PlayerFactionID(owner);
+        troop.Ready_Marker = true;
         //troop.SetPosition(tile);
     }
 
