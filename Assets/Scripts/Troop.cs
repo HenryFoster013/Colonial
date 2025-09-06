@@ -52,6 +52,7 @@ public class Troop : NetworkBehaviour{
         _PlayerManager = GameObject.FindGameObjectWithTag("Player Manager").GetComponent<PlayerManager>();
         _MapManager = GameObject.FindGameObjectWithTag("Map Manager").GetComponent<MapManager>();
         _GameplayManager = GameObject.FindGameObjectWithTag("Gameplay Manager").GetComponent<GameplayManager>();
+        _GameplayManager.AddTroop(this);
         used_move = false;
         used_special = true;
         first_move_completed = false;
