@@ -11,7 +11,7 @@ public class Troop : NetworkBehaviour{
     [SerializeField] Collider Col;
 
     [Header(" - DISPLAY - ")]
-    [SerializeField] GameObject ModelHolder;
+    [SerializeField] GameObject[] ModelHolders;
     [SerializeField] Animator Anim;
     public Material BaseMaterial;
     [SerializeField] MeshRenderer[] Meshes;
@@ -31,7 +31,7 @@ public class Troop : NetworkBehaviour{
     const int mesh_default_layer = 0;
     const int mesh_highlight_layer = 9;
     public int tile_buffer = -1;
-    bool used_move, used_special, setup, spawned;
+    bool used_move, used_special, setup, spawned, first_move_completed;
 
     // SETUP //
 
@@ -41,6 +41,7 @@ public class Troop : NetworkBehaviour{
     void Update(){
         CheckForDataSetup();
         CheckForMovement();
+        CheckVisibility();
     }
 
     // SETUP //
@@ -53,7 +54,7 @@ public class Troop : NetworkBehaviour{
         _GameplayManager = GameObject.FindGameObjectWithTag("Gameplay Manager").GetComponent<GameplayManager>();
         used_move = false;
         used_special = true;
-        ModelHolder.SetActive(false);
+        first_move_completed = false;
     }
 
     void CheckForDataSetup(){
@@ -68,7 +69,6 @@ public class Troop : NetworkBehaviour{
         setup = true;
         faction = _FactionLookup.GetFaction(Faction_ID);
         SetupMaterial();
-        ModelHolder.SetActive(true);
     }
 
     void SetupMaterial(){
@@ -89,18 +89,18 @@ public class Troop : NetworkBehaviour{
         //if(used_move)
         //    return;
 
+        first_move_completed = true;
         tile_buffer = current_tile;
         Anim.Play("Hop", -1, 0);
         Vector3 new_pos = _MapManager.GetTroopPosition(current_tile);
         transform.LookAt(new Vector3(new_pos.x,transform.position.y,new_pos.z));
+        print(new_pos.y);
         transform.position = new_pos;
 
         if(_SessionManager.OurInstance.ID == Owner){
             _MapManager.MarkRadiusAsVisible(current_tile, Data.Vision());
             _MapManager.CheckForMapRegen();
-            _GameplayManager.RecheckTroopsVisible();
         }
-        CheckVisibility();
 
         //UseMove();  
     }
@@ -108,8 +108,12 @@ public class Troop : NetworkBehaviour{
     // GRAPHICS //
 
     public void CheckVisibility(){
-        bool visible = setup && _MapManager.CheckVisibility(current_tile);
-        ModelHolder.SetActive(visible);
+        if(UniqueID == 0)
+            return;   
+
+        bool visible = setup && first_move_completed && _MapManager.CheckVisibility(current_tile);
+        foreach(GameObject model_holder in ModelHolders)
+            model_holder.SetActive(visible);
         Col.enabled = visible;
     }
 
