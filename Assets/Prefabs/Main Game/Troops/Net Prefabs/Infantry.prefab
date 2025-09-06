@@ -500,7 +500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data: {fileID: 11400000, guid: dd81d14c8929a2d4eb002c7e6d2659db, type: 2}
-  faction_lookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
+  _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
   Col: {fileID: 3194187414784522355}
   ModelHolder: {fileID: 8707171246841564941}
   Anim: {fileID: 5429601324022874933}
@@ -514,6 +514,7 @@ MonoBehaviour:
   - {fileID: 4997785077445397990}
   _Owner: -1
   _Faction_ID: -1
+  _Ready_Marker: 0
 --- !u!136 &3194187414784522355
 CapsuleCollider:
   m_ObjectHideFlags: 0

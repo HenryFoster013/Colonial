@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
 using UnityEngine.SceneManagement;
+using System.Linq;
 using Fusion.Sockets;
 using Fusion;
 using TMPro;
@@ -26,7 +26,7 @@ public class SessionManager : MonoBehaviour
     public int game_state { get; private set; } // 0 = Lobby, 1 = Gameplay, 2 = Postmatch
    
     int map_data_recieved;
-    bool generated_map = false;
+    bool generated_map, connected;
     
     const float texture_length_pixels = 16;
     MaterialPropertyBlock[] troop_skins;
@@ -34,6 +34,9 @@ public class SessionManager : MonoBehaviour
     // BASE //
 
     void Start(){
+        CheckConnection();
+        if(!connected)
+            return;
         SetupTroopMaterials();
         InitialSetup();
         AreWeLate();
@@ -41,20 +44,24 @@ public class SessionManager : MonoBehaviour
 
     void Update(){
         PreGame();
-        CheckConnection();
-    }
-
-    void CheckConnection(){
-        if(_ConnectionManager == null)
-            SceneManager.LoadScene("Network Error");
     }
 
     // SETUP //
 
+    void CheckConnection(){
+        GameObject cm_obj = GameObject.FindGameObjectWithTag("Connection Manager");
+        connected = (cm_obj != null);
+        if(!connected){
+            PlayerPrefs.SetString("Error Details", "Bad launch.");
+            SceneManager.LoadScene("Network Error");
+        }
+        else
+            _ConnectionManager = cm_obj.GetComponent<ConnectionManager>();
+    }
+
     void InitialSetup(){
         map_data_recieved = 0;
         generated_map = false;
-        _ConnectionManager = GameObject.FindGameObjectWithTag("Connection Manager").GetComponent<ConnectionManager>();
         _ConnectionManager._SessionManager = this;
         Hosting = _ConnectionManager.Hosting();
         _PreGameManager.gameObject.SetActive(true);
@@ -74,7 +81,7 @@ public class SessionManager : MonoBehaviour
     // LOBBY GAMEPLAY //
 
     void PreGame(){
-        if(game_state != 0)
+        if(game_state != 0 || !connected)
             return;
         
         GetPlayers();

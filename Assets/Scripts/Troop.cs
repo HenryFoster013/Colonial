@@ -87,7 +87,7 @@ public class Troop : NetworkBehaviour{
     void UpdateModel(){
         if(Owner != _SessionManager.OurInstance.ID)
             SetSkin(mesh_default_layer, 0);
-        if(TurnOver())
+        else if(TurnOver())
             SetSkin(mesh_default_layer, 1);
         else
             SetSkin(mesh_highlight_layer, 0);
