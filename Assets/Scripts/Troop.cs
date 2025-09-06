@@ -24,6 +24,7 @@ public class Troop : NetworkBehaviour{
     MapManager _MapManager;
     SessionManager _SessionManager;
     PlayerManager _PlayerManager;
+    GameplayManager _GameplayManager;
     Faction faction;
     
     MaterialPropertyBlock[] skins;
@@ -42,11 +43,14 @@ public class Troop : NetworkBehaviour{
         CheckForMovement();
     }
 
+    // SETUP //
+
     void Setup(){
         transform.eulerAngles = new Vector3(0f, 90f, 0f);
         _SessionManager = GameObject.FindGameObjectWithTag("Session Manager").GetComponent<SessionManager>();
         _PlayerManager = GameObject.FindGameObjectWithTag("Player Manager").GetComponent<PlayerManager>();
         _MapManager = GameObject.FindGameObjectWithTag("Map Manager").GetComponent<MapManager>();
+        _GameplayManager = GameObject.FindGameObjectWithTag("Gameplay Manager").GetComponent<GameplayManager>();
         used_move = false;
         used_special = true;
         ModelHolder.SetActive(false);
@@ -58,14 +62,6 @@ public class Troop : NetworkBehaviour{
                 GotDataSetup();
         }
     }
-
-    void CheckForMovement(){
-        if(UniqueID == 0)
-            return;
-        
-        if(current_tile != tile_buffer)
-            SetPosition();
-    }
     
     void GotDataSetup(){
         _PlayerManager.AddTroop(this);
@@ -73,7 +69,6 @@ public class Troop : NetworkBehaviour{
         faction = _FactionLookup.GetFaction(Faction_ID);
         SetupMaterial();
         ModelHolder.SetActive(true);
-        //SetPosition();
     }
 
     void SetupMaterial(){
@@ -82,6 +77,13 @@ public class Troop : NetworkBehaviour{
     }
 
     // MOVEMENT //
+
+    void CheckForMovement(){
+        if(UniqueID == 0)
+            return;    
+        if(current_tile != tile_buffer)
+            SetPosition();
+    }
 
     void SetPosition(){
         //if(used_move)
@@ -93,13 +95,23 @@ public class Troop : NetworkBehaviour{
         transform.LookAt(new Vector3(new_pos.x,transform.position.y,new_pos.z));
         transform.position = new_pos;
 
-        _MapManager.MarkRadiusAsVisible(current_tile, Data.Vision());
-        _MapManager.CheckForMapRegen();
-        
+        if(_SessionManager.OurInstance.ID == Owner){
+            _MapManager.MarkRadiusAsVisible(current_tile, Data.Vision());
+            _MapManager.CheckForMapRegen();
+            _GameplayManager.RecheckTroopsVisible();
+        }
+        CheckVisibility();
+
         //UseMove();  
     }
 
     // GRAPHICS //
+
+    public void CheckVisibility(){
+        bool visible = setup && _MapManager.CheckVisibility(current_tile);
+        ModelHolder.SetActive(visible);
+        Col.enabled = visible;
+    }
 
     void UpdateModel(){
         if(Owner != _SessionManager.OurInstance.ID)

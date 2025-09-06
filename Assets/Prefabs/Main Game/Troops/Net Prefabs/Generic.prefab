@@ -879,7 +879,9 @@ MonoBehaviour:
   - {fileID: 4269236959029888897}
   _Owner: -1
   _Faction_ID: -1
-  _Ready_Marker: 0
+  _UniqueID: 0
+  _current_tile: 0
+  tile_buffer: -1
 --- !u!136 &3194187414784522355
 CapsuleCollider:
   m_ObjectHideFlags: 0

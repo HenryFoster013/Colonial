@@ -47,7 +47,7 @@ public class MapManager : MonoBehaviour
     bool ready = false;
     public bool Ready(){return ready;}
 
-    float GrassLimit = -0.4f;
+    public float GrassLimit {get; private set;}
     float StoneLimit = 0.5f;
     bool generated_bg;
 
@@ -581,8 +581,9 @@ public class MapManager : MonoBehaviour
         bool flag = (tiles_visible[id] == false);
         tiles_visible[id] = true;
         
-        if(flag)
+        if(flag){
             map_regen_marker = true;
+        }
     }
 
     public void CheckForMapRegen(){
@@ -758,6 +759,10 @@ public class MapManager : MonoBehaviour
         map_data_raw = data;
     }
 
+    public void SetGrassLimit(float limit){
+        GrassLimit = limit;
+    }
+
     public void SetTileOwnership(int[] data){
         tiles_owned = data;
     }
@@ -766,4 +771,7 @@ public class MapManager : MonoBehaviour
         tile_pieces = data;
     }
 
+    // GETTERS //
+
+    public bool CheckVisibility(int tile){return tiles_visible[tile];}
 }
