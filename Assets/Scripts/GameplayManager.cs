@@ -15,6 +15,7 @@ public class GameplayManager : NetworkBehaviour
     public int current_turn { get; private set; }
     public int current_stars { get; private set; }
     int stars_per_turn = 3;
+    int troop_counter = 1;
 
     List<Troop>[] AllTroops;
 
@@ -32,8 +33,17 @@ public class GameplayManager : NetworkBehaviour
             AllTroops[i] = new List<Troop>();
     }
 
-    public List<Troop> GetTroops(int id){
+    public List<Troop> GetTroopList(int id){
         return AllTroops[id];
+    }
+
+    public Troop GetTroop(int list, int id){
+        Troop troop = null;
+        for(int i = 0; i < GetTroopList(list).Count && troop == null; i++){
+            if(GetTroopList(list)[i].UniqueID == id)
+                troop = GetTroopList(list)[i];
+        }
+        return troop;
     }
 
     // Troop Spawning //
@@ -62,14 +72,32 @@ public class GameplayManager : NetworkBehaviour
 
         NetworkObject new_troop = _ConnectionManager.SpawnObject(troop_data.NetPrefabRef());
         Troop troop = new_troop.gameObject.GetComponent<Troop>();
+        GetTroopList(owner).Add(troop);
         troop.Owner = owner;
         troop.Faction_ID = _SessionManager.PlayerFactionID(owner);
-        troop.Ready_Marker = true;
+        troop.UniqueID = troop_counter;
+        troop_counter++;
         troop.current_tile = tile;
     }
 
-    public void MoveTroop(Troop troop, int id){
-        troop.current_tile = id;
+    public void AskToMoveTroop(Troop troop, int tile, int owner){
+        if(_SessionManager.Hosting){
+            SetTroopPos(troop, tile, owner);
+        }
+        else{
+            RPC_SetTroopPos(troop.UniqueID, tile, owner);
+        }
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RPC_SetTroopPos(int troop_id, int tile, int owner){
+        Troop troop = GetTroop(owner, troop_id);
+        SetTroopPos(troop, tile, owner);
+    }
+
+    public void SetTroopPos(Troop troop, int id, int owner){
+        if(troop.Owner == owner && troop != null)
+            troop.current_tile = id;
     }
 
     public void UpTurn(){current_turn++;}

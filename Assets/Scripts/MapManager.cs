@@ -149,9 +149,6 @@ public class MapManager : MonoBehaviour
 
     public Vector3 GetTilePosition(int tile){
         
-        if(!tiles_visible[tile]) // does visible even have a use? especially since only visible tiles have colliders anyway? just used in a creation stage? Rework.
-            return new Vector3(-100, -100, -100); //This here returns -100 for valid player coords, check. Tiles not being correctly marked as visible
-        
         int y = tile / MapSize;
         int x = tile - (y * MapSize);
         float ybounce = 0f;
