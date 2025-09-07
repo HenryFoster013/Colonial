@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9485103ad3e85e4e9280994a77c7be5, type: 3}
+  m_Name: Roll
+  m_EditorClassIdentifier: 
+  Name: Roll
+  BaseClip: {fileID: 0}
+  Mixer: {fileID: 8193749847766800399, guid: f7d701d4c51aa3642b25f9526ef105f5, type: 2}
+  ClipRange:
+  - {fileID: 8300000, guid: b86c9cb413505e842ae4e80977a6dbf8, type: 3}
+  - {fileID: 8300000, guid: 7bdbd3dc6dec779449e59bfa6b20edab, type: 3}
+  - {fileID: 8300000, guid: 8fa9029ca068da3408df31dbcce873d4, type: 3}
+  - {fileID: 8300000, guid: 57746f73a42bb0b4fae034b77633cdc3, type: 3}
+  - {fileID: 8300000, guid: bbaf06fdbe4c27d4ea3167e34a46d146, type: 3}
+  - {fileID: 8300000, guid: 70ee525fc05bc63499e3e1c1aacad789, type: 3}
+  - {fileID: 8300000, guid: 5e5f8c2e07ca50d4d85b94130631a8cf, type: 3}
+  - {fileID: 8300000, guid: 0cbb468eb4515f24bac8db7b5b389a29, type: 3}
+  BasePitch: 1
+  PitchVariation: 0.1
+  BaseVolume: 1
+  VolumeVariation: 0

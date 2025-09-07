@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 using UnityEngine.EventSystems;
+using static HenrysUtils;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] TileLookup _TileLookup;
     [SerializeField] PieceLookup _PieceLookup;
     [SerializeField] FactionLookup _FactionLookup;
+    [SerializeField] SoundEffectLookup SFX_Lookup;
     SessionManager _SessionManager;
     GameplayManager _GameplayManager;
     
@@ -225,6 +227,7 @@ public class PlayerManager : MonoBehaviour
             }
             else{
                 Deselect();
+                PlaySFX("Tap High", SFX_Lookup);
             }
         }
 
@@ -355,6 +358,8 @@ public class PlayerManager : MonoBehaviour
         TileRenderPoint.position = new Vector3(TileRenderPoint.position.x, Map.GetTilePosition(current_tile).y, TileRenderPoint.position.z);
 
         CheckTileData(id, tile, piece);
+
+        PlaySFX("Tap", SFX_Lookup);
     }
 
     void CheckTileData(int id, TileData tile_data, PieceData piece_data){
@@ -427,6 +432,8 @@ public class PlayerManager : MonoBehaviour
         
         if(troop.Owner == _SessionManager.OurInstance.ID)
             GetTroopRanges(troop);
+
+        PlaySFX("Tap", SFX_Lookup);
     }
 
     public void AddTroop(Troop t){

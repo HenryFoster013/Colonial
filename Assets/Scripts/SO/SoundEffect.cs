@@ -1,15 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 [CreateAssetMenu(fileName = "New SFX", menuName = "Custom/Sound/SFX")]
 public class SoundEffect : ScriptableObject
 {
-    public AudioClip Clip {get; private set;}
-    public float BasePitch {get; private set;} = 1;
-    public float PitchVariation {get; private set;} = 0;
-    public float BaseVolume {get; private set;} = 1;
-    public float VolumeVariation {get; private set;} = 0;
+    public string Name;
+    [SerializeField] AudioClip BaseClip;
+    public AudioMixerGroup Mixer;
+     
+    [SerializeField] AudioClip[] ClipRange;
+    [SerializeField] float BasePitch = 1;
+    [SerializeField] float PitchVariation = 0;
+    [SerializeField] float BaseVolume = 1;
+    [SerializeField] float VolumeVariation = 0;
 
     public float Pitch(){return RandomiseValue(BasePitch, PitchVariation);}
     public float Volume(){return RandomiseValue(BaseVolume, VolumeVariation);}
@@ -24,5 +29,12 @@ public class SoundEffect : ScriptableObject
             mult = -1;
         
         return based + (Random.Range(0, variation) * mult);
+    }
+
+    public AudioClip Clip(){
+        if(BaseClip != null)
+            return BaseClip;
+        
+        return ClipRange[Random.Range(0, ClipRange.Length)];
     }
 }
