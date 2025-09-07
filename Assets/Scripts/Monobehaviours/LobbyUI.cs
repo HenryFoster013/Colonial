@@ -9,11 +9,13 @@ using UnityEngine.SceneManagement;
 using Random=System.Random;
 using UnityEngine.UI;
 using TMPro;
+using static HenrysUtils;
 
 public class LobbyUI : MonoBehaviour
 {
     [Header("Main")]
     [SerializeField] ConnectionManager _ConnectionManager;
+    [SerializeField] SoundEffectLookup SFX_Lookup;
 
     [Header("UI")]
     [SerializeField] GameObject Gen_LoadingIcon;
@@ -84,12 +86,14 @@ public class LobbyUI : MonoBehaviour
         }
         else{
             LoadingScreen();
+            PlaySFX("UI_2", SFX_Lookup);
             _ConnectionManager.StartGame(GameMode.Client, session_id, 0, "");
         }
     }
 
     public void NewSession(){
         LoadingScreen();
+        PlaySFX("UI_2", SFX_Lookup);
         _ConnectionManager.StartGame(GameMode.Host, RandomString(16), mcm_player_count, MCM_PasswordField.text);
     }
 
@@ -116,6 +120,8 @@ public class LobbyUI : MonoBehaviour
     }
 
     public void OnSessionListUpdated(List<SessionInfo> sessionList){ 
+        PlaySFX("UI_2", SFX_Lookup);
+
         foreach(Transform t in LL_ScrollContentRect.transform){
             Destroy(t.gameObject);
         }
@@ -148,19 +154,25 @@ public class LobbyUI : MonoBehaviour
         ep_active = !ep_active;
         EnterPasswordMenu.SetActive(ep_active);
         if(ep_active){
+            PlaySFX("UI_1", SFX_Lookup);
             EP_PasswordField.text = "";
             EP_Header.text = ep_user_name + "'s Match";
             EP_Incorrect.SetActive(false);
             EP_Main.SetActive(true);
         }
+        else{
+            PlaySFX("UI_2", SFX_Lookup);
+        }
     }
 
     public void EnterPassword(){
         if(EP_PasswordField.text == ep_password){
+            PlaySFX("UI_2", SFX_Lookup);
             LoadingScreen();
             _ConnectionManager.StartGame(GameMode.Client, ep_session_name, 0, ep_password);
         }
         else{
+            PlaySFX("UI_Error", SFX_Lookup);
             EP_Incorrect.SetActive(true);
             EP_Main.SetActive(false);
         }
@@ -172,10 +184,14 @@ public class LobbyUI : MonoBehaviour
         mcm_active = !mcm_active;
         MatchCreatorMenu.SetActive(mcm_active);
         if(mcm_active){
+            PlaySFX("UI_1", SFX_Lookup);
             MCM_Header.text = PlayerPrefs.GetString("USERNAME") + "'s Match";
             mcm_player_count = 3;
             MCM_PlayerCount.text = mcm_player_count.ToString();
             MCM_PasswordField.text = "";
+        }
+        else{
+            PlaySFX("UI_2", SFX_Lookup);
         }
     }
 
@@ -189,6 +205,7 @@ public class LobbyUI : MonoBehaviour
     }
 
     public void BackToTitle(){
+        PlaySFX("UI_2", SFX_Lookup);
         LoadingScreen();
         _ConnectionManager.DisconnectFromLobby("Title Screen");
     }

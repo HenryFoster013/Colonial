@@ -19,6 +19,7 @@ public static class HenrysUtils{
         asrc.Play();
         DeleteAfterTime deletor = new_sfx.AddComponent<DeleteAfterTime>();
         deletor.StartDeletion(asrc.clip.length + 1f);
+        GameObject.DontDestroyOnLoad(new_sfx);
     }
 
     // LOOKUPS //

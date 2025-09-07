@@ -2,10 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static HenrysUtils;
 
 public class GenericLoadScene : MonoBehaviour
 {
+    [SerializeField] SoundEffectLookup SFX_Lookup;
     public void LoadScene(string scene){
+        if(SFX_Lookup != null){
+            PlaySFX("UI_2", SFX_Lookup);
+        }
         SceneManager.LoadScene(scene);
     }
 }

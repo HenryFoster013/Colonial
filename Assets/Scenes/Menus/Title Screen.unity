@@ -1283,6 +1283,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   QuickplayScene: Auto Matchmake
   ServerBrowserScene: Server Browser
+  SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
 --- !u!1 &2058947795
 GameObject:
   m_ObjectHideFlags: 0

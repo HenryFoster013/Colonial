@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using static HenrysUtils;
 
 public class PreGameManager : MonoBehaviour
 {
     [Header(" - References - ")]
     [SerializeField] FactionLookup _FactionLookup;
     [SerializeField] SessionManager _SessionManager;
+    [SerializeField] SoundEffectLookup SFX_Lookup;
     
     [Header(" - UI - ")]
     [SerializeField] GameObject UI_Holder;
@@ -66,6 +68,7 @@ public class PreGameManager : MonoBehaviour
 
     public void CloseUI(){
         UI_Holder.SetActive(false);
+        PlaySFX("UI_2", SFX_Lookup);
     }
 
     public void SetStartButtons(bool can_war, bool all_ready){
@@ -85,6 +88,7 @@ public class PreGameManager : MonoBehaviour
         PlayerPrefs.SetInt("FACTION", new_faction);
 
         _SessionManager.OurInstance.UpdateFaction();
+        PlaySFX("UI_1", SFX_Lookup);
         UpdateFlag();
     }
 }
