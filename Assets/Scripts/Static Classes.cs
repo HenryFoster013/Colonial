@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 public static class HenrysUtils{
     
@@ -9,14 +10,15 @@ public static class HenrysUtils{
     public static void PlaySFX(SoundEffect sound){SpawnSound(sound);}
 
     public static void SpawnSound(SoundEffect sound){
-        GameObject new_sfx = new GameObject(sound.Clip.name);
+        GameObject new_sfx = new GameObject(sound.Name);
         AudioSource asrc = new_sfx.AddComponent<AudioSource>();
-        asrc.clip = sound.Clip;
+        asrc.clip = sound.Clip();
         asrc.volume = sound.Volume();
         asrc.pitch = sound.Pitch();
+        asrc.outputAudioMixerGroup  = sound.Mixer;
         asrc.Play();
         DeleteAfterTime deletor = new_sfx.AddComponent<DeleteAfterTime>();
-        deletor.StartDeletion(sound.Clip.length + 1f);
+        deletor.StartDeletion(asrc.clip.length + 1f);
     }
 
     // LOOKUPS //

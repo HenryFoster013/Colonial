@@ -9,6 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 5c65b6f2fede11348adf4dc9c7bb1397, type: 3}
   m_Name: _ SFX Lookup
   m_EditorClassIdentifier: Assembly-CSharp::SoundEffectLookupSO
+  Sounds:
+  - {fileID: 11400000, guid: 091990f0ef7a8d644bfb847bb6fcbc8a, type: 2}
+  - {fileID: 11400000, guid: fce191e740a807949b648e41b3d52817, type: 2}
+  - {fileID: 11400000, guid: beb45acc949309341b284d98fbcf794b, type: 2}
+  - {fileID: 11400000, guid: 6007ae58049950c40b41d2a40b5bbc0b, type: 2}

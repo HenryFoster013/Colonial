@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
+using static HenrysUtils;
 
 public class Troop : NetworkBehaviour{
     
     [Header(" - MAIN - ")]
     public TroopData Data;
     [SerializeField] FactionLookup _FactionLookup;
+    [SerializeField] SoundEffectLookup SFX_Lookup;
     [SerializeField] Collider Col;
 
     [Header(" - DISPLAY - ")]
@@ -32,6 +34,7 @@ public class Troop : NetworkBehaviour{
     const int mesh_highlight_layer = 9;
     public int tile_buffer = -1;
     bool used_move, used_special, setup, spawned, first_move_completed;
+    float prev_repos_sound = -1;
 
     // SETUP //
 
@@ -90,6 +93,8 @@ public class Troop : NetworkBehaviour{
         //if(used_move)
         //    return;
 
+        PlayPlacementSFX();
+
         first_move_completed = true;
         tile_buffer = current_tile;
         Anim.Play("Hop", -1, 0);
@@ -103,6 +108,12 @@ public class Troop : NetworkBehaviour{
         }
 
         //UseMove();  
+    }
+
+    void PlayPlacementSFX(){
+        if(Time.time - prev_repos_sound > .2f)
+            PlaySFX("Placement", SFX_Lookup);
+        prev_repos_sound = Time.time;
     }
 
     // GRAPHICS //

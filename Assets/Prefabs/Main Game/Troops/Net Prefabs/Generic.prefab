@@ -902,6 +902,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Data: {fileID: 11400000, guid: 257afc0480c85e04bb1fe939e7169d4a, type: 2}
   _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
+  SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
   Col: {fileID: 3194187414784522355}
   ModelHolders:
   - {fileID: 4950196530081982710}
