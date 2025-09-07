@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using static HenrysUtils;
 
 public class NameSelection : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class NameSelection : MonoBehaviour
     [SerializeField] string NextScene;
     [SerializeField] TextAsset Titles;
     [SerializeField] TextAsset Names;
+    [SerializeField] SoundEffectLookup SFX_Lookup;
     [Header("UI")]
     [SerializeField] GameObject Menu;
     [SerializeField] GameObject Model;
@@ -50,16 +52,19 @@ public class NameSelection : MonoBehaviour
     // UI Interactions //
 
     public void RandomiseTitle(){
+        PlaySFX("UI_1", SFX_Lookup);
         our_title = ChooseRandomString(ref titles);
         UpdateUI();
     }
 
     public void RandomiseName(){
+        PlaySFX("UI_1", SFX_Lookup);
         our_name = ChooseRandomString(ref names);
         UpdateUI();
     }
 
     public void ConfirmName(){
+        PlaySFX("UI_2", SFX_Lookup);
         PlayerPrefs.SetString("USERNAME", our_title + " " + our_name);
         Menu.SetActive(false);
         Model.SetActive(false);

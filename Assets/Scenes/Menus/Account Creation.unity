@@ -1745,6 +1745,7 @@ MonoBehaviour:
   NextScene: Title Screen
   Titles: {fileID: 4900000, guid: c1348f1b0cb56c1499ab04549604aeb9, type: 3}
   Names: {fileID: 4900000, guid: f27343cc0feb7fe438b690cbe3d7716b, type: 3}
+  SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
   Menu: {fileID: 1412633481}
   Model: {fileID: 658885016917897278}
   TitleDisplay: {fileID: 1447517791}

@@ -643,6 +643,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58f61bebdd7a0b742a7d6c7cd69b527a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
 --- !u!4 &504345451
 Transform:
   m_ObjectHideFlags: 0
@@ -671,6 +672,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ErrorInfo: {fileID: 188773757}
+  SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
 --- !u!1 &718431218
 GameObject:
   m_ObjectHideFlags: 0

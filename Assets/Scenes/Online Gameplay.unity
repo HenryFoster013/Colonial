@@ -525,6 +525,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
   _SessionManager: {fileID: 308904221}
+  SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
   UI_Holder: {fileID: 277091331}
   InteractableButtonsHolder: {fileID: 587031210}
   HostOnly_UI: {fileID: 589810320}

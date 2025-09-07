@@ -4039,6 +4039,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ConnectionManager: {fileID: 1687217439}
+  SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
   Gen_LoadingIcon: {fileID: 1324769179}
   MatchCreatorMenu: {fileID: 1793231657}
   MCM_Header: {fileID: 1387489402}
