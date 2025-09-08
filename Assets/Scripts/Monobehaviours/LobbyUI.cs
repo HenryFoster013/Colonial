@@ -153,6 +153,9 @@ public class LobbyUI : MonoBehaviour
     public void ToggleEP(){
         ep_active = !ep_active;
         EnterPasswordMenu.SetActive(ep_active);
+        LobbyListMenu.SetActive(!ep_active);
+        Gen_LoadingIcon.SetActive(false);
+        MatchCreatorMenu.SetActive(false);
         if(ep_active){
             PlaySFX("UI_1", SFX_Lookup);
             EP_PasswordField.text = "";
@@ -183,6 +186,9 @@ public class LobbyUI : MonoBehaviour
     public void ToggleMCM(){
         mcm_active = !mcm_active;
         MatchCreatorMenu.SetActive(mcm_active);
+        Gen_LoadingIcon.SetActive(false);
+        LobbyListMenu.SetActive(!mcm_active);
+        EnterPasswordMenu.SetActive(false);
         if(mcm_active){
             PlaySFX("UI_1", SFX_Lookup);
             MCM_Header.text = PlayerPrefs.GetString("USERNAME") + "'s Match";
