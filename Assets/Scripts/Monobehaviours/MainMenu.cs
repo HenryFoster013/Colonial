@@ -9,18 +9,22 @@ public class MainMenu : MonoBehaviour
     [SerializeField] string QuickplayScene = "Auto Matchmake";
     [SerializeField] string ServerBrowserScene = "Server Browser";
     [SerializeField] SoundEffectLookup SFX_Lookup;
+    [SerializeField] BackgroundColouring BG;
     
     public void QuickPlay(){
         PlaySFX("UI_2", SFX_Lookup);
         SceneManager.LoadScene(QuickplayScene);
+        BG.Save();
     }
 
     public void ServerBrowser(){
         PlaySFX("UI_2", SFX_Lookup);
         SceneManager.LoadScene(ServerBrowserScene);
+        BG.Save();
     }
 
     public void Exit(){
         Application.Quit();
+        BG.Save();
     }
 }

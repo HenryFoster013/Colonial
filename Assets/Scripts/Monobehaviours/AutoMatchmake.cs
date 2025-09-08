@@ -9,6 +9,7 @@ using Fusion.Sockets;
 public class AutoMatchmake : MonoBehaviour
 {
     [SerializeField] public ConnectionManager _ConnectionManager;
+
     private static Random random = new Random();
 
     void Start(){

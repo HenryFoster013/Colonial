@@ -13,6 +13,7 @@ public class NameSelection : MonoBehaviour
     [SerializeField] TextAsset Names;
     [SerializeField] SoundEffectLookup SFX_Lookup;
     [Header("UI")]
+    [SerializeField] BackgroundColouring BG;
     [SerializeField] GameObject Menu;
     [SerializeField] GameObject Model;
     [SerializeField] TMP_Text TitleDisplay;
@@ -69,5 +70,6 @@ public class NameSelection : MonoBehaviour
         Menu.SetActive(false);
         Model.SetActive(false);
         SceneManager.LoadScene(NextScene);
+        BG.Save();
     }
 }

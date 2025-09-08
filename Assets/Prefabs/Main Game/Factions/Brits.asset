@@ -20,7 +20,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dd81d14c8929a2d4eb002c7e6d2659db, type: 2}
   - {fileID: 11400000, guid: 0e152362814ac4b4eacae5aface73094, type: 2}
   _Tower: {fileID: 11400000, guid: 1d295ffb3a847b949a67ec5623e6305b, type: 2}
-  _Colour: {r: 1, g: 0.69411767, b: 0.69411767, a: 1}
+  _Colour: {r: 1, g: 0.6839622, b: 0.6839622, a: 1}
   _BorderColour: {r: 1, g: 0.3137255, b: 0.25882354, a: 1}
   _TextureOffset: 0
   _Flag: {fileID: 21300000, guid: d94ba6d3c20acad43ade893033c7d74e, type: 3}

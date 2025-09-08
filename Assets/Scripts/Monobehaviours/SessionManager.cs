@@ -24,6 +24,9 @@ public class SessionManager : MonoBehaviour
 
     public bool Hosting { get; private set; }
     public int game_state { get; private set; } // 0 = Lobby, 1 = Gameplay, 2 = Postmatch
+
+    [Header("Backgrounds")]
+    [SerializeField] BackgroundColouring PregameBackground;
    
     int map_data_recieved;
     bool generated_map, connected;
@@ -120,6 +123,7 @@ public class SessionManager : MonoBehaviour
         _GameplayManager.SetConnection(_ConnectionManager);
         _GameplayManager.SetMap(_MapManager);
         _PlayerManager.Setup(this, _GameplayManager);
+        PregameBackground.Save();
     }
 
     // MAP SETUP //

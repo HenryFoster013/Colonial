@@ -17,6 +17,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
     [HideInInspector] public LobbyUI _LobbyUI;
     [HideInInspector] public AutoMatchmake _AutoMatchmake;
     [HideInInspector] public SessionManager _SessionManager;
+    [SerializeField] BackgroundColouring BackgroundColours;
     
     private NetworkRunner _runner;
     private static Random random = new Random();
@@ -193,6 +194,9 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
                 {"Game_Started", false}
             }
         });
+
+        if(BackgroundColours != null)
+            BackgroundColours.Save();
     }
 
     public static string RandomString(int length){
