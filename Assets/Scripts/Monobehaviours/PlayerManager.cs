@@ -138,6 +138,7 @@ public class PlayerManager : MonoBehaviour
             return;
 
         if(_TileLookup.Tile(Map.GetTileType(current_tile)).CheckType("WATER")){
+            print("Water");
             BaseHighlight.transform.position = Map.GetTilePosition(current_tile);
         }
         for(int i = 0; i < walkable_tiles.Count; i++){
@@ -206,6 +207,8 @@ public class PlayerManager : MonoBehaviour
             }
             Deselect();
         }
+        else
+            PlaySFX("UI_Error_2", SFX_Lookup);
     }
 
     void SelectionLogic(){
@@ -412,11 +415,16 @@ public class PlayerManager : MonoBehaviour
     }
 
     void SelectTroop(Troop troop){
+
+        if(current_troop != troop)
+            PlaySFX("Pickup", SFX_Lookup);
+
         Deselect();
+        current_tile = troop.current_tile;
         current_troop = troop;
 
-        BaseHighlight.SetActive(true);
         BaseHighlight.transform.position = Map.GetTilePosition(troop.current_tile);
+        BaseHighlight.SetActive(true);
 
         if(!troop.TurnOver() || troop.Owner != _SessionManager.OurInstance.ID)
             BaseHighlightMaterial.SetColor("_BaseColor", troop.FactionData().Colour());
@@ -432,8 +440,8 @@ public class PlayerManager : MonoBehaviour
         
         if(troop.Owner == _SessionManager.OurInstance.ID)
             GetTroopRanges(troop);
-
-        PlaySFX("Tap", SFX_Lookup);
+        
+        troop.SetSelected(true);
     }
 
     public void AddTroop(Troop t){
@@ -462,6 +470,8 @@ public class PlayerManager : MonoBehaviour
 
     void Deselect(){
         TroopSpawnMenu.SetActive(false);
+        if(current_troop != null)
+            current_troop.SetSelected(false);
         current_troop = null;
         current_tile = 0;
         walkable_tiles = new List<int>();

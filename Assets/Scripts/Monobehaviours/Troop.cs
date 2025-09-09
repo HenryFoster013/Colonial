@@ -33,7 +33,7 @@ public class Troop : NetworkBehaviour{
     const int mesh_default_layer = 0;
     const int mesh_highlight_layer = 9;
     public int tile_buffer = -1;
-    bool used_move, used_special, setup, spawned, first_move_completed;
+    bool used_move, used_special, setup, spawned, first_move_completed, selected;
 
     // SETUP //
 
@@ -49,6 +49,8 @@ public class Troop : NetworkBehaviour{
     // SETUP //
 
     void Setup(){
+        foreach(GameObject model_holder in ModelHolders)
+            model_holder.SetActive(false);
         transform.eulerAngles = new Vector3(0f, 90f, 0f);
         _SessionManager = GameObject.FindGameObjectWithTag("Session Manager").GetComponent<SessionManager>();
         _PlayerManager = GameObject.FindGameObjectWithTag("Player Manager").GetComponent<PlayerManager>();
@@ -58,6 +60,8 @@ public class Troop : NetworkBehaviour{
         used_move = false;
         used_special = true;
         first_move_completed = false;
+        selected = false;
+        Anim.SetBool("selected", selected);
     }
 
     void CheckForDataSetup(){
@@ -81,6 +85,14 @@ public class Troop : NetworkBehaviour{
 
     // MOVEMENT //
 
+    public void SetSelected(bool select){
+        if(UniqueID == 0)
+            return;   
+
+        selected = select;
+        Anim.SetBool("selected", selected);
+    }
+
     void CheckForMovement(){
         if(UniqueID == 0)
             return;    
@@ -91,8 +103,6 @@ public class Troop : NetworkBehaviour{
     void SetPosition(){
         //if(used_move)
         //    return;
-
-        PlaySFX("Placement", SFX_Lookup);
 
         first_move_completed = true;
         tile_buffer = current_tile;
@@ -105,6 +115,9 @@ public class Troop : NetworkBehaviour{
             _MapManager.MarkRadiusAsVisible(current_tile, Data.Vision());
             _MapManager.CheckForMapRegen();
         }
+
+        if(_MapManager.CheckVisibility(current_tile))
+            PlaySFX("Placement", SFX_Lookup);
 
         //UseMove();  
     }
