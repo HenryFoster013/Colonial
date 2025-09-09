@@ -203,11 +203,19 @@ public class LobbyUI : MonoBehaviour
 
     public void AddPlayersMCM(int i){
         mcm_player_count += i;
+
+        if(mcm_player_count < 2 || mcm_player_count > 5)
+            PlaySFX("UI_4", SFX_Lookup);
+        else
+            PlaySFX("UI_3", SFX_Lookup);
+
         if(mcm_player_count < 2)
             mcm_player_count = 2;
-        if(mcm_player_count > 6)
-            mcm_player_count = 6;
+        if(mcm_player_count > 5)
+            mcm_player_count = 5;
+        
         MCM_PlayerCount.text = mcm_player_count.ToString();
+        
     }
 
     public void BackToTitle(){

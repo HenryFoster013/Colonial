@@ -15,7 +15,7 @@ public class MapManager : MonoBehaviour
     public bool AnimatedWater = true;
 
     [Header(" - Map - ")]
-    [SerializeField] int MapSize;
+    public const int MapSize = 32;
     [SerializeField] Transform MapHolder;
     [SerializeField] Transform TileHolder;
     [SerializeField] Transform ColliderHolder;
@@ -152,15 +152,16 @@ public class MapManager : MonoBehaviour
         return result;
     }
 
-    public Vector3 GetTilePosition(int tile){
+    public Vector3 GetTilePosition(int titty){
+        Vector2Int tile_coords = TileToCoords(titty);
         
-        int y = tile / MapSize;
-        int x = tile - (y * MapSize);
+        int y = tile_coords.y;
+        int x = tile_coords.x;
         float ybounce = 0f;
-        if(tile % 2 != 0)
+        if(titty % 2 != 0)
             ybounce = 0.5f;
-
-        return new Vector3((x * 0.75f), tile_positions[tile], y + ybounce);
+        
+        return new Vector3((tile_coords.x * 0.75f), tile_positions[titty], tile_coords.y + ybounce);
     }
 
     public Vector3 GetTroopPosition(int tile){
