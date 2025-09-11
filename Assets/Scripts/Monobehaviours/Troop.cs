@@ -22,6 +22,7 @@ public class Troop : NetworkBehaviour{
     [Networked] public int Faction_ID {get; set;}
     [Networked] public int UniqueID {get; set;}
     [Networked] public int current_tile {get; set;}
+    [Networked] public int health {get; set;}
     
     MapManager _MapManager;
     SessionManager _SessionManager;
@@ -58,10 +59,11 @@ public class Troop : NetworkBehaviour{
         _GameplayManager = GameObject.FindGameObjectWithTag("Gameplay Manager").GetComponent<GameplayManager>();
         _GameplayManager.AddTroop(this);
         used_move = false;
-        used_special = true;
+        used_special = false;
         first_move_completed = false;
         selected = false;
         Anim.SetBool("selected", selected);
+        health = Data.Health();
     }
 
     void CheckForDataSetup(){
@@ -101,15 +103,11 @@ public class Troop : NetworkBehaviour{
     }
 
     void SetPosition(){
-        //if(used_move)
-        //    return;
-
         first_move_completed = true;
         tile_buffer = current_tile;
         Anim.Play("Hop", -1, 0);
-        Vector3 new_pos = _MapManager.GetTroopPosition(current_tile);
-        transform.LookAt(new Vector3(new_pos.x,transform.position.y,new_pos.z));
-        transform.position = new_pos;
+        RotateAt(_MapManager.GetTroopPosition(current_tile));
+        transform.position = _MapManager.GetTroopPosition(current_tile);
 
         if(_SessionManager.OurInstance.ID == Owner){
             _MapManager.MarkRadiusAsVisible(current_tile, Data.Vision());
@@ -118,8 +116,6 @@ public class Troop : NetworkBehaviour{
 
         if(_MapManager.CheckVisibility(current_tile))
             PlaySFX("Placement", SFX_Lookup);
-
-        //UseMove();  
     }
 
     // GRAPHICS //
@@ -150,6 +146,21 @@ public class Troop : NetworkBehaviour{
         }
     }
 
+    // COMBAT //
+
+    public void AttackAnim(){
+        Anim.Play(Data.AttackAnim());
+    }
+
+    public void DamageAnim(){
+        Anim.Play("TroopDamaged");
+    }
+
+    public void RotateAt(Vector3 pos){
+        Vector3 new_look = new Vector3(pos.x, transform.position.y, pos.z);
+        transform.LookAt(new_look);
+    }
+
     // TURN LOGIC //
 
     public void NewTurn(){
@@ -160,20 +171,17 @@ public class Troop : NetworkBehaviour{
 
     public void UseMove(){
         used_move = true;
-        EndTurn();
+        UpdateModel();
     }
 
     public void UseSpecial(){
         used_special = true;
-        EndTurn();
+        UpdateModel();
     }
 
     void EndTurn(){
-        if(!TurnOver())
-            return;
-        
-        // Run out of things to do logic
-        UpdateModel();
+        UseMove();
+        UseSpecial();
     }
 
     // GETTERS AND SETTERS //

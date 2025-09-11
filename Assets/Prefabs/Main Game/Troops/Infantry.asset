@@ -16,8 +16,11 @@ MonoBehaviour:
   _Name: Infantry
   _Cost: 3
   _MoveDistance: 2
-  _AttackDistance: 2
+  _AttackDistance: 3
   _Vision: 2
+  _Health: 3
+  _Damage: 3
   _Prefab: {fileID: 7115972115337629991, guid: e2f68c35dc1b1fa45acae37d6d254d7e, type: 3}
   _NetPrefabRef:
     RawGuidValue: 7a9916f44a78d894e93526641fefd9b3
+  _AttackAnim: TroopFireRifle

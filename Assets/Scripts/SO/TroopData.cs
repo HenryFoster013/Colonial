@@ -14,9 +14,13 @@ public class TroopData : ScriptableObject
     [SerializeField] int _MoveDistance;  
     [SerializeField] int _AttackDistance;  
     [SerializeField] int _Vision;
-    [Header("Display")]  
+    [SerializeField] int _Health;
+    [SerializeField] int _Damage;
+    [Header("Prefabs")]  
     [SerializeField] GameObject _Prefab;
     [SerializeField] NetworkPrefabRef _NetPrefabRef;
+    [Header("Animations")]
+    [SerializeField] string _AttackAnim = "TroopAttack";
 
     public bool CheckType(string s){
         return (s.ToUpper() == _Type.ToUpper());
@@ -29,4 +33,7 @@ public class TroopData : ScriptableObject
     public string Type(){return _Type;}
     public int MoveDistance(){return _MoveDistance;}
     public int AttackDistance(){return _AttackDistance;}
+    public int Damage(){return _Damage;}
+    public int Health(){return _Health;}
+    public string AttackAnim(){return _AttackAnim;}
 }

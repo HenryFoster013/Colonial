@@ -21,8 +21,12 @@ public class GameplayManager : NetworkBehaviour
 
     // Defaults
 
+    void Update(){
+        CleanAllTroops();
+    }
+
     public void DefaultValues(){
-        current_stars = 3;
+        current_stars = 100;
         current_turn = 1;
         ResetTroops();
     }
@@ -40,31 +44,94 @@ public class GameplayManager : NetworkBehaviour
     public Troop GetTroop(int id){
         Troop troop = null;
         for(int i = 0; i < AllTroops.Count && troop == null; i++){
-            if(AllTroops[i].UniqueID == id)
-                troop = AllTroops[i];
+            if(AllTroops[i] != null){
+                if(AllTroops[i].UniqueID == id)
+                    troop = AllTroops[i];
+            }
         }
         return troop;
     }
 
+    public void CleanAllTroops(){
+        AllTroops.RemoveAll(item => item == null);
+    }
+
     public List<int> WalkableTileFilter(List<int> tiles){
         foreach(Troop t in AllTroops){
-            tiles.Remove(t.current_tile);
+            if(t != null)
+                tiles.Remove(t.current_tile);
         }
         return tiles;
     }
 
-    // Troop Spawning //
-
-    public void AddTroop(Troop troop){
-        AllTroops.Add(troop);
+    public List<int> EnemyTileFilter(List<int> tiles){
+        List<int> result = new List<int>();
+        foreach(Troop t in AllTroops){
+            if(t != null){
+                if(tiles.Contains(t.current_tile) && _MapManager.CheckVisibility(t.current_tile) && t.FactionID() != _SessionManager.OurInstance.Faction_ID){
+                    result.Add(t.current_tile);
+                }
+            }
+        }
+        return result;
     }
 
-    public void AskToSpawnTroop(TroopData troop_data, int tile, int owner){
-        if(_SessionManager.Hosting){
-            SpawnTroop(troop_data, tile, owner);
+    public List<int> SpecialTileFilter(List<int> tiles){
+        List<int> result = new List<int>();
+        return result;
+    }
+
+    // Troop Spawning //
+
+    public Troop GetTroopAt(int tile){
+        Troop troop = null;
+        foreach(Troop t in AllTroops){
+            if(t != null){
+                if(t.current_tile == tile)
+                    troop = t;
+            }
         }
-        else{
+        return troop;
+    }
+
+    public void AddTroop(Troop troop){AllTroops.Add(troop);}
+
+    public void AskToSpawnTroop(TroopData troop_data, int tile, int owner){
+        if(_SessionManager.Hosting)
+            SpawnTroop(troop_data, tile, owner);
+        else
             RPC_SpawnTroop(_TroopLookup.ID(troop_data), tile, owner);
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPC_AttackTroop(int attacking_id, int target_id,  RpcInfo info = default){
+        AttackTroop(attacking_id, target_id);
+    }
+
+    void AttackTroop(int attacking_id, int target_id){
+
+        Troop attacking_troop = GetTroop(attacking_id);
+        Troop target_troop = GetTroop(target_id);
+        
+        attacking_troop.AttackAnim();
+        attacking_troop.RotateAt(target_troop.transform.position);
+        if(target_troop != null){
+            target_troop.DamageAnim();
+            target_troop.RotateAt(attacking_troop.transform.position);
+        }
+
+        if(attacking_troop.Owner == _SessionManager.OurInstance.ID){
+            attacking_troop.UseMove();
+            attacking_troop.UseSpecial();
+        }
+
+        if(_SessionManager.Hosting){
+            target_troop.health -= attacking_troop.Data.Damage();
+            if(target_troop.health <= 0){
+                if(_MapManager.TilesAreNeighbors(attacking_troop.current_tile, target_troop.current_tile))
+                    attacking_troop.current_tile = target_troop.current_tile;
+                _ConnectionManager.Despawn(target_troop.gameObject.GetComponent<NetworkObject>());
+            }
         }
     }
 
