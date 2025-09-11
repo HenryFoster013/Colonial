@@ -85,6 +85,14 @@ public class MapManager : MonoBehaviour
 
     // OUTSIDE INTERACTION //
 
+    public bool TilesAreNeighbors(int tile_one, int tile_two){
+        if(!ValidateTile(tile_one) || !ValidateTile(tile_two))
+            return false;
+        
+        List<int> neighbors = TilesByDistance(tile_one, 1, false);
+        return neighbors.Contains(tile_two);
+    }
+
     public List<int> TilesByDistance(int origin_tile, int distance, bool walkable_only){
         List<int> result = new List<int>();
         List<int> temp = new List<int>();

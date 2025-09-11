@@ -18,6 +18,9 @@ MonoBehaviour:
   _MoveDistance: 3
   _AttackDistance: 1
   _Vision: 10
+  _Health: 3
+  _Damage: 1
   _Prefab: {fileID: 5269036604996546843, guid: 408cf4ba78b764546b1fb9432ce3a9ae, type: 3}
   _NetPrefabRef:
     RawGuidValue: c0ccc9b8ceb31d14696e66cd892c9021
+  _AttackAnim: TroopAttack

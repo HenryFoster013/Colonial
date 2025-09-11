@@ -47,6 +47,7 @@ public class SessionManager : MonoBehaviour
 
     void Update(){
         PreGame();
+        MainGame();
     }
 
     // SETUP //
@@ -249,6 +250,28 @@ public class SessionManager : MonoBehaviour
 
             troop_skins[i * 2] = default_skin;
             troop_skins[(i * 2) + 1] = disabled_skin;
+        }
+    }
+
+    // MAIN GAME //
+
+    void MainGame(){
+        if(game_state != 1)
+            return;
+        
+        CheckPlayers();
+    }
+
+    void CheckPlayers(){
+        bool player_gone = false;
+        foreach(PlayerInstance pi in player_instances){
+            if(pi == null)
+                player_gone = true;
+        }
+
+        if(player_gone){
+            PlayerPrefs.SetString("Error Details", "Opponent suddenly disconnected.");
+            _ConnectionManager.DisconnectFromLobby("Network Error");
         }
     }
 

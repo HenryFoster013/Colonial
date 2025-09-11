@@ -44,6 +44,10 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
         }
     }
 
+    public void Despawn(NetworkObject NO){
+        _runner.Despawn(NO);
+    }
+
     public void SendLargeIntArray(int header, int[] array){
 
         byte[] intBytes = new byte[array.Length * sizeof(int)];
