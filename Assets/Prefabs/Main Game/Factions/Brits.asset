@@ -17,7 +17,7 @@ MonoBehaviour:
   _Troops:
   - {fileID: 11400000, guid: 257afc0480c85e04bb1fe939e7169d4a, type: 2}
   - {fileID: 11400000, guid: 19f52be431cf2da418d4950e5061470f, type: 2}
-  - {fileID: 11400000, guid: dd81d14c8929a2d4eb002c7e6d2659db, type: 2}
+  - {fileID: 11400000, guid: 67d643b8dc5429a44940e098e58a04f0, type: 2}
   - {fileID: 11400000, guid: 0e152362814ac4b4eacae5aface73094, type: 2}
   _Tower: {fileID: 11400000, guid: 1d295ffb3a847b949a67ec5623e6305b, type: 2}
   _Colour: {r: 1, g: 0.6839622, b: 0.6839622, a: 1}

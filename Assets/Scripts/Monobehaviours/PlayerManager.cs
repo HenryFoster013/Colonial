@@ -316,10 +316,7 @@ public class PlayerManager : MonoBehaviour
     void SelectTile(int id){
         if(current_troop != null){
             if(walkable_tiles.Contains(id)){
-                _GameplayManager.AskToMoveTroop(current_troop, id, _SessionManager.OurInstance.ID);
-                current_troop.UseMove();
-                CheckNoSpecials(current_troop);
-                Deselect();
+                MoveTroop(id);
             }
             else if(attackable_tiles.Contains(id)){
                 AttackTroop(_GameplayManager.GetTroopAt(id));
@@ -329,6 +326,13 @@ public class PlayerManager : MonoBehaviour
         }
         else
             StandardTileSelect(id);
+    }
+
+    void MoveTroop(int tile){
+        _GameplayManager.AskToMoveTroop(current_troop, tile, _SessionManager.OurInstance.ID);
+        current_troop.UseMove();
+        CheckNoSpecials(current_troop);
+        Deselect();
     }
 
     void StandardTileSelect(int id){
