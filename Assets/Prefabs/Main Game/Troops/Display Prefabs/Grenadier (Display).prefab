@@ -144,7 +144,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 20a086e6155c54f4abb151afce1c7fd4, type: 2}
+  - {fileID: 2100000, guid: 0cd6c36be2f049f4db0a7a4717cfdf84, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -463,7 +463,7 @@ GameObject:
   - component: {fileID: 7115972115337629988}
   - component: {fileID: -4603723216999545646}
   m_Layer: 7
-  m_Name: Infantry (Display)
+  m_Name: Grenadier (Display)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

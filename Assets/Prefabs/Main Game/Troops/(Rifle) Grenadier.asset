@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f515b31b64faf524992a34452a563d5a, type: 3}
+  m_Name: (Rifle) Grenadier
+  m_EditorClassIdentifier: 
+  _Type: Grenadier
+  _Name: Grenadier
+  _Cost: 3
+  _MoveDistance: 2
+  _AttackDistance: 3
+  _Vision: 2
+  _Health: 3
+  _Damage: 3
+  _Prefab: {fileID: 7115972115337629991, guid: e2f68c35dc1b1fa45acae37d6d254d7e, type: 3}
+  _NetPrefabRef:
+    RawGuidValue: 7a9916f44a78d894e93526641fefd9b3
+  _AttackAnim: TroopFireRifle
