@@ -15,8 +15,8 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] PieceLookup _PieceLookup;
     [SerializeField] FactionLookup _FactionLookup;
     [SerializeField] SoundEffectLookup SFX_Lookup;
-    SessionManager _SessionManager;
-    GameplayManager _GameplayManager;
+    [SerializeField] SessionManager _SessionManager;
+    [SerializeField] GameplayManager _GameplayManager;
     
     [Header(" --- CAMERA --- ")]
     [SerializeField] Camera _Camera;
@@ -25,9 +25,11 @@ public class PlayerManager : MonoBehaviour
 
     [Header(" --- TROOPS --- ")]
     public List<TroopData> SpawnableTroops = new List<TroopData>();
+    [HideInInspector] public bool OurTurn = false;
 
     [Header(" --- UI --- ")]
     [SerializeField] GameObject TroopSpawnMenu;
+    [SerializeField] GameObject EndTurnButton;
 
     [Header("Tile Popup")]
     [SerializeField] GameObject TileInfoDisplay;
@@ -77,9 +79,7 @@ public class PlayerManager : MonoBehaviour
 
     // BASE //
 
-    public void Setup(SessionManager sm, GameplayManager gm){
-        _GameplayManager = gm;
-        _SessionManager = sm;
+    public void Setup(){
         GeneralSetup();
         Deselect();
     }
@@ -89,18 +89,6 @@ public class PlayerManager : MonoBehaviour
         ClickingLogic();
         SelectionLogic();
         Animate();
-    }
-
-    public void EndTurn(){
-        Deselect();
-        _GameplayManager.UpTurn();
-        _GameplayManager.UpStars();
-        TurnDisplay.text = _GameplayManager.current_turn.ToString();
-        StarsDisplay.text = _GameplayManager.current_stars.ToString();
-        foreach(Troop t in OurTroops){
-            if(t != null)
-                t.NewTurn();
-        }
     }
 
     // SETUP //
@@ -123,14 +111,15 @@ public class PlayerManager : MonoBehaviour
 
     void ResetUI(){
         TroopSpawnMenu.SetActive(false);
-        StarsDisplay.text = _GameplayManager.current_stars.ToString();
-        TurnDisplay.text = _GameplayManager.current_turn.ToString();
     }
 
     // ANIMATION //
 
     void Animate(){
         WateryHighlights();
+        EndTurnButton.SetActive(OurTurn);
+        TurnDisplay.text = _GameplayManager.current_turn.ToString();
+        StarsDisplay.text = _GameplayManager.current_stars.ToString();
     }
 
     void WateryHighlights(){
@@ -197,7 +186,6 @@ public class PlayerManager : MonoBehaviour
     public void SpawnTroopButton(int i){
         if(SpawnableTroops[i].Cost() <= _GameplayManager.current_stars){
             _GameplayManager.SpendStars(SpawnableTroops[i].Cost());
-            StarsDisplay.text = _GameplayManager.current_stars.ToString();
 
             block_world_clicks = true;
             TroopSpawnMenu.SetActive(false);
@@ -378,7 +366,7 @@ public class PlayerManager : MonoBehaviour
     void CheckTileData(int id, TileData tile_data, PieceData piece_data){
         TroopSpawnMenu.SetActive(false);
         if(piece_data.CanSpawnTroops()){
-            if(!DoWeHaveTroopAt(id) && Map.CheckTileOwnership(id, _SessionManager.LocalFactionID())){
+            if(!DoWeHaveTroopAt(id) && Map.CheckTileOwnership(id, _SessionManager.LocalFactionID()) && OurTurn){
                 OpenSpawnMenu();
             }
         }
@@ -393,35 +381,6 @@ public class PlayerManager : MonoBehaviour
             }
         }
         return found;
-    }
-
-    void OpenSpawnMenu(){
-        float offy = 120;
-        float centering = (-1 * offy * SpawnableTroops.Count) / 2;
-        centering += (offy / 2);
-
-        foreach(Transform t in TroopButtons)
-            t.gameObject.SetActive(false);
-
-        for(int i = 0; i < SpawnableTroops.Count; i++){
-            if(TroopModelHolders[i].childCount == 0){
-                SpawnModelHolderTroop(SpawnableTroops[i], TroopModelHolders[i], _SessionManager.LocalFactionID());
-                TroopButtons[i].GetChild(0).GetComponent<Image>().color = _SessionManager.LocalFactionData().Colour();
-                TroopButtons[i].GetChild(2).GetComponent<Image>().color = _SessionManager.LocalFactionData().Colour();
-                TroopButtons[i].GetChild(3).GetComponent<TMP_Text>().text = SpawnableTroops[i].Cost().ToString();
-            }
-
-            TMP_Text cost_text = TroopButtons[i].GetChild(3).GetComponent<TMP_Text>();
-            cost_text.text = SpawnableTroops[i].Cost().ToString();
-            cost_text.color = Color.white;
-            if(SpawnableTroops[i].Cost() > _GameplayManager.current_stars)
-                cost_text.color = Color.red;
-
-            TroopButtons[i].gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2((i * offy) + centering, 0);
-            TroopButtons[i].gameObject.SetActive(true);
-        }        
-
-        TroopSpawnMenu.SetActive(true);
     }
 
     bool IsTroopAttackable(Troop troop){
@@ -483,16 +442,6 @@ public class PlayerManager : MonoBehaviour
         OurTroops.Add(t);
     }
 
-    void SpawnModelHolderTroop(TroopData troop, Transform holder, int fact_owner){
-         foreach(Transform trans in holder)
-            Destroy(trans.gameObject);
-        GameObject t = GameObject.Instantiate(troop.Prefab(), holder.position - (Vector3.up * 1f), Quaternion.identity);
-        t.transform.localScale = new Vector3(1,1,1) * 1.4f;
-        t.transform.parent = holder;
-        t.GetComponent<DisplayTroop>().DisplayInitialSetup(_SessionManager, fact_owner);
-        SetLayer(t, HiddenLayer);
-    }
-
     void SetLayer(GameObject obj, int _layer){
         obj.layer = _layer;
         foreach (Transform child in obj.transform){
@@ -503,7 +452,7 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    void Deselect(){
+    public void Deselect(){
         TroopSpawnMenu.SetActive(false);
         if(current_troop != null)
             current_troop.SetSelected(false);
@@ -514,6 +463,22 @@ public class PlayerManager : MonoBehaviour
         ResetSelectionUI();
     }
 
+    public void DisableAllTroops(){
+        foreach(Troop t in OurTroops){
+            if(t != null)
+                t.EndTurn();
+        }
+    }
+
+    public void EnableAllTroops(){
+        foreach(Troop t in OurTroops){
+            if(t != null)
+                t.NewTurn();
+        }
+    }
+
+    // UI //
+
     void ResetSelectionUI(){
         TileInfoDisplay.SetActive(false);
         foreach(Transform t in blue_grid_highlights)
@@ -521,6 +486,50 @@ public class PlayerManager : MonoBehaviour
         foreach(Transform t in red_grid_highlights)
             t.gameObject.SetActive(false);
         BaseHighlight.SetActive(false);
+    }
+
+    public void EndTurn(){
+        Deselect();
+        _GameplayManager.RPC_AskToMoveTurn(_SessionManager.OurInstance.ID);
+    }
+
+    void OpenSpawnMenu(){
+        float offy = 120;
+        float centering = (-1 * offy * SpawnableTroops.Count) / 2;
+        centering += (offy / 2);
+
+        foreach(Transform t in TroopButtons)
+            t.gameObject.SetActive(false);
+
+        for(int i = 0; i < SpawnableTroops.Count; i++){
+            if(TroopModelHolders[i].childCount == 0){
+                SpawnModelHolderTroop(SpawnableTroops[i], TroopModelHolders[i], _SessionManager.LocalFactionID());
+                TroopButtons[i].GetChild(0).GetComponent<Image>().color = _SessionManager.LocalFactionData().Colour();
+                TroopButtons[i].GetChild(2).GetComponent<Image>().color = _SessionManager.LocalFactionData().Colour();
+                TroopButtons[i].GetChild(3).GetComponent<TMP_Text>().text = SpawnableTroops[i].Cost().ToString();
+            }
+
+            TMP_Text cost_text = TroopButtons[i].GetChild(3).GetComponent<TMP_Text>();
+            cost_text.text = SpawnableTroops[i].Cost().ToString();
+            cost_text.color = Color.white;
+            if(SpawnableTroops[i].Cost() > _GameplayManager.current_stars)
+                cost_text.color = Color.red;
+
+            TroopButtons[i].gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2((i * offy) + centering, 0);
+            TroopButtons[i].gameObject.SetActive(true);
+        }        
+
+        TroopSpawnMenu.SetActive(true);
+    }
+
+    void SpawnModelHolderTroop(TroopData troop, Transform holder, int fact_owner){
+         foreach(Transform trans in holder)
+            Destroy(trans.gameObject);
+        GameObject t = GameObject.Instantiate(troop.Prefab(), holder.position - (Vector3.up * 1f), Quaternion.identity);
+        t.transform.localScale = new Vector3(1,1,1) * 1.4f;
+        t.transform.parent = holder;
+        t.GetComponent<DisplayTroop>().DisplayInitialSetup(_SessionManager, fact_owner);
+        SetLayer(t, HiddenLayer);
     }
 
     // MOUSE OVER UI CHECKER //

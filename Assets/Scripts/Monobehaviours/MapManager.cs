@@ -11,7 +11,7 @@ public class MapManager : MonoBehaviour
     [Header(" - Main - ")]
     [SerializeField] NoiseManager _NoiseManager;
     [SerializeField] Renderer PreviewRenderer;
-    SessionManager _SessionManager;
+    [SerializeField] SessionManager _SessionManager;
     public bool AnimatedWater = true;
 
     [Header(" - Map - ")]
@@ -133,10 +133,6 @@ public class MapManager : MonoBehaviour
         result = result.Distinct().ToList();
 
         return result;
-    }
-
-    public void SetSession(SessionManager sess){
-        _SessionManager = sess;
     }
 
     public int GetTileType(int i){
