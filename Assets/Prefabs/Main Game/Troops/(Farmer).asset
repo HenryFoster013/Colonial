@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f515b31b64faf524992a34452a563d5a, type: 3}
-  m_Name: (Rifle) Grenadier
+  m_Name: (Farmer)
   m_EditorClassIdentifier: 
-  _Type: Grenadier
-  _Name: Grenadier
-  _Cost: 3
-  _MoveDistance: 2
-  _AttackDistance: 3
+  _Type: Farmer
+  _Name: Farmer
+  _Cost: 2
+  _MoveDistance: 1
+  _AttackDistance: 1
   _Vision: 2
   _Health: 3
-  _Damage: 3
-  _Prefab: {fileID: 7115972115337629991, guid: e2f68c35dc1b1fa45acae37d6d254d7e, type: 3}
+  _Damage: 1
+  _Prefab: {fileID: 7115972115337629991, guid: b4b60a87d413a94419a92229386f671f, type: 3}
   _NetPrefabRef:
-    RawGuidValue: 7a9916f44a78d894e93526641fefd9b3
-  _AttackAnim: TroopFireRifle
+    RawGuidValue: b88da37d46b7778448c25815151906d7
+  _AttackAnim: TroopAttack

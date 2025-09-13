@@ -27,6 +27,8 @@ public class PreGameManager : MonoBehaviour
     [SerializeField] Image[] PI_Flags;
     [SerializeField] MeshRenderer[] PI_TorsoMeshes;
     [SerializeField] GameObject[] PI_HostStars;
+    [Header("Meshes")]
+    [SerializeField] PregameTroopDisplay[] PI_Troops;
     
     public void Setup(){
         UI_Holder.SetActive(true);
@@ -49,8 +51,8 @@ public class PreGameManager : MonoBehaviour
                     PI_Usernames[i].text = playa.Username;
                     PI_Backgrounds[i].color = playa.FactionData().Colour();
                     PI_Flags[i].sprite = playa.FactionData().Mini_Flag();
-                    PI_TorsoMeshes[i].SetPropertyBlock(_SessionManager.GetTroopMaterials(playa.Faction_ID)[0]);
                     PI_HostStars[i].SetActive(playa.Host);
+                    PI_Troops[i].SetTroop(playa.Faction_ID);
                 }
             }
             PlayerIcons[i].gameObject.SetActive(valid);

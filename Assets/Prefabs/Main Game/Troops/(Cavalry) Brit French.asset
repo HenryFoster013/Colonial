@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f515b31b64faf524992a34452a563d5a, type: 3}
-  m_Name: Cavalry
+  m_Name: (Cavalry) Brit French
   m_EditorClassIdentifier: 
   _Type: Cavalry
   _Name: Cavalry
@@ -22,5 +22,5 @@ MonoBehaviour:
   _Damage: 1
   _Prefab: {fileID: 5269036604996546843, guid: 408cf4ba78b764546b1fb9432ce3a9ae, type: 3}
   _NetPrefabRef:
-    RawGuidValue: c0ccc9b8ceb31d14696e66cd892c9021
+    RawGuidValue: 3743c8c011681a14e8192025f403939c
   _AttackAnim: TroopAttack
