@@ -617,7 +617,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd440fa933e7704429dacb02760bdf1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Data: {fileID: 11400000, guid: 67d643b8dc5429a44940e098e58a04f0, type: 2}
+  Data: {fileID: 11400000, guid: 3d80bec8ebe9291489ff56d68803403d, type: 2}
   _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
   Col: {fileID: 3194187414784522355}
