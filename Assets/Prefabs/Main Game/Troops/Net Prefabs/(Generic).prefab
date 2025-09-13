@@ -865,7 +865,7 @@ GameObject:
   - component: {fileID: 3194187414784522355}
   - component: {fileID: -306411580649839658}
   m_Layer: 8
-  m_Name: Generic
+  m_Name: (Generic)
   m_TagString: Troop
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

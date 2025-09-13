@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f515b31b64faf524992a34452a563d5a, type: 3}
-  m_Name: Generic
+  m_Name: (Rifle) Brit
   m_EditorClassIdentifier: 
-  _Type: Generic
-  _Name: Villager
-  _Cost: 1
-  _MoveDistance: 1
-  _AttackDistance: 1
-  _Vision: 1
+  _Type: Countryman
+  _Name: Countryman
+  _Cost: 3
+  _MoveDistance: 2
+  _AttackDistance: 3
+  _Vision: 2
   _Health: 3
-  _Damage: 1
-  _Prefab: {fileID: 7115972115337629991, guid: f384704dff8475246915a4778c960b14, type: 3}
+  _Damage: 3
+  _Prefab: {fileID: 7115972115337629991, guid: a4b23a75276dae0439566ad2997c3db5, type: 3}
   _NetPrefabRef:
-    RawGuidValue: eb1434828b4dfd54d8c516b14dd49e48
-  _AttackAnim: TroopAttack
+    RawGuidValue: 28342d0efb6052747af408859953d79d
+  _AttackAnim: TroopFireRifle

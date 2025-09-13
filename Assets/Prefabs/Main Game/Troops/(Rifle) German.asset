@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f515b31b64faf524992a34452a563d5a, type: 3}
+  m_Name: (Rifle) German
+  m_EditorClassIdentifier: 
+  _Type: Jerry
+  _Name: Jerry
+  _Cost: 3
+  _MoveDistance: 2
+  _AttackDistance: 3
+  _Vision: 2
+  _Health: 3
+  _Damage: 3
+  _Prefab: {fileID: 7115972115337629991, guid: 9a7fcb3249d07fe4c99a74d66b3ec03c, type: 3}
+  _NetPrefabRef:
+    RawGuidValue: 8fc783f03d7916b4196b69207566e765
+  _AttackAnim: TroopFireRifle
