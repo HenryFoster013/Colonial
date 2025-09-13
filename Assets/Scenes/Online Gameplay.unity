@@ -1475,6 +1475,9 @@ MonoBehaviour:
   _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
   _TroopLookup: {fileID: 11400000, guid: 8de0005ed8ac4ca48a7e9746a64c37fc, type: 2}
   _PlayerManager: {fileID: 2146075082}
+  _SessionManager: {fileID: 308904221}
+  _current_turn: 0
+  player_sub_turn: 0
   AllTroops: []
 --- !u!1 &246462560
 GameObject:
@@ -4002,7 +4005,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2146075082}
         m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
         m_MethodName: EndTurn
         m_Mode: 1
@@ -10658,6 +10661,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _NoiseManager: {fileID: 1780067899}
   PreviewRenderer: {fileID: 2147257434}
+  _SessionManager: {fileID: 308904221}
   AnimatedWater: 1
   MapHolder: {fileID: 1780067898}
   TileHolder: {fileID: 2100177753}
@@ -13717,6 +13721,8 @@ MonoBehaviour:
   _PieceLookup: {fileID: 11400000, guid: 91ca4b05291bee14098208e490613db6, type: 2}
   _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
+  _SessionManager: {fileID: 308904221}
+  _GameplayManager: {fileID: 236702219}
   _Camera: {fileID: 86466292}
   CameraHook: {fileID: 776516041}
   CameraSpine: {fileID: 1029655847}
@@ -13725,7 +13731,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 19f52be431cf2da418d4950e5061470f, type: 2}
   - {fileID: 11400000, guid: dd81d14c8929a2d4eb002c7e6d2659db, type: 2}
   - {fileID: 11400000, guid: 0e152362814ac4b4eacae5aface73094, type: 2}
+  OurTurn: 0
   TroopSpawnMenu: {fileID: 48529154}
+  EndTurnButton: {fileID: 661793618}
   TileInfoDisplay: {fileID: 1025633090}
   TileRenderCamera: {fileID: 1944513289}
   TileRenderPoint: {fileID: 1109132460}

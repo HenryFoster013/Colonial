@@ -8,11 +8,14 @@ public class GameplayManager : NetworkBehaviour
     [SerializeField] FactionLookup _FactionLookup;
     [SerializeField] TroopLookup _TroopLookup;
     [SerializeField] PlayerManager _PlayerManager;
-    SessionManager _SessionManager;
+    [SerializeField] SessionManager _SessionManager;
     ConnectionManager _ConnectionManager;
     MapManager _MapManager;
 
-    public int current_turn { get; private set; }
+    [Networked] public int current_turn { get; private set; }
+    public int player_sub_turn;
+    int player_count;
+
     public int current_stars { get; private set; }
     int stars_per_turn = 3;
     int troop_counter = 1;
@@ -25,10 +28,46 @@ public class GameplayManager : NetworkBehaviour
         CleanAllTroops();
     }
 
-    public void DefaultValues(){
+    public void Setup(){
         current_stars = 100;
         current_turn = 1;
+        player_sub_turn = 0;
+        player_count = _SessionManager.player_instances.Count;
+        if(_SessionManager.Hosting)
+            RPC_SetTurn(0);
+        
         ResetTroops();
+    }
+
+    // TURNS //
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RPC_AskToMoveTurn(int id, RpcInfo info = default){
+        if(id == _SessionManager.player_instances[player_sub_turn].ID){
+        
+            player_sub_turn++;
+            if(player_sub_turn >= _SessionManager.player_instances.Count){
+                player_sub_turn = 0;
+                current_turn++;
+            }
+
+            RPC_SetTurn(_SessionManager.player_instances[player_sub_turn].ID);
+        }
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_SetTurn(int player, RpcInfo info = default){
+
+        bool our_turn = _SessionManager.OurInstance.ID == player;
+
+        _PlayerManager.OurTurn = our_turn;
+        if(our_turn){
+            _PlayerManager.Deselect();
+            _PlayerManager.EnableAllTroops();
+        }
+        else{
+            _PlayerManager.DisableAllTroops();
+        }
     }
 
     // TROOPS //
@@ -177,10 +216,7 @@ public class GameplayManager : NetworkBehaviour
             troop.current_tile = id;
     }
 
-    public void UpTurn(){current_turn++;}
-    public void UpStars(){current_stars += stars_per_turn;}
     public void SpendStars(int cost){current_stars -= cost;}
-    public void SetSession(SessionManager sm){_SessionManager = sm;}
     public void SetConnection(ConnectionManager cm){_ConnectionManager = cm;}
     public void SetMap(MapManager mm){_MapManager = mm;}
 }

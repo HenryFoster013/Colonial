@@ -165,7 +165,7 @@ public class Troop : NetworkBehaviour{
 
     public void NewTurn(){
         used_move = false;
-        used_special = true;
+        used_special = false;
         UpdateModel();
     }
 
@@ -179,7 +179,7 @@ public class Troop : NetworkBehaviour{
         UpdateModel();
     }
 
-    void EndTurn(){
+    public void EndTurn(){
         UseMove();
         UseSpecial();
     }

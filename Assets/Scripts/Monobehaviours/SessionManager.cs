@@ -100,7 +100,7 @@ public class SessionManager : MonoBehaviour
         
         game_state = 1;
         _ConnectionManager.CloseOffSession();
-        _GameplayManager.DefaultValues();
+        _GameplayManager.Setup();
         GetPlayers();
         ReapplyPlayerIDs();
         SwitchToGameplay();
@@ -109,8 +109,7 @@ public class SessionManager : MonoBehaviour
 
     public void ClientStartGame(){
         game_state = 1;
-        _MapManager.SetSession(this);
-        _GameplayManager.DefaultValues();
+        _GameplayManager.Setup();
         GetPlayers();
         SwitchToGameplay();
         _MapManager.ClientGenerateMap();
@@ -120,10 +119,9 @@ public class SessionManager : MonoBehaviour
         _PreGameManager.CloseUI();
         _PreGameManager.gameObject.SetActive(false);
         _GameplayManager.gameObject.SetActive(true);
-        _GameplayManager.SetSession(this);
         _GameplayManager.SetConnection(_ConnectionManager);
         _GameplayManager.SetMap(_MapManager);
-        _PlayerManager.Setup(this, _GameplayManager);
+        _PlayerManager.Setup();
         PregameBackground.Save();
     }
 
@@ -133,7 +131,6 @@ public class SessionManager : MonoBehaviour
         if(!Hosting)
             return;
 
-        _MapManager.SetSession(this);
         _MapManager.EstablishNoiseMap();
         _MapManager.EstablishOtherRandoms();
         _MapManager.GenerateMap();
