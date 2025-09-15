@@ -150,6 +150,7 @@ public class Troop : NetworkBehaviour{
 
     public void AttackAnim(){
         Anim.Play(Data.AttackAnim());
+        PlaySFX("Drums_5", SFX_Lookup);
     }
 
     public void DamageAnim(){
