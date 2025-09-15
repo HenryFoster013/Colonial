@@ -685,27 +685,34 @@ public class MapManager : MonoBehaviour
         if(tile_pieces[i] != 0)
             return;
 
-        // Grass fill (trees)
+        // Grass fill
         if(tile_data[i] == _TileLookup.ID("Grass")){
             if(Random.Range(0.2f, 1f) + map_data_raw[i] >= 1){
                 CoinFlipPiece(i, "Tree Large", "Tree Small");
             }
 
+            RandomChancePiece(i, 48, "Piggie");
+            RandomChancePiece(i, 48, "Piggie (Grass)");
             RandomChancePiece(i, 8, "Tall Grass");
-            RandomChancePiece(i, 30, "Farm");
+            RandomChancePiece(i, 28, "Farm");
         }
 
-        // Sand fill (alm trees, buried teasure)
+        // Sand fill
         if(tile_data[i] == _TileLookup.ID("Sand")){
             RandomChancePiece(i, 40, "Palm Tree");
             RandomChancePiece(i, 40, "X Mark");
         }
         
-        // Stone fill (mountains)
+        // Stone fill
         if(tile_data[i] == _TileLookup.ID("Stone")){
             if(Random.Range(0f, 0.5f) + map_data_raw[i] >= 1){
                 PlacePiece(i, _PieceLookup.ID("Mountain"));
             }
+        }
+
+        // Ocean fill
+        if(tile_data[i] == _TileLookup.ID("Water")){
+            RandomChancePiece(i, 48, "Sharkfin");
         }
     }
 
