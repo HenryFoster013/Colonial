@@ -73,6 +73,11 @@ public class GameplayManager : NetworkBehaviour
         else{
             _PlayerManager.DisableAllTroops();
         }
+
+        if(_SessionManager.player_instances[player] != _SessionManager.OurInstance)
+            _PlayerManager.UpdateTurnNameDisplay(_SessionManager.player_instances[player].GetUsername() + "'s turn.");
+        else
+            _PlayerManager.UpdateTurnNameDisplay("Our turn.");
     }
 
     // TROOPS //

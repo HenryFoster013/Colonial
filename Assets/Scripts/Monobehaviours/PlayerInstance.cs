@@ -42,6 +42,17 @@ public class PlayerInstance : NetworkBehaviour{
         }
     }
 
+    public string FilterText(string text, int length){
+
+        // Apply censors here
+        
+        if(text.Length > length){
+            text = text.Substring(0, length);
+        }
+
+        return text;
+    }
+
     // Setters //
     public void SetManager(PlayerManager manager){player_manager = manager;}
     public void WeAreHost(){Host = true;}
@@ -49,4 +60,5 @@ public class PlayerInstance : NetworkBehaviour{
 
     // Getters //
     public Faction FactionData(){return _FactionLookup.GetFaction(Faction_ID);}
+    public string GetUsername(){return FilterText(Username, 24);}
 }
