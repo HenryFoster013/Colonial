@@ -326,7 +326,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &54888802
 Transform:
   m_ObjectHideFlags: 0
@@ -1442,7 +1442,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &236702218
 Transform:
   m_ObjectHideFlags: 0
@@ -1476,6 +1476,7 @@ MonoBehaviour:
   _TroopLookup: {fileID: 11400000, guid: 8de0005ed8ac4ca48a7e9746a64c37fc, type: 2}
   _PlayerManager: {fileID: 2146075082}
   _SessionManager: {fileID: 308904221}
+  SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
   _current_turn: 0
   player_sub_turn: 0
   AllTroops: []

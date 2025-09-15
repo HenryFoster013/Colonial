@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
+using static HenrysUtils;
 
 public class GameplayManager : NetworkBehaviour
 {
@@ -9,6 +10,7 @@ public class GameplayManager : NetworkBehaviour
     [SerializeField] TroopLookup _TroopLookup;
     [SerializeField] PlayerManager _PlayerManager;
     [SerializeField] SessionManager _SessionManager;
+    [SerializeField] SoundEffectLookup SFX_Lookup;
     ConnectionManager _ConnectionManager;
     MapManager _MapManager;
 
@@ -35,6 +37,8 @@ public class GameplayManager : NetworkBehaviour
         player_count = _SessionManager.player_instances.Count;
         if(_SessionManager.Hosting)
             RPC_SetTurn(0);
+        else
+            PlaySFX("Drums_2", SFX_Lookup);
         
         ResetTroops();
     }
@@ -64,6 +68,7 @@ public class GameplayManager : NetworkBehaviour
         if(our_turn){
             _PlayerManager.Deselect();
             _PlayerManager.EnableAllTroops();
+            PlaySFX("Drums_1", SFX_Lookup);
         }
         else{
             _PlayerManager.DisableAllTroops();
@@ -170,6 +175,7 @@ public class GameplayManager : NetworkBehaviour
                 if(_MapManager.TilesAreNeighbors(attacking_troop.current_tile, target_troop.current_tile))
                     attacking_troop.current_tile = target_troop.current_tile;
                 _ConnectionManager.Despawn(target_troop.gameObject.GetComponent<NetworkObject>());
+                PlaySFX("Drums_4", SFX_Lookup);
             }
         }
     }

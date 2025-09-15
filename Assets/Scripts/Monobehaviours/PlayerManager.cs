@@ -273,7 +273,7 @@ public class PlayerManager : MonoBehaviour
             }
         }
 
-        if(!!troop.UsedSpecial()){
+        if(!troop.UsedSpecial()){
             for(int i = 0; i < attackable_tiles.Count; i++){
                 red_grid_highlights[i].position = Map.GetTilePosition(attackable_tiles[i]);
                 red_grid_highlights[i].gameObject.SetActive(true);
@@ -491,6 +491,7 @@ public class PlayerManager : MonoBehaviour
     public void EndTurn(){
         Deselect();
         _GameplayManager.RPC_AskToMoveTurn(_SessionManager.OurInstance.ID);
+        PlaySFX("Drums_2", SFX_Lookup);
     }
 
     void OpenSpawnMenu(){
