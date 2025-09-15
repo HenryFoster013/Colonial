@@ -48,7 +48,7 @@ public class PreGameManager : MonoBehaviour
                 valid = (playa.Username != "");
                 if(valid){
                     PlayerIcons[i].anchoredPosition = new Vector2((icon_dist * i) + offset, PlayerIcons[i].anchoredPosition.y);
-                    PI_Usernames[i].text = playa.Username;
+                    PI_Usernames[i].text = playa.GetUsername();
                     PI_Backgrounds[i].color = playa.FactionData().Colour();
                     PI_Flags[i].sprite = playa.FactionData().Mini_Flag();
                     PI_HostStars[i].SetActive(playa.Host);

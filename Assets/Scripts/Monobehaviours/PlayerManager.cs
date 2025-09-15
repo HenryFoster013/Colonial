@@ -30,6 +30,8 @@ public class PlayerManager : MonoBehaviour
     [Header(" --- UI --- ")]
     [SerializeField] GameObject TroopSpawnMenu;
     [SerializeField] GameObject EndTurnButton;
+    [SerializeField] Animator TurnNameAnim;
+    [SerializeField] TMP_Text TurnNameText;
 
     [Header("Tile Popup")]
     [SerializeField] GameObject TileInfoDisplay;
@@ -478,6 +480,11 @@ public class PlayerManager : MonoBehaviour
     }
 
     // UI //
+
+    public void UpdateTurnNameDisplay(string name){
+        TurnNameText.text = name;
+        TurnNameAnim.Play("Fadeout", -1, 0);
+    }
 
     void ResetSelectionUI(){
         TileInfoDisplay.SetActive(false);
