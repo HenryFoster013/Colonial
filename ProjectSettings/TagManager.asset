@@ -13,6 +13,7 @@ TagManager:
   - Session Manager
   - Player Manager
   - Gameplay Manager
+  - Billboard
   layers:
   - Default
   - TransparentFX

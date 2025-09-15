@@ -16,9 +16,9 @@ MonoBehaviour:
   _Name: "Empire Fran\xE7ais"
   _Troops:
   - {fileID: 11400000, guid: 257afc0480c85e04bb1fe939e7169d4a, type: 2}
-  - {fileID: 11400000, guid: 19f52be431cf2da418d4950e5061470f, type: 2}
   - {fileID: 11400000, guid: dd81d14c8929a2d4eb002c7e6d2659db, type: 2}
   - {fileID: 11400000, guid: 0e152362814ac4b4eacae5aface73094, type: 2}
+  - {fileID: 11400000, guid: 80607047b9e0b824d93963c5fc2ce1c3, type: 2}
   _Tower: {fileID: 11400000, guid: cdb56a843133bb842b9fbed0acae214e, type: 2}
   _Colour: {r: 0.69411767, g: 0.8802033, b: 1, a: 1}
   _BorderColour: {r: 0.2588235, g: 0.6477242, b: 1, a: 1}

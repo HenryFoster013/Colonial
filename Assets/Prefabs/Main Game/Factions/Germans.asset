@@ -16,9 +16,9 @@ MonoBehaviour:
   _Name: Deutsches Reich
   _Troops:
   - {fileID: 11400000, guid: 257afc0480c85e04bb1fe939e7169d4a, type: 2}
-  - {fileID: 11400000, guid: 19f52be431cf2da418d4950e5061470f, type: 2}
   - {fileID: 11400000, guid: 3d80bec8ebe9291489ff56d68803403d, type: 2}
   - {fileID: 11400000, guid: 13bed1d916663004caee19a9756c1228, type: 2}
+  - {fileID: 11400000, guid: cc874a814a8cef647bfc6cf3037738f3, type: 2}
   _Tower: {fileID: 11400000, guid: fb8757219ce1fb54a9ed30214a72b5ff, type: 2}
   _Colour: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 1}
   _BorderColour: {r: 0.54294235, g: 0.7830189, b: 0.5829551, a: 1}

@@ -347,10 +347,12 @@ public class PlayerManager : MonoBehaviour
         SetLayer(p, HiddenLayer);
 
         if(piece.ContainsBillboards()){
-            foreach(Transform child in p.transform){
-                Billboard b = child.GetComponent<Billboard>();
-                if(b != null)
-                    b.m_Camera = TileRenderCamera; 
+            foreach(Transform _child in p.transform){
+                if(_child.tag == "Billboard"){
+                    Billboard b = _child.GetComponent<Billboard>();
+                    if(b != null)
+                        b.m_Camera = TileRenderCamera; 
+                }
             }
         }
         
