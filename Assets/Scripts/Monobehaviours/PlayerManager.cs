@@ -24,8 +24,8 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] Transform CameraSpine;
 
     [Header(" --- TROOPS --- ")]
-    public List<TroopData> SpawnableTroops = new List<TroopData>();
     [HideInInspector] public bool OurTurn = false;
+    bool[] troops_owned;
 
     [Header(" --- UI --- ")]
     [SerializeField] GameObject TroopSpawnMenu;
@@ -41,8 +41,12 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] Image DisplayBG;
 
     [Header("Troop Popups")]
-    [SerializeField] Transform[] TroopButtons;
-    [SerializeField] Transform[] TroopModelHolders;
+    [SerializeField] GameObject TroopButton;
+    [SerializeField] Transform TroopButtonHolder;
+    [SerializeField] GameObject TroopRenderer;
+    [SerializeField] Transform TroopRendererHolder;
+    RenderTexture[] troop_renders;
+    Transform[] troop_buttons;
 
     [Header("Turns")]
     [SerializeField] TMP_Text StarsDisplay;
@@ -96,14 +100,9 @@ public class PlayerManager : MonoBehaviour
     // SETUP //
 
     void GeneralSetup(){
-        SetupTroops();
+        GenerateTroopRenderers();
         ResetCameraRot();
         ResetUI();
-    }
-
-    void SetupTroops(){
-        SpawnableTroops = new List<TroopData>();
-        SpawnableTroops.AddRange(_SessionManager.LocalFactionData().Troops());
     }
 
     void ResetCameraRot(){
@@ -186,13 +185,15 @@ public class PlayerManager : MonoBehaviour
     // SELECTION //
 
     public void SpawnTroopButton(int i){
-        if(SpawnableTroops[i].Cost() <= _GameplayManager.current_stars){
-            _GameplayManager.SpendStars(SpawnableTroops[i].Cost());
+        TroopData[] troops = _SessionManager.LocalFactionData().Troops();
+
+        if(troops[i].Cost() <= _GameplayManager.current_stars){
+            _GameplayManager.SpendStars(troops[i].Cost());
 
             block_world_clicks = true;
             TroopSpawnMenu.SetActive(false);
-            if(i > -1 && i < SpawnableTroops.Count){
-                _GameplayManager.AskToSpawnTroop(SpawnableTroops[i], current_tile, _SessionManager.OurInstance.ID);
+            if(i > -1 && i < troops.Length){
+                _GameplayManager.AskToSpawnTroop(troops[i], current_tile, _SessionManager.OurInstance.ID);
             }
             Deselect();
         }
@@ -503,30 +504,63 @@ public class PlayerManager : MonoBehaviour
         PlaySFX("Drums_2", SFX_Lookup);
     }
 
-    void OpenSpawnMenu(){
-        float offy = 120;
-        float centering = (-1 * offy * SpawnableTroops.Count) / 2;
-        centering += (offy / 2);
+    void GenerateTroopRenderers(){
+        TroopData[] troops = _SessionManager.LocalFactionData().Troops();
+        troop_renders = new RenderTexture[troops.Length];
+        troop_buttons = new Transform[troops.Length];
+        
+        // REPLACE THIS IN FUTURE
+        // Acts as a mask for which troops we have access to (for the tech tree)
+        troops_owned = new bool[troops.Length];
+        for(int i = 0; i < troops_owned.Length; i++){
+            troops_owned[i] = true;
+        }
 
-        foreach(Transform t in TroopButtons)
+        for(int count = 0; count < troops.Length; count++){
+
+            GameObject g = GameObject.Instantiate(TroopRenderer);
+            RenderTexture rendtext = new RenderTexture(333, 512, 24);
+            rendtext.Create();
+            g.transform.parent = TroopRendererHolder;
+            g.transform.position = new Vector3(25 * (count + 1), 0, 0);
+            g.transform.GetChild(1).GetChild(0).GetComponent<Camera>().targetTexture = rendtext;
+            troop_renders[count] = rendtext;
+            SpawnModelHolderTroop(troops[count], g.transform.GetChild(0), _SessionManager.LocalFactionID());
+
+            GameObject b = GameObject.Instantiate(TroopButton, TroopButtonHolder.position, Quaternion.identity);
+            b.transform.parent = TroopButtonHolder;
+            b.transform.GetComponent<TroopButton>().Setup(count, this, _SessionManager.LocalFactionData().Colour(), troops[count].Cost(), rendtext);
+            troop_buttons[count] = b.transform;
+        }
+    }
+
+    void OpenSpawnMenu(){
+
+        foreach(Transform t in troop_buttons)
             t.gameObject.SetActive(false);
 
-        for(int i = 0; i < SpawnableTroops.Count; i++){
-            if(TroopModelHolders[i].childCount == 0){
-                SpawnModelHolderTroop(SpawnableTroops[i], TroopModelHolders[i], _SessionManager.LocalFactionID());
-                TroopButtons[i].GetChild(0).GetComponent<Image>().color = _SessionManager.LocalFactionData().Colour();
-                TroopButtons[i].GetChild(2).GetComponent<Image>().color = _SessionManager.LocalFactionData().Colour();
-                TroopButtons[i].GetChild(3).GetComponent<TMP_Text>().text = SpawnableTroops[i].Cost().ToString();
+        int total_troops = 0;
+        for(int i = 0; i < troops_owned.Length; i++){
+            if(troops_owned[i]){
+                total_troops++;
             }
+        }
 
-            TMP_Text cost_text = TroopButtons[i].GetChild(3).GetComponent<TMP_Text>();
-            cost_text.text = SpawnableTroops[i].Cost().ToString();
-            cost_text.color = Color.white;
-            if(SpawnableTroops[i].Cost() > _GameplayManager.current_stars)
-                cost_text.color = Color.red;
+        float offy = 120;
+        float centering = (-1 * offy * total_troops) / 2;
+        centering += (offy / 2);
+        int active_count = 0;
 
-            TroopButtons[i].gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2((i * offy) + centering, 0);
-            TroopButtons[i].gameObject.SetActive(true);
+        for(int i = 0; i < troops_owned.Length; i++){
+            if(troops_owned[i]){
+                TMP_Text cost_text = troop_buttons[i].GetChild(3).GetComponent<TMP_Text>();
+                cost_text.color = Color.white;
+                if(_SessionManager.LocalFactionData().Troops()[i].Cost() > _GameplayManager.current_stars)
+                    cost_text.color = Color.red;
+                troop_buttons[i].gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2((active_count * offy) + centering, 0);
+                troop_buttons[i].gameObject.SetActive(true);
+                active_count++;
+            }
         }        
 
         TroopSpawnMenu.SetActive(true);

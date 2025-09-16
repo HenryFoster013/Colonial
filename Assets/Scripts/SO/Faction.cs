@@ -9,7 +9,7 @@ public class Faction : ScriptableObject
     [SerializeField] string _Type;
     [SerializeField] string _Name;
     [Header(" - References - ")]
-    [SerializeField] List<TroopData> _Troops = new List<TroopData>();
+    [SerializeField] TroopData[] _Troops;
     [SerializeField] PieceData _Tower;
     [Header(" - Display - ")]
     [SerializeField] Color _Colour = new Color(1f,1f,1f,1f);
@@ -29,7 +29,7 @@ public class Faction : ScriptableObject
     public Color BorderColour(){return _BorderColour;}
     public Sprite Flag(){return _Flag;}
     public Sprite Mini_Flag(){return _Mini_Flag;}
-    public List<TroopData> Troops(){return _Troops;}
+    public TroopData[] Troops(){return _Troops;}
     public PieceData Tower(){return _Tower;}
     public int TextureOffset(){return _TextureOffset;}
 }

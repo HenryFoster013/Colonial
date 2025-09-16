@@ -43,7 +43,6 @@ public class MapManager : MonoBehaviour
     [SerializeField] Material BorderMaterial;
     [SerializeField] GameObject[] BorderPrefabs;
 
-
     // Local only
     bool ready = false;
     public bool Ready(){return ready;}
@@ -691,8 +690,8 @@ public class MapManager : MonoBehaviour
                 CoinFlipPiece(i, "Tree Large", "Tree Small");
             }
 
-            RandomChancePiece(i, 48, "Piggie");
-            RandomChancePiece(i, 48, "Piggie (Grass)");
+            RandomChancePiece(i, 60, "Piggie");
+            RandomChancePiece(i, 60, "Piggie (Grass)");
             RandomChancePiece(i, 8, "Tall Grass");
             RandomChancePiece(i, 28, "Farm");
         }
@@ -712,7 +711,7 @@ public class MapManager : MonoBehaviour
 
         // Ocean fill
         if(tile_data[i] == _TileLookup.ID("Water")){
-            RandomChancePiece(i, 48, "Sharkfin");
+            RandomChancePiece(i, 36, "Sharkfin");
         }
     }
 
