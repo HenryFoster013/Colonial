@@ -94,43 +94,32 @@ public class MapManager : MonoBehaviour
 
     public List<int> TilesByDistance(int origin_tile, int distance, bool walkable_only){
         List<int> result = new List<int>();
-        List<int> temp = new List<int>();
-        List<int> add = new List<int>();
-        if(ValidateTile(origin_tile)){
+        List<int> last_iteration = new List<int>();
+        List<int> last_iteration_buffer = new List<int>();
 
-            // loop thru each item in result, get their neigbors
-            // if the neighbor is already in result, remove it from the list
-            // add the lists together
-            // repeat until distance runs out
-            // can optimise by ignoring values that have already been searched
+        if(!ValidateTile(origin_tile))
+            return result;
+        
+        last_iteration.Add(origin_tile);
 
-            int starting_point = 0;
-            result.Add(origin_tile);
+        for(int i = 0; i < distance; i++){
 
-            for(int p = 0; p < distance; p++){
-                add = new List<int>();
+            last_iteration_buffer = new List<int>(last_iteration);
+            last_iteration = new List<int>();
 
-                for(int i = starting_point; i < result.Count; i++){
-                    temp = GetNeighbors(result[i]);
-
-                    foreach(int q in temp){
-                        if(!result.Contains(q))
-                            add.Add(q);
+            foreach(int tile in last_iteration_buffer){
+                foreach(int neighbor in GetNeighbors(tile)){
+                    if(!result.Contains(neighbor)){
+                        result.Add(neighbor);
+                        last_iteration.Add(neighbor);
                     }
                 }
-
-                if(walkable_only)
-                    result.AddRange(WalkableFilter(add));
-                else
-                    result.AddRange(add);
             }
-
-            result.Remove(origin_tile);
         }
 
-        // Remove dupes
-        result = result.Distinct().ToList();
-
+        // In theory shouldn't be needed, uncomment if duplicate tiles appear.
+        //result = result.Distinct().ToList();
+        
         return result;
     }
 
