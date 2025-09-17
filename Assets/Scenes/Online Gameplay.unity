@@ -10532,6 +10532,7 @@ MonoBehaviour:
   _TileLookup: {fileID: 11400000, guid: ce6d8e292a733dc4b9656b1c225fba2c, type: 2}
   _PieceLookup: {fileID: 11400000, guid: 91ca4b05291bee14098208e490613db6, type: 2}
   _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
+  _TroopLookup: {fileID: 11400000, guid: 8de0005ed8ac4ca48a7e9746a64c37fc, type: 2}
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
   _SessionManager: {fileID: 308904221}
   _GameplayManager: {fileID: 236702219}
