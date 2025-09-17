@@ -505,44 +505,61 @@ public class MapManager : MonoBehaviour
         }
     }
     
+    // Based upon place towers, could be merged into one function but I really don't wanna mess with
+    // the tower algorithm because it is quite good.
+    void EvenlyDistributeTiles(string piece_name, int amount){
+
+    }
+
+    bool IsDistanceFromEdge(Vector2Int our_coords, int dist){
+        return (our_coords.x > dist && our_coords.x < MapSize - dist && our_coords.y > dist && our_coords.y < MapSize - dist);
+    }
+
+    bool IsLand(int local){
+        return (tile_data[local] == _TileLookup.ID("Grass") || tile_data[local] == _TileLookup.ID("Sand"));
+    }
+
     void PlaceTowers(int castles_needed){
         // Use of a minimum distance that gets lower as the failed attempts increase
         // Ensure that the castles are placed randomly but far enough apart that the game is fair
         // But if no such position can be found quickly, the distance needed is reduced until it can be
 
         List<Vector2Int> placed_castles = new List<Vector2Int>();
+
         int minimum_distance = MapSize / castles_needed;
         minimum_distance = minimum_distance * minimum_distance;
         int distance_fails = 0;
+        int forts_needed = castles_needed * 3;
 
-        while(placed_castles.Count < castles_needed){
+        while(placed_castles.Count < castles_needed + forts_needed){
 
             if(distance_fails > 10)
                 minimum_distance -= 1;
-
             int local = Random.Range(0, MapSize * MapSize);
             Vector2Int our_coords = TileToCoords(local);
 
-            if(our_coords.x > 2 && our_coords.x < MapSize - 2 && our_coords.y > 2 && our_coords.y < MapSize - 2){
+            if(IsDistanceFromEdge(our_coords, 3)){
                 if(tile_pieces[local] == 0){ // Empty
-                    if(tile_data[local] == _TileLookup.ID("Grass") || tile_data[local] == _TileLookup.ID("Sand")){ // Basic ground
-                        
-                        bool valid = true;
+                    if(IsLand(local)){
 
+                        bool valid = true;
                         foreach(Vector2Int pos in placed_castles){
                             if((our_coords - pos).sqrMagnitude < minimum_distance){
                                 valid = false;
                             }
                         }
 
-                        if((valid)){
-                            PlayerInstance player = _SessionManager.GetPlayer(placed_castles.Count);
-                            int _owner = _FactionLookup.ID(player.FactionData());
-
+                        if(valid){
+                            if(placed_castles.Count < castles_needed){ // Place Capital
+                                PlayerInstance player = _SessionManager.GetPlayer(placed_castles.Count);
+                                int _owner = _FactionLookup.ID(player.FactionData());
+                                PlacePiece(local, _PieceLookup.ID(player.FactionData().Tower()));
+                                MarkRadiusAsOwned(local, 3, _owner);
+                            }
+                            else{ // Place Fort
+                                PlacePiece(local, _PieceLookup.ID("Fort (Empty)"));
+                            }
                             placed_castles.Add(TileToCoords(local));
-                            PlacePiece(local, _PieceLookup.ID(player.FactionData().Tower()));
-
-                            MarkRadiusAsOwned(local, 3, _owner);
                         }
                         else{
                             distance_fails++;
