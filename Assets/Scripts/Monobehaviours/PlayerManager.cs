@@ -14,6 +14,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] TileLookup _TileLookup;
     [SerializeField] PieceLookup _PieceLookup;
     [SerializeField] FactionLookup _FactionLookup;
+    [SerializeField] TroopLookup _TroopLookup;
     [SerializeField] SoundEffectLookup SFX_Lookup;
     [SerializeField] SessionManager _SessionManager;
     [SerializeField] GameplayManager _GameplayManager;
@@ -193,7 +194,7 @@ public class PlayerManager : MonoBehaviour
             block_world_clicks = true;
             TroopSpawnMenu.SetActive(false);
             if(i > -1 && i < troops.Length){
-                _GameplayManager.AskToSpawnTroop(troops[i], current_tile, _SessionManager.OurInstance.ID);
+                _GameplayManager.RPC_SpawnTroop(_TroopLookup.ID(troops[i]), current_tile, _SessionManager.OurInstance.ID);
             }
             Deselect();
         }
@@ -403,7 +404,7 @@ public class PlayerManager : MonoBehaviour
 
     void AttackTroop(Troop troop){
         if(troop != null && current_troop != null){
-            _GameplayManager.RPC_AttackTroop(current_troop.UniqueID, troop.UniqueID);
+            _GameplayManager.RPC_AttackTroop(current_troop.UniqueID, troop.UniqueID, true);
         }
         Deselect();
     }

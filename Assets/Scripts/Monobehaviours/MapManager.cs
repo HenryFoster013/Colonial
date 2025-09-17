@@ -542,7 +542,7 @@ public class MapManager : MonoBehaviour
                             placed_castles.Add(TileToCoords(local));
                             PlacePiece(local, _PieceLookup.ID(player.FactionData().Tower()));
 
-                            MarkRadiusAsOwned(local, 2, _owner);
+                            MarkRadiusAsOwned(local, 3, _owner);
                         }
                         else{
                             distance_fails++;
@@ -711,7 +711,7 @@ public class MapManager : MonoBehaviour
 
         // Ocean fill
         if(tile_data[i] == _TileLookup.ID("Water")){
-            RandomChancePiece(i, 36, "Sharkfin");
+            RandomChancePiece(i, 50, "Sharkfin");
         }
     }
 
