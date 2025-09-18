@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 27076cdd8188395419b12c7eae2156a5, type: 3}
-  m_Name: Farm
+  m_Name: Pig Sty
   m_EditorClassIdentifier: 
-  _Type: Farm
-  _Name: Farm
-  _Prefab: {fileID: 8521195677729410137, guid: d02530bef4000624d95b29b8b945751b, type: 3}
+  _Type: Pig Sty
+  _Name: Pig Sty
+  _Prefab: {fileID: 753328104817070758, guid: 7be264ca84f276b4e88a34026250ac30, type: 3}
   _TroopOffset: 0
   _RandomiseRotation: 0
   _RandomiseFirstChildRotation: 1

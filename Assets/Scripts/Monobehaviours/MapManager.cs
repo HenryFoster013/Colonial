@@ -15,7 +15,7 @@ public class MapManager : MonoBehaviour
     public bool AnimatedWater = true;
 
     [Header(" - Map - ")]
-    public const int MapSize = 32;
+    public int MapSize = 16;
     [SerializeField] Transform MapHolder;
     [SerializeField] Transform TileHolder;
     [SerializeField] Transform ColliderHolder;
@@ -129,11 +129,17 @@ public class MapManager : MonoBehaviour
     }
 
     public int GetTileType(int i){
-        return tile_data[i];
+        int return_val = -1;
+        if(ValidateTile(i))
+            return_val = tile_data[i];
+        return return_val;
     }
 
     public int GetPieceType(int i){
-        return tile_pieces[i];
+        int return_val = -1;
+        if(ValidateTile(i))
+            return_val = tile_pieces[i];
+        return return_val;
     }
 
     public bool CheckWalkable(int i){
@@ -150,15 +156,17 @@ public class MapManager : MonoBehaviour
     }
 
     public Vector3 GetTilePosition(int titty){
+        Vector3 return_val = Vector3.zero;
+
         Vector2Int tile_coords = TileToCoords(titty);
-        
         int y = tile_coords.y;
         int x = tile_coords.x;
         float ybounce = 0f;
         if(titty % 2 != 0)
             ybounce = 0.5f;
-        
-        return new Vector3((tile_coords.x * 0.75f), tile_positions[titty], tile_coords.y + ybounce);
+        return_val = new Vector3((tile_coords.x * 0.75f), tile_positions[titty], tile_coords.y + ybounce);
+
+        return return_val;
     }
 
     public Vector3 GetTroopPosition(int tile){
@@ -312,7 +320,6 @@ public class MapManager : MonoBehaviour
 
                 string type = _TileLookup.Tile(tile_data[i]).Type().ToUpper();
 
-                tile_positions[i] = map_data_raw[i] * TileHeightVariation;
                 Vector3 decided_position = new Vector3((x * 0.75f), 0, y + ybounce);
                 GameObject tile = GameObject.Instantiate(GetTilePrefab(i), decided_position, Quaternion.identity);
                 tile.transform.parent = TileHolder;
@@ -460,13 +467,11 @@ public class MapManager : MonoBehaviour
         tile_positions = new float[map_data_raw.Length];
         tile_data = new int[map_data_raw.Length];
         requires_piece_refresh = new bool[map_data_raw.Length];
-
-        for(int i = 0; i < tiles_owned.Length; i++){
-            tiles_owned[i] = -1;
-        }
         
-        for(int i = 0; i < tile_data.Length; i++){
+        for(int i = 0; i < map_data_raw.Length; i++){
+            tiles_owned[i] = -1;
             tile_data[i] = _TileLookup.ID("Unmarked");
+            tile_positions[i] = map_data_raw[i] * TileHeightVariation;
         }
     }
 
@@ -497,12 +502,6 @@ public class MapManager : MonoBehaviour
                 tile_data[pos] = _TileLookup.ID("Sand");
             }
         }
-    }
-    
-    // Based upon place towers, could be merged into one function but I really don't wanna mess with
-    // the tower algorithm because it is quite good.
-    void EvenlyDistributeTiles(string piece_name, int amount){
-
     }
 
     bool IsDistanceFromEdge(Vector2Int our_coords, int dist){
@@ -706,7 +705,7 @@ public class MapManager : MonoBehaviour
             RandomChancePiece(i, 60, "Piggie");
             RandomChancePiece(i, 60, "Piggie (Grass)");
             RandomChancePiece(i, 8, "Tall Grass");
-            RandomChancePiece(i, 28, "Farm");
+            RandomChancePiece(i, 28, "Apples");
         }
 
         // Sand fill

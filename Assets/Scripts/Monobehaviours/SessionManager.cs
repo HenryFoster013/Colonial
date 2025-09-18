@@ -135,14 +135,15 @@ public class SessionManager : MonoBehaviour
         _MapManager.EstablishOtherRandoms();
         _MapManager.GenerateMap();
 
-        _ConnectionManager.SendRawMapData(0, _MapManager.GrassLimit, _MapManager.GetRawMapData());
+        _ConnectionManager.SendRawMapData(0, _MapManager.MapSize, _MapManager.GrassLimit, _MapManager.GetRawMapData());
         _ConnectionManager.SendLargeIntArray(1, _MapManager.GetTilePieces());
         _ConnectionManager.SendLargeIntArray(2, _MapManager.GetTileOwnership());
     }
 
-    public void GotMapDataRaw(float grass_limit, float[] data){
+    public void GotMapDataRaw(int map_size, float grass_limit, float[] data){
         if(Hosting)
             return;
+        _MapManager.MapSize = map_size;
         _MapManager.SetGrassLimit(grass_limit);
         _MapManager.SetMapDataRaw(data);
         map_data_recieved++;
