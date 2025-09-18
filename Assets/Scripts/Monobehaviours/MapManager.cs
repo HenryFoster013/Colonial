@@ -94,11 +94,13 @@ public class MapManager : MonoBehaviour
 
     public List<int> TilesByDistance(int origin_tile, int distance, bool walkable_only){
         List<int> result = new List<int>();
-        List<int> last_iteration = new List<int>();
-        List<int> last_iteration_buffer = new List<int>();
 
         if(!ValidateTile(origin_tile))
             return result;
+
+        List<int> checked_tiles = new List<int>();
+        List<int> last_iteration = new List<int>();
+        List<int> last_iteration_buffer = new List<int>();
         
         last_iteration.Add(origin_tile);
 
@@ -109,9 +111,12 @@ public class MapManager : MonoBehaviour
 
             foreach(int tile in last_iteration_buffer){
                 foreach(int neighbor in GetNeighbors(tile)){
-                    if(!result.Contains(neighbor)){
-                        result.Add(neighbor);
-                        last_iteration.Add(neighbor);
+                    if(!checked_tiles.Contains(neighbor)){   
+                        if((walkable_only && CheckWalkable(neighbor)) || !walkable_only){
+                            result.Add(neighbor);
+                            last_iteration.Add(neighbor);
+                        }
+                        checked_tiles.Add(neighbor);
                     }
                 }
             }
@@ -515,15 +520,17 @@ public class MapManager : MonoBehaviour
 
         List<Vector2Int> placed_castles = new List<Vector2Int>();
 
-        int minimum_distance = MapSize / castles_needed;
-        minimum_distance = minimum_distance * minimum_distance;
+        int minimum_distance = MapSize * 2;
         int distance_fails = 0;
-        int forts_needed = castles_needed * 3;
+        int forts_needed = MapSize / 5;
 
         while(placed_castles.Count < castles_needed + forts_needed){
 
-            if(distance_fails > 10)
+            if(distance_fails > 15){
                 minimum_distance -= 1;
+                distance_fails = 0;
+            }
+
             int local = Random.Range(0, MapSize * MapSize);
             Vector2Int our_coords = TileToCoords(local);
 

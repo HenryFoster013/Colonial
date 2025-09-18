@@ -18,8 +18,6 @@ public class Troop : NetworkBehaviour{
     [SerializeField] GameObject UI_Holder;
     [SerializeField] Image Health_BG;
     [SerializeField] TMP_Text HealthText;
-    Color local_health_colour = new Color(0.5451f, 0.7725f, 0.5833f, 1f);
-    Color other_health_colour = new Color(0.8208f, 0.4067f, 0.3988f, 1f);
 
     [Header(" - MODEL - ")]
     [SerializeField] Animator Anim;
@@ -73,8 +71,8 @@ public class Troop : NetworkBehaviour{
         DisplayModel(false);
         Anim.SetBool("selected", selected);
 
-        used_move = false;
-        used_special = false;
+        used_move = true;
+        used_special = true;
         first_move_completed = false;
         selected = false;
     }
@@ -90,11 +88,9 @@ public class Troop : NetworkBehaviour{
         _PlayerManager.AddTroop(this);
         setup = true;
         faction = _FactionLookup.GetFaction(Faction_ID);
-        if(_SessionManager.OurInstance.ID == Owner)
-            Health_BG.color = local_health_colour;
-        else
-            Health_BG.color = other_health_colour;
+        Health_BG.color = FactionData().Colour();
         SetupMaterial();
+        UpdateModel();
     }
 
     void SetupMaterial(){
