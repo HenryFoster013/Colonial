@@ -156,6 +156,7 @@ public class MapManager : MonoBehaviour
     }
 
     public Vector3 GetTilePosition(int titty){
+
         Vector3 return_val = Vector3.zero;
 
         Vector2Int tile_coords = TileToCoords(titty);
@@ -165,6 +166,9 @@ public class MapManager : MonoBehaviour
         if(titty % 2 != 0)
             ybounce = 0.5f;
         return_val = new Vector3((tile_coords.x * 0.75f), tile_positions[titty], tile_coords.y + ybounce);
+
+        if(_TileLookup.Tile(GetTileType(titty)).CheckType("WATER"))
+            return_val = new Vector3(return_val.x, GetWaterHeight(titty) - 1, return_val.z);
 
         return return_val;
     }
@@ -250,18 +254,23 @@ public class MapManager : MonoBehaviour
         
         for(int i = 0; i < water_transforms.Length; i++){
             if(water_transforms[i] != null && tiles_visible[i] && tiles_created[i]){
-                float final_vert = tile_positions[i] + (Mathf.Sin((Time.time * .5f) + (water_transforms[i].position.x)) + Mathf.Sin((Time.time * .75f) + (water_transforms[i].position.y))) * 0.1f;
 
-                if(final_vert < -0.99f)
-                    final_vert = -0.99f;
-                
-                Vector3 pos = new Vector3(water_transforms[i].position.x, final_vert, water_transforms[i].position.z);
-                water_transforms[i].localScale = new Vector3(water_transforms[i].localScale.x, water_transforms[i].localScale.x * (final_vert + 1), water_transforms[i].localScale.z);
+                float final_vert = GetWaterHeight(i);
+                Vector3 pos = new Vector3(water_transforms[i].position.x, final_vert - 1, water_transforms[i].position.z);
+                water_transforms[i].localScale = new Vector3(water_transforms[i].localScale.x, water_transforms[i].localScale.x * (final_vert), water_transforms[i].localScale.z);
 
                 if(piece_transforms[i] != null)
                     piece_transforms[i].position = pos;
             }
         }
+    }
+
+    public float GetWaterHeight(int tile){
+        float height = tile_positions[tile] + 1f;
+        height += Mathf.Sin((Time.time * .5f) + (water_transforms[tile].position.x)) / 8f;
+        height += Mathf.Sin((Time.time * .75f) + (water_transforms[tile].position.z)) / 8f;
+        height = Mathf.Clamp(height, 0.01f, 2f);
+        return height;
     }
 
     // MAP GENERATION //

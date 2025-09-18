@@ -129,10 +129,7 @@ public class PlayerManager : MonoBehaviour
             return;
 
         if(current_tile != -1){
-            if(_TileLookup.Tile(Map.GetTileType(current_tile)).CheckType("WATER")){
-                print(Map.GetTilePosition(current_tile));
-                BaseHighlight.transform.position = Map.GetTilePosition(current_tile);
-            }
+            BaseHighlight.transform.position = Map.GetTilePosition(current_tile);
         }
         for(int i = 0; i < walkable_tiles.Count; i++){
             if(blue_grid_highlights.Count >= walkable_tiles.Count){
