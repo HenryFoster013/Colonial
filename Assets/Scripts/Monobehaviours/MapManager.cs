@@ -522,7 +522,7 @@ public class MapManager : MonoBehaviour
 
         int minimum_distance = MapSize * 2;
         int distance_fails = 0;
-        int forts_needed = MapSize / 5;
+        int forts_needed = (MapSize / 4) - castles_needed;
 
         while(placed_castles.Count < castles_needed + forts_needed){
 
