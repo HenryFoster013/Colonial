@@ -20,6 +20,7 @@ MonoBehaviour:
   _Vision: 2
   _Health: 3
   _Damage: 3
+  _MoveOnCloseKill: 0
   _Prefab: {fileID: 7115972115337629991, guid: c7fb5da7301756f4ba98af9264682b51, type: 3}
   _NetPrefabRef:
     RawGuidValue: 7a9916f44a78d894e93526641fefd9b3

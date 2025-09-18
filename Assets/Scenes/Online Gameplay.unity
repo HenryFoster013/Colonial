@@ -1130,6 +1130,8 @@ MonoBehaviour:
   _PlayerManager: {fileID: 2146075082}
   _SessionManager: {fileID: 308904221}
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
+  DamageEffect: {fileID: 6489121289303637190, guid: fd7838d6f78d8f5489e83dca2f78c957, type: 3}
+  DefeatEffect: {fileID: 2175132715089273159, guid: 640e563a24c5c8e41b14dc24075db742, type: 3}
   _current_turn: 0
   player_sub_turn: 0
   AllTroops: []
@@ -8145,6 +8147,7 @@ MonoBehaviour:
   PreviewRenderer: {fileID: 2147257434}
   _SessionManager: {fileID: 308904221}
   AnimatedWater: 1
+  MapSize: 16
   MapHolder: {fileID: 1780067898}
   TileHolder: {fileID: 2100177753}
   ColliderHolder: {fileID: 33991132}

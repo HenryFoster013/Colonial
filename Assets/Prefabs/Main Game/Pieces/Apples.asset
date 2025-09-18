@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 27076cdd8188395419b12c7eae2156a5, type: 3}
-  m_Name: Farm
+  m_Name: Apples
   m_EditorClassIdentifier: 
-  _Type: Farm
-  _Name: Farm
-  _Prefab: {fileID: 8521195677729410137, guid: d02530bef4000624d95b29b8b945751b, type: 3}
+  _Type: Apples
+  _Name: Apples
+  _Prefab: {fileID: 675972354095142977, guid: 6ebaef8e28ba9574a8b54920eb88772a, type: 3}
   _TroopOffset: 0
-  _RandomiseRotation: 0
-  _RandomiseFirstChildRotation: 1
-  _ContainsBillboards: 0
+  _RandomiseRotation: 1
+  _RandomiseFirstChildRotation: 0
+  _ContainsBillboards: 1
   _Walkable: 1
   _CanSpawnTroops: 0

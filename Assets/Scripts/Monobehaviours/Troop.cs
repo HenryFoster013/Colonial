@@ -129,6 +129,10 @@ public class Troop : NetworkBehaviour{
 
         if(_MapManager.CheckVisibility(current_tile))
             PlaySFX("Placement", SFX_Lookup);
+        
+        if(_PlayerManager.CheckNoSpecials(this)){
+            UseSpecial();
+        }
     }
 
     // GRAPHICS //

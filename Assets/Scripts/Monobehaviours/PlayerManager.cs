@@ -128,8 +128,11 @@ public class PlayerManager : MonoBehaviour
         if(!Map.AnimatedWater || !Map.Ready())
             return;
 
-        if(_TileLookup.Tile(Map.GetTileType(current_tile)).CheckType("WATER")){
-            BaseHighlight.transform.position = Map.GetTilePosition(current_tile);
+        if(current_tile != -1){
+            if(_TileLookup.Tile(Map.GetTileType(current_tile)).CheckType("WATER")){
+                print(Map.GetTilePosition(current_tile));
+                BaseHighlight.transform.position = Map.GetTilePosition(current_tile);
+            }
         }
         for(int i = 0; i < walkable_tiles.Count; i++){
             if(blue_grid_highlights.Count >= walkable_tiles.Count){
@@ -254,6 +257,19 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public bool CheckNoSpecials(Troop troop){
+        special_tiles = new List<int>();
+        attackable_tiles = new List<int>();
+
+        if(!troop.UsedSpecial()){
+            attackable_tiles = _GameplayManager.EnemyTileFilter(Map.TilesByDistance(troop.current_tile, troop.Data.AttackDistance(), false));
+            special_tiles = _GameplayManager.SpecialTileFilter(Map.TilesByDistance(troop.current_tile, 1, false));
+            special_tiles = special_tiles.Except(attackable_tiles).ToList();
+        }
+
+        return (special_tiles.Count == 0 && attackable_tiles.Count == 0);
+    }
+
     void GetTroopRanges(Troop troop){
 
         if(troop.Owner != _SessionManager.OurInstance.ID)
@@ -298,13 +314,6 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    void CheckNoSpecials(Troop troop){
-        SetupTiles(troop);
-        if(special_tiles.Count == 0 && attackable_tiles.Count == 0){
-            troop.UseSpecial();
-        }
-    }
-
     void SelectTile(int id){
         if(current_troop != null){
             if(walkable_tiles.Contains(id)){
@@ -321,9 +330,8 @@ public class PlayerManager : MonoBehaviour
     }
 
     void MoveTroop(int tile){
-        _GameplayManager.AskToMoveTroop(current_troop, tile, _SessionManager.OurInstance.ID);
+        _GameplayManager.RPC_SetTroopPos(current_troop.UniqueID, tile, _SessionManager.OurInstance.ID);
         current_troop.UseMove();
-        CheckNoSpecials(current_troop);
         Deselect();
     }
 
@@ -438,6 +446,7 @@ public class PlayerManager : MonoBehaviour
         DisplayBG.color = _SessionManager.PlayerFaction(troop.Owner).Colour();
         
         if(troop.Owner == _SessionManager.OurInstance.ID){
+            print("Getting ranges");
             GetTroopRanges(troop);
         }
 
@@ -463,7 +472,7 @@ public class PlayerManager : MonoBehaviour
         if(current_troop != null)
             current_troop.SetSelected(false);
         current_troop = null;
-        current_tile = 0;
+        current_tile = -1;
         walkable_tiles = new List<int>();
         attackable_tiles = new List<int>();
         ResetSelectionUI();

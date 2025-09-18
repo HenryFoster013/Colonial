@@ -6,6 +6,7 @@ using static HenrysUtils;
 
 public class GameplayManager : NetworkBehaviour
 {
+    [Header("References")]
     [SerializeField] FactionLookup _FactionLookup;
     [SerializeField] TroopLookup _TroopLookup;
     [SerializeField] PlayerManager _PlayerManager;
@@ -14,6 +15,10 @@ public class GameplayManager : NetworkBehaviour
     ConnectionManager _ConnectionManager;
     MapManager _MapManager;
 
+    [Header("Visuals")]
+    [SerializeField] GameObject DamageEffect;
+    [SerializeField] GameObject DefeatEffect;
+ 
     [Networked] public int current_turn { get; private set; }
     public int player_sub_turn;
     int player_count;
@@ -148,24 +153,39 @@ public class GameplayManager : NetworkBehaviour
         if(attacking_troop.Owner == _SessionManager.OurInstance.ID){
             attacking_troop.UseMove();
             attacking_troop.UseSpecial();
+            _PlayerManager.Deselect();
         }
 
         if(_SessionManager.Hosting){
             target_troop.health -= CalculateDamage(attacking_troop, original_attack);
             if(target_troop.health <= 0){
-                if(_MapManager.TilesAreNeighbors(attacking_troop.current_tile, target_troop.current_tile) && original_attack)
-                    attacking_troop.current_tile = target_troop.current_tile;
+                if(original_attack && attacking_troop.Data.MoveOnCloseKill()){
+                    if(_MapManager.TilesAreNeighbors(attacking_troop.current_tile, target_troop.current_tile))
+                        attacking_troop.current_tile = target_troop.current_tile;
+                }
+                RPC_KilledTroop(target_troop.current_tile);
                 _ConnectionManager.Despawn(target_troop.gameObject.GetComponent<NetworkObject>());
-                PlaySFX("Drums_4", SFX_Lookup);
             }
             else{
                 if(original_attack){
                     StartCoroutine(Slapback(attacking_id, target_id));
                 }
+                RPC_DamageEffect(target_troop.current_tile);
             }
         }
 
         CleanAllTroops();
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_KilledTroop(int tile, RpcInfo info = default){
+        PlaySFX("Drums_4", SFX_Lookup);
+        //SpawnEffect(DefeatEffect, tile);
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_DamageEffect(int tile, RpcInfo info = default){
+        SpawnEffect(DamageEffect, tile);
     }
 
     IEnumerator Slapback(int attacking_id, int target_id){
@@ -178,6 +198,11 @@ public class GameplayManager : NetworkBehaviour
         if(!original)
             damage = damage / 2;
         return damage;
+    }
+
+    void SpawnEffect(GameObject effect, int tile){
+        GameObject g = GameObject.Instantiate(effect);
+        g.transform.position = _MapManager.GetTilePosition(tile);
     }
 
     // Troop Spawning //
@@ -219,19 +244,12 @@ public class GameplayManager : NetworkBehaviour
         CleanAllTroops();
     }
 
-    public void AskToMoveTroop(Troop troop, int tile, int owner){
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPC_SetTroopPos(int troop_id, int tile, int owner){
+        Troop troop = GetTroop(troop_id);
         if(_SessionManager.Hosting){
             SetTroopPos(troop, tile, owner);
         }
-        else{
-            RPC_SetTroopPos(troop.UniqueID, tile, owner);
-        }
-    }
-
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void RPC_SetTroopPos(int troop_id, int tile, int owner){
-        Troop troop = GetTroop(troop_id);
-        SetTroopPos(troop, tile, owner);
     }
 
     public void SetTroopPos(Troop troop, int id, int owner){
