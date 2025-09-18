@@ -26,10 +26,6 @@ public class GameplayManager : NetworkBehaviour
 
     // Defaults
 
-    void Update(){
-        
-    }
-
     public void Setup(){
         current_stars = 100;
         current_turn = 1;
@@ -155,7 +151,7 @@ public class GameplayManager : NetworkBehaviour
         }
 
         if(_SessionManager.Hosting){
-            target_troop.health -= attacking_troop.Data.Damage();
+            target_troop.health -= CalculateDamage(attacking_troop, original_attack);
             if(target_troop.health <= 0){
                 if(_MapManager.TilesAreNeighbors(attacking_troop.current_tile, target_troop.current_tile) && original_attack)
                     attacking_troop.current_tile = target_troop.current_tile;
@@ -175,6 +171,13 @@ public class GameplayManager : NetworkBehaviour
     IEnumerator Slapback(int attacking_id, int target_id){
         yield return new WaitForSeconds(0.5f);
         RPC_AttackTroop(target_id, attacking_id, false);
+    }
+
+    int CalculateDamage(Troop troop, bool original){
+        int damage = troop.Data.Damage();
+        if(!original)
+            damage = damage / 2;
+        return damage;
     }
 
     // Troop Spawning //

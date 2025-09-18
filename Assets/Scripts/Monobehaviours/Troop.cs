@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Fusion;
+using TMPro;
 using static HenrysUtils;
 
 public class Troop : NetworkBehaviour{
@@ -12,11 +14,18 @@ public class Troop : NetworkBehaviour{
     [SerializeField] SoundEffectLookup SFX_Lookup;
     [SerializeField] Collider Col;
 
-    [Header(" - DISPLAY - ")]
-    [SerializeField] GameObject[] ModelHolders;
+    [Header(" - UI - ")]
+    [SerializeField] GameObject UI_Holder;
+    [SerializeField] Image Health_BG;
+    [SerializeField] TMP_Text HealthText;
+    Color local_health_colour = new Color(0.5451f, 0.7725f, 0.5833f, 1f);
+    Color other_health_colour = new Color(0.8208f, 0.4067f, 0.3988f, 1f);
+
+    [Header(" - MODEL - ")]
     [SerializeField] Animator Anim;
     public Material BaseMaterial;
     [SerializeField] MeshRenderer[] Meshes;
+    [SerializeField] GameObject Shadow;
     
     [Networked] public int Owner {get; set;}
     [Networked] public int Faction_ID {get; set;}
@@ -45,25 +54,29 @@ public class Troop : NetworkBehaviour{
         CheckForDataSetup();
         CheckForMovement();
         CheckVisibility();
+        HealthText.text = health.ToString();
     }
 
     // SETUP //
 
     void Setup(){
-        foreach(GameObject model_holder in ModelHolders)
-            model_holder.SetActive(false);
-        transform.eulerAngles = new Vector3(0f, 90f, 0f);
+
         _SessionManager = GameObject.FindGameObjectWithTag("Session Manager").GetComponent<SessionManager>();
         _PlayerManager = GameObject.FindGameObjectWithTag("Player Manager").GetComponent<PlayerManager>();
         _MapManager = GameObject.FindGameObjectWithTag("Map Manager").GetComponent<MapManager>();
         _GameplayManager = GameObject.FindGameObjectWithTag("Gameplay Manager").GetComponent<GameplayManager>();
+
         _GameplayManager.AddTroop(this);
+        health = Data.Health();
+        
+        transform.eulerAngles = new Vector3(0f, 90f, 0f);
+        DisplayModel(false);
+        Anim.SetBool("selected", selected);
+
         used_move = false;
         used_special = false;
         first_move_completed = false;
         selected = false;
-        Anim.SetBool("selected", selected);
-        health = Data.Health();
     }
 
     void CheckForDataSetup(){
@@ -77,6 +90,10 @@ public class Troop : NetworkBehaviour{
         _PlayerManager.AddTroop(this);
         setup = true;
         faction = _FactionLookup.GetFaction(Faction_ID);
+        if(_SessionManager.OurInstance.ID == Owner)
+            Health_BG.color = local_health_colour;
+        else
+            Health_BG.color = other_health_colour;
         SetupMaterial();
     }
 
@@ -125,9 +142,16 @@ public class Troop : NetworkBehaviour{
             return;   
 
         bool visible = setup && first_move_completed && _MapManager.CheckVisibility(current_tile);
-        foreach(GameObject model_holder in ModelHolders)
-            model_holder.SetActive(visible);
+        
         Col.enabled = visible;
+        DisplayModel(visible);
+    }
+
+    void DisplayModel(bool visible){
+        Shadow.SetActive(visible);
+        UI_Holder.SetActive(visible);
+        foreach(MeshRenderer mr in Meshes)
+            mr.gameObject.SetActive(visible);
     }
 
     void UpdateModel(){

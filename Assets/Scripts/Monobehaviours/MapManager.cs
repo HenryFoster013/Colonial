@@ -543,7 +543,7 @@ public class MapManager : MonoBehaviour
                                 PlayerInstance player = _SessionManager.GetPlayer(placed_castles.Count);
                                 int _owner = _FactionLookup.ID(player.FactionData());
                                 PlacePiece(local, _PieceLookup.ID(player.FactionData().Tower()));
-                                MarkRadiusAsOwned(local, 3, _owner);
+                                MarkRadiusAsOwned(local, 2, _owner);
                             }
                             else{ // Place Fort
                                 PlacePiece(local, _PieceLookup.ID("Fort (Empty)"));
