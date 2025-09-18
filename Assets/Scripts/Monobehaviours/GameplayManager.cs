@@ -180,7 +180,7 @@ public class GameplayManager : NetworkBehaviour
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_KilledTroop(int tile, RpcInfo info = default){
         PlaySFX("Drums_4", SFX_Lookup);
-        //SpawnEffect(DefeatEffect, tile);
+        SpawnEffect(DefeatEffect, tile);
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
