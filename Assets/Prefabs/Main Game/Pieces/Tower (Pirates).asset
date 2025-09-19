@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Tower (Pirates)
   m_EditorClassIdentifier: 
   _Type: Tower
-  _Name: Fortress
+  _Name: Tower (Pirates)
   _Prefab: {fileID: 2087964761525941807, guid: 063bc565d6bd50342b88cf9f3286e1eb, type: 3}
   _TroopOffset: 1.19
   _RandomiseRotation: 0

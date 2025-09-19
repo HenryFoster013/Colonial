@@ -22,6 +22,10 @@ public class PieceData : ScriptableObject
         return (s.ToUpper() == _Type.ToUpper());
     }
 
+    public bool CheckName(string s){
+        return (s.ToUpper() == _Name.ToUpper());
+    }
+
     public bool Walkable(){return _Walkable;}
     public bool ContainsBillboards(){return _ContainsBillboards;}
     public GameObject Prefab(){return _Prefab;}
