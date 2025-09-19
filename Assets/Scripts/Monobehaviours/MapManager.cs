@@ -582,6 +582,28 @@ public class MapManager : MonoBehaviour
 
     // TILE OWNERSHIP //
 
+    public bool ForeignFortress(int tile){
+        if(!ValidateTile(tile))
+            return false;
+        
+        bool valid = false;
+        if(tiles_owned[tile] != _SessionManager.OurInstance.Faction_ID){
+            if(IsTileFortress(tile))
+                valid = true;
+        }
+        
+        return valid;
+    }
+
+    bool IsTileFortress(int tile){
+        if(!ValidateTile(tile))
+            return false;
+
+        bool valid = (_PieceLookup.Piece(tile_pieces[tile]).CheckType("Tower") || _PieceLookup.Piece(tile_pieces[tile]).CheckType("Fort"));
+        print(valid);
+        return valid;
+    }
+
     public bool CheckTileOwnership(int id, int owner){
         return (tiles_owned[id] == owner);
     }

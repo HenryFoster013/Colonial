@@ -71,7 +71,7 @@ public class PlayerManager : MonoBehaviour
     float camera_spin;
     float target_spine_rot = -90;
 
-    List<Troop> OurTroops = new List<Troop>();
+    public List<Troop> OurTroops = new List<Troop>();
     List<Transform> blue_grid_highlights = new List<Transform>();
     List<Transform> red_grid_highlights = new List<Transform>();
     List<int> walkable_tiles = new List<int>();
@@ -451,7 +451,8 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void AddTroop(Troop t){
-        OurTroops.Add(t);
+        if(t.Owner == _SessionManager.OurInstance.ID)
+            OurTroops.Add(t);
     }
 
     void SetLayer(GameObject obj, int _layer){
@@ -484,8 +485,10 @@ public class PlayerManager : MonoBehaviour
 
     public void EnableAllTroops(){
         foreach(Troop t in OurTroops){
-            if(t != null)
+            if(t != null){
                 t.NewTurn();
+                t.EnableConquest(Map.ForeignFortress(t.current_tile));
+            }
         }
     }
 

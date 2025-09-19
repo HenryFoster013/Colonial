@@ -153,7 +153,8 @@ public class GameplayManager : NetworkBehaviour
         if(attacking_troop.Owner == _SessionManager.OurInstance.ID){
             attacking_troop.UseMove();
             attacking_troop.UseSpecial();
-            _PlayerManager.Deselect();
+            if(original_attack)
+                _PlayerManager.Deselect();
         }
 
         if(_SessionManager.Hosting){
