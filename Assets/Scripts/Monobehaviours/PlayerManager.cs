@@ -377,21 +377,10 @@ public class PlayerManager : MonoBehaviour
     void CheckTileData(int id, TileData tile_data, PieceData piece_data){
         TroopSpawnMenu.SetActive(false);
         if(piece_data.CanSpawnTroops()){
-            if(!DoWeHaveTroopAt(id) && Map.CheckTileOwnership(id, _SessionManager.LocalFactionID()) && OurTurn){
+            if(!_GameplayManager.TroopOnTile(id) && Map.CheckTileOwnership(id, _SessionManager.LocalFactionID()) && OurTurn){
                 OpenSpawnMenu();
             }
         }
-    }
-
-    bool DoWeHaveTroopAt(int tile){
-        bool found = false;
-        for(int i = 0; i < OurTroops.Count && !found; i++){
-            if(OurTroops[i] != null){
-                if(OurTroops[i].current_tile == tile)
-                    found = true;
-            }
-        }
-        return found;
     }
 
     bool IsTroopAttackable(Troop troop){
@@ -451,8 +440,10 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void AddTroop(Troop t){
-        if(t.Owner == _SessionManager.OurInstance.ID)
+        if(t.Owner == _SessionManager.OurInstance.ID){
             OurTroops.Add(t);
+            t.SetEventCamera(_Camera);
+        }
     }
 
     void SetLayer(GameObject obj, int _layer){

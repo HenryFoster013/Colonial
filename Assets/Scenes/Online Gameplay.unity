@@ -1671,7 +1671,8 @@ MonoBehaviour:
   SortKey: 3458748302
   ObjectInterest: 1
   Flags: 262145
-  NestedObjects: []
+  NestedObjects:
+  - {fileID: 1780067901}
   NetworkedBehaviours:
   - {fileID: 236702219}
   ForceRemoteRenderTimeframe: 0
@@ -8090,6 +8091,7 @@ GameObject:
   - component: {fileID: 1780067898}
   - component: {fileID: 1780067900}
   - component: {fileID: 1780067899}
+  - component: {fileID: 1780067901}
   m_Layer: 0
   m_Name: '- MAP -'
   m_TagString: Map Manager
@@ -8146,6 +8148,7 @@ MonoBehaviour:
   _NoiseManager: {fileID: 1780067899}
   PreviewRenderer: {fileID: 2147257434}
   _SessionManager: {fileID: 308904221}
+  _GameplayManager: {fileID: 236702219}
   AnimatedWater: 1
   MapSize: 16
   MapHolder: {fileID: 1780067898}
@@ -8174,6 +8177,25 @@ MonoBehaviour:
   - {fileID: 1497038871315994472, guid: 9f98975a479c68e4a9cdeaba56ba94b7, type: 3}
   - {fileID: 2505958575200160393, guid: 56fbc02adc3e8964c9a015a0562c5d09, type: 3}
   - {fileID: 7529026757873758582, guid: 7a1deff2df54c7647a9dd762f3b42e57, type: 3}
+--- !u!114 &1780067901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1780067897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 1377768868
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 1780067900}
+  ForceRemoteRenderTimeframe: 0
 --- !u!1 &1781492487
 GameObject:
   m_ObjectHideFlags: 0
@@ -10568,6 +10590,7 @@ MonoBehaviour:
   RedHighlightPrefab: {fileID: 6264462412396003950, guid: 50716c7f79448874a92b83a004d3b288, type: 3}
   RedHighlightHook: {fileID: 687229923}
   DisabledColour: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+  OurTroops: []
   attackable_tiles: 
 --- !u!1 &2147257432
 GameObject:

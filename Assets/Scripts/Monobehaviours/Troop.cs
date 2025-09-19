@@ -74,6 +74,10 @@ public class Troop : NetworkBehaviour{
         EnableConquest(false);
     }
 
+    public void SetEventCamera(Camera cam){
+        UI.SetCamera(cam);
+    }
+
     public void EnableConquest(bool valid){
         UI.ConquerVisible(valid);
     }
@@ -210,6 +214,14 @@ public class Troop : NetworkBehaviour{
     public void EndTurn(){
         UseMove();
         UseSpecial();
+    }
+
+    public void ConquestNow(){
+        if(Owner != _SessionManager.OurInstance.ID)
+            return;
+        
+        EndTurn();
+        _GameplayManager.RPC_ConquestNow(current_tile, Faction_ID);
     }
 
     // GETTERS AND SETTERS //

@@ -6,12 +6,13 @@ using System.Diagnostics;
 using Debug=UnityEngine.Debug;
 using Fusion;
 
-public class MapManager : MonoBehaviour
+public class MapManager : NetworkBehaviour
 {
     [Header(" - Main - ")]
     [SerializeField] NoiseManager _NoiseManager;
     [SerializeField] Renderer PreviewRenderer;
     [SerializeField] SessionManager _SessionManager;
+    [SerializeField] GameplayManager _GameplayManager;
     public bool AnimatedWater = true;
 
     [Header(" - Map - ")]
@@ -54,14 +55,14 @@ public class MapManager : MonoBehaviour
     Transform[] piece_transforms;
     bool[] tiles_visible;
     bool[] tiles_created;
-    bool[] requires_piece_refresh;
     float[] tile_positions;
     int[] tile_data;
+    int[] tile_bonus_data;
     List<MeshFilter> grass_mesh = new List<MeshFilter>();
     List<MeshFilter> sand_mesh = new List<MeshFilter>();
     List<MeshFilter> water_mesh = new List<MeshFilter>();
     List<MeshFilter> stone_mesh = new List<MeshFilter>();
-    List<Transform> player_border_holders = new List<Transform>();
+    List<Transform> faction_border_holders = new List<Transform>();
     List<MeshFilter> bg_mesh = new List<MeshFilter>();
     Transform[] water_transforms;
 
@@ -149,7 +150,7 @@ public class MapManager : MonoBehaviour
     List<int> WalkableFilter(List<int> tiles){
         List<int> result = new List<int>();
         foreach(int i in tiles){
-            if(CheckWalkable(i))
+            if(CheckWalkable(i) && !_GameplayManager.TroopOnTile(i))
                 result.Add(i);
         }
         return result;
@@ -304,11 +305,11 @@ public class MapManager : MonoBehaviour
 
     public void GenerateMap(){
         GenerateVisibleMapMesh();
-        SetupPlayerBorders();
+        SetupFactionBorders();
     }
 
     void GenerateVisibleMapMesh(){
-        
+
         Stopwatch st = new Stopwatch();
         st.Start();
 
@@ -359,9 +360,9 @@ public class MapManager : MonoBehaviour
                         stone_mesh.Add(tile.transform.GetChild(0).GetComponent<MeshFilter>());
                         break;
                 }
-            }
 
-            GeneratePieceModel(i);
+                GeneratePieceModel(i);
+            }
 
             // Counters
             x++;
@@ -385,13 +386,13 @@ public class MapManager : MonoBehaviour
         ready = true;
     }
 
-    void SetupPlayerBorders(){
-        for(int player=0; player < _SessionManager.GetPlayerCount(); player++){
+    void SetupFactionBorders(){
+        for(int owner = 0; owner < _FactionLookup.Length(); owner++){
             GameObject g = GameObject.Instantiate(BorderHolder.gameObject);
             g.transform.parent = BorderHolder;
-            player_border_holders.Add(g.transform);
+            faction_border_holders.Add(g.transform);
 
-            RefreshBorderMesh(player);
+            RefreshBorderMesh(owner);
         }
     }
 
@@ -441,11 +442,10 @@ public class MapManager : MonoBehaviour
         piece_transforms = new Transform[map_data_raw.Length];
         tile_positions = new float[map_data_raw.Length];
         tile_data = new int[map_data_raw.Length];
-        requires_piece_refresh = new bool[map_data_raw.Length];
+        tile_bonus_data = new int[map_data_raw.Length];
         
         for(int i = 0; i < tile_data.Length; i++){
             tile_data[i] = _TileLookup.ID("Unmarked");
-            requires_piece_refresh[i] = true;
             tile_positions[i] = map_data_raw[i] * TileHeightVariation;
         }
 
@@ -475,7 +475,7 @@ public class MapManager : MonoBehaviour
         piece_transforms = new Transform[map_data_raw.Length];
         tile_positions = new float[map_data_raw.Length];
         tile_data = new int[map_data_raw.Length];
-        requires_piece_refresh = new bool[map_data_raw.Length];
+        tile_bonus_data = new int[map_data_raw.Length];
         
         for(int i = 0; i < map_data_raw.Length; i++){
             tiles_owned[i] = -1;
@@ -558,7 +558,7 @@ public class MapManager : MonoBehaviour
                                 PlayerInstance player = _SessionManager.GetPlayer(placed_castles.Count);
                                 int _owner = _FactionLookup.ID(player.FactionData());
                                 PlacePiece(local, _PieceLookup.ID(player.FactionData().Tower()));
-                                MarkRadiusAsOwned(local, 2, _owner);
+                                MarkRadiusAsOwned(local, 2, _owner, true);
                             }
                             else{ // Place Fort
                                 PlacePiece(local, _PieceLookup.ID("Fort (Empty)"));
@@ -600,7 +600,6 @@ public class MapManager : MonoBehaviour
             return false;
 
         bool valid = (_PieceLookup.Piece(tile_pieces[tile]).CheckType("Tower") || _PieceLookup.Piece(tile_pieces[tile]).CheckType("Fort"));
-        print(valid);
         return valid;
     }
 
@@ -608,16 +607,49 @@ public class MapManager : MonoBehaviour
         return (tiles_owned[id] == owner);
     }
 
-    void MarkRadiusAsOwned(int id, int radius, int owner){
-        MarkTileAsOwned(id, owner);
-        foreach(int tile in TilesByDistance(id, radius, false)){
-            MarkTileAsOwned(tile, owner);
+    public void Conquer(int tile, int owner){
+        if(!_SessionManager.Hosting)
+            return;
+        if(!ValidateTile(tile))
+            return;
+        
+        if(IsTileFortress(tile)){
+            int radius = 2;
+            //if(tile_bonus_data[tile] != 0)
+            //    radius = tile_bonus_data[tile];
+            
+            if(_PieceLookup.Piece(tile_pieces[tile]).CheckType("Tower"))
+                RPC_PieceChanged(tile, _PieceLookup.ID(_FactionLookup.GetFaction(owner).Tower()));
+            else
+                RPC_PieceChanged(tile, _PieceLookup.ID(_FactionLookup.GetFaction(owner).Fort()));
+
+            RPC_Conquer(tile, radius, owner);
         }
     }
 
-    void MarkTileAsOwned(int id, int owner){
+    void MarkRadiusAsOwned(int id, int radius, int owner, bool do_not_overwrite){
+        MarkTileAsOwned(id, owner, do_not_overwrite);
+        tile_bonus_data[id] = radius;
+        foreach(int tile in TilesByDistance(id, radius, false)){
+            MarkTileAsOwned(tile, owner, do_not_overwrite);
+        }
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_PieceChanged(int tile, int piece, RpcInfo info = default){
+        PlacePiece(tile, piece);
+        GeneratePieceModel(tile);
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_Conquer(int tile, int radius, int owner, RpcInfo info = default){
+        MarkRadiusAsOwned(tile, radius, owner, false);
+        RefreshAllBorders();
+    }
+
+    void MarkTileAsOwned(int id, int owner, bool do_not_overwrite){
         if(ValidateTile(id)){
-            if(tiles_owned[id] == -1)
+            if(tiles_owned[id] == -1 && do_not_overwrite || !do_not_overwrite)
                 tiles_owned[id] = owner;
         }
     }
@@ -648,13 +680,12 @@ public class MapManager : MonoBehaviour
     }
 
     void RefreshAllBorders(){
-        for(int i = 0; i < _SessionManager.GetPlayerCount(); i++)
+        for(int i = 0; i < _FactionLookup.Length(); i++)
             RefreshBorderMesh(i);
     }
 
-    void RefreshBorderMesh(int player){
-        int owner = _FactionLookup.ID(_SessionManager.GetPlayer(player).FactionData());
-        Transform border_holder = player_border_holders[player];
+    void RefreshBorderMesh(int owner){
+        Transform border_holder = faction_border_holders[owner];
 
         // Generic so this can be later expanded for different owners with different border meshes
         foreach(Transform t in border_holder)
@@ -668,7 +699,7 @@ public class MapManager : MonoBehaviour
         }
 
         Material mat = new Material(BorderMaterial);
-        mat.SetColor("_BaseColour", _SessionManager.GetPlayer(player).FactionData().BorderColour());
+        mat.SetColor("_BaseColour", _FactionLookup.GetFaction(owner).BorderColour());
 
         CombineMeshes(ref border_pieces, mat, border_holder);
     }
@@ -775,15 +806,13 @@ public class MapManager : MonoBehaviour
 
     void PlacePiece(int pos, int id){
         tile_pieces[pos] = id;
-        requires_piece_refresh[pos] = true;
     }
 
     void GeneratePieceModel(int pos){
 
-        if(tile_pieces[pos] <= 0 || requires_piece_refresh[pos] == false || !tiles_created[pos] || !tiles_visible[pos])
+        if(tile_pieces[pos] <= 0 || !tiles_created[pos] || !tiles_visible[pos])
             return;
 
-        requires_piece_refresh[pos] = false;
         if(piece_transforms[pos] != null){
             GameObject.Destroy(piece_transforms[pos].gameObject);
         }
@@ -834,4 +863,9 @@ public class MapManager : MonoBehaviour
     // GETTERS //
 
     public bool CheckVisibility(int tile){return tiles_visible[tile];}
+    public bool IsOwner(int tile, int owner){
+        if(!ValidateTile(tile))
+            return false;
+        return tiles_owned[tile] == owner;
+    }
 }
