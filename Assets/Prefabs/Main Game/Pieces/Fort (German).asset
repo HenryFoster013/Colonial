@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Fort (German)
   m_EditorClassIdentifier: 
   _Type: Fort
-  _Name: Fort
+  _Name: Fort (German)
   _Prefab: {fileID: 7229817698954709211, guid: 033261e3b9b437b4c8e30f3fe25ffc69, type: 3}
   _TroopOffset: 0.389
   _RandomiseRotation: 0

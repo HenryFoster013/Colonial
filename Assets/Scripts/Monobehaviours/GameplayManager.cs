@@ -259,7 +259,8 @@ public class GameplayManager : NetworkBehaviour
     public bool TroopOnTile(int tile){
         bool return_val = false;
         for(int i = 0; i < AllTroops.Count && !return_val; i++){
-            return_val = AllTroops[i].current_tile == tile;
+            if(AllTroops[i] != null)
+                return_val = AllTroops[i].current_tile == tile;
         }
         return return_val;
     }
