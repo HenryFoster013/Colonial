@@ -9,11 +9,16 @@ public class TroopUIManager : MonoBehaviour
     [Header(" - Main - ")]
     public Troop troop;
     [SerializeField] GameObject UI_Holder;
+    [SerializeField] Canvas _Canvas;
     [Header(" - Health - ")]
     [SerializeField] Image Health_BG;
     [SerializeField] TMP_Text HealthText;
     [Header(" - Conquest - ")]
     [SerializeField] GameObject Conquer_Holder;
+
+    public void SetCamera(Camera cam){
+        _Canvas.worldCamera = cam;
+    }
 
     public void SetHealthColour(Color colour){
         HealthText.color = colour;
@@ -32,6 +37,6 @@ public class TroopUIManager : MonoBehaviour
     }
 
     public void ConquerButton(){
-
+        troop.ConquestNow();
     }
 }

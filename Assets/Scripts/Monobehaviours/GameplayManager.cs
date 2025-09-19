@@ -231,6 +231,9 @@ public class GameplayManager : NetworkBehaviour
         if(!_SessionManager.Hosting)
             return;
 
+        if(TroopOnTile(tile))
+            return;
+
         if(!_MapManager.CheckTileOwnership(tile, _SessionManager.PlayerFactionID(owner)))
             return;
 
@@ -253,9 +256,28 @@ public class GameplayManager : NetworkBehaviour
         }
     }
 
+    public bool TroopOnTile(int tile){
+        bool return_val = false;
+        for(int i = 0; i < AllTroops.Count && !return_val; i++){
+            return_val = AllTroops[i].current_tile == tile;
+        }
+        return return_val;
+    }
+
     public void SetTroopPos(Troop troop, int id, int owner){
         if(troop.Owner == owner && troop != null)
             troop.current_tile = id;
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RPC_ConquestNow(int tile, int owner){
+        if(_SessionManager.Hosting){
+            if(_MapManager.ValidateTile(tile)){
+                if(!_MapManager.IsOwner(tile, owner)){
+                    _MapManager.Conquer(tile, owner);
+                }
+            }
+        }
     }
 
     public void SpendStars(int cost){current_stars -= cost;}
