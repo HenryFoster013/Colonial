@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 27076cdd8188395419b12c7eae2156a5, type: 3}
-  m_Name: Fort
+  m_Name: Tower (Empty)
   m_EditorClassIdentifier: 
-  _Type: Fort
-  _Name: Fort
-  _Prefab: {fileID: 7229817698954709211, guid: a44afcb5aad9d1f44b84b58d2fde684f, type: 3}
-  _TroopOffset: 0.389
+  _Type: Tower
+  _Name: Tower (Empty)
+  _Prefab: {fileID: 2087964761525941807, guid: fac796edd78cc824684bc34de9f033e5, type: 3}
+  _TroopOffset: 1.19
   _RandomiseRotation: 0
   _RandomiseFirstChildRotation: 0
   _ContainsBillboards: 0
   _Walkable: 1
-  _CanSpawnTroops: 1
+  _CanSpawnTroops: 0

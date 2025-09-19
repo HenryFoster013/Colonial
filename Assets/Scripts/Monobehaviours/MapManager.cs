@@ -561,7 +561,7 @@ public class MapManager : NetworkBehaviour
                                 MarkRadiusAsOwned(local, 2, _owner, true);
                             }
                             else{ // Place Fort
-                                PlacePiece(local, _PieceLookup.ID("Fort (Empty)"));
+                                PlacePiece(local, _PieceLookup.ID_ByName("Fort (Empty)"));
                             }
                             placed_castles.Add(TileToCoords(local));
                         }
@@ -614,14 +614,18 @@ public class MapManager : NetworkBehaviour
             return;
         
         if(IsTileFortress(tile)){
-            int radius = 2;
-            //if(tile_bonus_data[tile] != 0)
-            //    radius = tile_bonus_data[tile];
-            
-            if(_PieceLookup.Piece(tile_pieces[tile]).CheckType("Tower"))
+            int radius = 0;
+            if(_PieceLookup.Piece(tile_pieces[tile]).CheckType("Tower")){
                 RPC_PieceChanged(tile, _PieceLookup.ID(_FactionLookup.GetFaction(owner).Tower()));
-            else
+                radius = 2;
+            }
+            else{
                 RPC_PieceChanged(tile, _PieceLookup.ID(_FactionLookup.GetFaction(owner).Fort()));
+                radius = 1;
+            }
+   
+            if(tile_bonus_data[tile] != 0)
+                radius = tile_bonus_data[tile];
 
             RPC_Conquer(tile, radius, owner);
         }

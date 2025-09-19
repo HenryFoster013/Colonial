@@ -34,4 +34,16 @@ public class PieceLookup : ScriptableObject
         }
         return return_val;
     }
+
+    public int ID_ByName(string name){
+        int return_val = 0;
+        bool done = false;
+        for(int i = 0; i < Pieces.Length && !done; i++){
+            if(Pieces[i].CheckName(name)){
+                done = true;
+                return_val = i;
+            }
+        }
+        return return_val;
+    }
 }

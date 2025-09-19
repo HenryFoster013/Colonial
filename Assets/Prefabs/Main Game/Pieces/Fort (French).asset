@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Fort (French)
   m_EditorClassIdentifier: 
   _Type: Fort
-  _Name: Fort
+  _Name: Fort (French)
   _Prefab: {fileID: 7229817698954709211, guid: 6f981ea84cf4ace4885060a7e62b68ba, type: 3}
   _TroopOffset: 0.389
   _RandomiseRotation: 0

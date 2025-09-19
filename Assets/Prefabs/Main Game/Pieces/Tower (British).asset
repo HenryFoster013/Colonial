@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Tower (British)
   m_EditorClassIdentifier: 
   _Type: Tower
-  _Name: Fortress
+  _Name: Tower (British)
   _Prefab: {fileID: 2087964761525941807, guid: 23d57f21c827fbc4ab450d5196a3e5db, type: 3}
   _TroopOffset: 1.19
   _RandomiseRotation: 0
