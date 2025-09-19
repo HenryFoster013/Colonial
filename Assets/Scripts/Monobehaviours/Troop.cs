@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Fusion;
-using TMPro;
 using static HenrysUtils;
 
 public class Troop : NetworkBehaviour{
@@ -15,9 +13,7 @@ public class Troop : NetworkBehaviour{
     [SerializeField] Collider Col;
 
     [Header(" - UI - ")]
-    [SerializeField] GameObject UI_Holder;
-    [SerializeField] Image Health_BG;
-    [SerializeField] TMP_Text HealthText;
+    [SerializeField] TroopUIManager UI;
 
     [Header(" - MODEL - ")]
     [SerializeField] Animator Anim;
@@ -52,7 +48,7 @@ public class Troop : NetworkBehaviour{
         CheckForDataSetup();
         CheckForMovement();
         CheckVisibility();
-        HealthText.text = health.ToString();
+        UI.UpdateHealth();
     }
 
     // SETUP //
@@ -75,6 +71,11 @@ public class Troop : NetworkBehaviour{
         used_special = true;
         first_move_completed = false;
         selected = false;
+        EnableConquest(false);
+    }
+
+    public void EnableConquest(bool valid){
+        UI.ConquerVisible(valid);
     }
 
     void CheckForDataSetup(){
@@ -88,7 +89,7 @@ public class Troop : NetworkBehaviour{
         _PlayerManager.AddTroop(this);
         setup = true;
         faction = _FactionLookup.GetFaction(Faction_ID);
-        Health_BG.color = FactionData().Colour();
+        UI.SetHealthColour(FactionData().Colour());
         SetupMaterial();
         UpdateModel();
     }
@@ -149,7 +150,7 @@ public class Troop : NetworkBehaviour{
 
     void DisplayModel(bool visible){
         Shadow.SetActive(visible);
-        UI_Holder.SetActive(visible);
+        UI.SetVisible(visible);
         foreach(MeshRenderer mr in Meshes)
             mr.gameObject.SetActive(visible);
     }
@@ -197,11 +198,13 @@ public class Troop : NetworkBehaviour{
     public void UseMove(){
         used_move = true;
         UpdateModel();
+        EnableConquest(false);
     }
 
     public void UseSpecial(){
         used_special = true;
         UpdateModel();
+        EnableConquest(false);
     }
 
     public void EndTurn(){

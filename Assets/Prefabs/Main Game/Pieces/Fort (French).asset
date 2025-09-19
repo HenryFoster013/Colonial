@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27076cdd8188395419b12c7eae2156a5, type: 3}
   m_Name: Fort (French)
   m_EditorClassIdentifier: 
-  _Type: Fort (French)
+  _Type: Fort
   _Name: Fort
   _Prefab: {fileID: 7229817698954709211, guid: 6f981ea84cf4ace4885060a7e62b68ba, type: 3}
   _TroopOffset: 0.389

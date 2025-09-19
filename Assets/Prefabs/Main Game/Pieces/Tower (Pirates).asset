@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 27076cdd8188395419b12c7eae2156a5, type: 3}
-  m_Name: Tower - British
+  m_Name: Tower (Pirates)
   m_EditorClassIdentifier: 
-  _Type: Tower (British)
+  _Type: Tower
   _Name: Fortress
-  _Prefab: {fileID: 2087964761525941807, guid: 23d57f21c827fbc4ab450d5196a3e5db, type: 3}
+  _Prefab: {fileID: 2087964761525941807, guid: 063bc565d6bd50342b88cf9f3286e1eb, type: 3}
   _TroopOffset: 1.19
   _RandomiseRotation: 0
   _RandomiseFirstChildRotation: 0
