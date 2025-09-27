@@ -16,13 +16,12 @@ public class TileData : ScriptableObject
     [SerializeField] bool _Walkable;
 
     public bool CheckType(string s){
-        return (s.ToUpper() == _Type.ToUpper());
+        return (s.ToUpper() == Type());
     }
 
     public bool Walkable(){return _Walkable;}
     public GameObject Prefab(){return _Prefab;}
-    public string Name(){return _Name;}
     public Color TabColour(){return _TabColour;}
     public Color TextColour(){return _TextColour;}
-    public string Type(){return _Type;}
+    public string Type(){return _Type.ToUpper();}
 }

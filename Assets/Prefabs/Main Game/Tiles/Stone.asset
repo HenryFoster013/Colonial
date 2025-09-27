@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2baabb38b26e484e99be2d37298df16, type: 3}
   m_Name: Stone
   m_EditorClassIdentifier: 
-  _Type: Stone
+  _Type: STONE
   _Name: Cliffs
   _TabColour: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 1}
   _TextColour: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 1}

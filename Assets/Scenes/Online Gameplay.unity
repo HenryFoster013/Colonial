@@ -10591,7 +10591,6 @@ MonoBehaviour:
   RedHighlightHook: {fileID: 687229923}
   DisabledColour: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
   OurTroops: []
-  attackable_tiles: 
 --- !u!1 &2147257432
 GameObject:
   m_ObjectHideFlags: 0

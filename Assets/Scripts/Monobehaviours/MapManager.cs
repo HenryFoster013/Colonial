@@ -5,6 +5,7 @@ using System.Linq;
 using System.Diagnostics;
 using Debug=UnityEngine.Debug;
 using Fusion;
+using HenrysMapUtils;
 
 public class MapManager : NetworkBehaviour
 {
@@ -45,37 +46,25 @@ public class MapManager : NetworkBehaviour
     [SerializeField] GameObject[] BorderPrefabs;
 
     // Local only
-    bool ready = false;
-    public bool Ready(){return ready;}
-
+    public bool ready {get; private set;}
     public float GrassLimit {get; private set;}
+
     float StoneLimit = 0.5f;
     bool generated_bg;
 
-    Transform[] piece_transforms;
-    bool[] tiles_visible;
-    bool[] tiles_created;
-    float[] tile_positions;
-    int[] tile_data;
-    int[] tile_bonus_data;
+    Tile[] Tiles;
+
+    // Synced from Host
+    public float[] map_data_raw;
+    int[] tile_pieces;
+    int[] tile_ownerships;
+    
     List<MeshFilter> grass_mesh = new List<MeshFilter>();
     List<MeshFilter> sand_mesh = new List<MeshFilter>();
     List<MeshFilter> water_mesh = new List<MeshFilter>();
     List<MeshFilter> stone_mesh = new List<MeshFilter>();
     List<Transform> faction_border_holders = new List<Transform>();
     List<MeshFilter> bg_mesh = new List<MeshFilter>();
-    Transform[] water_transforms;
-
-    // Synced from Host
-    float[] map_data_raw;
-    public float[] GetRawMapData(){return map_data_raw;}
-
-    int[] tile_pieces;
-    public int[] GetTilePieces(){return tile_pieces;}
-
-    int[] tiles_owned;
-    public int[] GetTileOwnership(){return tiles_owned;}
-    
 
     // MAIN FUNCTIONS //
 
@@ -85,33 +74,35 @@ public class MapManager : NetworkBehaviour
 
     // OUTSIDE INTERACTION //
 
-    public bool TilesAreNeighbors(int tile_one, int tile_two){
-        if(!ValidateTile(tile_one) || !ValidateTile(tile_two))
-            return false;
-        
-        List<int> neighbors = TilesByDistance(tile_one, 1, false);
+    public Tile GetTile(int i){
+        if(!ValidateTileID(i))
+            return null;
+        else
+            return Tiles[i];
+    }
+
+    public bool TilesAreNeighbors(int tile_one, int tile_two){return TilesAreNeighbors(Tiles[tile_one], Tiles[tile_two]);}
+    public bool TilesAreNeighbors(Tile tile_one, Tile tile_two){
+        List<Tile> neighbors = TilesByDistance(tile_one, 1, false);
         return neighbors.Contains(tile_two);
     }
 
-    public List<int> TilesByDistance(int origin_tile, int distance, bool walkable_only){
-        List<int> result = new List<int>();
-
-        if(!ValidateTile(origin_tile))
-            return result;
-
-        List<int> checked_tiles = new List<int>();
-        List<int> last_iteration = new List<int>();
-        List<int> last_iteration_buffer = new List<int>();
+    public List<Tile> TilesByDistance(int id, int distance, bool walkable_only){return TilesByDistance(Tiles[id], distance, walkable_only);}
+    public List<Tile> TilesByDistance(Tile origin_tile, int distance, bool walkable_only){
+        List<Tile> result = new List<Tile>();
+        List<Tile> checked_tiles = new List<Tile>();
+        List<Tile> last_iteration = new List<Tile>();
+        List<Tile> last_iteration_buffer = new List<Tile>();
         
         last_iteration.Add(origin_tile);
 
         for(int i = 0; i < distance; i++){
 
-            last_iteration_buffer = new List<int>(last_iteration);
-            last_iteration = new List<int>();
+            last_iteration_buffer = new List<Tile>(last_iteration);
+            last_iteration = new List<Tile>();
 
-            foreach(int tile in last_iteration_buffer){
-                foreach(int neighbor in GetNeighbors(tile)){
+            foreach(Tile tile in last_iteration_buffer){
+                foreach(Tile neighbor in GetNeighbors(tile)){
                     if(!checked_tiles.Contains(neighbor)){   
                         if((walkable_only && CheckWalkable(neighbor)) || !walkable_only){
                             result.Add(neighbor);
@@ -123,59 +114,81 @@ public class MapManager : NetworkBehaviour
             }
         }
 
-        // In theory shouldn't be needed, uncomment if duplicate tiles appear.
+        // In theory shouldn't be needed, uncomment if duplicate Tiles appear.
         //result = result.Distinct().ToList();
         
         return result;
     }
 
-    public int GetTileType(int i){
-        int return_val = -1;
-        if(ValidateTile(i))
-            return_val = tile_data[i];
-        return return_val;
+
+    public bool CheckWalkable(Tile tile){
+        return tile.type.Walkable() && tile.piece.Walkable();
     }
 
-    public int GetPieceType(int i){
-        int return_val = -1;
-        if(ValidateTile(i))
-            return_val = tile_pieces[i];
-        return return_val;
-    }
-
-    public bool CheckWalkable(int i){
-        return _TileLookup.Tile(tile_data[i]).Walkable() && _PieceLookup.Piece(tile_pieces[i]).Walkable();
-    }
-
-    List<int> WalkableFilter(List<int> tiles){
-        List<int> result = new List<int>();
-        foreach(int i in tiles){
-            if(CheckWalkable(i) && !_GameplayManager.TroopOnTile(i))
-                result.Add(i);
+    List<Tile> WalkableFilter(List<Tile> Tiles){
+        List<Tile> result = new List<Tile>();
+        foreach(Tile tile in Tiles){
+            if(CheckWalkable(tile) && !_GameplayManager.TroopOnTile(tile))
+                result.Add(tile);
         }
         return result;
     }
 
-    public Vector3 GetTilePosition(int titty){
-
+    public Vector3 CalcTileWorldPosition(Tile tile){return CalcTileWorldPosition(tile.ID);}
+    public Vector3 CalcTileWorldPosition(int tile_id){
+        
+        float height = (map_data_raw[tile_id]) / 2;
         Vector3 return_val = Vector3.zero;
-
-        Vector2Int tile_coords = TileToCoords(titty);
+        Vector2Int tile_coords = TileToCoords(tile_id);
         int y = tile_coords.y;
         int x = tile_coords.x;
         float ybounce = 0f;
-        if(titty % 2 != 0)
+        if(tile_id % 2 != 0)
             ybounce = 0.5f;
-        return_val = new Vector3((tile_coords.x * 0.75f), tile_positions[titty], tile_coords.y + ybounce);
+        return_val = new Vector3((tile_coords.x * 0.75f), height, tile_coords.y + ybounce);
 
-        if(_TileLookup.Tile(GetTileType(titty)).CheckType("WATER"))
-            return_val = new Vector3(return_val.x, GetWaterHeight(titty) - 1, return_val.z);
-
+        if(Tiles[tile_id] != null){
+            if(Tiles[tile_id].type == _TileLookup.Tile("WATER"))
+                return_val = CalcTileWaterHeight(return_val);
+        }
+        
         return return_val;
     }
 
-    public Vector3 GetTroopPosition(int tile){
-        return GetTilePosition(tile) + new Vector3(0, _PieceLookup.Piece(GetPieceType(tile)).TroopOffset(), 0);
+    public Vector3 CalcTileWaterHeight(Vector3 pos){
+        float offset = -1.8f;
+        offset += Mathf.Sin((Time.time * .5f) + pos.x);
+        offset += Mathf.Sin((Time.time * .75f) + pos.z);
+
+        return new Vector3(pos.x, Mathf.Clamp(pos.y + (offset / 8f), -0.99f, pos.y + 0.2f), pos.z);
+    }
+
+    Vector2Int TileToCoords(Tile tile){return TileToCoords(tile.ID);}
+    Vector2Int TileToCoords(int id){
+        int y = id / MapSize;
+        int x = id - (MapSize * y);
+        return (new Vector2Int(x, y));
+    }
+
+    public Vector3 GetTroopPosition(int tile_id){return GetTroopPosition(Tiles[tile_id]);}
+    public Vector3 GetTroopPosition(Tile tile){
+        return tile.world_position + new Vector3(0, tile.piece.TroopOffset(), 0);
+    }
+
+    // Works backwards from the in world position. The math should be much faster than searching a list of all Tiles.
+    public Tile GetTileFromTransform(Transform t){
+        float grid_x = (t.position.x) / 0.75f;
+
+        float bounceval = 0;
+        if(Mathf.Round(Mathf.Round(grid_x) % 2) != 0)
+            bounceval = 0.5f;
+
+        float grid_y = (t.position.z - bounceval);
+        
+        int y_int = (int)(Mathf.Round(grid_y));
+        int x_int = (int)(Mathf.Round(grid_x));
+
+        return Tiles[GetTileID(new Vector2Int(x_int, y_int))];
     }
 
     public int GetTileID(Vector2Int pos){
@@ -188,63 +201,43 @@ public class MapManager : NetworkBehaviour
         return tile;
     }
 
-    public int GetSize(){
-        return MapSize;
-    }
+    public List<Tile> GetNeighbors(Tile tile){
 
-    public List<int> GetNeighbors(int tile){
-        List<int> neighbors = new List<int>();
-        if(ValidateTile(tile)){
-            if(ValidateTile(tile + 1) && AntiLoopingMeasures(tile, +1, 0)) {neighbors.Add(tile + 1);}
-            if(ValidateTile(tile - 1) && AntiLoopingMeasures(tile, -1, 0)) {neighbors.Add(tile - 1);}
-            if(ValidateTile(tile + MapSize)) {neighbors.Add(tile + MapSize);}
-            if(ValidateTile(tile - MapSize)) {neighbors.Add(tile - MapSize);}
+        List<Tile> neighbors = new List<Tile>();
+        if(AntiLoopingMeasures(tile, +1, 0)) {neighbors.Add(Tiles[tile.ID + 1]);}
+        if(AntiLoopingMeasures(tile, -1, 0)) {neighbors.Add(Tiles[tile.ID - 1]);}
+        if(ValidateTileID(tile.ID + MapSize)) {neighbors.Add(Tiles[tile.ID + MapSize]);}
+        if(ValidateTileID(tile.ID - MapSize)) {neighbors.Add(Tiles[tile.ID - MapSize]);}
 
-            if(tile % 2 == 0){
-                if(ValidateTile(tile + 1 - MapSize) && AntiLoopingMeasures(tile, +1, -1)) {neighbors.Add(tile + 1 - MapSize);}
-                if(ValidateTile(tile - 1 - MapSize) && AntiLoopingMeasures(tile, -1, -1)) {neighbors.Add(tile - 1 - MapSize);}
-            }
-            else{
-                if(ValidateTile(tile + 1 + MapSize) && AntiLoopingMeasures(tile, +1, +1)) {neighbors.Add(tile + 1 + MapSize);}
-                if(ValidateTile(tile - 1 + MapSize) && AntiLoopingMeasures(tile, -1, +1)) {neighbors.Add(tile - 1 + MapSize);}
-            }
+        if(tile.ID % 2 == 0){
+            if(ValidateTileID(tile.ID + 1 - MapSize) && AntiLoopingMeasures(tile, +1, -1)) {neighbors.Add(Tiles[tile.ID + 1 - MapSize]);}
+            if(ValidateTileID(tile.ID - 1 - MapSize) && AntiLoopingMeasures(tile, -1, -1)) {neighbors.Add(Tiles[tile.ID - 1 - MapSize]);}
+        }
+        else{
+            if(ValidateTileID(tile.ID + 1 + MapSize) && AntiLoopingMeasures(tile, +1, +1)) {neighbors.Add(Tiles[tile.ID + 1 + MapSize]);}
+            if(ValidateTileID(tile.ID - 1 + MapSize) && AntiLoopingMeasures(tile, -1, +1)) {neighbors.Add(Tiles[tile.ID - 1 + MapSize]);}
         }
         return neighbors;
     }
 
+    bool AntiLoopingMeasures(Tile tile, int x_offset, int y_offset){return AntiLoopingMeasures(tile.ID, x_offset, y_offset);}
     bool AntiLoopingMeasures(int tile, int x_offset, int y_offset){
-        if(!ValidateTile(tile))
+        if(!ValidateTileID(tile))
             return false;
         
         int new_tile = tile + x_offset + (y_offset * MapSize);
 
-        if(!ValidateTile(new_tile))
+        if(!ValidateTileID(new_tile))
             return false;
 
-        Vector2Int base_tile_coords = TileToCoords(tile) + new Vector2Int(x_offset, y_offset);
-        Vector2Int new_tile_coords = TileToCoords(new_tile);
+        Vector2Int base_tile_coords = TileToCoords(Tiles[tile]) + new Vector2Int(x_offset, y_offset);
+        Vector2Int new_tile_coords = TileToCoords(Tiles[new_tile]);
         
         return base_tile_coords == new_tile_coords;
     }
 
-    public bool ValidateTile(int pos){
+    public bool ValidateTileID(int pos){
         return(pos < map_data_raw.Length && pos > -1);
-    }
-
-    // Works backwards from the in world position. The math should be much faster than searching a list of all tiles.
-    public int GetTileIDFromTransform(Transform t){
-        float grid_x = (t.position.x) / 0.75f;
-
-        float bounceval = 0;
-        if(Mathf.Round(Mathf.Round(grid_x) % 2) != 0)
-            bounceval = 0.5f;
-
-        float grid_y = (t.position.z - bounceval);
-        
-        int y_int = (int)(Mathf.Round(grid_y));
-        int x_int = (int)(Mathf.Round(grid_x));
-
-        return GetTileID(new Vector2Int(x_int, y_int));
     }
 
     // MAP ANIMATION //
@@ -253,54 +246,29 @@ public class MapManager : NetworkBehaviour
         if(!AnimatedWater || !ready)
             return;
         
-        for(int i = 0; i < water_transforms.Length; i++){
-            if(water_transforms[i] != null && tiles_visible[i] && tiles_created[i]){
+        foreach(Tile tile in Tiles){
+            if(tile.type.CheckType("WATER") && tile.visible && tile.created){
+                
+                tile.SetPosition(CalcTileWorldPosition(tile));
+                tile.water_transform.localScale = new Vector3(tile.water_transform.localScale.x, tile.water_transform.localScale.x * (tile.world_position.y + 1), tile.water_transform.localScale.z);
 
-                float final_vert = GetWaterHeight(i);
-                Vector3 pos = new Vector3(water_transforms[i].position.x, final_vert - 1, water_transforms[i].position.z);
-                water_transforms[i].localScale = new Vector3(water_transforms[i].localScale.x, water_transforms[i].localScale.x * (final_vert), water_transforms[i].localScale.z);
-
-                if(piece_transforms[i] != null)
-                    piece_transforms[i].position = pos;
+                if(tile.piece_transform != null)
+                    tile.piece_transform.position = tile.world_position;
             }
         }
-    }
-
-    public float GetWaterHeight(int tile){
-        float height = tile_positions[tile] + 1f;
-        height += Mathf.Sin((Time.time * .5f) + (water_transforms[tile].position.x)) / 8f;
-        height += Mathf.Sin((Time.time * .75f) + (water_transforms[tile].position.z)) / 8f;
-        height = Mathf.Clamp(height, 0.01f, 2f);
-        return height;
     }
 
     // MAP GENERATION //
 
     public void EstablishOtherRandoms(){
-        ResetMapData();
-        
-        // Base pass
-        BaseTilePass();
+        CreateTiles(false);
 
         // Towers pass
         PlaceTowers(_SessionManager.GetPlayerCount());
         VisibleTilesPass();
         
         // Extras pass
-        for(int i = 0; i < tile_data.Length; i++){
-            CheckTileExtras(i);
-        }
-    }
-
-    public void BaseTilePass(){
-        for(int i = 0; i < map_data_raw.Length; i++){
-            MarkTileType(i);
-        }
-
-        // Sand pass
-        for(int i = 0; i < tile_data.Length; i++){
-            MarkSandTiles(i);
-        }
+        ExtrasPass();
     }
 
     public void GenerateMap(){
@@ -313,68 +281,50 @@ public class MapManager : NetworkBehaviour
         Stopwatch st = new Stopwatch();
         st.Start();
 
-        int x = 0;
-        int y = 0;
-        float ybounce = 0f;
-
         // Tile creation
-        for(int i = 0; i < tile_data.Length; i++){
+        foreach(Tile tile in Tiles){
+
+            Vector3 pos = new Vector3(tile.world_position.x, 0, tile.world_position.z);
 
             if(!generated_bg){
-                GameObject bg_tile = GameObject.Instantiate(BackgroundPiece, new Vector3((x * 0.75f), 0, y + ybounce), Quaternion.identity);
+                GameObject bg_tile = GameObject.Instantiate(BackgroundPiece, pos, Quaternion.identity);
                 bg_mesh.Add(bg_tile.transform.GetChild(0).GetComponent<MeshFilter>());
             }
 
-            if(tiles_visible[i] && !tiles_created[i]){
-                tiles_created[i] = true;
+            if(tile.visible && !tile.created){
+                tile.Created();
 
-                string type = _TileLookup.Tile(tile_data[i]).Type().ToUpper();
 
-                Vector3 decided_position = new Vector3((x * 0.75f), 0, y + ybounce);
-                GameObject tile = GameObject.Instantiate(GetTilePrefab(i), decided_position, Quaternion.identity);
-                tile.transform.parent = TileHolder;
-                tile.transform.localScale = new Vector3(tile.transform.localScale.x, tile.transform.localScale.y * (tile_positions[i] + 1), tile.transform.localScale.z);
+                GameObject tile_obj = GameObject.Instantiate(tile.type.Prefab(), pos, Quaternion.identity);
+                tile_obj.transform.parent = TileHolder;
+                tile_obj.transform.localScale = new Vector3(tile_obj.transform.localScale.x, tile_obj.transform.localScale.y * (tile.world_position.y + 1), tile_obj.transform.localScale.z);
 
-                if(!AnimatedWater || AnimatedWater && type != "WATER"){
-                    GameObject collider = GameObject.Instantiate(HexagonalCollider, decided_position, Quaternion.identity);
-                    collider.transform.localScale = new Vector3(collider.transform.localScale.x, collider.transform.localScale.y * (tile_positions[i] + 1), collider.transform.localScale.z);
+                if(!AnimatedWater || AnimatedWater && !tile.type.CheckType("WATER")){
+                    GameObject collider = GameObject.Instantiate(HexagonalCollider, pos, Quaternion.identity);
+                    collider.transform.localScale = new Vector3(collider.transform.localScale.x, collider.transform.localScale.y * (tile.world_position.y + 1), collider.transform.localScale.z);
                     collider.transform.parent = ColliderHolder;
                 }
 
                 // Track meshes and their types
-                switch(type){
+                switch(tile.type.Type()){
                     case "WATER":
                         if(!AnimatedWater)
-                            water_mesh.Add(tile.transform.GetChild(0).GetComponent<MeshFilter>());
-                        else{
-                            water_transforms[i] = tile.transform;
-                        }
+                            water_mesh.Add(tile_obj.transform.GetChild(0).GetComponent<MeshFilter>());
+                        else
+                            tile.SetWaterTransform(tile_obj.transform);
                         break;
                     case "GRASS":
-                        grass_mesh.Add(tile.transform.GetChild(0).GetComponent<MeshFilter>());
+                        grass_mesh.Add(tile_obj.transform.GetChild(0).GetComponent<MeshFilter>());
                         break;
                     case "SAND":
-                        sand_mesh.Add(tile.transform.GetChild(0).GetComponent<MeshFilter>());
+                        sand_mesh.Add(tile_obj.transform.GetChild(0).GetComponent<MeshFilter>());
                         break;
                     case "STONE":
-                        stone_mesh.Add(tile.transform.GetChild(0).GetComponent<MeshFilter>());
+                        stone_mesh.Add(tile_obj.transform.GetChild(0).GetComponent<MeshFilter>());
                         break;
                 }
 
-                GeneratePieceModel(i);
-            }
-
-            // Counters
-            x++;
-            if(x >= MapSize){
-                x = 0;
-                y++;
-            }
-            if(ybounce == 0){
-                ybounce = 0.5f;
-            }
-            else{
-                ybounce = 0f;
+                GeneratePieceModel(tile);
             }
         }
 
@@ -391,7 +341,6 @@ public class MapManager : NetworkBehaviour
             GameObject g = GameObject.Instantiate(BorderHolder.gameObject);
             g.transform.parent = BorderHolder;
             faction_border_holders.Add(g.transform);
-
             RefreshBorderMesh(owner);
         }
     }
@@ -436,89 +385,56 @@ public class MapManager : NetworkBehaviour
     }
 
     public void ClientGenerateMap(){
-        water_transforms = new Transform[map_data_raw.Length];
-        tiles_visible = new bool[map_data_raw.Length];
-        tiles_created = new bool[map_data_raw.Length];
-        piece_transforms = new Transform[map_data_raw.Length];
-        tile_positions = new float[map_data_raw.Length];
-        tile_data = new int[map_data_raw.Length];
-        tile_bonus_data = new int[map_data_raw.Length];
-        
-        for(int i = 0; i < tile_data.Length; i++){
-            tile_data[i] = _TileLookup.ID("Unmarked");
-            tile_positions[i] = map_data_raw[i] * TileHeightVariation;
-        }
-
+        CreateTiles(true);
         VisibleTilesPass();
-        BaseTilePass();
         GenerateMap();
     }
 
     public void VisibleTilesPass(){
-        for(int i = 0; i < tiles_owned.Length; i++){
-            if(tiles_owned[i] == _FactionLookup.ID(_SessionManager.OurInstance.FactionData())){
-                MarkTileAsVisible(i);
+        foreach(Tile tile in Tiles){
+            if(tile.owner == _SessionManager.OurInstance.FactionData()){
+                tile.Visible();
             }
 
-            if(tile_pieces[i] == _PieceLookup.ID(_SessionManager.OurInstance.FactionData().Tower())){
-                _SessionManager.OurInstance.SnapCameraToPosition(GetTilePosition(i) + new Vector3(8,0,0));
+            if(tile.piece == _SessionManager.OurInstance.FactionData().Tower()){
+                _SessionManager.OurInstance.SnapCameraToPosition(CalcTileWorldPosition(tile) + new Vector3(8,0,0));
             }
         }
     }
 
-    public void ResetMapData(){
-        water_transforms = new Transform[map_data_raw.Length];
-        tile_pieces = new int[map_data_raw.Length];
-        tiles_owned = new int[map_data_raw.Length];
-        tiles_visible = new bool[map_data_raw.Length];
-        tiles_created = new bool[map_data_raw.Length];
-        piece_transforms = new Transform[map_data_raw.Length];
-        tile_positions = new float[map_data_raw.Length];
-        tile_data = new int[map_data_raw.Length];
-        tile_bonus_data = new int[map_data_raw.Length];
-        
+    public void CreateTiles(bool client){
+        Tiles = new Tile[map_data_raw.Length];
         for(int i = 0; i < map_data_raw.Length; i++){
-            tiles_owned[i] = -1;
-            tile_data[i] = _TileLookup.ID("Unmarked");
-            tile_positions[i] = map_data_raw[i] * TileHeightVariation;
+            PieceData piece = _PieceLookup.Piece("UNMARKED");
+            Faction owner = null;
+            if(client){
+                piece = _PieceLookup.Piece(tile_pieces[i]);
+                owner = _FactionLookup.GetFaction(tile_ownerships[i]);
+            }
+            Tiles[i] = new Tile(i, map_data_raw[i], GetRawType(map_data_raw[i]), piece, CalcTileWorldPosition(i), owner);
+        }
+
+        foreach(Tile t in Tiles){
+            if(t.type.CheckType("WATER")){
+                foreach(Tile t_ in GetNeighbors(t)){
+                    if(t_.type.CheckType("GRASS"))
+                        t_.SetType(_TileLookup.Tile("SAND"));
+                }
+            }
         }
     }
 
-    GameObject GetTilePrefab(int i){
-        return _TileLookup.Tile(tile_data[i]).Prefab();
-    }
-
-    void MarkTileType(int i){
-        if(map_data_raw[i] > StoneLimit)
-            tile_data[i] = _TileLookup.ID("Stone");
-        else if(map_data_raw[i] > GrassLimit)
-            tile_data[i] = _TileLookup.ID("Grass");
+    TileData GetRawType(float raw){
+        if(raw > StoneLimit)
+            return _TileLookup.Tile("STONE");
+        else if(raw > GrassLimit)
+            return _TileLookup.Tile("GRASS");
         else
-            tile_data[i] = _TileLookup.ID("Water");
-    }
-
-    void MarkSandTiles(int i){
-        if(tile_data[i] == _TileLookup.ID("Water")){
-            foreach(int p in GetNeighbors(i)){
-                TileToSand(p);
-            }
-        }
-    }
-
-    void TileToSand(int pos){
-        if(ValidateTile(pos)){
-            if(tile_data[pos] == _TileLookup.ID("Grass")){
-                tile_data[pos] = _TileLookup.ID("Sand");
-            }
-        }
+            return _TileLookup.Tile("WATER");
     }
 
     bool IsDistanceFromEdge(Vector2Int our_coords, int dist){
         return (our_coords.x > dist && our_coords.x < MapSize - dist && our_coords.y > dist && our_coords.y < MapSize - dist);
-    }
-
-    bool IsLand(int local){
-        return (tile_data[local] == _TileLookup.ID("Grass") || tile_data[local] == _TileLookup.ID("Sand"));
     }
 
     void PlaceTowers(int castles_needed){
@@ -539,12 +455,12 @@ public class MapManager : NetworkBehaviour
                 distance_fails = 0;
             }
 
-            int local = Random.Range(0, MapSize * MapSize);
-            Vector2Int our_coords = TileToCoords(local);
+            Tile check_tile = Tiles[Random.Range(0, MapSize * MapSize)];
+            Vector2Int our_coords = TileToCoords(check_tile);
 
             if(IsDistanceFromEdge(our_coords, 3)){
-                if(tile_pieces[local] == 0){ // Empty
-                    if(IsLand(local)){
+                if(check_tile.piece == _PieceLookup.Piece("UNMARKED")){ // Empty
+                    if(check_tile.type.CheckType("GRASS") || check_tile.type.CheckType("SAND")){
 
                         bool valid = true;
                         foreach(Vector2Int pos in placed_castles){
@@ -556,14 +472,14 @@ public class MapManager : NetworkBehaviour
                         if(valid){
                             if(placed_castles.Count < castles_needed){ // Place Capital
                                 PlayerInstance player = _SessionManager.GetPlayer(placed_castles.Count);
-                                int _owner = _FactionLookup.ID(player.FactionData());
-                                PlacePiece(local, _PieceLookup.ID(player.FactionData().Tower()));
-                                MarkRadiusAsOwned(local, 2, _owner, true);
+                                Faction _owner = player.FactionData();
+                                check_tile.SetPiece(player.FactionData().Tower());
+                                MarkRadiusAsOwned(check_tile, 2, _owner, true);
                             }
                             else{ // Place Fort
-                                PlacePiece(local, _PieceLookup.ID_ByName("Fort (Empty)"));
+                                check_tile.SetPiece(_PieceLookup.Piece("Fort (Empty)"));
                             }
-                            placed_castles.Add(TileToCoords(local));
+                            placed_castles.Add(TileToCoords(check_tile));
                         }
                         else{
                             distance_fails++;
@@ -574,20 +490,17 @@ public class MapManager : NetworkBehaviour
         }
     }
 
-    Vector2Int TileToCoords(int id){
-        int y = id / MapSize;
-        int x = id - (MapSize * y);
-        return (new Vector2Int(x, y));
+    public void CheckForMapRegen(){
+        GenerateVisibleMapMesh();
+        RefreshAllBorders();
     }
 
     // TILE OWNERSHIP //
 
-    public bool ForeignFortress(int tile){
-        if(!ValidateTile(tile))
-            return false;
-        
+    public bool ForeignFortress(int id){return ForeignFortress(Tiles[id]);}
+    public bool ForeignFortress(Tile tile){        
         bool valid = false;
-        if(tiles_owned[tile] != _SessionManager.OurInstance.Faction_ID){
+        if(tile.owner != _SessionManager.OurInstance.FactionData()){
             if(IsTileFortress(tile))
                 valid = true;
         }
@@ -595,91 +508,65 @@ public class MapManager : NetworkBehaviour
         return valid;
     }
 
-    bool IsTileFortress(int tile){
-        if(!ValidateTile(tile))
-            return false;
-
-        bool valid = (_PieceLookup.Piece(tile_pieces[tile]).CheckType("Tower") || _PieceLookup.Piece(tile_pieces[tile]).CheckType("Fort"));
-        return valid;
+    bool IsTileFortress(Tile tile){
+        return (tile.piece.CheckType("Tower") || tile.piece.CheckType("Fort"));
     }
 
-    public bool CheckTileOwnership(int id, int owner){
-        return (tiles_owned[id] == owner);
+    public bool CheckTileOwnership(Tile tile, Faction owner){
+        return (tile.owner == owner);
     }
 
-    public void Conquer(int tile, int owner){
+    public void Conquer(Tile tile, Faction owner){
         if(!_SessionManager.Hosting)
-            return;
-        if(!ValidateTile(tile))
             return;
         
         if(IsTileFortress(tile)){
             int radius = 0;
-            if(_PieceLookup.Piece(tile_pieces[tile]).CheckType("Tower")){
-                RPC_PieceChanged(tile, _PieceLookup.ID(_FactionLookup.GetFaction(owner).Tower()));
+            if(tile.piece.CheckType("Tower")){
+                RPC_PieceChanged(tile.ID, _PieceLookup.ID(owner.Tower()));
                 radius = 2;
             }
             else{
-                RPC_PieceChanged(tile, _PieceLookup.ID(_FactionLookup.GetFaction(owner).Fort()));
+                RPC_PieceChanged(tile.ID, _PieceLookup.ID(owner.Fort()));
                 radius = 1;
             }
    
-            if(tile_bonus_data[tile] != 0)
-                radius = tile_bonus_data[tile];
+            if(tile.bonus_data != 0)
+                radius = tile.bonus_data;
 
-            RPC_Conquer(tile, radius, owner);
+            RPC_Conquer(tile.ID, radius, _FactionLookup.ID(owner));
         }
     }
 
-    void MarkRadiusAsOwned(int id, int radius, int owner, bool do_not_overwrite){
-        MarkTileAsOwned(id, owner, do_not_overwrite);
-        tile_bonus_data[id] = radius;
-        foreach(int tile in TilesByDistance(id, radius, false)){
-            MarkTileAsOwned(tile, owner, do_not_overwrite);
+    void MarkRadiusAsOwned(Tile tile, int radius, Faction owner, bool do_not_overwrite){
+        MarkTileAsOwned(tile, owner, do_not_overwrite);
+        tile.SetBonusData(radius);
+        foreach(Tile tile_ in TilesByDistance(tile, radius, false)){
+            MarkTileAsOwned(tile_, owner, do_not_overwrite);
         }
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPC_PieceChanged(int tile, int piece, RpcInfo info = default){
-        PlacePiece(tile, piece);
-        GeneratePieceModel(tile);
+    public void RPC_PieceChanged(int tile_id, int piece_id, RpcInfo info = default){
+        Tiles[tile_id].SetPiece(_PieceLookup.Piece(piece_id));
+        GeneratePieceModel(Tiles[tile_id]);
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPC_Conquer(int tile, int radius, int owner, RpcInfo info = default){
-        MarkRadiusAsOwned(tile, radius, owner, false);
+    public void RPC_Conquer(int tile_id, int radius, int owner_id, RpcInfo info = default){
+        MarkRadiusAsOwned(Tiles[tile_id], radius, _FactionLookup.GetFaction(owner_id), false);
         RefreshAllBorders();
     }
 
-    void MarkTileAsOwned(int id, int owner, bool do_not_overwrite){
-        if(ValidateTile(id)){
-            if(tiles_owned[id] == -1 && do_not_overwrite || !do_not_overwrite)
-                tiles_owned[id] = owner;
-        }
+    void MarkTileAsOwned(Tile tile, Faction owner, bool do_not_overwrite){
+        if(tile.owner == null && do_not_overwrite || !do_not_overwrite)
+            tile.SetOwner(owner);
     }
 
-    bool map_regen_marker = false;
-    public void MarkRadiusAsVisible(int id, int radius){
-        MarkTileAsVisible(id);
-        foreach(int tile in TilesByDistance(id, radius, false)){
-            MarkTileAsVisible(tile);
-        }
-    }
-
-    public void MarkTileAsVisible(int id){
-        bool flag = (tiles_visible[id] == false);
-        tiles_visible[id] = true;
-        
-        if(flag){
-            map_regen_marker = true;
-        }
-    }
-
-    public void CheckForMapRegen(){
-        if(map_regen_marker){
-            map_regen_marker = false;
-            GenerateVisibleMapMesh();
-            RefreshAllBorders();
+    public void MarkRadiusAsVisible(Tile tile, int radius){
+        tile.Visible();
+        foreach(Tile tile_ in TilesByDistance(tile, radius, false)){
+            tile_.Visible();
         }
     }
 
@@ -688,58 +575,57 @@ public class MapManager : NetworkBehaviour
             RefreshBorderMesh(i);
     }
 
-    void RefreshBorderMesh(int owner){
-        Transform border_holder = faction_border_holders[owner];
+    void RefreshBorderMesh(int owner_id){
+        Transform border_holder = faction_border_holders[owner_id];
 
-        // Generic so this can be later expanded for different owners with different border meshes
         foreach(Transform t in border_holder)
             Destroy(t.gameObject);
 
         List<MeshFilter> border_pieces = new List<MeshFilter>();
 
-        for(int tile_id = 0; tile_id < tiles_owned.Length; tile_id++){
-            if(tiles_owned[tile_id] == owner)
-                border_pieces.AddRange(PlaceNewBorders(tile_id, owner, border_holder));
+        foreach(Tile tile in Tiles){
+            if(tile.owner == _FactionLookup.GetFaction(owner_id))
+                border_pieces.AddRange(PlaceNewBorders(tile.ID, owner_id, border_holder));
         }
 
         Material mat = new Material(BorderMaterial);
-        mat.SetColor("_BaseColour", _FactionLookup.GetFaction(owner).BorderColour());
+        mat.SetColor("_BaseColour", _FactionLookup.GetFaction(owner_id).BorderColour());
 
         CombineMeshes(ref border_pieces, mat, border_holder);
     }
 
     List<MeshFilter> border_buffer = new List<MeshFilter>();
-    List<MeshFilter> PlaceNewBorders(int tile, int owner, Transform bh){
+    List<MeshFilter> PlaceNewBorders(int tile, int owner_id, Transform bh){
         
         border_buffer = new List<MeshFilter>();
         
-        if(!tiles_visible[tile] || !tiles_created[tile])
+        if(!Tiles[tile].visible || !Tiles[tile].created)
             return border_buffer;
 
-        CreateBorder(tile, tile + MapSize, bh, owner, 1);
-        CreateBorder(tile, tile - MapSize, bh, owner, 4);
+        CreateBorder(tile, tile + MapSize, bh, owner_id, 1);
+        CreateBorder(tile, tile - MapSize, bh, owner_id, 4);
         if(tile % 2 == 0){ // Down Tile
-            CreateBorder(tile, tile + 1, bh, owner, 2); //TR
-            CreateBorder(tile, tile - 1, bh, owner, 6); //TL
-            CreateBorder(tile, tile - MapSize - 1, bh, owner, 5); // BL
-            CreateBorder(tile, tile - MapSize + 1, bh, owner, 3); // BR
+            CreateBorder(tile, tile + 1, bh, owner_id, 2); //TR
+            CreateBorder(tile, tile - 1, bh, owner_id, 6); //TL
+            CreateBorder(tile, tile - MapSize - 1, bh, owner_id, 5); // BL
+            CreateBorder(tile, tile - MapSize + 1, bh, owner_id, 3); // BR
         }
         else{ // Up Tile
-            CreateBorder(tile, tile + 1, bh, owner, 3); //BR
-            CreateBorder(tile, tile - 1, bh, owner, 5); //BL
-            CreateBorder(tile, tile + MapSize - 1, bh, owner, 6); // TL
-            CreateBorder(tile, tile + MapSize + 1, bh, owner, 2); // TR
+            CreateBorder(tile, tile + 1, bh, owner_id, 3); //BR
+            CreateBorder(tile, tile - 1, bh, owner_id, 5); //BL
+            CreateBorder(tile, tile + MapSize - 1, bh, owner_id, 6); // TL
+            CreateBorder(tile, tile + MapSize + 1, bh, owner_id, 2); // TR
         }
 
         return border_buffer;
     }
 
-    void CreateBorder(int tile, int comp_tile, Transform border_holder, int owner, int prefab){
+    void CreateBorder(int tile_id, int comp_tile, Transform border_holder, int owner_id, int prefab){
         prefab = prefab - 1;
 
         bool border_here = false;
-        if(ValidateTile(comp_tile)){
-            if(tiles_owned[comp_tile] != owner){
+        if(ValidateTileID(comp_tile)){
+            if(_FactionLookup.ID(Tiles[comp_tile].owner) != owner_id){
                 border_here = true;
             }
         }
@@ -747,8 +633,8 @@ public class MapManager : NetworkBehaviour
             border_here = true;
         }
 
-        if(border_here && tiles_created[tile]){
-            Vector3 pos = GetTilePosition(tile);
+        if(border_here && Tiles[tile_id].created){
+            Vector3 pos = CalcTileWorldPosition(tile_id);
             pos = new Vector3(pos.x, 0, pos.z);
             GameObject border_obj = GameObject.Instantiate(BorderPrefabs[prefab], pos, Quaternion.identity);
             border_obj.transform.parent = border_holder;
@@ -758,75 +644,72 @@ public class MapManager : NetworkBehaviour
 
     // PIECE PLACING //
 
-    void CheckTileExtras(int i){
-        if(tile_pieces[i] != 0)
-            return;
+    void ExtrasPass(){
 
-        // Grass fill
-        if(tile_data[i] == _TileLookup.ID("Grass")){
-            if(Random.Range(0.2f, 1f) + map_data_raw[i] >= 1){
-                CoinFlipPiece(i, "Tree Large", "Tree Small");
+        foreach(Tile tile in Tiles){
+
+            if(tile.piece.CheckType("UNMARKED")){
+
+                // Grass fill
+                if(tile.type.CheckType("GRASS")){
+                    if(Random.Range(0.2f, 1f) + tile.raw >= 1){
+                        CoinFlipPiece(tile, "Tree Large", "Tree Small");
+                    }
+
+                    RandomChancePiece(tile, 40, "Piggie");
+                    RandomChancePiece(tile, 30, "Apples");
+                    RandomChancePiece(tile, 40, "Piggie (Grass)");
+                    RandomChancePiece(tile, 5, "Tall Grass");
+                }
+
+                // Sand fill
+                if(tile.type.CheckType("SAND")){
+                    RandomChancePiece(tile, 20, "Palm Tree");
+                    RandomChancePiece(tile, 35, "X Mark");
+                }
+                
+                // Stone fill
+                if(tile.type.CheckType("STONE")){
+                    if(Random.Range(0f, 0.5f) + tile.raw >= 1){
+                        tile.SetPiece(_PieceLookup.Piece("MOUNTAIN"));
+                    }
+                }
+
+                // Ocean fill
+                if(tile.type.CheckType("WATER")){
+                    RandomChancePiece(tile, 50, "Sharkfin");
+                }
             }
-
-            RandomChancePiece(i, 60, "Piggie");
-            RandomChancePiece(i, 60, "Piggie (Grass)");
-            RandomChancePiece(i, 8, "Tall Grass");
-            RandomChancePiece(i, 28, "Apples");
-        }
-
-        // Sand fill
-        if(tile_data[i] == _TileLookup.ID("Sand")){
-            RandomChancePiece(i, 40, "Palm Tree");
-            RandomChancePiece(i, 40, "X Mark");
-        }
-        
-        // Stone fill
-        if(tile_data[i] == _TileLookup.ID("Stone")){
-            if(Random.Range(0f, 0.5f) + map_data_raw[i] >= 1){
-                PlacePiece(i, _PieceLookup.ID("Mountain"));
-            }
-        }
-
-        // Ocean fill
-        if(tile_data[i] == _TileLookup.ID("Water")){
-            RandomChancePiece(i, 50, "Sharkfin");
         }
     }
 
-    void RandomChancePiece(int i, int odds, string piece){
-        if(tile_pieces[i] != 0)
-            return;
-
+    void RandomChancePiece(Tile tile, int odds, string piece){
         if(Random.Range(0, odds + 1) == 0)
-            PlacePiece(i, _PieceLookup.ID(piece));
+            tile.SetPiece(_PieceLookup.Piece(piece));
     }
 
-    void CoinFlipPiece(int i, string piece_a, string piece_b){
+    void CoinFlipPiece(Tile tile, string piece_a, string piece_b){
         if(Random.Range(0, 3) == 0)
-            PlacePiece(i, _PieceLookup.ID(piece_a));
+            tile.SetPiece(_PieceLookup.Piece(piece_a));
         else
-            PlacePiece(i, _PieceLookup.ID(piece_b));
+            tile.SetPiece(_PieceLookup.Piece(piece_b));
     }
 
-    void PlacePiece(int pos, int id){
-        tile_pieces[pos] = id;
-    }
+    void GeneratePieceModel(Tile tile){
 
-    void GeneratePieceModel(int pos){
-
-        if(tile_pieces[pos] <= 0 || !tiles_created[pos] || !tiles_visible[pos])
+        if(tile.piece.CheckType("UNMARKED") || !tile.created || !tile.visible)
             return;
 
-        if(piece_transforms[pos] != null){
-            GameObject.Destroy(piece_transforms[pos].gameObject);
+        if(tile.piece_transform != null){
+            GameObject.Destroy(tile.piece_transform.gameObject);
         }
 
-        GameObject g = GameObject.Instantiate(_PieceLookup.Piece(tile_pieces[pos]).Prefab(), GetTilePosition(pos), Quaternion.identity);
-        if(_PieceLookup.Piece(tile_pieces[pos]).RandomRotation())
+        GameObject g = GameObject.Instantiate(tile.piece.Prefab(), tile.world_position, Quaternion.identity);
+        if(tile.piece.RandomRotation())
             g.transform.eulerAngles = new Vector3(0, Random.Range(0f, 360f), 0f);
-        if(_PieceLookup.Piece(tile_pieces[pos]).RandomChildRotation())
+        if(tile.piece.RandomChildRotation())
             g.transform.GetChild(0).eulerAngles = new Vector3(0, Random.Range(0f, 360f), 0f);
-        piece_transforms[pos] = g.transform;
+        tile.SetPieceTransform(g.transform);
         g.transform.parent = PieceHolder;
     }
 
@@ -857,7 +740,7 @@ public class MapManager : NetworkBehaviour
     }
 
     public void SetTileOwnership(int[] data){
-        tiles_owned = data;
+        tile_ownerships = data;
     }
 
     public void SetTilePieces(int[] data){
@@ -866,10 +749,29 @@ public class MapManager : NetworkBehaviour
 
     // GETTERS //
 
-    public bool CheckVisibility(int tile){return tiles_visible[tile];}
-    public bool IsOwner(int tile, int owner){
-        if(!ValidateTile(tile))
-            return false;
-        return tiles_owned[tile] == owner;
+    public bool CheckVisibility(int tile){return Tiles[tile].visible;}
+
+    public bool IsOwner(Tile tile, Faction owner){
+        return tile.owner == owner;
+    }
+
+    public float[] GetRawMapData(){
+        return map_data_raw;
+    }
+
+    public int[] GetTilePieces(){
+        int[] tp = new int[map_data_raw.Length];
+        for(int i = 0; i < map_data_raw.Length; i++){
+            tp[i] = _PieceLookup.ID(Tiles[i].piece);
+        }
+        return tp;
+    }
+
+    public int[] GetTileOwnership(){
+        int[] to = new int[map_data_raw.Length];
+        for(int i = 0; i < map_data_raw.Length; i++){
+            to[i] = _FactionLookup.ID(Tiles[i].owner);
+        }
+        return to;
     }
 }

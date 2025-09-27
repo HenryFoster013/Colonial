@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2baabb38b26e484e99be2d37298df16, type: 3}
   m_Name: Sand
   m_EditorClassIdentifier: 
-  _Type: Sand
+  _Type: SAND
   _Name: Beach
   _TabColour: {r: 0.70980394, g: 0.63158065, b: 0.5181569, a: 1}
   _TextColour: {r: 0.291, g: 0.24862137, b: 0.19494176, a: 1}

@@ -10,6 +10,8 @@ public class FactionLookup : ScriptableObject
     public Faction[] GetFactions(){return _Factions;}
 
     public Faction GetFaction(int i){
+        if(i == -1)
+            return null;
         return _Factions[i];
     }   
 

@@ -6,6 +6,7 @@ using TMPro;
 using System.Linq;
 using UnityEngine.EventSystems;
 using static HenrysUtils;
+using HenrysMapUtils;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -74,10 +75,10 @@ public class PlayerManager : MonoBehaviour
     public List<Troop> OurTroops = new List<Troop>();
     List<Transform> blue_grid_highlights = new List<Transform>();
     List<Transform> red_grid_highlights = new List<Transform>();
-    List<int> walkable_tiles = new List<int>();
-    List<int> special_tiles = new List<int>();
-    public List<int> attackable_tiles = new List<int>();
-    int current_tile;
+    List<Tile> walkable_tiles = new List<Tile>();
+    List<Tile> special_tiles = new List<Tile>();
+    public List<Tile> attackable_tiles = new List<Tile>();
+    Tile current_tile;
     bool block_world_clicks = false;
 
     Troop current_troop;
@@ -125,21 +126,21 @@ public class PlayerManager : MonoBehaviour
     }
 
     void WateryHighlights(){
-        if(!Map.AnimatedWater || !Map.Ready())
+        if(!Map.AnimatedWater || !Map.ready)
             return;
 
-        if(current_tile != -1){
-            BaseHighlight.transform.position = Map.GetTilePosition(current_tile);
+        if(current_tile != null){
+            BaseHighlight.transform.position = current_tile.world_position;
         }
         for(int i = 0; i < walkable_tiles.Count; i++){
             if(blue_grid_highlights.Count >= walkable_tiles.Count){
                 if(blue_grid_highlights[i] != null){
-                    blue_grid_highlights[i].position = Map.GetTilePosition(walkable_tiles[i]);
+                    blue_grid_highlights[i].position = walkable_tiles[i].world_position;
                 }
             }
             if(red_grid_highlights.Count >= walkable_tiles.Count){
                 if(red_grid_highlights[i] != null){
-                    red_grid_highlights[i].position = Map.GetTilePosition(walkable_tiles[i]);
+                    red_grid_highlights[i].position = walkable_tiles[i].world_position;
                 }
             }
         }
@@ -148,7 +149,7 @@ public class PlayerManager : MonoBehaviour
     // CLICKING //
 
     Vector2Int GridConversion(Vector2Int pos){
-        return new Vector2Int(Map.GetSize() - pos.y - 1,pos.x);
+        return new Vector2Int(Map.MapSize - pos.y - 1,pos.x);
     }
 
     float downTime = 0;
@@ -194,7 +195,7 @@ public class PlayerManager : MonoBehaviour
             block_world_clicks = true;
             TroopSpawnMenu.SetActive(false);
             if(i > -1 && i < troops.Length){
-                _GameplayManager.RPC_SpawnTroop(_TroopLookup.ID(troops[i]), current_tile, _SessionManager.OurInstance.ID);
+                _GameplayManager.RPC_SpawnTroop(_TroopLookup.ID(troops[i]), current_tile.ID, _SessionManager.OurInstance.ID);
             }
             Deselect();
         }
@@ -213,7 +214,7 @@ public class PlayerManager : MonoBehaviour
             Ray ray = _Camera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit, 100f, ClickableLayers)){
                 if(hit.transform.tag == "Tile"){
-                   SelectTile(Map.GetTileIDFromTransform(hit.transform.parent));
+                   SelectTile(Map.GetTileFromTransform(hit.transform.parent));
                 }
                 else if(hit.transform.tag == "Troop"){
                     SelectTroop(hit.transform.gameObject.GetComponent<Troop>());
@@ -237,9 +238,9 @@ public class PlayerManager : MonoBehaviour
 
     void SetupTiles(Troop troop){
         // Priority = attacking, special, walkable
-        walkable_tiles = new List<int>();
-        special_tiles = new List<int>();
-        attackable_tiles = new List<int>();
+        walkable_tiles = new List<Tile>();
+        special_tiles = new List<Tile>();
+        attackable_tiles = new List<Tile>();
 
         if(!troop.UsedSpecial()){
             attackable_tiles = _GameplayManager.EnemyTileFilter(Map.TilesByDistance(troop.current_tile, troop.Data.AttackDistance(), false));
@@ -255,8 +256,8 @@ public class PlayerManager : MonoBehaviour
     }
 
     public bool CheckNoSpecials(Troop troop){
-        special_tiles = new List<int>();
-        attackable_tiles = new List<int>();
+        special_tiles = new List<Tile>();
+        attackable_tiles = new List<Tile>();
 
         if(!troop.UsedSpecial()){
             attackable_tiles = _GameplayManager.EnemyTileFilter(Map.TilesByDistance(troop.current_tile, troop.Data.AttackDistance(), false));
@@ -285,14 +286,14 @@ public class PlayerManager : MonoBehaviour
 
         if(!troop.UsedMove()){
             for(int i = 0; i < walkable_tiles.Count; i++){
-                blue_grid_highlights[i].position = Map.GetTilePosition(walkable_tiles[i]);
+                blue_grid_highlights[i].position = walkable_tiles[i].world_position;
                 blue_grid_highlights[i].gameObject.SetActive(true);
             }
         }
 
         if(!troop.UsedSpecial()){
             for(int i = 0; i < attackable_tiles.Count; i++){
-                red_grid_highlights[i].position = Map.GetTilePosition(attackable_tiles[i]);
+                red_grid_highlights[i].position = attackable_tiles[i].world_position;
                 red_grid_highlights[i].gameObject.SetActive(true);
             }
         }
@@ -311,49 +312,47 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    void SelectTile(int id){
+    void SelectTile(Tile tile){
         if(current_troop != null){
-            if(walkable_tiles.Contains(id)){
-                MoveTroop(id);
+            if(walkable_tiles.Contains(tile)){
+                MoveTroop(tile);
             }
-            else if(attackable_tiles.Contains(id)){
-                AttackTroop(_GameplayManager.GetTroopAt(id));
+            else if(attackable_tiles.Contains(tile)){
+                AttackTroop(_GameplayManager.GetTroopAt(tile));
             }
             else
-                StandardTileSelect(id);
+                StandardTileSelect(tile);
         }
         else
-            StandardTileSelect(id);
+            StandardTileSelect(tile);
     }
 
-    void MoveTroop(int tile){
-        _GameplayManager.RPC_SetTroopPos(current_troop.UniqueID, tile, _SessionManager.OurInstance.ID);
+    void MoveTroop(Tile tile){
+        _GameplayManager.RPC_SetTroopPos(current_troop.UniqueID, tile.ID, _SessionManager.OurInstance.ID);
         current_troop.UseMove();
         Deselect();
     }
 
-    void StandardTileSelect(int id){
+    void StandardTileSelect(Tile tile){
         Deselect();
 
-        current_tile = id;
-        TileData tile = _TileLookup.Tile(Map.GetTileType(current_tile));
-        PieceData piece = _PieceLookup.Piece(Map.GetPieceType(current_tile));
+        current_tile = tile;
 
-        DisplayBG.color = tile.TabColour();
+        DisplayBG.color = current_tile.type.TabColour();
         BaseHighlightMaterial.SetColor("_BaseColor", new Color(1f,1f,1f,1f));
 
         foreach(Transform trans in TileModelHolder)
             Destroy(trans.gameObject);
 
-        GameObject t = GameObject.Instantiate(tile.Prefab(), TileModelHolder.position, TileModelHolder.rotation);
+        GameObject t = GameObject.Instantiate(current_tile.type.Prefab(), TileModelHolder.position, TileModelHolder.rotation);
         t.transform.parent = TileModelHolder;
         SetLayer(t, HiddenLayer);
         
-        GameObject p = GameObject.Instantiate(piece.Prefab(), TileModelHolder.position, TileModelHolder.rotation);
+        GameObject p = GameObject.Instantiate(current_tile.piece.Prefab(), TileModelHolder.position, TileModelHolder.rotation);
         p.transform.parent = TileModelHolder;
         SetLayer(p, HiddenLayer);
 
-        if(piece.ContainsBillboards()){
+        if(current_tile.piece.ContainsBillboards()){
             foreach(Transform _child in p.transform){
                 if(_child.tag == "Billboard"){
                     Billboard b = _child.GetComponent<Billboard>();
@@ -363,22 +362,23 @@ public class PlayerManager : MonoBehaviour
             }
         }
         
-        BaseHighlight.transform.position = Map.GetTilePosition(current_tile);
+        BaseHighlight.transform.position = current_tile.world_position;
         BaseHighlight.SetActive(true);
 
         TileInfoDisplay.SetActive(true);
-        TileRenderPoint.position = new Vector3(TileRenderPoint.position.x, Map.GetTilePosition(current_tile).y, TileRenderPoint.position.z);
+        TileRenderPoint.position = new Vector3(TileRenderPoint.position.x, current_tile.world_position.y, TileRenderPoint.position.z);
 
-        CheckTileData(id, tile, piece);
+        CheckTileData(tile);
 
         PlaySFX("Tap", SFX_Lookup);
     }
 
-    void CheckTileData(int id, TileData tile_data, PieceData piece_data){
+    void CheckTileData(Tile tile){
         TroopSpawnMenu.SetActive(false);
-        if(piece_data.CanSpawnTroops()){
-            if(!_GameplayManager.TroopOnTile(id) && Map.CheckTileOwnership(id, _SessionManager.LocalFactionID()) && OurTurn){
-                OpenSpawnMenu();
+        if(tile.piece.CanSpawnTroops()){
+            if(!_GameplayManager.TroopOnTile(tile) && OurTurn){
+                if(Map.CheckTileOwnership(tile, _SessionManager.LocalFactionData()))
+                    OpenSpawnMenu();
             }
         }
     }
@@ -388,7 +388,7 @@ public class PlayerManager : MonoBehaviour
         if(current_troop != null){
             bool current_is_ours = current_troop.FactionID() == _SessionManager.OurInstance.Faction_ID;
             bool target_not_ours = troop.FactionID() != _SessionManager.OurInstance.Faction_ID;
-            bool in_range = attackable_tiles.Contains(troop.current_tile);
+            bool in_range = attackable_tiles.Contains(Map.GetTile(troop.current_tile));
 
             result = current_is_ours && target_not_ours && in_range;
         }
@@ -412,11 +412,11 @@ public class PlayerManager : MonoBehaviour
 
         Deselect();
 
-        current_tile = troop.current_tile;
+        current_tile = Map.GetTile(troop.current_tile);
         current_troop = troop;
         troop.SetSelected(true);
 
-        BaseHighlight.transform.position = Map.GetTilePosition(troop.current_tile);
+        BaseHighlight.transform.position = current_tile.world_position;
         BaseHighlight.SetActive(true);
 
         if(!troop.TurnOver() || troop.Owner != _SessionManager.OurInstance.ID)
@@ -461,9 +461,9 @@ public class PlayerManager : MonoBehaviour
         if(current_troop != null)
             current_troop.SetSelected(false);
         current_troop = null;
-        current_tile = -1;
-        walkable_tiles = new List<int>();
-        attackable_tiles = new List<int>();
+        current_tile = null;
+        walkable_tiles = new List<Tile>();
+        attackable_tiles = new List<Tile>();
         ResetSelectionUI();
     }
 
@@ -642,9 +642,9 @@ public class PlayerManager : MonoBehaviour
 
     void ClampCamera(){
         target_camera_pos = new Vector3(
-            Mathf.Clamp(target_camera_pos.x, 0, Map.GetSize()), 
+            Mathf.Clamp(target_camera_pos.x, 0, Map.MapSize), 
             Mathf.Clamp(target_camera_pos.y, 2.5f, 17.5f),
-            Mathf.Clamp(target_camera_pos.z, -8f, Map.GetSize() + 8f));
+            Mathf.Clamp(target_camera_pos.z, -8f, Map.MapSize + 8f));
     }
 
     void ApplyCameraChanges(){
