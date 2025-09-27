@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 using static HenrysUtils;
+using HenrysMapUtils;
 
 public class Troop : NetworkBehaviour{
     
@@ -124,15 +125,18 @@ public class Troop : NetworkBehaviour{
         first_move_completed = true;
         tile_buffer = current_tile;
         Anim.Play("Hop", -1, 0);
+
+        Tile the_tile = _MapManager.GetTile(current_tile);
+
         RotateAt(_MapManager.GetTroopPosition(current_tile));
-        transform.position = _MapManager.GetTroopPosition(current_tile);
+        transform.position = _MapManager.GetTroopPosition(the_tile);
 
         if(_SessionManager.OurInstance.ID == Owner){
-            _MapManager.MarkRadiusAsVisible(current_tile, Data.Vision());
+            _MapManager.MarkRadiusAsVisible(the_tile, Data.Vision());
             _MapManager.CheckForMapRegen();
         }
 
-        if(_MapManager.CheckVisibility(current_tile))
+        if(the_tile.visible)
             PlaySFX("Placement", SFX_Lookup);
         
         if(_PlayerManager.CheckNoSpecials(this)){

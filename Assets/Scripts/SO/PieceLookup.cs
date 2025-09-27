@@ -11,11 +11,15 @@ public class PieceLookup : ScriptableObject
         return Pieces[i];
     }   
 
-    public int ID(string name){
+    public PieceData Piece(string type){
+        return Pieces[ID(type)];
+    }
+
+    public int ID(string type){
         int return_val = 0;
         bool done = false;
         for(int i = 0; i < Pieces.Length && !done; i++){
-            if(Pieces[i].CheckType(name)){
+            if(Pieces[i].CheckType(type)){
                 done = true;
                 return_val = i;
             }

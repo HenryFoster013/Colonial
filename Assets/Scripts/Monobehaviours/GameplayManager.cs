@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 using static HenrysUtils;
+using HenrysMapUtils;
 
 public class GameplayManager : NetworkBehaviour
 {
@@ -106,28 +107,29 @@ public class GameplayManager : NetworkBehaviour
         AllTroops.RemoveAll(item => item == null);
     }
 
-    public List<int> WalkableTileFilter(List<int> tiles){
+    public List<Tile> WalkableTileFilter(List<Tile> tiles){
         foreach(Troop t in AllTroops){
             if(t != null)
-                tiles.Remove(t.current_tile);
+                tiles.Remove(_MapManager.GetTile(t.current_tile));
         }
         return tiles;
     }
 
-    public List<int> EnemyTileFilter(List<int> tiles){
-        List<int> result = new List<int>();
+    public List<Tile> EnemyTileFilter(List<Tile> tiles){
+        List<Tile> result = new List<Tile>();
         foreach(Troop t in AllTroops){
             if(t != null){
-                if(tiles.Contains(t.current_tile) && _MapManager.CheckVisibility(t.current_tile) && t.FactionID() != _SessionManager.OurInstance.Faction_ID){
-                    result.Add(t.current_tile);
+                Tile tile = _MapManager.GetTile(t.current_tile);
+                if(tiles.Contains(tile) && tile.visible && t.FactionID() != _SessionManager.OurInstance.Faction_ID){
+                    result.Add(tile);
                 }
             }
         }
         return result;
     }
 
-    public List<int> SpecialTileFilter(List<int> tiles){
-        List<int> result = new List<int>();
+    public List<Tile> SpecialTileFilter(List<Tile> tiles){
+        List<Tile> result = new List<Tile>();
         return result;
     }
 
@@ -203,16 +205,16 @@ public class GameplayManager : NetworkBehaviour
 
     void SpawnEffect(GameObject effect, int tile){
         GameObject g = GameObject.Instantiate(effect);
-        g.transform.position = _MapManager.GetTilePosition(tile);
+        g.transform.position = _MapManager.CalcTileWorldPosition(tile);
     }
 
     // Troop Spawning //
 
-    public Troop GetTroopAt(int tile){
+    public Troop GetTroopAt(Tile tile){
         Troop troop = null;
         foreach(Troop t in AllTroops){
             if(t != null){
-                if(t.current_tile == tile)
+                if(t.current_tile == tile.ID)
                     troop = t;
             }
         }
@@ -223,10 +225,10 @@ public class GameplayManager : NetworkBehaviour
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_SpawnTroop(int troop_id, int tile, int owner, RpcInfo info = default){
-        SpawnTroop(_TroopLookup.Troop(troop_id), tile, owner);
+        SpawnTroop(_TroopLookup.Troop(troop_id), _MapManager.GetTile(tile), owner);
     }
 
-    public void SpawnTroop(TroopData troop_data, int tile, int owner){
+    public void SpawnTroop(TroopData troop_data, Tile tile, int owner){
 
         if(!_SessionManager.Hosting)
             return;
@@ -234,7 +236,7 @@ public class GameplayManager : NetworkBehaviour
         if(TroopOnTile(tile))
             return;
 
-        if(!_MapManager.CheckTileOwnership(tile, _SessionManager.PlayerFactionID(owner)))
+        if(!_MapManager.CheckTileOwnership(tile, _FactionLookup.GetFaction(_SessionManager.PlayerFactionID(owner))))
             return;
 
         NetworkObject new_troop = _ConnectionManager.SpawnObject(troop_data.NetPrefabRef());
@@ -243,7 +245,7 @@ public class GameplayManager : NetworkBehaviour
         troop.Faction_ID = _SessionManager.PlayerFactionID(owner);
         troop.UniqueID = troop_counter;
         troop_counter++;
-        troop.current_tile = tile;
+        troop.current_tile = tile.ID;
 
         CleanAllTroops();
     }
@@ -256,11 +258,11 @@ public class GameplayManager : NetworkBehaviour
         }
     }
 
-    public bool TroopOnTile(int tile){
+    public bool TroopOnTile(Tile tile){
         bool return_val = false;
         for(int i = 0; i < AllTroops.Count && !return_val; i++){
             if(AllTroops[i] != null)
-                return_val = AllTroops[i].current_tile == tile;
+                return_val = AllTroops[i].current_tile == tile.ID;
         }
         return return_val;
     }
@@ -272,11 +274,11 @@ public class GameplayManager : NetworkBehaviour
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_ConquestNow(int tile, int owner){
+        Faction faction = _FactionLookup.GetFaction(owner);
+        Tile tile_ = _MapManager.GetTile(tile);
         if(_SessionManager.Hosting){
-            if(_MapManager.ValidateTile(tile)){
-                if(!_MapManager.IsOwner(tile, owner)){
-                    _MapManager.Conquer(tile, owner);
-                }
+            if(!_MapManager.IsOwner(tile_, faction)){
+                _MapManager.Conquer(tile_, faction);
             }
         }
     }

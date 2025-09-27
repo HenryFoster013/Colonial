@@ -17,7 +17,7 @@ MonoBehaviour:
   _Cost: 3
   _MoveDistance: 3
   _AttackDistance: 1
-  _Vision: 10
+  _Vision: 20
   _Health: 3
   _Damage: 1
   _MoveOnCloseKill: 1

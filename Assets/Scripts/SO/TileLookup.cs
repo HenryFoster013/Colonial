@@ -9,7 +9,11 @@ public class TileLookup : ScriptableObject
 
     public TileData Tile(int i){
         return Tiles[i];
-    }   
+    } 
+
+    public TileData Tile(string name){
+        return Tiles[ID(name)];
+    }     
 
     public int ID(string name){
         int return_val = 0;
