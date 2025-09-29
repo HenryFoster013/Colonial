@@ -17,6 +17,8 @@ namespace HenrysMapUtils{
         public Vector3 origin_position {get; private set;}
         public Transform water_transform {get; private set;}
         public Transform piece_transform {get; private set;}
+
+        public TileStats stats {get; private set;}
         
         public int bonus_data {get; private set;}
 
@@ -47,5 +49,50 @@ namespace HenrysMapUtils{
         public void SetPieceTransform(Transform _piece_transform){piece_transform = _piece_transform;}
         public void SetType(TileData new_type){type = new_type;}
         public void SetPosition(Vector3 position_){world_position = position_;}
+        public void SetStats(TileStats _stats){stats = _stats;}
+    }
+
+    public class TileStats{
+
+        public Tile tile {get; private set;}
+        public string name {get; private set;}
+        public int ownership_radius {get; private set;}
+        public int money_produced {get; private set;}
+
+        public int max_population {get; private set;}
+        public int population_used {get; private set;}
+        public int max_produce {get; private set;}
+        public int produce_used {get; private set;}
+        public int max_industry {get; private set;}
+        public int industry_used {get; private set;}
+
+        public TileStats(Tile _tile, string _name, int radius, int money, int pop, int prod, int industry){
+            tile = _tile;
+            name = _name;
+            ownership_radius = radius;
+            money_produced = money;
+            max_population = pop;
+            max_produce = prod;
+            max_industry = industry;
+            population_used = 0;
+            produce_used = 0;
+            industry_used = 0;
+        }
+
+        // Setters //
+
+        public void AddPopulation(int amount){population_used += amount;}
+        public void SetPopulation(int amount){population_used = amount;}
+        public void AddProduce(int amount){produce_used += amount;}
+        public void SetProduce(int amount){produce_used = amount;}
+        public void AddIndustry(int amount){industry_used += amount;}
+        public void SetIndustry(int amount){industry_used = amount;}
+
+        public void AddMaxPopulation(int amount){max_population += amount;}
+        public void SetMaxPopulation(int amount){max_population = amount;}
+        public void AddMaxProduce(int amount){max_produce += amount;}
+        public void SetMaxProduce(int amount){max_produce = amount;}
+        public void AddMaxIndustry(int amount){max_industry += amount;}
+        public void SetMaxIndustry(int amount){max_industry = amount;}
     }
 }

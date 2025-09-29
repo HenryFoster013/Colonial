@@ -24,8 +24,8 @@ public class GameplayManager : NetworkBehaviour
     public int player_sub_turn;
     int player_count;
 
-    public int current_stars { get; private set; }
-    int stars_per_turn = 3;
+    public int current_coins { get; private set; }
+    int coins_per_turn = 3;
     int troop_counter = 1;
 
     public List<Troop> AllTroops;
@@ -33,7 +33,7 @@ public class GameplayManager : NetworkBehaviour
     // Defaults
 
     public void Setup(){
-        current_stars = 100;
+        current_coins = 100;
         current_turn = 1;
         player_sub_turn = 0;
         player_count = _SessionManager.player_instances.Count;
@@ -283,7 +283,7 @@ public class GameplayManager : NetworkBehaviour
         }
     }
 
-    public void SpendStars(int cost){current_stars -= cost;}
+    public void SpendStars(int cost){current_coins -= cost;}
     public void SetConnection(ConnectionManager cm){_ConnectionManager = cm;}
     public void SetMap(MapManager mm){_MapManager = mm;}
 }

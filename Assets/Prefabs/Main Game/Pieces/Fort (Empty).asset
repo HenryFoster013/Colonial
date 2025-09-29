@@ -20,4 +20,4 @@ MonoBehaviour:
   _RandomiseFirstChildRotation: 0
   _ContainsBillboards: 0
   _Walkable: 1
-  _CanSpawnTroops: 0
+  _Fort: 1

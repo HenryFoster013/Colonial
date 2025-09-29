@@ -26,3 +26,4 @@ MonoBehaviour:
   _TextureOffset: 0
   _Flag: {fileID: 21300000, guid: d94ba6d3c20acad43ade893033c7d74e, type: 3}
   _Mini_Flag: {fileID: 21300000, guid: 6ad405fb545e3f34fb25a5c10f5069e3, type: 3}
+  _Currency: "\xA3"

@@ -16,7 +16,7 @@ public class PieceData : ScriptableObject
     [SerializeField] bool _ContainsBillboards;
     [Header("Gameplay")]
     [SerializeField] bool _Walkable;
-    [SerializeField] bool _CanSpawnTroops;
+    [SerializeField] bool _Fort;
 
     public bool CheckType(string s){
         return (s.ToUpper() == _Type.ToUpper());
@@ -34,7 +34,7 @@ public class PieceData : ScriptableObject
     public bool RandomRotation(){return _RandomiseRotation;}
     public bool RandomChildRotation(){return _RandomiseFirstChildRotation;}
     public float TroopOffset(){return _TroopOffset;}
-    public bool CanSpawnTroops(){return _CanSpawnTroops;}
+    public bool Fort(){return _Fort;}
 }
 
 
