@@ -474,10 +474,15 @@ public class MapManager : NetworkBehaviour
                                 PlayerInstance player = _SessionManager.GetPlayer(placed_castles.Count);
                                 Faction _owner = player.FactionData();
                                 check_tile.SetPiece(player.FactionData().Tower());
+                                TileStats stats = new TileStats(check_tile, "Capital", 2, 5, 3, 3, 3);
+                                stats.AddIndustry(2);
+                                stats.AddPopulation(1);
+                                check_tile.SetStats(stats);
                                 MarkRadiusAsOwned(check_tile, 2, _owner, true);
                             }
                             else{ // Place Fort
                                 check_tile.SetPiece(_PieceLookup.Piece("Fort (Empty)"));
+                                check_tile.SetStats(new TileStats(check_tile, "Fort", 2, 5, 3, 3, 3));
                             }
                             placed_castles.Add(TileToCoords(check_tile));
                         }
