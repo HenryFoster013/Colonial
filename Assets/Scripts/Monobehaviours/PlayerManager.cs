@@ -32,8 +32,16 @@ public class PlayerManager : MonoBehaviour
     [Header(" --- UI --- ")]
     [SerializeField] GameObject TroopSpawnMenu;
     [SerializeField] GameObject EndTurnButton;
+    [SerializeField] TMP_Text CoinDisplay;
+
+    [Header("Turns")]
+    [SerializeField] TMP_Text TurnDisplay;
     [SerializeField] Animator TurnNameAnim;
     [SerializeField] TMP_Text TurnNameText;
+
+    [Header("Faction")]
+    [SerializeField] Image FactionFlag;
+    [SerializeField] TMP_Text FactionName;
 
     [Header("Tile Popup")]
     [SerializeField] GameObject TileInfoDisplay;
@@ -42,17 +50,26 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] Transform TileModelHolder;
     [SerializeField] Image DisplayBG;
 
+    [Header("Forts")]
+    [SerializeField] GameObject FortStats;
+    [SerializeField] TMP_Text FortName;
+    [SerializeField] GameObject PopulationUnit;
+    [SerializeField] GameObject ProduceUnit;
+    [SerializeField] GameObject IndustryUnit;
+    [SerializeField] Transform PopulationHolder;
+    [SerializeField] Transform ProduceHolder;
+    [SerializeField] Transform IndustryHolder;
+
+
     [Header("Troop Popups")]
     [SerializeField] GameObject TroopButton;
     [SerializeField] Transform TroopButtonHolder;
     [SerializeField] GameObject TroopRenderer;
     [SerializeField] Transform TroopRendererHolder;
+    [SerializeField] GameObject TroopOffsetButtons;
+    int troop_spawn_offset = 0;
     RenderTexture[] troop_renders;
     Transform[] troop_buttons;
-
-    [Header("Turns")]
-    [SerializeField] TMP_Text StarsDisplay;
-    [SerializeField] TMP_Text TurnDisplay;
 
     [Header("Highlights")]
     [SerializeField] LayerMask ClickableLayers;
@@ -114,6 +131,8 @@ public class PlayerManager : MonoBehaviour
 
     void ResetUI(){
         TroopSpawnMenu.SetActive(false);
+        FactionName.text = _SessionManager.LocalFactionData().Name().Replace(' ', '\n');
+        FactionFlag.sprite = _SessionManager.LocalFactionData().Flag();
     }
 
     // ANIMATION //
@@ -121,8 +140,8 @@ public class PlayerManager : MonoBehaviour
     void Animate(){
         WateryHighlights();
         EndTurnButton.SetActive(OurTurn);
-        TurnDisplay.text = _GameplayManager.current_turn.ToString();
-        StarsDisplay.text = _GameplayManager.current_stars.ToString();
+        TurnDisplay.text = "Turn " + _GameplayManager.current_turn.ToString();
+        CoinDisplay.text = _SessionManager.LocalFactionData().Currency() + _GameplayManager.current_coins.ToString();
     }
 
     void WateryHighlights(){
@@ -189,7 +208,7 @@ public class PlayerManager : MonoBehaviour
     public void SpawnTroopButton(int i){
         TroopData[] troops = _SessionManager.LocalFactionData().Troops();
 
-        if(troops[i].Cost() <= _GameplayManager.current_stars){
+        if(troops[i].Cost() <= _GameplayManager.current_coins){
             _GameplayManager.SpendStars(troops[i].Cost());
 
             block_world_clicks = true;
@@ -375,10 +394,45 @@ public class PlayerManager : MonoBehaviour
 
     void CheckTileData(Tile tile){
         TroopSpawnMenu.SetActive(false);
-        if(tile.piece.CanSpawnTroops()){
-            if(!_GameplayManager.TroopOnTile(tile) && OurTurn){
-                if(Map.CheckTileOwnership(tile, _SessionManager.LocalFactionData()))
+        FortStats.SetActive(false);
+        if(tile.piece.Fort()){
+            if(Map.CheckTileOwnership(tile, _SessionManager.LocalFactionData())){
+                if(!_GameplayManager.TroopOnTile(tile) && OurTurn){
                     OpenSpawnMenu();
+                }
+                SetupTileStats(Map.GetTile(tile.ID).stats);
+            }
+        }
+    }
+
+    void SetupTileStats(TileStats stats){
+        if(stats == null)
+            return;
+        
+        FortStats.SetActive(true);
+        FortName.text = stats.name + " (" + stats.money_produced.ToString() + ")";
+        SpawnStatUnits(ref PopulationHolder, ref PopulationUnit, stats.max_population, stats.population_used);
+        SpawnStatUnits(ref ProduceHolder, ref ProduceUnit, stats.max_produce, stats.produce_used);
+        SpawnStatUnits(ref IndustryHolder, ref IndustryUnit, stats.max_industry, stats.industry_used);
+    }
+
+    void SpawnStatUnits(ref Transform holder, ref GameObject unit, int max, int amount){
+        foreach(Transform t in holder)
+            GameObject.Destroy(t.gameObject);
+        for(int i = 1; i <= max; i++){
+            if(i <= amount){
+                GameObject new_unit = GameObject.Instantiate(unit);
+                new_unit.transform.parent = holder;
+                RectTransform rect = new_unit.GetComponent<RectTransform>();
+                rect.localScale = new Vector3(1,1,1); 
+                rect.localPosition  = Vector3.zero;
+
+                float width = 100f / max;
+                float left = width * (i - 1);
+                rect.offsetMin = new Vector2(left, 0f); // Left, Bottom
+                rect.offsetMax = new Vector2(left + width, 0f); // Right, Top
+
+                new_unit.SetActive(true);
             }
         }
     }
@@ -457,6 +511,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void Deselect(){
+        FortStats.SetActive(false);
         TroopSpawnMenu.SetActive(false);
         if(current_troop != null)
             current_troop.SetSelected(false);
@@ -547,16 +602,16 @@ public class PlayerManager : MonoBehaviour
             }
         }
 
-        float offy = 120;
+        float offy = 95;
         float centering = (-1 * offy * total_troops) / 2;
         centering += (offy / 2);
         int active_count = 0;
 
         for(int i = 0; i < troops_owned.Length; i++){
             if(troops_owned[i]){
-                TMP_Text cost_text = troop_buttons[i].GetChild(3).GetComponent<TMP_Text>();
+                TMP_Text cost_text = troop_buttons[i].GetChild(0).GetChild(3).GetComponent<TMP_Text>();
                 cost_text.color = Color.white;
-                if(_SessionManager.LocalFactionData().Troops()[i].Cost() > _GameplayManager.current_stars)
+                if(_SessionManager.LocalFactionData().Troops()[i].Cost() > _GameplayManager.current_coins)
                     cost_text.color = Color.red;
                 troop_buttons[i].gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2((active_count * offy) + centering, 0);
                 troop_buttons[i].gameObject.SetActive(true);

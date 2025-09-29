@@ -1,0 +1,16 @@
+To Develop
+- stats menu popup (with stat spawning)
+- make the troops smooth scroll when more than 4
+- create the engineer as a class
+
+To Model:
+flowers
+mineshaft
+gunpower mill
+dogs
+bridge
+port
+ship (small, medium, large)
+houses
+church
+roads
