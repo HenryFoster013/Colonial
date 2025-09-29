@@ -11749,9 +11749,9 @@ MonoBehaviour:
   DisplayBG: {fileID: 1617952547}
   FortStats: {fileID: 1506853250}
   FortName: {fileID: 144312259}
-  PopulationUnit: {fileID: 1156424515}
-  ProduceUnit: {fileID: 1111170520}
-  IndustryUnit: {fileID: 1128007620}
+  PopulationUnit: {fileID: 1156424514}
+  ProduceUnit: {fileID: 1111170519}
+  IndustryUnit: {fileID: 1128007619}
   PopulationHolder: {fileID: 1121649440}
   ProduceHolder: {fileID: 90551116}
   IndustryHolder: {fileID: 61304039}

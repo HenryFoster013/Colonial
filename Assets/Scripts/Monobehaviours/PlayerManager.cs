@@ -426,11 +426,12 @@ public class PlayerManager : MonoBehaviour
                 RectTransform rect = new_unit.GetComponent<RectTransform>();
                 rect.localScale = new Vector3(1,1,1); 
                 rect.localPosition  = Vector3.zero;
-
-                float width = 100f / max;
+                
+                float full_size = 100f;
+                float width = full_size / max;
                 float left = width * (i - 1);
                 rect.offsetMin = new Vector2(left, 0f); // Left, Bottom
-                rect.offsetMax = new Vector2(left + width, 0f); // Right, Top
+                rect.offsetMax = new Vector2(left + width - full_size, 0f); // Right, Top
 
                 new_unit.SetActive(true);
             }
@@ -585,6 +586,7 @@ public class PlayerManager : MonoBehaviour
 
             GameObject b = GameObject.Instantiate(TroopButton, TroopButtonHolder.position, Quaternion.identity);
             b.transform.parent = TroopButtonHolder;
+            b.transform.localScale = new Vector3(1,1,1);
             b.transform.GetComponent<TroopButton>().Setup(count, this, _SessionManager.LocalFactionData().Colour(), troops[count].Cost(), rendtext);
             troop_buttons[count] = b.transform;
         }
