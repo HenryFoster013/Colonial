@@ -4,15 +4,51 @@ using UnityEngine;
 
 namespace HenrysMapUtils{
 
+    public class Seed{
+
+        public int value {get; private set;}
+        public int first_third {get; private set;}
+        public int second_third {get; private set;}
+        public int final_third {get; private set;}
+        System.Random random;
+
+        public Seed(){
+            value = Random.Range(0, 999999999);
+            Setup();
+        }
+
+        public Seed(int seed){
+            value = seed;
+            Setup();
+        }
+
+        void Setup(){ // Note this assumes the number is representable in 9 digits
+            first_third = value / 1000000;
+            second_third = (value - (first_third * 1000000)) / 1000;
+            final_third = value - (first_third * 1000000) - (second_third * 1000);
+            random = new System.Random(value);
+        }
+
+        public float Range(float min, float max){ // By defalt returns [0,1], this multiplies that value by the range (max - min), then adds the offset (min)
+            return (float)(random.NextDouble() * (max - min) + min);
+        }
+
+        public int RangeInt(int min, int max){
+            return random.Next(min, max);
+        }
+    }
+
     public class NoiseGenerator{
         
+        Seed seed;
         int width;
         int height;
         float scale;
         int layers;
         float offset_range;
 
-        public NoiseGenerator(int _size, float _scale, int _layers, float _offset){
+        public NoiseGenerator(Seed _seed, int _size, float _scale, int _layers, float _offset){
+            seed = _seed;
             width = _size;
             height = _size;
             scale = _scale;
@@ -27,19 +63,15 @@ namespace HenrysMapUtils{
 
             for(int count = 1; count <= layers; count++){
                 float amplitude = 1f / (float)count;
-                float[] pixadd = new float[width * height];
                 
                 for (int y = 0; y < height; y++){
                     for (int x = 0; x < width; x++){
                         float xCoord = random_vals[(count * 2) - 2] + (float)x / width * scale * count;
                         float yCoord = random_vals[(count * 2) - 1] + (float)y / height * scale * count;
                         float sample = Mathf.PerlinNoise(xCoord, yCoord);
-                        pixadd[y * width + x] = Mathf.Clamp((sample * 2f) - 1f, -1f, 1f);
+                        pixels[y * width + x] += Mathf.Clamp((sample * 2f) - 1f, -1f, 1f) * amplitude;
                     }
                 }
-
-                for(int i = 0; i < width * height; i++)
-                    pixels[i] = pixels[i] + (pixadd[i] * amplitude);
             }
 
             return pixels;
@@ -48,7 +80,7 @@ namespace HenrysMapUtils{
         float[] RandomiseOffsets(){
             float[] random_vals = new float[layers * 2];
             for(int i = 0; i < layers * 2; i++){
-                random_vals[i] = Random.Range(-offset_range, offset_range);
+                random_vals[i] = seed.Range(-offset_range, offset_range);
             }
             return random_vals;
         }
@@ -116,12 +148,16 @@ namespace HenrysMapUtils{
         public TileStats(Tile _tile, string _name, int money){
             tile = _tile;
             tile.SetStats(this);
-            name = _name;
+
             ownership_radius = 2;
+
+            name = _name;
             money_produced = money;
+
             max_population = 3;
             max_produce = 3;
             max_industry = 3;
+
             population_used = 0;
             produce_used = 0;
             industry_used = 0;
