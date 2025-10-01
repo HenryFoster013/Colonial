@@ -7,8 +7,9 @@ using System.Linq;
 using Fusion.Sockets;
 using Fusion;
 using TMPro;
+using HenrysMapUtils;
 
-public class SessionManager : MonoBehaviour
+public class SessionManager : NetworkBehaviour
 {
     [Header(" - MAIN - ")]
     [SerializeField] FactionLookup _FactionLookup;
@@ -29,7 +30,7 @@ public class SessionManager : MonoBehaviour
     [SerializeField] BackgroundColouring PregameBackground;
    
     int map_data_recieved;
-    bool generated_map, connected;
+    bool connected;
     
     const float texture_length_pixels = 16;
     MaterialPropertyBlock[] troop_skins;
@@ -64,8 +65,6 @@ public class SessionManager : MonoBehaviour
     }
 
     void InitialSetup(){
-        map_data_recieved = 0;
-        generated_map = false;
         _ConnectionManager._SessionManager = this;
         Hosting = _ConnectionManager.Hosting();
         _PreGameManager.gameObject.SetActive(true);
@@ -98,21 +97,36 @@ public class SessionManager : MonoBehaviour
         if(!AllPlayersReady())
             return;
         
-        game_state = 1;
-        _ConnectionManager.CloseOffSession();
-        _GameplayManager.Setup();
-        GetPlayers();
         ReapplyPlayerIDs();
-        SwitchToGameplay();
-        HostMakeMap();
+        _ConnectionManager.CloseOffSession();
+        _MapManager.seed = new Seed();
+
+        StartGame();
+        StartCoroutine(ClientDelay());
     }
 
-    public void ClientStartGame(){
+    IEnumerator ClientDelay(){
+        yield return new WaitForSeconds(1f);
+        RPC_StartGame(_MapManager.seed.value);
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_StartGame(int seed_value, RpcInfo info = default){
+        if(Hosting) // Host has already set up
+            return;
+
+        _MapManager.seed = new Seed(seed_value);
+        StartGame();
+    }
+
+    void StartGame(){
         game_state = 1;
         _GameplayManager.Setup();
         GetPlayers();
         SwitchToGameplay();
-        _MapManager.ClientGenerateMap();
+        _MapManager.EstablishNoiseMap();
+        _MapManager.EstablishOtherRandoms();
+        _MapManager.GenerateMap();
     }
 
     public void SwitchToGameplay(){
@@ -123,49 +137,6 @@ public class SessionManager : MonoBehaviour
         _GameplayManager.SetMap(_MapManager);
         _PlayerManager.Setup();
         PregameBackground.Save();
-    }
-
-    // MAP SETUP //
-    
-    void HostMakeMap(){
-        if(!Hosting)
-            return;
-
-        _MapManager.EstablishNoiseMap();
-        _MapManager.EstablishOtherRandoms();
-        _MapManager.GenerateMap();
-
-        _ConnectionManager.SendRawMapData(0, _MapManager.MapSize, _MapManager.GrassLimit, _MapManager.GetRawMapData());
-        _ConnectionManager.SendLargeIntArray(1, _MapManager.GetTilePieces());
-    }
-
-    public void GotMapDataRaw(int map_size, float grass_limit, float[] data){
-        if(Hosting)
-            return;
-        _MapManager.MapSize = map_size;
-        _MapManager.SetGrassLimit(grass_limit);
-        _MapManager.SetMapDataRaw(data);
-        map_data_recieved++;
-        CheckWeHaveAllData();
-    }
-
-
-    public void GotTilePieces(int[] data){
-        if(Hosting)
-            return;
-        _MapManager.SetTilePieces(data);
-        map_data_recieved++;
-        CheckWeHaveAllData();
-    }
-
-    void CheckWeHaveAllData(){
-        if(Hosting)
-            return;
-        
-        if(map_data_recieved > 1 && !generated_map){
-            generated_map = true;
-            ClientStartGame();
-        }
     }
 
     // PLAYER SETUP //

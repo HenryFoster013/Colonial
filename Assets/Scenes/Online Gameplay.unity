@@ -1683,7 +1683,7 @@ GameObject:
   - component: {fileID: 308904221}
   - component: {fileID: 308904222}
   m_Layer: 0
-  m_Name: '- LOCAL SESSION MANAGER -'
+  m_Name: '- SESSION MANAGER -'
   m_TagString: Session Manager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1745,6 +1745,7 @@ MonoBehaviour:
   NestedObjects:
   - {fileID: 1780067901}
   NetworkedBehaviours:
+  - {fileID: 308904221}
   - {fileID: 236702219}
   ForceRemoteRenderTimeframe: 0
 --- !u!1 &326029295

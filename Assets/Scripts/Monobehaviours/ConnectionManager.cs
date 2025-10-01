@@ -115,7 +115,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
             float[] decompressed_data = new float[data_count];
 
             Buffer.BlockCopy(data.Array, offset, decompressed_data, 0, data.Count - sizeof(float) - sizeof(int) - sizeof(int));
-            _SessionManager.GotMapDataRaw(map_size, grass_limit, decompressed_data);
+            //_SessionManager.GotMapDataRaw(map_size, grass_limit, decompressed_data);
         }
 
         else{ // Tile Pieces
@@ -123,7 +123,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
             int[] decompressed_data = new int[data_count];
 
             Buffer.BlockCopy(data.Array, offset, decompressed_data, 0, data.Count - sizeof(int));
-            _SessionManager.GotTilePieces(decompressed_data);
+            //_SessionManager.GotTilePieces(decompressed_data);
         }
     }
 

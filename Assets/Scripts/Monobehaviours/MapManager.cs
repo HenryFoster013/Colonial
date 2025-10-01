@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using System.Linq;
 using System.Diagnostics;
@@ -41,9 +42,6 @@ public class MapManager : NetworkBehaviour
     [SerializeField] Material BorderMaterial;
     [SerializeField] GameObject[] BorderPrefabs;
 
-    int seed_one = 123456;
-    int seed_two = 987654;
-
     // Local only
     public bool ready {get; private set;}
     public float GrassLimit {get; private set;}
@@ -51,6 +49,7 @@ public class MapManager : NetworkBehaviour
     bool generated_bg;
 
     Tile[] Tiles;
+    [HideInInspector] public Seed seed;
 
     // Synced from Host
     public float[] map_data_raw;
@@ -388,7 +387,7 @@ public class MapManager : NetworkBehaviour
     }
 
     public void OwnershipVisibilityPass(){
-        _FactionLookup.ShuffleLocationNames(seed_one, seed_two);
+        _FactionLookup.ShuffleLocationNames(seed.first_third, seed.second_third);
         foreach(Tile tile in Tiles){
             if(tile.piece.CheckType("Tower")){
                 TileStats stats = new TileStats(tile, "temp", 5);
@@ -410,10 +409,6 @@ public class MapManager : NetworkBehaviour
         Tiles = new Tile[map_data_raw.Length];
         for(int i = 0; i < map_data_raw.Length; i++){
             PieceData piece = _PieceLookup.Piece("UNMARKED");
-
-            if(client)
-                piece = _PieceLookup.Piece(tile_pieces[i]);
-
             Tile new_tile = new Tile(i, map_data_raw[i], GetRawType(map_data_raw[i]), piece, CalcTileWorldPosition(i), null);
             Tiles[i] = new_tile;
         }
@@ -459,7 +454,7 @@ public class MapManager : NetworkBehaviour
                 distance_fails = 0;
             }
 
-            Tile check_tile = Tiles[Random.Range(0, MapSize * MapSize)];
+            Tile check_tile = Tiles[seed.RangeInt(0, MapSize * MapSize)];
             Vector2Int our_coords = TileToCoords(check_tile);
 
             if(IsDistanceFromEdge(our_coords, 3)){
@@ -658,7 +653,7 @@ public class MapManager : NetworkBehaviour
 
                 // Grass fill
                 if(tile.type.CheckType("GRASS")){
-                    if(Random.Range(0.2f, 1f) + tile.raw >= 1){
+                    if(seed.Range(0.2f, 1f) + tile.raw >= 1){
                         CoinFlipPiece(tile, "Tree Large", "Tree Small");
                     }
 
@@ -676,7 +671,7 @@ public class MapManager : NetworkBehaviour
                 
                 // Stone fill
                 if(tile.type.CheckType("STONE")){
-                    if(Random.Range(0f, 0.5f) + tile.raw >= 1){
+                    if(seed.Range(0f, 0.5f) + tile.raw >= 1){
                         tile.SetPiece(_PieceLookup.Piece("MOUNTAIN"));
                     }
                 }
@@ -690,12 +685,12 @@ public class MapManager : NetworkBehaviour
     }
 
     void RandomChancePiece(Tile tile, int odds, string piece){
-        if(Random.Range(0, odds + 1) == 0)
+        if(seed.RangeInt(0, odds + 1) == 0)
             tile.SetPiece(_PieceLookup.Piece(piece));
     }
 
     void CoinFlipPiece(Tile tile, string piece_a, string piece_b){
-        if(Random.Range(0, 3) == 0)
+        if(seed.RangeInt(0, 3) == 0)
             tile.SetPiece(_PieceLookup.Piece(piece_a));
         else
             tile.SetPiece(_PieceLookup.Piece(piece_b));
@@ -712,9 +707,9 @@ public class MapManager : NetworkBehaviour
 
         GameObject g = GameObject.Instantiate(tile.piece.Prefab(), tile.world_position, Quaternion.identity);
         if(tile.piece.RandomRotation())
-            g.transform.eulerAngles = new Vector3(0, Random.Range(0f, 360f), 0f);
+            g.transform.eulerAngles = new Vector3(0, seed.Range(0f, 360f), 0f);
         if(tile.piece.RandomChildRotation())
-            g.transform.GetChild(0).eulerAngles = new Vector3(0, Random.Range(0f, 360f), 0f);
+            g.transform.GetChild(0).eulerAngles = new Vector3(0, seed.Range(0f, 360f), 0f);
         tile.SetPieceTransform(g.transform);
         g.transform.parent = PieceHolder;
     }
@@ -722,23 +717,9 @@ public class MapManager : NetworkBehaviour
     // NOISE GENERATION //
 
     public void EstablishNoiseMap(){
-        NoiseGenerator noise_gen = new NoiseGenerator(MapSize, 3, 12, 300);
+        NoiseGenerator noise_gen = new NoiseGenerator(seed, MapSize, 3, 12, 300);
         map_data_raw = noise_gen.Generate();
-        GrassLimit = Random.Range(-0.2f, -0.6f);
-    }
-
-    // LARGE DATA SETTING //
-
-    public void SetMapDataRaw(float[] data){
-        map_data_raw = data;
-    }
-
-    public void SetGrassLimit(float limit){
-        GrassLimit = limit;
-    }
-
-    public void SetTilePieces(int[] data){
-        tile_pieces = data;
+        GrassLimit = seed.Range(-0.2f, -0.6f);
     }
 
     // GETTERS //
@@ -747,17 +728,5 @@ public class MapManager : NetworkBehaviour
 
     public bool IsOwner(Tile tile, Faction owner){
         return tile.owner == owner;
-    }
-
-    public float[] GetRawMapData(){
-        return map_data_raw;
-    }
-
-    public int[] GetTilePieces(){
-        int[] tp = new int[map_data_raw.Length];
-        for(int i = 0; i < map_data_raw.Length; i++){
-            tp[i] = _PieceLookup.ID(Tiles[i].piece);
-        }
-        return tp;
     }
 }
