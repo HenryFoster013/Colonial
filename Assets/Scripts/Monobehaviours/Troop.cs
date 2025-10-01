@@ -27,6 +27,7 @@ public class Troop : NetworkBehaviour{
     [Networked] public int UniqueID {get; set;}
     [Networked] public int current_tile {get; set;}
     [Networked] public int health {get; set;}
+    [Networked] public string Name {get; set;}
     
     MapManager _MapManager;
     SessionManager _SessionManager;
@@ -102,6 +103,10 @@ public class Troop : NetworkBehaviour{
     void SetupMaterial(){
         skins = _SessionManager.GetTroopMaterials(Faction_ID);
         UpdateModel();
+    }
+
+    public void SetName(string name){
+        Name = name;
     }
 
     // MOVEMENT //

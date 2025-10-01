@@ -3,6 +3,57 @@
 using UnityEngine;
 
 namespace HenrysMapUtils{
+
+    public class NoiseGenerator{
+        
+        int width;
+        int height;
+        float scale;
+        int layers;
+        float offset_range;
+
+        public NoiseGenerator(int _size, float _scale, int _layers, float _offset){
+            width = _size;
+            height = _size;
+            scale = _scale;
+            layers = _layers;
+            offset_range = _offset;
+        }
+
+        public float[] Generate(){
+
+            float[] random_vals = RandomiseOffsets();
+            float[] pixels = new float[width * height];
+
+            for(int count = 1; count <= layers; count++){
+                float amplitude = 1f / (float)count;
+                float[] pixadd = new float[width * height];
+                
+                for (int y = 0; y < height; y++){
+                    for (int x = 0; x < width; x++){
+                        float xCoord = random_vals[(count * 2) - 2] + (float)x / width * scale * count;
+                        float yCoord = random_vals[(count * 2) - 1] + (float)y / height * scale * count;
+                        float sample = Mathf.PerlinNoise(xCoord, yCoord);
+                        pixadd[y * width + x] = Mathf.Clamp((sample * 2f) - 1f, -1f, 1f);
+                    }
+                }
+
+                for(int i = 0; i < width * height; i++)
+                    pixels[i] = pixels[i] + (pixadd[i] * amplitude);
+            }
+
+            return pixels;
+        }
+
+        float[] RandomiseOffsets(){
+            float[] random_vals = new float[layers * 2];
+            for(int i = 0; i < layers * 2; i++){
+                random_vals[i] = Random.Range(-offset_range, offset_range);
+            }
+            return random_vals;
+        }
+    }
+
     public class Tile{
 
         public int ID {get; private set;}
@@ -19,8 +70,6 @@ namespace HenrysMapUtils{
         public Transform piece_transform {get; private set;}
 
         public TileStats stats {get; private set;}
-        
-        public int bonus_data {get; private set;}
 
         public float raw {get; private set;}
 
@@ -35,7 +84,6 @@ namespace HenrysMapUtils{
             origin_position = _position;
             world_position = _position;
             water_transform = null;
-            bonus_data = 0;
         }
 
         // Setters //
@@ -45,7 +93,6 @@ namespace HenrysMapUtils{
         public void SetOwner(Faction _owner){owner = _owner;}
         public void SetPiece(PieceData _piece){piece = _piece;}
         public void SetWaterTransform(Transform _transform){water_transform = _transform;}
-        public void SetBonusData(int bonus){bonus_data = bonus;}
         public void SetPieceTransform(Transform _piece_transform){piece_transform = _piece_transform;}
         public void SetType(TileData new_type){type = new_type;}
         public void SetPosition(Vector3 position_){world_position = position_;}
@@ -66,20 +113,34 @@ namespace HenrysMapUtils{
         public int max_industry {get; private set;}
         public int industry_used {get; private set;}
 
-        public TileStats(Tile _tile, string _name, int radius, int money, int pop, int prod, int industry){
+        public TileStats(Tile _tile, string _name, int money){
             tile = _tile;
+            tile.SetStats(this);
             name = _name;
-            ownership_radius = radius;
+            ownership_radius = 2;
             money_produced = money;
-            max_population = pop;
-            max_produce = prod;
-            max_industry = industry;
+            max_population = 3;
+            max_produce = 3;
+            max_industry = 3;
             population_used = 0;
             produce_used = 0;
             industry_used = 0;
         }
 
+        public void RefreshDetails(MapManager Map){
+            foreach(Tile searched_tile in Map.TilesByDistance(tile, ownership_radius, false)){
+
+                // Baseline, add up from here
+                max_population = 3;
+                max_produce = 3;
+                max_industry = 3;
+            }
+        }
+
         // Setters //
+
+        public void SetOwnershipRadius(int rad){ownership_radius = rad;}
+        public void SetName(string _name){name = _name;}
 
         public void AddPopulation(int amount){population_used += amount;}
         public void SetPopulation(int amount){population_used = amount;}

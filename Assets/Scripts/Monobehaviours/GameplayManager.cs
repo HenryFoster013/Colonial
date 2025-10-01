@@ -25,7 +25,6 @@ public class GameplayManager : NetworkBehaviour
     int player_count;
 
     public int current_coins { get; private set; }
-    int coins_per_turn = 3;
     int troop_counter = 1;
 
     public List<Troop> AllTroops;
@@ -243,6 +242,7 @@ public class GameplayManager : NetworkBehaviour
         Troop troop = new_troop.gameObject.GetComponent<Troop>();
         troop.Owner = owner;
         troop.Faction_ID = _SessionManager.PlayerFactionID(owner);
+        troop.SetName(_FactionLookup.GetFaction(troop.Faction_ID).GetTroopName());
         troop.UniqueID = troop_counter;
         troop_counter++;
         troop.current_tile = tile.ID;

@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa3534d78ecf4bdfeb3a12d255823c1e, type: 3}
+  m_Name: French Location Names
+  m_EditorClassIdentifier: 
+  Prefixes_TXT: {fileID: 4900000, guid: c501b89a36c0a48908eeebcdb8b24e16, type: 3}
+  Suffixes_TXT: {fileID: 4900000, guid: b1edc109f61fdf85e9ad813750f10e33, type: 3}
+  Whitespace: 0
+  Prefixes:
+  - Beau
+  - Saint
+  - Sainte
+  - Mont
+  - Pont
+  - La
+  - Le
+  - Les
+  - Ville
+  - Val
+  - Font
+  - Dom
+  - Don
+  - Bourg
+  - Bour
+  - Bois
+  - Clair
+  - Grand
+  - Petite
+  - Vieux
+  - Neuf
+  - Roche
+  Suffixes:
+  - ville
+  - court
+  - mont
+  - val
+  - bois
+  - "ch\xE2teau"
+  - bourg
+  - ac
+  - ec
+  - ic
+  - y
+  - ay
+  - ey
+  - on
+  - an
+  - en
+  - et
+  - ot
+  - euil
+  - ueil
+  - sur-Mer
+  - sur-Seine
+  - sur-Loire
+  - en-Brie
+  - en-Champagne
+  - en-Provence
+  - "la-For\xEAt"
+  - "le-Ch\xE2teau"
+  - les-Bains
+  - la-Ville
+  - le-Roi
+  - la-Reine

@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa3534d78ecf4bdfeb3a12d255823c1e, type: 3}
+  m_Name: German Location Names
+  m_EditorClassIdentifier: 
+  Prefixes_TXT: {fileID: 4900000, guid: ccd09f2c312b7ee2b8f312d04109b70a, type: 3}
+  Suffixes_TXT: {fileID: 4900000, guid: abe76eaafd63289b38f9f5dbc0348d1c, type: 3}
+  Whitespace: 0
+  Prefixes:
+  - Bad
+  - Neu
+  - Alt
+  - Gross
+  - Klein
+  - Ober
+  - Unter
+  - Sankt
+  - Berg
+  - Langen
+  - Hohen
+  - Nieder
+  - Rhein
+  - Stein
+  - Wolf
+  - Lind
+  - Rosen
+  - "Gr\xFCn"
+  - Feld
+  - Gold
+  - Wald
+  - Dorf
+  - Frank
+  - Nord
+  - "S\xFCd"
+  - Ost
+  - West
+  - Kaiser
+  - "K\xF6nigs"
+  Suffixes:
+  - burg
+  - berg
+  - dorf
+  - thal
+  - tal
+  - stadt
+  - feld
+  - hain
+  - wald
+  - heim
+  - hafen
+  - kirchen
+  - "br\xFCck"
+  - "br\xFCcke"
+  - furt
+  - hausen
+  - stein
+  - au
+  - bach
+  - see
+  - moor
+  - egg
+  - ried
+  - ach
+  - born
+  - loh
+  - hof
+  - weiler

@@ -15,6 +15,10 @@ public class PieceLookup : ScriptableObject
         return Pieces[ID(type)];
     }
 
+    public PieceData Piece_ByName(string name){
+        return Pieces[ID_ByName(name)];
+    }
+
     public int ID(string type){
         int return_val = 0;
         bool done = false;

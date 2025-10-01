@@ -17,6 +17,7 @@ public class PieceData : ScriptableObject
     [Header("Gameplay")]
     [SerializeField] bool _Walkable;
     [SerializeField] bool _Fort;
+    [SerializeField] Faction _OwningFaction;
 
     public bool CheckType(string s){
         return (s.ToUpper() == _Type.ToUpper());
@@ -35,6 +36,7 @@ public class PieceData : ScriptableObject
     public bool RandomChildRotation(){return _RandomiseFirstChildRotation;}
     public float TroopOffset(){return _TroopOffset;}
     public bool Fort(){return _Fort;}
+    public Faction Owner(){return _OwningFaction;}
 }
 
 

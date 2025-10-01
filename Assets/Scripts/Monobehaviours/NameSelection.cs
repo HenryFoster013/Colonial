@@ -9,9 +9,8 @@ public class NameSelection : MonoBehaviour
 {
     [Header("Main")]
     [SerializeField] string NextScene;
-    [SerializeField] TextAsset Titles;
-    [SerializeField] TextAsset Names;
     [SerializeField] SoundEffectLookup SFX_Lookup;
+    [SerializeField] Nameset PlayerNameset;
     [Header("UI")]
     [SerializeField] BackgroundColouring BG;
     [SerializeField] GameObject Menu;
@@ -26,43 +25,31 @@ public class NameSelection : MonoBehaviour
     void Start(){
         Menu.SetActive(true);
         Model.SetActive(true);
-        DecompressTextFiles();
-        our_title = ChooseRandomString(ref titles);
-        our_name = ChooseRandomString(ref names);
+        our_title = PlayerNameset.RandomPrefix();
+        our_name = PlayerNameset.RandomSuffix();
         UpdateUI();
     }
 
-    // Start Only //
-
-    void DecompressTextFiles(){
-        titles = Titles.text.Split(new[] { "\r\n", "\n" }, System.StringSplitOptions.None);
-        names = Names.text.Split(new[] { "\r\n", "\n" }, System.StringSplitOptions.None);
-    }
-
     // Runtime //
-
-    string ChooseRandomString(ref string[] options){
-        return options[Random.Range(0, options.Length)];
-    }
 
     void UpdateUI(){
         TitleDisplay.text = our_title;
         NameDisplay.text = our_name;
     }
 
-    // UI Interactions //
-
     public void RandomiseTitle(){
         PlaySFX("UI_1", SFX_Lookup);
-        our_title = ChooseRandomString(ref titles);
+        our_title = PlayerNameset.RandomPrefix();
         UpdateUI();
     }
 
     public void RandomiseName(){
         PlaySFX("UI_1", SFX_Lookup);
-        our_name = ChooseRandomString(ref names);
+        our_name = PlayerNameset.RandomSuffix();
         UpdateUI();
     }
+
+    // UI Interactions //
 
     public void ConfirmName(){
         PlaySFX("UI_2", SFX_Lookup);
