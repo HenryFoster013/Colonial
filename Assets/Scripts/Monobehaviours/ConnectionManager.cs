@@ -118,20 +118,12 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
             _SessionManager.GotMapDataRaw(map_size, grass_limit, decompressed_data);
         }
 
-        else{ // Tile Pieces and Tile Ownership (both int)
+        else{ // Tile Pieces
             int data_count = (data.Count - sizeof(int)) / sizeof(int);
             int[] decompressed_data = new int[data_count];
 
             Buffer.BlockCopy(data.Array, offset, decompressed_data, 0, data.Count - sizeof(int));
-
-            switch(type){
-                case 1:
-                    _SessionManager.GotTilePieces(decompressed_data);
-                    break;
-                case 2:
-                    _SessionManager.GotTileOwnership(decompressed_data);
-                    break;
-            }
+            _SessionManager.GotTilePieces(decompressed_data);
         }
     }
 

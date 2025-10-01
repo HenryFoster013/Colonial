@@ -50,9 +50,15 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] Transform TileModelHolder;
     [SerializeField] Image DisplayBG;
 
+    [Header("Troop Info")]
+    [SerializeField] GameObject TroopInfoDisplay;
+    [SerializeField] TMP_Text TroopName;
+    [SerializeField] Image TroopName_BG;
+
     [Header("Forts")]
     [SerializeField] GameObject FortStats;
     [SerializeField] TMP_Text FortName;
+    [SerializeField] Image FortName_BG;
     [SerializeField] GameObject PopulationUnit;
     [SerializeField] GameObject ProduceUnit;
     [SerializeField] GameObject IndustryUnit;
@@ -206,6 +212,7 @@ public class PlayerManager : MonoBehaviour
     // SELECTION //
 
     public void SpawnTroopButton(int i){
+        print(i);
         TroopData[] troops = _SessionManager.LocalFactionData().Troops();
 
         if(troops[i].Cost() <= _GameplayManager.current_coins){
@@ -400,8 +407,8 @@ public class PlayerManager : MonoBehaviour
                 if(!_GameplayManager.TroopOnTile(tile) && OurTurn){
                     OpenSpawnMenu();
                 }
-                SetupTileStats(Map.GetTile(tile.ID).stats);
             }
+            SetupTileStats(Map.GetTile(tile.ID).stats);
         }
     }
 
@@ -411,6 +418,7 @@ public class PlayerManager : MonoBehaviour
         
         FortStats.SetActive(true);
         FortName.text = stats.name + " (" + stats.money_produced.ToString() + ")";
+        FortName_BG.color = stats.tile.owner.Colour();
         SpawnStatUnits(ref PopulationHolder, ref PopulationUnit, stats.max_population, stats.population_used);
         SpawnStatUnits(ref ProduceHolder, ref ProduceUnit, stats.max_produce, stats.produce_used);
         SpawnStatUnits(ref IndustryHolder, ref IndustryUnit, stats.max_industry, stats.industry_used);
@@ -484,6 +492,9 @@ public class PlayerManager : MonoBehaviour
         SpawnModelHolderTroop(troop.Data, TileModelHolder, troop.FactionID());
 
         TileInfoDisplay.SetActive(true);
+        TroopInfoDisplay.SetActive(true);
+        TroopName.text = troop.Name;
+        TroopName_BG.color = _SessionManager.PlayerFaction(troop.Owner).Colour();
         DisplayBG.color = _SessionManager.PlayerFaction(troop.Owner).Colour();
         
         if(troop.Owner == _SessionManager.OurInstance.ID){
@@ -512,6 +523,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void Deselect(){
+        TroopInfoDisplay.SetActive(false);
         FortStats.SetActive(false);
         TroopSpawnMenu.SetActive(false);
         if(current_troop != null)
@@ -548,6 +560,7 @@ public class PlayerManager : MonoBehaviour
 
     void ResetSelectionUI(){
         TileInfoDisplay.SetActive(false);
+        TroopInfoDisplay.SetActive(false);
         foreach(Transform t in blue_grid_highlights)
             t.gameObject.SetActive(false);
         foreach(Transform t in red_grid_highlights)

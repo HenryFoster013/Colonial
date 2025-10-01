@@ -44,4 +44,10 @@ public class FactionLookup : ScriptableObject
 
         return return_val;
     }
+
+    public void ShuffleLocationNames(int seed_one, int seed_two){
+        foreach(Faction fac in _Factions){
+            fac.LocationNameset().Shuffle(seed_one, seed_two);
+        }
+    }
 }

@@ -1,0 +1,101 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa3534d78ecf4bdfeb3a12d255823c1e, type: 3}
+  m_Name: Brits Troop Names
+  m_EditorClassIdentifier: 
+  Prefixes_TXT: {fileID: 4900000, guid: 95ec512b0df1e27918d5da6381ad7396, type: 3}
+  Suffixes_TXT: {fileID: 4900000, guid: 6eea6b7d6dbe9a90181bb5199cc0d8b2, type: 3}
+  Whitespace: 1
+  Prefixes:
+  - Henry
+  - William
+  - Samuel
+  - Peter
+  - Joshua
+  - Morgan
+  - Arthur
+  - Finley
+  - Fred
+  - Daniel
+  - Charlie
+  - Charles
+  - Scott
+  - Jonah
+  - Harry
+  - Harrison
+  - Godfrey
+  - Jeffrey
+  - Mark
+  - John
+  - Arthur
+  - Calum
+  - Thomas
+  - Bradley
+  - Nathan
+  - Paul
+  - Steve
+  - Matthew
+  - Luke
+  - Harold
+  - Jimmy
+  - Kai
+  - Chuck
+  - Richard
+  - Billy
+  - Donald
+  - Jack
+  - Eugene
+  - Harvey
+  - Rufus
+  - Montgomery
+  - Guy
+  - Ed
+  Suffixes:
+  - Finger
+  - Boar
+  - Foster
+  - Stevens
+  - Hardrada
+  - Godwinson
+  - Edwards
+  - Churchill
+  - Matthews
+  - Morgan
+  - Fricker
+  - Beck
+  - Daniels
+  - Berry
+  - Bonnet
+  - Clark
+  - Carey
+  - Wakins
+  - Pierce
+  - O'Hines
+  - Tudor
+  - Pover
+  - Hallas
+  - Sargent
+  - Jones
+  - Gallagah
+  - Orson
+  - Archer
+  - Truekidd
+  - Coalpigge
+  - Firespinner
+  - Kent
+  - Worth
+  - Baker
+  - Dickens
+  - Poe
+  - Banner
+  - Torey
+  - Vorley

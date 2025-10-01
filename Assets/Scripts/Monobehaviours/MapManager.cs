@@ -10,20 +10,16 @@ using HenrysMapUtils;
 public class MapManager : NetworkBehaviour
 {
     [Header(" - Main - ")]
-    [SerializeField] NoiseManager _NoiseManager;
-    [SerializeField] Renderer PreviewRenderer;
     [SerializeField] SessionManager _SessionManager;
     [SerializeField] GameplayManager _GameplayManager;
     public bool AnimatedWater = true;
 
     [Header(" - Map - ")]
     public int MapSize = 16;
-    [SerializeField] Transform MapHolder;
     [SerializeField] Transform TileHolder;
     [SerializeField] Transform ColliderHolder;
     [SerializeField] Transform PieceHolder;
     [SerializeField] Transform BackgroundHolder;
-    [SerializeField] float TileHeightVariation = 0.7f;
 
     [Header(" - Tiles - ")]
     [SerializeField] TileLookup _TileLookup;
@@ -45,10 +41,12 @@ public class MapManager : NetworkBehaviour
     [SerializeField] Material BorderMaterial;
     [SerializeField] GameObject[] BorderPrefabs;
 
+    int seed_one = 123456;
+    int seed_two = 987654;
+
     // Local only
     public bool ready {get; private set;}
     public float GrassLimit {get; private set;}
-
     float StoneLimit = 0.5f;
     bool generated_bg;
 
@@ -57,7 +55,6 @@ public class MapManager : NetworkBehaviour
     // Synced from Host
     public float[] map_data_raw;
     int[] tile_pieces;
-    int[] tile_ownerships;
     
     List<MeshFilter> grass_mesh = new List<MeshFilter>();
     List<MeshFilter> sand_mesh = new List<MeshFilter>();
@@ -265,7 +262,7 @@ public class MapManager : NetworkBehaviour
 
         // Towers pass
         PlaceTowers(_SessionManager.GetPlayerCount());
-        VisibleTilesPass();
+        OwnershipVisibilityPass();
         
         // Extras pass
         ExtrasPass();
@@ -386,32 +383,39 @@ public class MapManager : NetworkBehaviour
 
     public void ClientGenerateMap(){
         CreateTiles(true);
-        VisibleTilesPass();
+        OwnershipVisibilityPass();
         GenerateMap();
     }
 
-    public void VisibleTilesPass(){
+    public void OwnershipVisibilityPass(){
+        _FactionLookup.ShuffleLocationNames(seed_one, seed_two);
         foreach(Tile tile in Tiles){
-            if(tile.owner == _SessionManager.OurInstance.FactionData()){
-                tile.Visible();
-            }
-
-            if(tile.piece == _SessionManager.OurInstance.FactionData().Tower()){
-                _SessionManager.OurInstance.SnapCameraToPosition(CalcTileWorldPosition(tile) + new Vector3(8,0,0));
+            if(tile.piece.CheckType("Tower")){
+                TileStats stats = new TileStats(tile, "temp", 5);
+                if(tile.piece == _SessionManager.OurInstance.FactionData().Tower()){
+                    _SessionManager.OurInstance.SnapCameraToPosition(CalcTileWorldPosition(tile) + new Vector3(8,0,0));
+                    MarkRadiusAsVisible(tile, stats.ownership_radius);
+                }
+                MarkRadiusAsOwned(tile, stats.ownership_radius, tile.piece.Owner(), true);
+                stats.SetName(TileToLocationName(tile));
             }
         }
+    }
+
+    public string TileToLocationName(Tile tile){
+        return tile.owner.LocationNameset().GetLocationName(tile.ID);
     }
 
     public void CreateTiles(bool client){
         Tiles = new Tile[map_data_raw.Length];
         for(int i = 0; i < map_data_raw.Length; i++){
             PieceData piece = _PieceLookup.Piece("UNMARKED");
-            Faction owner = null;
-            if(client){
+
+            if(client)
                 piece = _PieceLookup.Piece(tile_pieces[i]);
-                owner = _FactionLookup.GetFaction(tile_ownerships[i]);
-            }
-            Tiles[i] = new Tile(i, map_data_raw[i], GetRawType(map_data_raw[i]), piece, CalcTileWorldPosition(i), owner);
+
+            Tile new_tile = new Tile(i, map_data_raw[i], GetRawType(map_data_raw[i]), piece, CalcTileWorldPosition(i), null);
+            Tiles[i] = new_tile;
         }
 
         foreach(Tile t in Tiles){
@@ -474,15 +478,9 @@ public class MapManager : NetworkBehaviour
                                 PlayerInstance player = _SessionManager.GetPlayer(placed_castles.Count);
                                 Faction _owner = player.FactionData();
                                 check_tile.SetPiece(player.FactionData().Tower());
-                                TileStats stats = new TileStats(check_tile, "Capital", 2, 5, 3, 3, 3);
-                                stats.AddIndustry(2);
-                                stats.AddPopulation(1);
-                                check_tile.SetStats(stats);
-                                MarkRadiusAsOwned(check_tile, 2, _owner, true);
                             }
                             else{ // Place Fort
-                                check_tile.SetPiece(_PieceLookup.Piece("Fort (Empty)"));
-                                check_tile.SetStats(new TileStats(check_tile, "Fort", 2, 5, 3, 3, 3));
+                                check_tile.SetPiece(_PieceLookup.Piece_ByName("Fort (Empty)"));
                             }
                             placed_castles.Add(TileToCoords(check_tile));
                         }
@@ -526,26 +524,20 @@ public class MapManager : NetworkBehaviour
             return;
         
         if(IsTileFortress(tile)){
-            int radius = 0;
             if(tile.piece.CheckType("Tower")){
                 RPC_PieceChanged(tile.ID, _PieceLookup.ID(owner.Tower()));
-                radius = 2;
             }
             else{
                 RPC_PieceChanged(tile.ID, _PieceLookup.ID(owner.Fort()));
-                radius = 1;
             }
-   
-            if(tile.bonus_data != 0)
-                radius = tile.bonus_data;
 
-            RPC_Conquer(tile.ID, radius, _FactionLookup.ID(owner));
+            RPC_Conquer(tile.ID, _FactionLookup.ID(owner));
         }
     }
 
     void MarkRadiusAsOwned(Tile tile, int radius, Faction owner, bool do_not_overwrite){
         MarkTileAsOwned(tile, owner, do_not_overwrite);
-        tile.SetBonusData(radius);
+        tile.stats.SetOwnershipRadius(radius);
         foreach(Tile tile_ in TilesByDistance(tile, radius, false)){
             MarkTileAsOwned(tile_, owner, do_not_overwrite);
         }
@@ -558,9 +550,18 @@ public class MapManager : NetworkBehaviour
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPC_Conquer(int tile_id, int radius, int owner_id, RpcInfo info = default){
+    public void RPC_Conquer(int tile_id, int owner_id, RpcInfo info = default){
+        int radius = 2;
+        TileStats stats = Tiles[tile_id].stats;
+        if(stats != null)
+            radius = stats.ownership_radius;
+        else{
+            stats = new TileStats(Tiles[tile_id], "temp", 3);
+        }
+
         MarkRadiusAsOwned(Tiles[tile_id], radius, _FactionLookup.GetFaction(owner_id), false);
         RefreshAllBorders();
+        stats.SetName(TileToLocationName(Tiles[tile_id]));
     }
 
     void MarkTileAsOwned(Tile tile, Faction owner, bool do_not_overwrite){
@@ -721,17 +722,9 @@ public class MapManager : NetworkBehaviour
     // NOISE GENERATION //
 
     public void EstablishNoiseMap(){
-        _NoiseManager.ImageWidth = MapSize;
-        _NoiseManager.ImageHeight = MapSize;
-        _NoiseManager.NewCachedNoise();
-        map_data_raw = _NoiseManager.GetCachedNoise();
-        SetImage();
-        MapHolder.localScale = new Vector3(MapSize, MapSize, MapSize);
+        NoiseGenerator noise_gen = new NoiseGenerator(MapSize, 3, 12, 300);
+        map_data_raw = noise_gen.Generate();
         GrassLimit = Random.Range(-0.2f, -0.6f);
-    }
-
-    void SetImage(){
-        PreviewRenderer.material.mainTexture = _NoiseManager.NoiseAsImage(_NoiseManager.GetCachedNoise(), _NoiseManager.ImageWidth, _NoiseManager.ImageHeight);
     }
 
     // LARGE DATA SETTING //
@@ -742,10 +735,6 @@ public class MapManager : NetworkBehaviour
 
     public void SetGrassLimit(float limit){
         GrassLimit = limit;
-    }
-
-    public void SetTileOwnership(int[] data){
-        tile_ownerships = data;
     }
 
     public void SetTilePieces(int[] data){
@@ -770,13 +759,5 @@ public class MapManager : NetworkBehaviour
             tp[i] = _PieceLookup.ID(Tiles[i].piece);
         }
         return tp;
-    }
-
-    public int[] GetTileOwnership(){
-        int[] to = new int[map_data_raw.Length];
-        for(int i = 0; i < map_data_raw.Length; i++){
-            to[i] = _FactionLookup.ID(Tiles[i].owner);
-        }
-        return to;
     }
 }

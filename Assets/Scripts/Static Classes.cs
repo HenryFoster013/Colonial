@@ -23,6 +23,23 @@ public static class HenrysUtils{
         GameObject.DontDestroyOnLoad(new_sfx);
     }
 
+    // SEED GEN //
+
+    public static void SeedShuffle<T>(ref T[] array, int seed){
+        System.Random random = new System.Random(seed);
+        T temp;
+        int random_pointer = 0;
+
+        for(int i = array.Length - 1; i >= 0; i--){
+            random_pointer = random.Next(i + 1);
+            while(random_pointer >= array.Length)
+                random_pointer -= array.Length;
+            temp = array[random_pointer];
+            array[random_pointer] = array[i];
+            array[i] = temp;
+        }
+    }
+
     // LOOKUPS //
 
     public static FactionLookup GetFactionLookup(){return Resources.Load<FactionLookup>("_ Faction Lookup");}

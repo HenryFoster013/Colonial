@@ -427,3 +427,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TitleScreen: Title Screen
   AccountCreation: Account Creation
+  Namesets:
+  - {fileID: 11400000, guid: 3348cc1d659bc56d298f9bc070043b5d, type: 2}
+  - {fileID: 11400000, guid: ab8a949021788ed988731089ff42155f, type: 2}
+  - {fileID: 11400000, guid: e326585127f3f54738f64565d17936b6, type: 2}
+  - {fileID: 11400000, guid: 9c65f57bb278ee38e84e3cae80afaa5c, type: 2}
+  - {fileID: 11400000, guid: f4ca22dae4adfd2bcb6667466dafa662, type: 2}
+  - {fileID: 11400000, guid: 6a594d592b6820aa785dc9ba85de7390, type: 2}

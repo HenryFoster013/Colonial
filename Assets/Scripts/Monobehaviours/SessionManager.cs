@@ -137,7 +137,6 @@ public class SessionManager : MonoBehaviour
 
         _ConnectionManager.SendRawMapData(0, _MapManager.MapSize, _MapManager.GrassLimit, _MapManager.GetRawMapData());
         _ConnectionManager.SendLargeIntArray(1, _MapManager.GetTilePieces());
-        _ConnectionManager.SendLargeIntArray(2, _MapManager.GetTileOwnership());
     }
 
     public void GotMapDataRaw(int map_size, float grass_limit, float[] data){
@@ -149,14 +148,7 @@ public class SessionManager : MonoBehaviour
         map_data_recieved++;
         CheckWeHaveAllData();
     }
-    
-    public void GotTileOwnership(int[] data){
-        if(Hosting)
-            return;
-        _MapManager.SetTileOwnership(data);
-        map_data_recieved++;
-        CheckWeHaveAllData();
-    }
+
 
     public void GotTilePieces(int[] data){
         if(Hosting)
@@ -170,7 +162,7 @@ public class SessionManager : MonoBehaviour
         if(Hosting)
             return;
         
-        if(map_data_recieved > 2 && !generated_map){
+        if(map_data_recieved > 1 && !generated_map){
             generated_map = true;
             ClientStartGame();
         }
