@@ -64,38 +64,6 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
         }
     }
 
-    public void SendRawMapData(int header, int map_size, float grass_limit, float[] array){
-
-        // Convert float array to byte data
-        byte[] floatBytes = new byte[array.Length * sizeof(float)];
-        Buffer.BlockCopy(array, 0, floatBytes, 0, floatBytes.Length);
-
-        byte[] data = new byte[sizeof(int) + sizeof(int) + sizeof(float) + floatBytes.Length];
-        int offset = 0;
-        
-        // Write header
-        Buffer.BlockCopy(System.BitConverter.GetBytes(header), 0, data, offset, sizeof(int));
-        offset += sizeof(int);
-
-        // Write MapSize as second part of header
-        Buffer.BlockCopy(System.BitConverter.GetBytes(map_size), 0, data, offset, sizeof(int));
-        offset += sizeof(int);
-
-        // Write Grass_Limit as third part of header
-        Buffer.BlockCopy(System.BitConverter.GetBytes(grass_limit), 0, data, offset, sizeof(float));
-        offset += sizeof(float);
-
-        // Write main data
-        Buffer.BlockCopy(floatBytes, 0, data, offset, floatBytes.Length);
-
-        foreach(PlayerRef player in _runner.ActivePlayers){
-            if(player != _runner.LocalPlayer){
-                _runner.SendReliableDataToPlayer(player, ReliableKey.FromInts(key_counter, 0, 0, 0), data);
-                key_counter++;
-            }
-        }
-    }
-
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data){
         int offset = data.Offset;
 
@@ -103,27 +71,17 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
         int type = System.BitConverter.ToInt32(data.Array, offset);
         offset += sizeof(int);
         
-        if(type == 0){ // Map Data Raw (float)
-
-            int map_size = System.BitConverter.ToInt32(data.Array, offset);
-            offset += sizeof(int);
-            
-            float grass_limit = System.BitConverter.ToSingle(data.Array, offset);
-            offset += sizeof(float);
+        if(type == 0){ // floats
 
             int data_count = (data.Count - sizeof(int) - sizeof(int) - sizeof(float)) / sizeof(float);
             float[] decompressed_data = new float[data_count];
-
             Buffer.BlockCopy(data.Array, offset, decompressed_data, 0, data.Count - sizeof(float) - sizeof(int) - sizeof(int));
-            //_SessionManager.GotMapDataRaw(map_size, grass_limit, decompressed_data);
         }
 
-        else{ // Tile Pieces
+        if(type == 1){ // Integers
             int data_count = (data.Count - sizeof(int)) / sizeof(int);
             int[] decompressed_data = new int[data_count];
-
             Buffer.BlockCopy(data.Array, offset, decompressed_data, 0, data.Count - sizeof(int));
-            //_SessionManager.GotTilePieces(decompressed_data);
         }
     }
 

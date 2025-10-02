@@ -387,7 +387,7 @@ public class MapManager : NetworkBehaviour
     }
 
     public void OwnershipVisibilityPass(){
-        _FactionLookup.ShuffleLocationNames(seed.first_third, seed.second_third);
+        _FactionLookup.ShuffleLocationNames(seed.RandomInt(), seed.RandomInt());
         foreach(Tile tile in Tiles){
             if(tile.piece.CheckType("Tower")){
                 TileStats stats = new TileStats(tile, "temp", 5);
