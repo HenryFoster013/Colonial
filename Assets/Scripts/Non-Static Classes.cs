@@ -7,35 +7,22 @@ namespace HenrysMapUtils{
     public class Seed{
 
         public int value {get; private set;}
-        public int first_third {get; private set;}
-        public int second_third {get; private set;}
-        public int final_third {get; private set;}
         System.Random random;
 
         public Seed(){
             value = Random.Range(0, 999999999);
-            Setup();
+            random = new System.Random(value);
         }
 
         public Seed(int seed){
             value = seed;
-            Setup();
-        }
-
-        void Setup(){ // Note this assumes the number is representable in 9 digits
-            first_third = value / 1000000;
-            second_third = (value - (first_third * 1000000)) / 1000;
-            final_third = value - (first_third * 1000000) - (second_third * 1000);
             random = new System.Random(value);
         }
 
-        public float Range(float min, float max){ // By defalt returns [0,1], this multiplies that value by the range (max - min), then adds the offset (min)
-            return (float)(random.NextDouble() * (max - min) + min);
-        }
-
-        public int RangeInt(int min, int max){
-            return random.Next(min, max);
-        }
+        // By defalt returns [0,1], this multiplies that value by the range (max - min), then adds the offset (min)
+        public float Range(float min, float max){return (float)(random.NextDouble() * (max - min) + min);}
+        public int RangeInt(int min, int max){return random.Next(min, max);}
+        public int RandomInt(){return random.Next();}
     }
 
     public class NoiseGenerator{
