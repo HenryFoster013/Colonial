@@ -31,6 +31,7 @@ public class PlayerManager : MonoBehaviour
 
     [Header(" --- UI --- ")]
     [SerializeField] GameObject TroopSpawnMenu;
+    [SerializeField] GameObject SpwanMenuArrowsHolder;
     [SerializeField] GameObject EndTurnButton;
     [SerializeField] TMP_Text CoinDisplay;
 
@@ -65,7 +66,6 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] Transform PopulationHolder;
     [SerializeField] Transform ProduceHolder;
     [SerializeField] Transform IndustryHolder;
-
 
     [Header("Troop Popups")]
     [SerializeField] GameObject TroopButton;
@@ -585,9 +585,8 @@ public class PlayerManager : MonoBehaviour
         for(int i = 0; i < troops_owned.Length; i++){
             troops_owned[i] = true;
         }
-
+    
         for(int count = 0; count < troops.Length; count++){
-
             GameObject g = GameObject.Instantiate(TroopRenderer);
             RenderTexture rendtext = new RenderTexture(333, 512, 24);
             rendtext.Create();
@@ -605,24 +604,56 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void SpawnMenuArrows(int difference){
+        troop_spawn_offset += difference;
+        PlaySFX("UI_2", SFX_Lookup);
+        OpenSpawnMenu();
+    }
+
+    int RationaliseTroopSpawnOffset(){
+        int total_troops = CountAvailableTroops();
+        int max_offset = ((total_troops + 3) / 4) - 1; // Divides by 4 rounded up
+        SpwanMenuArrowsHolder.SetActive(total_troops > 4);
+
+        if(troop_spawn_offset < 0)
+            troop_spawn_offset = max_offset;
+        else if(troop_spawn_offset > max_offset)
+            troop_spawn_offset = 0;
+
+        int displayed_count = total_troops - troop_spawn_offset * 4;
+        if(displayed_count > 4)
+            displayed_count = 4;
+
+        return displayed_count;
+    }
+
+    int CountAvailableTroops(){
+        int total_troops = 0;
+        foreach(bool owned in troops_owned){
+            if(owned)
+                total_troops++;
+        }
+        return total_troops;
+    }
+
     void OpenSpawnMenu(){
+
+        if(!TroopSpawnMenu.activeSelf)
+            PlaySFX("UI_Raise", SFX_Lookup);
 
         foreach(Transform t in troop_buttons)
             t.gameObject.SetActive(false);
 
-        int total_troops = 0;
-        for(int i = 0; i < troops_owned.Length; i++){
-            if(troops_owned[i]){
-                total_troops++;
-            }
-        }
+        RationaliseTroopSpawnOffset();
+        int start_point = troop_spawn_offset * 4;
+        int displayed_count = RationaliseTroopSpawnOffset();
 
         float offy = 95;
-        float centering = (-1 * offy * total_troops) / 2;
+        float centering = (-1 * offy * displayed_count) / 2;
         centering += (offy / 2);
         int active_count = 0;
 
-        for(int i = 0; i < troops_owned.Length; i++){
+        for(int i = start_point; i < troops_owned.Length && i < start_point + 4; i++){
             if(troops_owned[i]){
                 TMP_Text cost_text = troop_buttons[i].GetChild(0).GetChild(3).GetComponent<TMP_Text>();
                 cost_text.color = Color.white;

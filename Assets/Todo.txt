@@ -1,9 +1,5 @@
 To Develop
 - stats sync (auto check for specials)
-- locations have names
-- display troop names
-- noise comes from a seed which is transmitted
-- make the troops smooth scroll when more than 4
 - create the engineer as a class
 
 To Model:

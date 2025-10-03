@@ -256,7 +256,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.84586, y: 0.84586, z: 0.84586}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1227609888}
   m_Father: {fileID: 656314379}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3595,7 +3596,6 @@ RectTransform:
   - {fileID: 48529155}
   - {fileID: 2108722837}
   - {fileID: 1506853251}
-  - {fileID: 1227609888}
   - {fileID: 953086934}
   m_Father: {fileID: 1986801054}
   m_RootOrder: 0
@@ -4978,7 +4978,7 @@ RectTransform:
   - {fileID: 1034381969}
   - {fileID: 491572921}
   m_Father: {fileID: 656314379}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -6133,19 +6133,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1227609887}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.1822288, y: 1.1822288, z: 1.1822288}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2109939644}
   - {fileID: 1702617214}
-  m_Father: {fileID: 656314379}
-  m_RootOrder: 6
+  m_Father: {fileID: 48529155}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 361.76196}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1235517163
@@ -9312,7 +9312,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1702617216}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2146075082}
+        m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
+        m_MethodName: SpawnMenuArrows
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: -1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1702617216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12033,7 +12045,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2109939646}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2146075082}
+        m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
+        m_MethodName: SpawnMenuArrows
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2109939646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12308,6 +12332,7 @@ MonoBehaviour:
   CameraSpine: {fileID: 1029655847}
   OurTurn: 0
   TroopSpawnMenu: {fileID: 48529154}
+  SpwanMenuArrowsHolder: {fileID: 1227609887}
   EndTurnButton: {fileID: 661793618}
   CoinDisplay: {fileID: 503266993}
   TurnDisplay: {fileID: 1528910920}
