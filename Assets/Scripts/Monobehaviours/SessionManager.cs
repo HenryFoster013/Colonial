@@ -97,25 +97,15 @@ public class SessionManager : NetworkBehaviour
         if(!AllPlayersReady())
             return;
         
-        ReapplyPlayerIDs();
         _ConnectionManager.CloseOffSession();
         _MapManager.seed = new Seed();
-
-        StartGame();
-        StartCoroutine(ClientDelay());
-    }
-
-    IEnumerator ClientDelay(){
-        yield return new WaitForSeconds(1f);
-        RPC_StartGame(_MapManager.seed.value);
+        RPC_StartGame(Random.Range(0,999999999));
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_StartGame(int seed_value, RpcInfo info = default){
-        if(Hosting) // Host has already set up
-            return;
-
         _MapManager.seed = new Seed(seed_value);
+        ReapplyPlayerIDs();
         StartGame();
     }
 
