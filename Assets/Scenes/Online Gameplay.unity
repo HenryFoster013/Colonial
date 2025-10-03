@@ -239,7 +239,7 @@ GameObject:
   m_Component:
   - component: {fileID: 48529155}
   m_Layer: 5
-  m_Name: Troop Spawn Menu
+  m_Name: Spawn Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5167,7 +5167,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 56.6, y: 62}
+  m_AnchoredPosition: {x: 56.600098, y: 62}
   m_SizeDelta: {x: 199, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1029655846
@@ -6120,7 +6120,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1227609888}
   m_Layer: 5
-  m_Name: Troop Spawn Buttons
+  m_Name: Spawn Buttons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12331,8 +12331,8 @@ MonoBehaviour:
   CameraHook: {fileID: 776516041}
   CameraSpine: {fileID: 1029655847}
   OurTurn: 0
-  TroopSpawnMenu: {fileID: 48529154}
-  SpwanMenuArrowsHolder: {fileID: 1227609887}
+  SpawnMenu: {fileID: 48529154}
+  SpawnMenuArrowsHolder: {fileID: 1227609887}
   EndTurnButton: {fileID: 661793618}
   CoinDisplay: {fileID: 503266993}
   TurnDisplay: {fileID: 1528910920}

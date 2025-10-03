@@ -47,4 +47,15 @@ public static class HenrysUtils{
     public static SoundEffectLookup GetSFXLookup(){return Resources.Load<SoundEffectLookup>("_ SFX Lookup");}
     public static TileLookup GetTileLookup(){return Resources.Load<TileLookup>("_ Tile Lookup");}
     public static TroopLookup GetTroopLookup(){return Resources.Load<TroopLookup>("_ Troop Lookup");}
+
+    // MISC //
+
+    public static int CountBooleanArray(bool[] array){
+        int count = 0;
+        foreach(bool owned in array){
+            if(owned)
+                count++;
+        }
+        return count;
+    }
 }
