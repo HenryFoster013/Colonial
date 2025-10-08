@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3901857504830502793}
   m_Layer: 7
-  m_Name: Troop Renderer
+  m_Name: Item Renderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

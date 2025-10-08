@@ -4,26 +4,23 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class TroopButton : MonoBehaviour{
+public class SpawnButton : MonoBehaviour{
 
-    [SerializeField] RawImage Display;
     [SerializeField] Image MainBG;
     [SerializeField] Image CostBG;
     [SerializeField] TMP_Text CostText;
-    int troop_id;
-    PlayerManager pm; 
+    [SerializeField] RawImage RenderTextureDisplay;
+    PreviewRenderer pr; 
     
-    public void Setup(int count, PlayerManager player_manag, Color col, int cost, RenderTexture render_texture){
-        troop_id = count;
-        pm = player_manag;
-
-        Display.texture = render_texture;
+    public void Setup(PreviewRenderer _pr, Color col, int cost, RenderTexture tex){
+        pr = _pr;
         MainBG.GetComponent<Image>().color = col;
         CostBG.GetComponent<Image>().color = col;
         CostText.text = cost.ToString();
+        RenderTextureDisplay.texture = tex;
     }
 
     public void Pressed(){
-        pm.SpawnTroopButton(troop_id);
+        pr.PressButton();
     }
 }

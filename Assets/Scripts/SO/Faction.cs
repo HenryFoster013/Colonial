@@ -8,11 +8,13 @@ public class Faction : ScriptableObject
     [Header(" - Main - ")]
     [SerializeField] string _Type;
     [SerializeField] string _Name;
-    [Header(" - References - ")]
+    [Header(" - Troops - ")]
     [SerializeField] TroopData[] _Troops;
+    [SerializeField] Nameset _TroopNameset;
+    [Header(" - Pieces - ")]
     [SerializeField] PieceData _Tower;
     [SerializeField] PieceData _Fort;
-    [SerializeField] Nameset _TroopNameset;
+    [SerializeField] PieceData[] _Buildings;
     [SerializeField] Nameset _LocationNameset;
     [Header(" - Display - ")]
     [SerializeField] Color _Colour = new Color(1f,1f,1f,1f);
@@ -35,6 +37,8 @@ public class Faction : ScriptableObject
     public Sprite Flag(){return _Flag;}
     public Sprite Mini_Flag(){return _Mini_Flag;}
     public TroopData[] Troops(){return _Troops;}
+    public PieceData[] Buildings(){return _Buildings;}
+    public PieceData Building(int index){return _Buildings[index];}
     public PieceData Tower(){return _Tower;}
     public PieceData Fort(){return _Fort;}
     public int TextureOffset(){return _TextureOffset;}
