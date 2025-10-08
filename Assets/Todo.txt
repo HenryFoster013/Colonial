@@ -1,4 +1,6 @@
 To Develop
+- make namegen for usernames use the name lookup system
+- often spwaning a building also selects a tile (disable a mouseclick) (check this first)
 - stats sync (auto check for specials)
 - create the engineer as a class
 

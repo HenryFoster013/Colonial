@@ -7,6 +7,7 @@ using System.Linq;
 using UnityEngine.EventSystems;
 using static HenrysUtils;
 using HenrysMapUtils;
+using Fusion;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -220,7 +221,9 @@ public class PlayerManager : MonoBehaviour
     // SELECTION //
 
     public void SpawnBuildingButton(PieceData piece){
-        
+        _GameplayManager.RPC_SpawnBuilding(current_tile.ID, _PieceLookup.ID(piece));
+        CloseSpawnMenu();
+        Deselect();
     }
 
     public void SpawnTroopButton(int i){
@@ -229,9 +232,9 @@ public class PlayerManager : MonoBehaviour
             if(troops[i].Cost() <= _GameplayManager.current_coins && troops_owned[i]){
                 _GameplayManager.SpendStars(troops[i].Cost());
                 block_world_clicks = true;
+                _GameplayManager.RPC_SpawnTroop(_TroopLookup.ID(troops[i]), current_tile.ID, _SessionManager.OurInstance.ID);
                 CloseSpawnMenu();
                 Deselect();
-                _GameplayManager.RPC_SpawnTroop(_TroopLookup.ID(troops[i]), current_tile.ID, _SessionManager.OurInstance.ID);
             }
             else
                 PlaySFX("UI_Error_2", SFX_Lookup);
@@ -429,13 +432,7 @@ public class PlayerManager : MonoBehaviour
     public void SetConstructables(Tile tile){
         buildings_constructable = new bool[buildings_owned.Length];
         for(int i = 0; i < buildings_owned.Length; i++){
-
-            bool constructable = buildings_owned[i];
-            if(constructable)
-                constructable = building_renders[i].GetPieceData().Compatible(tile.type);
-            if(constructable)
-                constructable = building_renders[i].GetPieceData().Compatible(tile.piece);
-
+            bool constructable = buildings_owned[i] && BuildingValid(tile, building_renders[i].GetPieceData());
             buildings_constructable[i] = constructable;
         }
     }

@@ -10,6 +10,7 @@ public class GameplayManager : NetworkBehaviour
     [Header("References")]
     [SerializeField] FactionLookup _FactionLookup;
     [SerializeField] TroopLookup _TroopLookup;
+    [SerializeField] PieceLookup _PieceLookup;
     [SerializeField] PlayerManager _PlayerManager;
     [SerializeField] SessionManager _SessionManager;
     [SerializeField] SoundEffectLookup SFX_Lookup;
@@ -205,6 +206,15 @@ public class GameplayManager : NetworkBehaviour
     void SpawnEffect(GameObject effect, int tile){
         GameObject g = GameObject.Instantiate(effect);
         g.transform.position = _MapManager.CalcTileWorldPosition(tile);
+    }
+
+    // Building Spawning //
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RPC_SpawnBuilding(int tile_id, int piece_id, RpcInfo info = default){
+        if(!BuildingValid(_MapManager.GetTile(tile_id), _PieceLookup.Piece(piece_id)))
+            return;
+        _MapManager.RPC_PieceChanged(tile_id, piece_id);
     }
 
     // Troop Spawning //
