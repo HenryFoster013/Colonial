@@ -1335,6 +1335,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
   _TroopLookup: {fileID: 11400000, guid: 8de0005ed8ac4ca48a7e9746a64c37fc, type: 2}
+  _PieceLookup: {fileID: 11400000, guid: 91ca4b05291bee14098208e490613db6, type: 2}
   _PlayerManager: {fileID: 2146075082}
   _SessionManager: {fileID: 308904221}
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
+using HenrysMapUtils;
 
 public static class HenrysUtils{
     
@@ -66,5 +67,9 @@ public static class HenrysUtils{
             if (child.GetComponentInChildren<Transform>() != null)
                 SetLayer(child.gameObject, _layer);
         }
+    }
+
+    public static bool BuildingValid(Tile tile, PieceData piece){
+        return piece.Compatible(tile.piece) && piece.Compatible(tile.type);
     }
 }
