@@ -20,4 +20,11 @@ MonoBehaviour:
   _RandomiseFirstChildRotation: 1
   _ContainsBillboards: 0
   _Walkable: 1
-  _CanSpawnTroops: 0
+  _Fort: 0
+  _Cost: 1
+  _CompatibleTiles:
+  - {fileID: 11400000, guid: 7cb8fe8a787d4e849979c6ea5e635b99, type: 2}
+  _CompatiblePieces:
+  - {fileID: 11400000, guid: 8a1879b64b3d3844f9fdfa0d010c02e8, type: 2}
+  - {fileID: 11400000, guid: 36871afea83f4e847b72a28748611859, type: 2}
+  _OwningFaction: {fileID: 0}

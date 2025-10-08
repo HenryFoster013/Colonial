@@ -58,4 +58,13 @@ public static class HenrysUtils{
         }
         return count;
     }
+
+    public static void SetLayer(GameObject obj, int _layer){
+        obj.layer = _layer;
+        foreach (Transform child in obj.transform){
+            child.gameObject.layer = _layer;
+            if (child.GetComponentInChildren<Transform>() != null)
+                SetLayer(child.gameObject, _layer);
+        }
+    }
 }
