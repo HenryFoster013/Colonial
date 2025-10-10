@@ -17,10 +17,15 @@ public class PieceData : ScriptableObject
     [Header("Gameplay")]
     [SerializeField] bool _Walkable;
     [SerializeField] bool _Fort;
+    [SerializeField] Faction _OwningFaction;
+    [SerializeField] int _Population;
+    [SerializeField] int _Produce;
+    [SerializeField] int _Industry;
+    [Header("Placement")]
     [SerializeField] int _Cost;
     [SerializeField] TileData[] _CompatibleTiles;
     [SerializeField] PieceData[] _CompatiblePieces;
-    [SerializeField] Faction _OwningFaction;
+    
 
     public bool CheckType(string s){
         return (s.ToUpper() == _Type.ToUpper());
@@ -47,6 +52,9 @@ public class PieceData : ScriptableObject
 
     public bool Walkable(){return _Walkable;}
     public int Cost(){return _Cost;}
+    public int Population(){return _Population;}
+    public int Produce(){return _Produce;}
+    public int Industry(){return _Industry;}
     public bool ContainsBillboards(){return _ContainsBillboards;}
     public GameObject Prefab(){return _Prefab;}
     public string Name(){return _Name;}

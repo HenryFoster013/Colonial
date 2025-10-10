@@ -237,6 +237,19 @@ public class GameplayManager : NetworkBehaviour
         SpawnTroop(_TroopLookup.Troop(troop_id), _MapManager.GetTile(tile), owner);
     }
 
+    public bool ValidTroopSpawn(TroopData troop, Tile tile){
+        bool valid = _MapManager.IsTileFortress(tile);
+
+        if(valid)
+            valid = troop.PopulationCost() <= tile.stats.FreePopulation();
+        if(valid)
+            valid = troop.ProduceCost() <= tile.stats.FreeProduce();
+        if(valid)
+            valid = troop.IndustryCost() <= tile.stats.FreeIndustry();
+
+        return valid;
+    }
+
     public void SpawnTroop(TroopData troop_data, Tile tile, int owner){
 
         if(!_SessionManager.Hosting)

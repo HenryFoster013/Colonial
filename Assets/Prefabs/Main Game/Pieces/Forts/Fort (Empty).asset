@@ -21,3 +21,10 @@ MonoBehaviour:
   _ContainsBillboards: 0
   _Walkable: 1
   _Fort: 1
+  _OwningFaction: {fileID: 0}
+  _Population: 2
+  _Produce: 2
+  _Industry: 2
+  _Cost: 0
+  _CompatibleTiles: []
+  _CompatiblePieces: []

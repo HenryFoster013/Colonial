@@ -21,6 +21,10 @@ MonoBehaviour:
   _ContainsBillboards: 0
   _Walkable: 1
   _Fort: 0
+  _OwningFaction: {fileID: 0}
+  _Population: 0
+  _Produce: 0
+  _Industry: 1
   _Cost: 3
   _CompatibleTiles:
   - {fileID: 11400000, guid: 7cb8fe8a787d4e849979c6ea5e635b99, type: 2}
@@ -29,4 +33,3 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3a1b7f6330207a242a0082f313aaa4de, type: 2}
   - {fileID: 11400000, guid: 79a127b177eb43c4c938ce2190c54d2c, type: 2}
   - {fileID: 11400000, guid: 63dccfee067861a4d8e08a11e6256e71, type: 2}
-  _OwningFaction: {fileID: 0}

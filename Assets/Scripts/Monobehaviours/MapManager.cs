@@ -386,6 +386,7 @@ public class MapManager : NetworkBehaviour
         GenerateMap();
     }
 
+    List<TileStats> towers_forts_stats = new List<TileStats>();
     public void OwnershipVisibilityPass(){
         _FactionLookup.ShuffleLocationNames(seed.RandomInt(), seed.RandomInt());
         foreach(Tile tile in Tiles){
@@ -397,7 +398,15 @@ public class MapManager : NetworkBehaviour
                 }
                 MarkRadiusAsOwned(tile, stats.ownership_radius, tile.piece.Owner(), true);
                 stats.SetName(TileToLocationName(tile));
+                stats.RefreshDetails(this);
+                towers_forts_stats.Add(stats);
             }
+        }
+    }
+
+    public void RefreshAllCities(){
+        foreach(TileStats stats in towers_forts_stats){
+            stats.RefreshDetails(this);
         }
     }
 
@@ -542,6 +551,7 @@ public class MapManager : NetworkBehaviour
     public void RPC_PieceChanged(int tile_id, int piece_id, RpcInfo info = default){
         Tiles[tile_id].SetPiece(_PieceLookup.Piece(piece_id));
         GeneratePieceModel(Tiles[tile_id]);
+        RefreshAllCities();
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
@@ -552,11 +562,13 @@ public class MapManager : NetworkBehaviour
             radius = stats.ownership_radius;
         else{
             stats = new TileStats(Tiles[tile_id], "temp", 3);
+            towers_forts_stats.Add(stats);
         }
 
         MarkRadiusAsOwned(Tiles[tile_id], radius, _FactionLookup.GetFaction(owner_id), false);
         RefreshAllBorders();
         stats.SetName(TileToLocationName(Tiles[tile_id]));
+        stats.RefreshDetails(this);
     }
 
     void MarkTileAsOwned(Tile tile, Faction owner, bool do_not_overwrite){
