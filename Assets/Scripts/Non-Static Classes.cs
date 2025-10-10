@@ -141,22 +141,25 @@ namespace HenrysMapUtils{
             name = _name;
             money_produced = money;
 
-            max_population = 3;
-            max_produce = 3;
-            max_industry = 3;
+            ResetMaxes();
 
             population_used = 0;
             produce_used = 0;
             industry_used = 0;
         }
 
-        public void RefreshDetails(MapManager Map){
-            foreach(Tile searched_tile in Map.TilesByDistance(tile, ownership_radius, false)){
+        void ResetMaxes(){
+            max_population = 0;
+            max_produce = 0;
+            max_industry = 0;
+        }
 
-                // Baseline, add up from here
-                max_population = 3;
-                max_produce = 3;
-                max_industry = 3;
+        public void RefreshDetails(MapManager Map){
+            ResetMaxes();
+            foreach(Tile searched_tile in Map.TilesByDistance(tile, ownership_radius, false)){
+                max_population += searched_tile.piece.Population();
+                max_produce += searched_tile.piece.Produce();
+                max_industry += searched_tile.piece.Industry();
             }
         }
 
@@ -178,5 +181,11 @@ namespace HenrysMapUtils{
         public void SetMaxProduce(int amount){max_produce = amount;}
         public void AddMaxIndustry(int amount){max_industry += amount;}
         public void SetMaxIndustry(int amount){max_industry = amount;}
+
+        // Getters //
+
+        public int FreePopulation(){return max_population - population_used;}
+        public int FreeProduce(){return max_produce - produce_used;}
+        public int FreeIndustry(){return max_industry - industry_used;}
     }
 }

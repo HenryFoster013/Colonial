@@ -229,18 +229,30 @@ public class PlayerManager : MonoBehaviour
     public void SpawnTroopButton(int i){
         TroopData[] troops = _SessionManager.LocalFactionData().Troops();
         if(i > -1 && i < troops.Length){
-            if(troops[i].Cost() <= _GameplayManager.current_coins && troops_owned[i]){
+
+            TroopData troop = troops[i];
+
+            // Check Troop Costs
+            bool valid = troops_owned[i];
+            if(valid)
+                valid = troop.Cost() <= _GameplayManager.current_coins; // sync money and move to coins
+            if(valid)
+                valid = _GameplayManager.ValidTroopSpawn(troop, current_tile);
+
+            if(valid){
+
+                // make this a defined purchase function (with all costs)
                 _GameplayManager.SpendStars(troops[i].Cost());
+
+
                 block_world_clicks = true;
-                _GameplayManager.RPC_SpawnTroop(_TroopLookup.ID(troops[i]), current_tile.ID, _SessionManager.OurInstance.ID);
+                _GameplayManager.RPC_SpawnTroop(_TroopLookup.ID(troop), current_tile.ID, _SessionManager.OurInstance.ID);
                 CloseSpawnMenu();
                 Deselect();
             }
             else
                 PlaySFX("UI_Error_2", SFX_Lookup);
         }
-        else
-            PlaySFX("UI_Error_2", SFX_Lookup);
     }
 
     void SelectionLogic(){
@@ -450,24 +462,26 @@ public class PlayerManager : MonoBehaviour
     }
 
     void SpawnStatUnits(ref Transform holder, ref GameObject unit, int max, int amount){
+        Color off_colour = holder.parent.GetComponent<Image>().color;
         foreach(Transform t in holder)
             GameObject.Destroy(t.gameObject);
         for(int i = 1; i <= max; i++){
-            if(i <= amount){
-                GameObject new_unit = GameObject.Instantiate(unit);
-                new_unit.transform.parent = holder;
-                RectTransform rect = new_unit.GetComponent<RectTransform>();
-                rect.localScale = new Vector3(1,1,1); 
-                rect.localPosition  = Vector3.zero;
-                
-                float full_size = 100f;
-                float width = full_size / max;
-                float left = width * (i - 1);
-                rect.offsetMin = new Vector2(left, 0f); // Left, Bottom
-                rect.offsetMax = new Vector2(left + width - full_size, 0f); // Right, Top
+            GameObject new_unit = GameObject.Instantiate(unit);
+            new_unit.transform.SetParent(holder);
+            RectTransform rect = new_unit.GetComponent<RectTransform>();
+            rect.localScale = new Vector3(1,1,1); 
+            rect.localPosition  = Vector3.zero;
 
-                new_unit.SetActive(true);
-            }
+            if(i > amount)
+                new_unit.GetComponent<Image>().color = off_colour;
+            
+            float full_size = 100f;
+            float width = full_size / max;
+            float left = width * (i - 1);
+            rect.offsetMin = new Vector2(left, 0f); // Left, Bottom
+            rect.offsetMax = new Vector2(left + width - full_size, 0f); // Right, Top
+
+            new_unit.SetActive(true);
         }
     }
 

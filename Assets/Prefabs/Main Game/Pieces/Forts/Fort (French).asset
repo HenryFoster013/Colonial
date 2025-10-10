@@ -22,3 +22,9 @@ MonoBehaviour:
   _Walkable: 1
   _Fort: 1
   _OwningFaction: {fileID: 11400000, guid: beb74d94913e7f74284323062eef1eaf, type: 2}
+  _Population: 2
+  _Produce: 2
+  _Industry: 2
+  _Cost: 0
+  _CompatibleTiles: []
+  _CompatiblePieces: []
