@@ -641,7 +641,6 @@ public class PlayerManager : MonoBehaviour
 
     void ResetSpawnMenu(){
         if(!SpawnMenu.activeSelf){
-            PlaySFX("UI_Raise", SFX_Lookup);
             spawn_menu_offset = 0;
         }
 
