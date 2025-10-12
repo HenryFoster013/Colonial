@@ -630,12 +630,14 @@ MonoBehaviour:
   - {fileID: 5529826843203996600}
   - {fileID: 1318410232522749315}
   - {fileID: 2039425777358375933}
+  Face: {fileID: 659562789151275502}
   Shadow: {fileID: 7115972115090445410}
   _Owner: -1
   _Faction_ID: -1
   _UniqueID: 0
   _current_tile: 0
   _health: 0
+  _Name: 
   tile_buffer: -1
 --- !u!136 &3194187414784522355
 CapsuleCollider:

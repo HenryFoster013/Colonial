@@ -515,7 +515,7 @@ public class MapManager : NetworkBehaviour
         return valid;
     }
 
-    bool IsTileFortress(Tile tile){
+    public bool IsTileFortress(Tile tile){
         return (tile.piece.CheckType("Tower") || tile.piece.CheckType("Fort"));
     }
 

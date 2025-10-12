@@ -20,6 +20,7 @@ public class Troop : NetworkBehaviour{
     [SerializeField] Animator Anim;
     public Material BaseMaterial;
     [SerializeField] MeshRenderer[] Meshes;
+    [SerializeField] GameObject Face;
     [SerializeField] GameObject Shadow;
     
     [Networked] public int Owner {get; set;}
@@ -182,6 +183,7 @@ public class Troop : NetworkBehaviour{
             renderer.SetPropertyBlock(skins[state]);
             renderer.gameObject.layer = layer;
         }
+        Face.layer = layer;
     }
 
     // COMBAT //
