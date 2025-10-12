@@ -15,6 +15,9 @@ MonoBehaviour:
   _Type: Swordsman
   _Name: Swordsman
   _Cost: 3
+  _PopulationCost: 1
+  _ProduceCost: 0
+  _IndustryCost: 0
   _MoveDistance: 2
   _AttackDistance: 1
   _Vision: 2

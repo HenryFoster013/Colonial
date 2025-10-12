@@ -29,6 +29,7 @@ public class Troop : NetworkBehaviour{
     [Networked] public int current_tile {get; set;}
     [Networked] public int health {get; set;}
     [Networked] public string Name {get; set;}
+    [Networked] public int HomeTile {get; set;}
     
     MapManager _MapManager;
     SessionManager _SessionManager;
@@ -167,6 +168,7 @@ public class Troop : NetworkBehaviour{
         UI.SetVisible(visible);
         foreach(MeshRenderer mr in Meshes)
             mr.gameObject.SetActive(visible);
+        Face.SetActive(visible);
     }
 
     void UpdateModel(){
@@ -183,7 +185,6 @@ public class Troop : NetworkBehaviour{
             renderer.SetPropertyBlock(skins[state]);
             renderer.gameObject.layer = layer;
         }
-        Face.layer = layer;
     }
 
     // COMBAT //

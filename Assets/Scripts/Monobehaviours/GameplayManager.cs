@@ -45,6 +45,10 @@ public class GameplayManager : NetworkBehaviour
         ResetTroops();
     }
 
+    void Update(){
+        RefreshAllCities();
+    }
+
     // TURNS //
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
@@ -261,9 +265,13 @@ public class GameplayManager : NetworkBehaviour
         if(!_MapManager.CheckTileOwnership(tile, _FactionLookup.GetFaction(_SessionManager.PlayerFactionID(owner))))
             return;
 
+        if(!ValidTroopSpawn(troop_data, tile))
+            return;
+
         NetworkObject new_troop = _ConnectionManager.SpawnObject(troop_data.NetPrefabRef());
         Troop troop = new_troop.gameObject.GetComponent<Troop>();
         troop.Owner = owner;
+        troop.HomeTile = tile.ID;
         troop.Faction_ID = _SessionManager.PlayerFactionID(owner);
         troop.SetName(_FactionLookup.GetFaction(troop.Faction_ID).GetTroopName());
         troop.UniqueID = troop_counter;
@@ -303,6 +311,13 @@ public class GameplayManager : NetworkBehaviour
             if(!_MapManager.IsOwner(tile_, faction)){
                 _MapManager.Conquer(tile_, faction);
             }
+        }
+    }
+
+    void RefreshAllCities(){
+        _MapManager.CleanCities();
+        foreach(Troop troop in AllTroops){
+            _MapManager.AddTroopStats(troop);
         }
     }
 

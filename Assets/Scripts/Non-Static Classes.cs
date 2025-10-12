@@ -137,21 +137,23 @@ namespace HenrysMapUtils{
             tile.SetStats(this);
 
             ownership_radius = 2;
-
             name = _name;
             money_produced = money;
 
             ResetMaxes();
-
-            population_used = 0;
-            produce_used = 0;
-            industry_used = 0;
+            ReleaseUsage();
         }
 
         void ResetMaxes(){
             max_population = 0;
             max_produce = 0;
             max_industry = 0;
+        }
+
+        public void ReleaseUsage(){
+            produce_used = 0;
+            industry_used = 0;
+            population_used = 0;
         }
 
         public void RefreshDetails(MapManager Map){
@@ -161,6 +163,12 @@ namespace HenrysMapUtils{
                 max_produce += searched_tile.piece.Produce();
                 max_industry += searched_tile.piece.Industry();
             }
+        }
+
+        public void AddTroopStats(TroopData troop){
+            produce_used += troop.ProduceCost();
+            population_used += troop.PopulationCost();
+            industry_used += troop.IndustryCost();
         }
 
         // Setters //

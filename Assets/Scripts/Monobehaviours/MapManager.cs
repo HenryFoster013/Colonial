@@ -49,6 +49,7 @@ public class MapManager : NetworkBehaviour
     bool generated_bg;
 
     Tile[] Tiles;
+    Tile[] city_tiles;
     [HideInInspector] public Seed seed;
 
     // Synced from Host
@@ -456,6 +457,8 @@ public class MapManager : NetworkBehaviour
         int distance_fails = 0;
         int forts_needed = (MapSize / 4) - castles_needed;
 
+        city_tiles = new Tile[castles_needed + forts_needed];
+
         while(placed_castles.Count < castles_needed + forts_needed){
 
             if(distance_fails > 15){
@@ -486,6 +489,7 @@ public class MapManager : NetworkBehaviour
                             else{ // Place Fort
                                 check_tile.SetPiece(_PieceLookup.Piece_ByName("Fort (Empty)"));
                             }
+                            city_tiles[placed_castles.Count] = check_tile;
                             placed_castles.Add(TileToCoords(check_tile));
                         }
                         else{
@@ -503,6 +507,21 @@ public class MapManager : NetworkBehaviour
     }
 
     // TILE OWNERSHIP //
+
+    public void CleanCities(){
+        for(int i = 0; i < city_tiles.Length; i++){
+            if(city_tiles[i].stats != null)
+                city_tiles[i].stats.ReleaseUsage();
+        }
+    }
+
+    public void AddTroopStats(Troop troop){
+        if(troop.HomeTile == 0)
+            return;
+        if(troop.FactionData() != Tiles[troop.HomeTile].owner)
+            return;
+        Tiles[troop.HomeTile].stats.AddTroopStats(troop.Data);
+    }
 
     public bool ForeignFortress(int id){return ForeignFortress(Tiles[id]);}
     public bool ForeignFortress(Tile tile){        

@@ -15,6 +15,9 @@ MonoBehaviour:
   _Type: Generic
   _Name: Villager
   _Cost: 1
+  _PopulationCost: 1
+  _ProduceCost: 0
+  _IndustryCost: 0
   _MoveDistance: 1
   _AttackDistance: 1
   _Vision: 1

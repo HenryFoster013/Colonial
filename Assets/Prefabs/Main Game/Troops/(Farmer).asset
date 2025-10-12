@@ -15,6 +15,9 @@ MonoBehaviour:
   _Type: Farmer
   _Name: Farmer
   _Cost: 2
+  _PopulationCost: 1
+  _ProduceCost: 0
+  _IndustryCost: 0
   _MoveDistance: 1
   _AttackDistance: 1
   _Vision: 2

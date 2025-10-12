@@ -240,11 +240,7 @@ public class PlayerManager : MonoBehaviour
                 valid = _GameplayManager.ValidTroopSpawn(troop, current_tile);
 
             if(valid){
-
-                // make this a defined purchase function (with all costs)
                 _GameplayManager.SpendStars(troops[i].Cost());
-
-
                 block_world_clicks = true;
                 _GameplayManager.RPC_SpawnTroop(_TroopLookup.ID(troop), current_tile.ID, _SessionManager.OurInstance.ID);
                 CloseSpawnMenu();

@@ -10,7 +10,7 @@ public class PreviewRenderer : MonoBehaviour{
     PieceData piece_data;
     int reference;
     bool troop_building;
-    Camera camera;
+    Camera cam;
     int item_cost;
     PlayerManager player;
     SpawnButton button_manager;
@@ -32,8 +32,8 @@ public class PreviewRenderer : MonoBehaviour{
         rend_text.Create();
         renderer_transform.parent = renderer_holder;
         renderer_transform.position = new Vector3(12 * (reference + 1), 0, 0);
-        camera = renderer_transform.GetChild(1).GetChild(0).GetComponent<Camera>();
-        camera.targetTexture = rend_text;
+        cam = renderer_transform.GetChild(1).GetChild(0).GetComponent<Camera>();
+        cam.targetTexture = rend_text;
 
         button = GameObject.Instantiate(ButtonPrefab, button_holder.position, Quaternion.identity);
         button.transform.parent = button_holder;
@@ -77,13 +77,13 @@ public class PreviewRenderer : MonoBehaviour{
     }
 
     public void Disable(){
-        camera.gameObject.SetActive(false);
+        cam.gameObject.SetActive(false);
         renderer_transform.gameObject.SetActive(false);
         button.SetActive(false);
     }
 
     public void Enable(){
-        camera.gameObject.SetActive(true);
+        cam.gameObject.SetActive(true);
         renderer_transform.gameObject.SetActive(true);
         button.SetActive(true);
     }

@@ -15,6 +15,9 @@ MonoBehaviour:
   _Type: Countryman
   _Name: Countryman
   _Cost: 3
+  _PopulationCost: 1
+  _ProduceCost: 0
+  _IndustryCost: 1
   _MoveDistance: 2
   _AttackDistance: 3
   _Vision: 2
