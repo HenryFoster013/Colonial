@@ -10,7 +10,7 @@ The game is online-multiplayer, made in Unity in C#, with the networking done in
 ### Win Condition
 
 ## Comparative to _The Battle of Polytopia_
-Some mahbqjicily notice that this game is heavily inspired by _The Battle of Polytopia_. I love _The Battle of Polytopia_, my favourite aspect of the gameplay loop has always been the nation building, which sadly isn't the main focus. This is my attempt to capture what Polytopia has, whilst building upon the nation building mechanics. I've designed some key changes. I've chosen to list these below as these in the context of Polytopia best explain my thinking during development. 
+Some may notice that this game is heavily inspired by _The Battle of Polytopia_. I love _The Battle of Polytopia_, my favourite aspect of the gameplay loop has always been the nation building, which sadly isn't the main focus. This is my attempt to capture what Polytopia has, whilst building upon the nation building mechanics. I've designed some key changes. I've chosen to list these below as these in the context of Polytopia best explain my thinking during development. 
 
  - The game is 3D
  - The map takes place on a hexagonal grid.
