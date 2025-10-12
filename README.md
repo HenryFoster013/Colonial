@@ -13,6 +13,7 @@ This game is heavily inspired by _The Battle of Polytopia_. I love _The Battle o
  - Troops require different variable amounts of resources to be spawned and used.
  - Tech tree progression is dependant on resource availablity.
  - A more expansive peace treaty system, where players can set a turn limit for the treaty as well as demand successions from other players.
+ - Gift/trade system, where players can gift or trade resources.
  - Coalition system where players can agree to attack a specific faction without defining final peace between them.
  - Roads are much more valuable as connected cities now share resources.
  - Roads and builings can be pillaged and/or destroyed.
