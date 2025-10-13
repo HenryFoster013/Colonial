@@ -632,7 +632,6 @@ public class PlayerManager : MonoBehaviour
 
     void ClampSpawnMenuOffset(int total_items){
         int max_offset = ((total_items + 3) / 4) - 1;
-        print(max_offset);
         if(spawn_menu_offset < 0)
             spawn_menu_offset = max_offset;
         else if(spawn_menu_offset > max_offset)
@@ -653,23 +652,23 @@ public class PlayerManager : MonoBehaviour
 
         ResetSpawnMenu(); 
         CloseSpawnMenu();
+
         current_spawn_menu_type = troop_building;
 
-        int start_point = spawn_menu_offset * 4;
-        float offset = 95;
-
         if(troop_building)
-            SetupSpawnButtons(building_renders, buildings_constructable, start_point, offset);
+            SetupSpawnButtons(building_renders, buildings_constructable);
         else
-            SetupSpawnButtons(troop_renders, troops_owned, start_point, offset);
+            SetupSpawnButtons(troop_renders, troops_owned);
 
         SpawnMenu.SetActive(true);
     }
 
-    public void SetupSpawnButtons(PreviewRenderer[] prs, bool[] ownership, int start_point, float offy){
+    public void SetupSpawnButtons(PreviewRenderer[] prs, bool[] ownership){
+        float offy = 95;
         int active_count = 0;
         int total_items = CountBooleanArray(ownership);
         ClampSpawnMenuOffset(total_items);
+        int start_point = spawn_menu_offset * 4;
         int displayed_count = DisplayedItemCount(total_items, spawn_menu_offset);
         float centering = (-1 * offy * displayed_count) / 2;
         centering += (offy / 2);
