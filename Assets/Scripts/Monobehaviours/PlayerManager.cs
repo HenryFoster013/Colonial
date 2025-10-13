@@ -54,17 +54,13 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] GameObject TroopInfoDisplay;
     [SerializeField] TMP_Text TroopName;
     [SerializeField] Image TroopName_BG;
+    [SerializeField] TroopInfoDisplay TroopInfoPopup;
 
     [Header("Forts")]
     [SerializeField] GameObject FortStats;
     [SerializeField] TMP_Text FortName;
     [SerializeField] Image FortName_BG;
-    [SerializeField] GameObject PopulationUnit;
-    [SerializeField] GameObject ProduceUnit;
-    [SerializeField] GameObject IndustryUnit;
-    [SerializeField] Transform PopulationHolder;
-    [SerializeField] Transform ProduceHolder;
-    [SerializeField] Transform IndustryHolder;
+    [SerializeField] StatBar[] StatBars;
 
     [Header("General Popups")]
     [SerializeField] Transform PreviewRendererHolder;
@@ -452,33 +448,9 @@ public class PlayerManager : MonoBehaviour
         FortStats.SetActive(true);
         FortName.text = stats.name + " (" + stats.money_produced.ToString() + ")";
         FortName_BG.color = stats.tile.owner.Colour();
-        SpawnStatUnits(ref PopulationHolder, ref PopulationUnit, stats.max_population, stats.population_used);
-        SpawnStatUnits(ref ProduceHolder, ref ProduceUnit, stats.max_produce, stats.produce_used);
-        SpawnStatUnits(ref IndustryHolder, ref IndustryUnit, stats.max_industry, stats.industry_used);
-    }
-
-    void SpawnStatUnits(ref Transform holder, ref GameObject unit, int max, int amount){
-        Color off_colour = holder.parent.GetComponent<Image>().color;
-        foreach(Transform t in holder)
-            GameObject.Destroy(t.gameObject);
-        for(int i = 1; i <= max; i++){
-            GameObject new_unit = GameObject.Instantiate(unit);
-            new_unit.transform.SetParent(holder);
-            RectTransform rect = new_unit.GetComponent<RectTransform>();
-            rect.localScale = new Vector3(1,1,1); 
-            rect.localPosition  = Vector3.zero;
-
-            if(i > amount)
-                new_unit.GetComponent<Image>().color = off_colour;
-            
-            float full_size = 100f;
-            float width = full_size / max;
-            float left = width * (i - 1);
-            rect.offsetMin = new Vector2(left, 0f); // Left, Bottom
-            rect.offsetMax = new Vector2(left + width - full_size, 0f); // Right, Top
-
-            new_unit.SetActive(true);
-        }
+        StatBars[0].Refresh(stats.max_population, stats.population_used);
+        StatBars[1].Refresh(stats.max_produce, stats.produce_used);
+        StatBars[2].Refresh(stats.max_industry, stats.industry_used);
     }
 
     bool IsTroopAttackable(Troop troop){
@@ -620,14 +592,14 @@ public class PlayerManager : MonoBehaviour
             PreviewRenderer new_render = GameObject.Instantiate(PreviewRendererPrefab, Vector3.zero, Quaternion.identity).GetComponent<PreviewRenderer>();
             troop_renders[count] = new_render;
             new_render.Setup(TroopRendererHolder, TroopButtonHolder, count, desc, this, _SessionManager.LocalFactionData().Colour(), troops[count].Cost(), false, null);
-            new_render.transform.parent = PreviewRendererHolder;
+            new_render.transform.SetParent(PreviewRendererHolder);
         }
 
         for(int count = 0; count < buildings.Length; count++){
             PreviewRenderer new_render = GameObject.Instantiate(PreviewRendererPrefab, Vector3.zero, Quaternion.identity).GetComponent<PreviewRenderer>();
             building_renders[count] = new_render;
             new_render.Setup(BuildingRendererHolder, BuildingButtonHolder, count, desc, this, _SessionManager.LocalFactionData().Colour(), buildings[count].Cost(), true, buildings[count]);
-            new_render.transform.parent = PreviewRendererHolder;
+            new_render.transform.SetParent(PreviewRendererHolder);
         }
     }
 
@@ -660,6 +632,7 @@ public class PlayerManager : MonoBehaviour
 
     void ClampSpawnMenuOffset(int total_items){
         int max_offset = ((total_items + 3) / 4) - 1;
+        print(max_offset);
         if(spawn_menu_offset < 0)
             spawn_menu_offset = max_offset;
         else if(spawn_menu_offset > max_offset)
