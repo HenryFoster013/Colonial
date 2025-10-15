@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: (Rifle) French
   m_EditorClassIdentifier: 
   _Type: Grenadier
-  _Name: Grenadier
+  _Name: Rifleman
   _Cost: 3
   _PopulationCost: 1
   _ProduceCost: 0

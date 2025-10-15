@@ -54,7 +54,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] GameObject TroopInfoDisplay;
     [SerializeField] TMP_Text TroopName;
     [SerializeField] Image TroopName_BG;
-    [SerializeField] TroopInfoDisplay TroopInfoPopup;
+    [SerializeField] SpawnInfoDisplay SpawnInfoPopup;
 
     [Header("Forts")]
     [SerializeField] GameObject FortStats;
@@ -103,6 +103,7 @@ public class PlayerManager : MonoBehaviour
 
     Troop current_troop;
     const int HiddenLayer = 7;
+    RectTransform SpawnPopupRect;
 
     int spawn_menu_offset = 0;
     bool[] troops_owned;
@@ -144,12 +145,14 @@ public class PlayerManager : MonoBehaviour
         CloseSpawnMenu();
         FactionName.text = _SessionManager.LocalFactionData().Name().Replace(' ', '\n');
         FactionFlag.sprite = _SessionManager.LocalFactionData().Flag();
+        SpawnPopupRect = SpawnInfoPopup.GetComponent<RectTransform>();
     }
 
     // ANIMATION //
 
     void Animate(){
         WateryHighlights();
+        SpawnPopupRect.anchoredPosition = Input.mousePosition;
         EndTurnButton.SetActive(OurTurn);
         TurnDisplay.text = "Turn " + _GameplayManager.current_turn.ToString();
         CoinDisplay.text = _SessionManager.LocalFactionData().Currency() + _GameplayManager.current_coins.ToString();
@@ -228,14 +231,7 @@ public class PlayerManager : MonoBehaviour
 
             TroopData troop = troops[i];
 
-            // Check Troop Costs
-            bool valid = troops_owned[i];
-            if(valid)
-                valid = troop.Cost() <= _GameplayManager.current_coins; // sync money and move to coins
-            if(valid)
-                valid = _GameplayManager.ValidTroopSpawn(troop, current_tile);
-
-            if(valid){
+            if(CanSpawnTroop(i)){
                 _GameplayManager.SpendStars(troops[i].Cost());
                 block_world_clicks = true;
                 _GameplayManager.RPC_SpawnTroop(_TroopLookup.ID(troop), current_tile.ID, _SessionManager.OurInstance.ID);
@@ -245,6 +241,16 @@ public class PlayerManager : MonoBehaviour
             else
                 PlaySFX("UI_Error_2", SFX_Lookup);
         }
+    }
+
+    public bool CanSpawnTroop(int troop_id){
+        TroopData troop = _SessionManager.LocalFactionData().Troops()[troop_id];
+        bool valid = troops_owned[troop_id];
+        if(valid)
+            valid = troop.Cost() <= _GameplayManager.current_coins;
+        if(valid)
+            valid = _GameplayManager.ValidTroopSpawn(troop, current_tile);
+        return valid;
     }
 
     void SelectionLogic(){
@@ -591,14 +597,14 @@ public class PlayerManager : MonoBehaviour
         for(int count = 0; count < troops.Length; count++){
             PreviewRenderer new_render = GameObject.Instantiate(PreviewRendererPrefab, Vector3.zero, Quaternion.identity).GetComponent<PreviewRenderer>();
             troop_renders[count] = new_render;
-            new_render.Setup(TroopRendererHolder, TroopButtonHolder, count, desc, this, _SessionManager.LocalFactionData().Colour(), troops[count].Cost(), false, null);
+            new_render.Setup(TroopRendererHolder, TroopButtonHolder, count, desc, this, _SessionManager.LocalFactionData().Colour(), false, null, true);
             new_render.transform.SetParent(PreviewRendererHolder);
         }
 
         for(int count = 0; count < buildings.Length; count++){
             PreviewRenderer new_render = GameObject.Instantiate(PreviewRendererPrefab, Vector3.zero, Quaternion.identity).GetComponent<PreviewRenderer>();
             building_renders[count] = new_render;
-            new_render.Setup(BuildingRendererHolder, BuildingButtonHolder, count, desc, this, _SessionManager.LocalFactionData().Colour(), buildings[count].Cost(), true, buildings[count]);
+            new_render.Setup(BuildingRendererHolder, BuildingButtonHolder, count, desc, this, _SessionManager.LocalFactionData().Colour(), true, buildings[count], true);
             new_render.transform.SetParent(PreviewRendererHolder);
         }
     }
@@ -675,7 +681,7 @@ public class PlayerManager : MonoBehaviour
 
         for(int i = start_point; i < ownership.Length && i < start_point + 4; i++){
             if(ownership[i]){
-                prs[i].UpdateMoney(_GameplayManager.current_coins);
+                prs[i].SetAfford(CanSpawnTroop(i));
                 prs[i].SetPosition(new Vector2((active_count * offy) + centering, 0));
                 prs[i].SetTile(current_tile);
                 prs[i].Enable();
@@ -717,20 +723,38 @@ public class PlayerManager : MonoBehaviour
 
     int UILayer = 5;
     private bool IsPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults){
+        SpawnInfoPopup.gameObject.SetActive(false);
         for (int index = 0; index < eventSystemRaysastResults.Count; index++){
             RaycastResult curRaysastResult = eventSystemRaysastResults[index];
-            if (curRaysastResult.gameObject.layer == UILayer)
+            if (curRaysastResult.gameObject.layer == UILayer){
+                HoverableDisplay(curRaysastResult.gameObject);
                 return true;
+            }
         }
         return false;
+    }
+
+    void HoverableDisplay(GameObject obj){
+        bool show_display = false;
+        SpawnButton butt = null;
+
+        if(obj.tag == "Hoverable"){
+            butt = obj.transform.parent.parent.GetComponent<SpawnButton>();
+            show_display = butt.IsTroop();
+        }
+
+        if(show_display){
+            SpawnInfoPopup.gameObject.SetActive(true);
+            SpawnInfoPopup.Refresh(_SessionManager.LocalFactionData().Troops()[butt.Reference()], current_tile.stats, _SessionManager.LocalFactionData(), _GameplayManager.current_coins);
+        }
     }
 
     static List<RaycastResult> GetEventSystemRaycastResults(){
         PointerEventData eventData = new PointerEventData(EventSystem.current);
         eventData.position = Input.mousePosition;
-        List<RaycastResult> raysastResults = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(eventData, raysastResults);
-        return raysastResults;
+        List<RaycastResult> raycastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, raycastResults);
+        return raycastResults;
     }
 
     // CAMERA //

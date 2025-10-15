@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: (Sword) German
   m_EditorClassIdentifier: 
   _Type: Jerry Swordsman
-  _Name: Jerry Swordsman
+  _Name: Swordsman
   _Cost: 3
   _PopulationCost: 1
   _ProduceCost: 0

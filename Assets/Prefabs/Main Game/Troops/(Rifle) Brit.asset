@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: (Rifle) Brit
   m_EditorClassIdentifier: 
   _Type: Countryman
-  _Name: Countryman
+  _Name: Rifleman
   _Cost: 3
   _PopulationCost: 1
   _ProduceCost: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: (Rifle) German
   m_EditorClassIdentifier: 
   _Type: Jerry
-  _Name: Jerry
+  _Name: Rifleman
   _Cost: 3
   _PopulationCost: 1
   _ProduceCost: 0
