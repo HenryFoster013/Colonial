@@ -103,7 +103,6 @@ public class PlayerManager : MonoBehaviour
 
     Troop current_troop;
     const int HiddenLayer = 7;
-    RectTransform SpawnPopupRect;
 
     int spawn_menu_offset = 0;
     bool[] troops_owned;
@@ -145,14 +144,13 @@ public class PlayerManager : MonoBehaviour
         CloseSpawnMenu();
         FactionName.text = _SessionManager.LocalFactionData().Name().Replace(' ', '\n');
         FactionFlag.sprite = _SessionManager.LocalFactionData().Flag();
-        SpawnPopupRect = SpawnInfoPopup.GetComponent<RectTransform>();
     }
 
     // ANIMATION //
 
     void Animate(){
         WateryHighlights();
-        SpawnPopupRect.anchoredPosition = Input.mousePosition;
+        SpawnInfoPopup.transform.position = Input.mousePosition;
         EndTurnButton.SetActive(OurTurn);
         TurnDisplay.text = "Turn " + _GameplayManager.current_turn.ToString();
         CoinDisplay.text = _SessionManager.LocalFactionData().Currency() + _GameplayManager.current_coins.ToString();
@@ -220,9 +218,13 @@ public class PlayerManager : MonoBehaviour
     // SELECTION //
 
     public void SpawnBuildingButton(PieceData piece){
-        _GameplayManager.RPC_SpawnBuilding(current_tile.ID, _PieceLookup.ID(piece));
-        CloseSpawnMenu();
-        Deselect();
+        if(_GameplayManager.current_coins >= piece.Cost()){
+            _GameplayManager.RPC_SpawnBuilding(current_tile.ID, _PieceLookup.ID(piece));
+            CloseSpawnMenu();
+            Deselect();
+        }
+        else
+            PlaySFX("UI_Error_2", SFX_Lookup);
     }
 
     public void SpawnTroopButton(int i){
@@ -433,8 +435,10 @@ public class PlayerManager : MonoBehaviour
                 SetupTileStats(Map.GetTile(tile.ID).stats);
             }
             else{
-                SetConstructables(tile);
-                OpenSpawnMenu(true);
+                if(OurTurn){
+                    SetConstructables(tile);
+                    OpenSpawnMenu(true);
+                }
             }
         }
     }
@@ -597,14 +601,14 @@ public class PlayerManager : MonoBehaviour
         for(int count = 0; count < troops.Length; count++){
             PreviewRenderer new_render = GameObject.Instantiate(PreviewRendererPrefab, Vector3.zero, Quaternion.identity).GetComponent<PreviewRenderer>();
             troop_renders[count] = new_render;
-            new_render.Setup(TroopRendererHolder, TroopButtonHolder, count, desc, this, _SessionManager.LocalFactionData().Colour(), false, null, true);
+            new_render.Setup(TroopRendererHolder, TroopButtonHolder, count, desc, this, _SessionManager.LocalFactionData().Colour(), null, _SessionManager.LocalFactionData().Troops()[count], true);
             new_render.transform.SetParent(PreviewRendererHolder);
         }
 
         for(int count = 0; count < buildings.Length; count++){
             PreviewRenderer new_render = GameObject.Instantiate(PreviewRendererPrefab, Vector3.zero, Quaternion.identity).GetComponent<PreviewRenderer>();
             building_renders[count] = new_render;
-            new_render.Setup(BuildingRendererHolder, BuildingButtonHolder, count, desc, this, _SessionManager.LocalFactionData().Colour(), true, buildings[count], true);
+            new_render.Setup(BuildingRendererHolder, BuildingButtonHolder, count, desc, this, _SessionManager.LocalFactionData().Colour(), buildings[count], null, true);
             new_render.transform.SetParent(PreviewRendererHolder);
         }
     }
@@ -681,7 +685,7 @@ public class PlayerManager : MonoBehaviour
 
         for(int i = start_point; i < ownership.Length && i < start_point + 4; i++){
             if(ownership[i]){
-                prs[i].SetAfford(CanSpawnTroop(i));
+                prs[i].SetAfford(_GameplayManager.current_coins);
                 prs[i].SetPosition(new Vector2((active_count * offy) + centering, 0));
                 prs[i].SetTile(current_tile);
                 prs[i].Enable();
@@ -735,17 +739,15 @@ public class PlayerManager : MonoBehaviour
     }
 
     void HoverableDisplay(GameObject obj){
-        bool show_display = false;
         SpawnButton butt = null;
 
         if(obj.tag == "Hoverable"){
             butt = obj.transform.parent.parent.GetComponent<SpawnButton>();
-            show_display = butt.IsTroop();
-        }
-
-        if(show_display){
+            if(butt.IsTroop())
+                SpawnInfoPopup.Refresh(_SessionManager.LocalFactionData().Troops()[butt.Reference()], current_tile.stats, _SessionManager.LocalFactionData(), _GameplayManager.current_coins);
+            else
+                SpawnInfoPopup.Refresh(butt.Piece(), _GameplayManager.current_coins, _SessionManager.LocalFactionData());
             SpawnInfoPopup.gameObject.SetActive(true);
-            SpawnInfoPopup.Refresh(_SessionManager.LocalFactionData().Troops()[butt.Reference()], current_tile.stats, _SessionManager.LocalFactionData(), _GameplayManager.current_coins);
         }
     }
 

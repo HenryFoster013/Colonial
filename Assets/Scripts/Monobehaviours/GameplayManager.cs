@@ -33,7 +33,7 @@ public class GameplayManager : NetworkBehaviour
     // Defaults
 
     public void Setup(){
-        current_coins = 100;
+        current_coins = 3;
         current_turn = 1;
         player_sub_turn = 0;
         player_count = _SessionManager.player_instances.Count;

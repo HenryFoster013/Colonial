@@ -8,7 +8,7 @@ public class PreviewRenderer : MonoBehaviour{
     [SerializeField] GameObject RendererPrefab;
     [SerializeField] GameObject ButtonPrefab;
     PieceData piece_data;
-    int reference;
+    TroopData troop_data;
     bool troop_building;
     Camera cam;
     PlayerManager player;
@@ -16,12 +16,14 @@ public class PreviewRenderer : MonoBehaviour{
     GameObject button;
     Transform renderer_transform;
     GameObject tile_model;
+    int reference;
 
-    public void Setup(Transform renderer_holder, Transform button_holder, int iteration, RenderTextureDescriptor rend_text_desc, PlayerManager _player, Color colour, bool _troop_building, PieceData data, bool affordable){
+    public void Setup(Transform renderer_holder, Transform button_holder, int iteration, RenderTextureDescriptor rend_text_desc, PlayerManager _player, Color colour, PieceData data, TroopData troop, bool affordable){
         reference = iteration;
         player = _player;
-        troop_building = _troop_building;
         piece_data = data;
+        troop_data = troop;
+        troop_building = piece_data != null;
         
         GameObject g = GameObject.Instantiate(RendererPrefab);
         renderer_transform = g.transform;
@@ -45,17 +47,10 @@ public class PreviewRenderer : MonoBehaviour{
         button_manager.Setup(this, colour, affordable, rend_text);
     }
 
-    public PieceData GetPieceData(){
-        return piece_data;
-    }
-
-    public bool IsTroop(){
-        return !troop_building;
-    }
-
-    public int Reference(){
-        return reference;
-    }
+    public PieceData GetPieceData(){return piece_data;}
+    public TroopData GetTroopData(){return troop_data;}
+    public bool IsTroop(){return !troop_building;}
+    public int Reference(){return reference;}
 
     public void SetTile(Tile tile){
         if(!troop_building)
@@ -68,13 +63,14 @@ public class PreviewRenderer : MonoBehaviour{
         renderer_transform.transform.position = new Vector3(renderer_transform.transform.position.x, tile.world_position.y, renderer_transform.transform.position.z);
     }
 
-    public void SetAfford(bool affordable){
-        button_manager.SetAfford(affordable);
+    public void SetAfford(int money){
+        if(piece_data != null)
+            button_manager.SetAfford(money >= piece_data.Cost());
+        else
+            button_manager.SetAfford(money >= troop_data.Cost());
     }
 
-    public void SetPosition(Vector2 pos){
-        button.GetComponent<RectTransform>().anchoredPosition = pos;
-    }
+    public void SetPosition(Vector2 pos){button.GetComponent<RectTransform>().anchoredPosition = pos;}
 
     public void Disable(){
         cam.gameObject.SetActive(false);
