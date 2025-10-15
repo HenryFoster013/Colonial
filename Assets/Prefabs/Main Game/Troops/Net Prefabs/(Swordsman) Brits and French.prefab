@@ -700,7 +700,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd440fa933e7704429dacb02760bdf1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Data: {fileID: 11400000, guid: cc874a814a8cef647bfc6cf3037738f3, type: 2}
+  Data: {fileID: 11400000, guid: 80607047b9e0b824d93963c5fc2ce1c3, type: 2}
   _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
   Col: {fileID: 3194187414784522355}
