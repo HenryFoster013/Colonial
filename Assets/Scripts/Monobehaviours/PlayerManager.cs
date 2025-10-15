@@ -743,11 +743,13 @@ public class PlayerManager : MonoBehaviour
 
         if(obj.tag == "Hoverable"){
             butt = obj.transform.parent.parent.GetComponent<SpawnButton>();
-            if(butt.IsTroop())
-                SpawnInfoPopup.Refresh(_SessionManager.LocalFactionData().Troops()[butt.Reference()], current_tile.stats, _SessionManager.LocalFactionData(), _GameplayManager.current_coins);
-            else
-                SpawnInfoPopup.Refresh(butt.Piece(), _GameplayManager.current_coins, _SessionManager.LocalFactionData());
-            SpawnInfoPopup.gameObject.SetActive(true);
+            if(butt != null){
+                if(butt.IsTroop())
+                    SpawnInfoPopup.Refresh(_SessionManager.LocalFactionData().Troops()[butt.Reference()], current_tile.stats, _SessionManager.LocalFactionData(), _GameplayManager.current_coins);
+                else
+                    SpawnInfoPopup.Refresh(butt.Piece(), _GameplayManager.current_coins, _SessionManager.LocalFactionData());
+                SpawnInfoPopup.gameObject.SetActive(true);
+            }
         }
     }
 
