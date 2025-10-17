@@ -1,0 +1,42 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using static HenrysUtils;
+
+public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
+
+    [Header("Generic Variables")]
+    [SerializeField] private RectTransform dragRectTransform;
+    [SerializeField] Canvas canvas;
+    public SoundEffectLookup SFX_Lookup;
+    const float offset = 180;
+
+    public void OnDrag(PointerEventData eventData){
+        dragRectTransform.anchoredPosition += eventData.delta/canvas.scaleFactor;
+    }
+    public void OnPointerDown(PointerEventData eventData){
+        dragRectTransform.SetAsLastSibling();
+    }
+
+    public void Open(){
+        PlaySFX("UI_1", SFX_Lookup);
+        SilentOpen();
+    }
+    public void SilentOpen(){
+        RandomisePosition();
+        dragRectTransform.gameObject.SetActive(true);
+    }
+
+    public void Close(){
+        PlaySFX("UI_2", SFX_Lookup);
+        SilentClose();
+    }
+    public void SilentClose(){
+        dragRectTransform.gameObject.SetActive(false);
+    }
+
+    void RandomisePosition(){
+        dragRectTransform.anchoredPosition = new Vector2(Random.Range(-offset, offset), Random.Range(-offset, offset));
+    }
+}

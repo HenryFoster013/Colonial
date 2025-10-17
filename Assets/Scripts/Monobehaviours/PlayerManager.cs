@@ -61,6 +61,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] TMP_Text FortName;
     [SerializeField] Image FortName_BG;
     [SerializeField] StatBar[] StatBars;
+    [SerializeField] FortressUpgradeWindow UpgradeWindow;
 
     [Header("General Popups")]
     [SerializeField] Transform PreviewRendererHolder;
@@ -539,6 +540,10 @@ public class PlayerManager : MonoBehaviour
         walkable_tiles = new List<Tile>();
         attackable_tiles = new List<Tile>();
         ResetSelectionUI();
+    }
+
+    public void FortUpgradeButton(){
+        UpgradeWindow.Open();
     }
 
     public void DisableAllTroops(){
