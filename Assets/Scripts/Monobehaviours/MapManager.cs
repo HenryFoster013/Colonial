@@ -564,6 +564,11 @@ public class MapManager : NetworkBehaviour
         foreach(Tile tile_ in TilesByDistance(tile, radius, false)){
             MarkTileAsOwned(tile_, owner, do_not_overwrite);
         }
+
+        if(owner == _SessionManager.OurInstance.FactionData()){
+            print("let there be light");
+            MarkRadiusAsVisible(tile, radius);
+        }
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
@@ -571,6 +576,23 @@ public class MapManager : NetworkBehaviour
         Tiles[tile_id].SetPiece(_PieceLookup.Piece(piece_id));
         GeneratePieceModel(Tiles[tile_id]);
         RefreshAllCities();
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RPC_RequestFortLevel(int tile_id, int level, RpcInfo info = default){
+        // Validate here
+        if(level == Tiles[tile_id].stats.level + 1){
+            RPC_SetFortLevel(tile_id, level);
+        }
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_SetFortLevel(int tile_id, int level, RpcInfo info = default){
+        Tiles[tile_id].stats.SetLevel(level);
+        MarkRadiusAsOwned(Tiles[tile_id], Tiles[tile_id].stats.ownership_radius, Tiles[tile_id].owner, true);
+        RefreshAllBorders();
+        Tiles[tile_id].stats.RefreshDetails(this);
+        CheckForMapRegen();
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
@@ -584,7 +606,9 @@ public class MapManager : NetworkBehaviour
             towers_forts_stats.Add(stats);
         }
 
-        MarkRadiusAsOwned(Tiles[tile_id], radius, _FactionLookup.GetFaction(owner_id), false);
+        Faction faction = _FactionLookup.GetFaction(owner_id);
+
+        MarkRadiusAsOwned(Tiles[tile_id], radius, faction, false);
         RefreshAllBorders();
         stats.SetName(TileToLocationName(Tiles[tile_id]));
         stats.RefreshDetails(this);

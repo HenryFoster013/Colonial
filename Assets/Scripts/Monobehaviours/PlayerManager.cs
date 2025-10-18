@@ -62,6 +62,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] Image FortName_BG;
     [SerializeField] StatBar[] StatBars;
     [SerializeField] FortressUpgradeWindow UpgradeWindow;
+    [SerializeField] GameObject UpgradeButton;
 
     [Header("General Popups")]
     [SerializeField] Transform PreviewRendererHolder;
@@ -101,6 +102,7 @@ public class PlayerManager : MonoBehaviour
     public List<Tile> attackable_tiles = new List<Tile>();
     Tile current_tile;
     bool block_world_clicks = false;
+    bool IsPointerOverUIElementBuffer = false;
 
     Troop current_troop;
     const int HiddenLayer = 7;
@@ -145,6 +147,7 @@ public class PlayerManager : MonoBehaviour
         CloseSpawnMenu();
         FactionName.text = _SessionManager.LocalFactionData().Name().Replace(' ', '\n');
         FactionFlag.sprite = _SessionManager.LocalFactionData().Flag();
+        UpgradeWindow.SilentClose();
     }
 
     // ANIMATION //
@@ -209,7 +212,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     bool ShortClick(){
-        return !IsPointerOverUIElement() && (Input.GetMouseButtonUp(0) && downTime < 0.2f && ((mouse_pos - mouse_start_pos).sqrMagnitude < 10f));
+        return !IsPointerOverUIElementBuffer && !IsPointerOverUIElement() && (Input.GetMouseButtonUp(0) && downTime < 0.2f && ((mouse_pos - mouse_start_pos).sqrMagnitude < 10f));
     }
 
     bool LongClick(){
@@ -287,6 +290,8 @@ public class PlayerManager : MonoBehaviour
             Vector3 rationalised_mouse_offset = (CameraSpine.forward * (mouse_pos.y - mouse_start_pos.y)) + (CameraSpine.right * (mouse_pos.x - mouse_start_pos.x));
             target_camera_pos = camera_start_point + (rationalised_mouse_offset * -1 * camera_start_point.y / (Screen.height));
         }
+
+        IsPointerOverUIElementBuffer = IsPointerOverUIElement();
     }
 
     void SetupTiles(Troop troop){
@@ -457,6 +462,7 @@ public class PlayerManager : MonoBehaviour
             return;
         
         FortStats.SetActive(true);
+        UpgradeButton.SetActive(OurTurn && stats.UpgradeCost() <= _GameplayManager.current_coins);
         FortName.text = stats.name + " (" + stats.money_produced.ToString() + ")";
         FortName_BG.color = stats.tile.owner.Colour();
         StatBars[0].Refresh(stats.max_population, stats.population_used);
@@ -531,6 +537,8 @@ public class PlayerManager : MonoBehaviour
 
     public void Deselect(){
         CloseSpawnMenu();
+        UpgradeWindow.SilentClose();
+        UpgradeButton.SetActive(false);
         TroopInfoDisplay.SetActive(false);
         FortStats.SetActive(false);
         if(current_troop != null)
@@ -540,10 +548,6 @@ public class PlayerManager : MonoBehaviour
         walkable_tiles = new List<Tile>();
         attackable_tiles = new List<Tile>();
         ResetSelectionUI();
-    }
-
-    public void FortUpgradeButton(){
-        UpgradeWindow.Open();
     }
 
     public void DisableAllTroops(){
@@ -563,6 +567,19 @@ public class PlayerManager : MonoBehaviour
     }
 
     // UI //
+
+    public void FortUpgradeButton(){
+        UpgradeWindow.Setup(_SessionManager.LocalFactionData().Currency() + current_tile.stats.UpgradeCost().ToString(), this);
+        UpgradeWindow.Open();
+    }
+
+    public void UpgradeFort(){
+        if(_GameplayManager.current_coins >= current_tile.stats.UpgradeCost()){
+            _GameplayManager.SpendStars(current_tile.stats.UpgradeCost());
+            Map.RPC_RequestFortLevel(current_tile.ID, current_tile.stats.level + 1);
+            Deselect();
+        }
+    }
 
     public void UpdateTurnNameDisplay(string name){
         TurnNameText.text = name;
@@ -659,7 +676,6 @@ public class PlayerManager : MonoBehaviour
             displayed_count = 4;
         return displayed_count;
     }
-
 
     bool current_spawn_menu_type;
     void OpenSpawnMenu(){OpenSpawnMenu(current_spawn_menu_type);}

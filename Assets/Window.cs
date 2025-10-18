@@ -10,7 +10,12 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
     [SerializeField] private RectTransform dragRectTransform;
     [SerializeField] Canvas canvas;
     public SoundEffectLookup SFX_Lookup;
-    const float offset = 180;
+    [SerializeField] float offset = 60;
+    Vector2 pos;
+
+    void Start(){
+        pos = dragRectTransform.anchoredPosition;
+    }
 
     public void OnDrag(PointerEventData eventData){
         dragRectTransform.anchoredPosition += eventData.delta/canvas.scaleFactor;
@@ -37,6 +42,6 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
     }
 
     void RandomisePosition(){
-        dragRectTransform.anchoredPosition = new Vector2(Random.Range(-offset, offset), Random.Range(-offset, offset));
+        dragRectTransform.anchoredPosition = pos + new Vector2(Random.Range(-offset, offset), Random.Range(-offset, offset));
     }
 }

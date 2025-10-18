@@ -33,7 +33,7 @@ public class GameplayManager : NetworkBehaviour
     // Defaults
 
     public void Setup(){
-        current_coins = 3;
+        current_coins = 0;
         current_turn = 1;
         player_sub_turn = 0;
         player_count = _SessionManager.player_instances.Count;
@@ -72,9 +72,7 @@ public class GameplayManager : NetworkBehaviour
 
         _PlayerManager.OurTurn = our_turn;
         if(our_turn){
-            _PlayerManager.Deselect();
-            _PlayerManager.EnableAllTroops();
-            PlaySFX("Drums_1", SFX_Lookup);
+            NewTurn();
         }
         else{
             _PlayerManager.DisableAllTroops();
@@ -84,6 +82,14 @@ public class GameplayManager : NetworkBehaviour
             _PlayerManager.UpdateTurnNameDisplay(_SessionManager.player_instances[player].GetUsername() + "'s turn.");
         else
             _PlayerManager.UpdateTurnNameDisplay("Our turn.");
+    }
+
+    void NewTurn(){
+        _PlayerManager.Deselect();
+        _PlayerManager.EnableAllTroops();
+        PlaySFX("Drums_1", SFX_Lookup);
+
+        current_coins += 25;
     }
 
     // TROOPS //

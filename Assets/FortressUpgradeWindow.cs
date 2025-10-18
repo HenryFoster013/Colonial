@@ -17,6 +17,7 @@ public class FortressUpgradeWindow : Window{
 
     public void CashIn(){
         SilentClose();
+        player.UpgradeFort();
         PlaySFX("UI_Raise", SFX_Lookup);
     }
 }
