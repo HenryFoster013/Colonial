@@ -15,7 +15,7 @@ public class GameplayManager : NetworkBehaviour
     [SerializeField] SessionManager _SessionManager;
     [SerializeField] SoundEffectLookup SFX_Lookup;
     ConnectionManager _ConnectionManager;
-    MapManager _MapManager;
+    [SerializeField] MapManager _MapManager;
 
     [Header("Visuals")]
     [SerializeField] GameObject DamageEffect;
@@ -24,6 +24,7 @@ public class GameplayManager : NetworkBehaviour
     [Networked] public int current_turn { get; private set; }
     public int player_sub_turn;
     int player_count;
+    public bool our_first_turn;
 
     public int current_coins { get; private set; }
     int troop_counter = 1;
@@ -33,7 +34,8 @@ public class GameplayManager : NetworkBehaviour
     // Defaults
 
     public void Setup(){
-        current_coins = 0;
+        current_coins = 5;
+        our_first_turn = true;
         current_turn = 1;
         player_sub_turn = 0;
         player_count = _SessionManager.player_instances.Count;
@@ -89,7 +91,11 @@ public class GameplayManager : NetworkBehaviour
         _PlayerManager.EnableAllTroops();
         PlaySFX("Drums_1", SFX_Lookup);
 
-        current_coins += 25;
+        if(our_first_turn){
+            our_first_turn = false;
+        }
+        else
+            current_coins += _MapManager.TotalValue();
     }
 
     // TROOPS //
@@ -329,5 +335,4 @@ public class GameplayManager : NetworkBehaviour
 
     public void SpendStars(int cost){current_coins -= cost;}
     public void SetConnection(ConnectionManager cm){_ConnectionManager = cm;}
-    public void SetMap(MapManager mm){_MapManager = mm;}
 }

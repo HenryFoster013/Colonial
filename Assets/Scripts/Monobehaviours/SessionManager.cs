@@ -124,7 +124,6 @@ public class SessionManager : NetworkBehaviour
         _PreGameManager.gameObject.SetActive(false);
         _GameplayManager.gameObject.SetActive(true);
         _GameplayManager.SetConnection(_ConnectionManager);
-        _GameplayManager.SetMap(_MapManager);
         _PlayerManager.Setup();
         PregameBackground.Save();
     }

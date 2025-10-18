@@ -2025,6 +2025,7 @@ MonoBehaviour:
   _PlayerManager: {fileID: 2146075082}
   _SessionManager: {fileID: 308904221}
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
+  _MapManager: {fileID: 1780067900}
   DamageEffect: {fileID: 6489121289303637190, guid: fd7838d6f78d8f5489e83dca2f78c957, type: 3}
   DefeatEffect: {fileID: 8069163334187433995, guid: 640e563a24c5c8e41b14dc24075db742, type: 3}
   _current_turn: 0

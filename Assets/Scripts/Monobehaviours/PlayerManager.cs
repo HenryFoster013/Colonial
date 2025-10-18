@@ -463,7 +463,7 @@ public class PlayerManager : MonoBehaviour
         
         FortStats.SetActive(true);
         UpgradeButton.SetActive(OurTurn && stats.UpgradeCost() <= _GameplayManager.current_coins);
-        FortName.text = stats.name + " (" + stats.money_produced.ToString() + ")";
+        FortName.text = stats.name + " (" + stats.Value().ToString() + ")";
         FortName_BG.color = stats.tile.owner.Colour();
         StatBars[0].Refresh(stats.max_population, stats.population_used);
         StatBars[1].Refresh(stats.max_produce, stats.produce_used);

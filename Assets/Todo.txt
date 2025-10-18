@@ -1,11 +1,10 @@
 To Develop
-- make money a synced stat so it can be validated server side
-- similarily make produce etc update on the server which sends that data back
 - make namegen for usernames use the name lookup system
-- often spwaning a building also selects a tile (disable a mouseclick) (check this first)
 - create the engineer as a class
 - make a tile spawning effect
-- troops use stats
+- leaderboard
+- win condition
+- balance money
 
 To Model:
 flowers

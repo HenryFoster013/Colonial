@@ -508,6 +508,24 @@ public class MapManager : NetworkBehaviour
 
     // TILE OWNERSHIP //
 
+    public int TotalValue(){
+        if(city_tiles == null)
+            return 0;
+
+        int return_val = 0;
+        for(int i = 0; i < city_tiles.Length; i++){
+            if(city_tiles[i] != null){
+                if(city_tiles[i].stats != null){
+                    if(city_tiles[i].owner == _SessionManager.OurInstance.FactionData()){
+                        return_val += city_tiles[i].stats.Value();
+                    }
+                }
+            }
+        }
+        
+        return return_val;
+    }
+
     public void CleanCities(){
         for(int i = 0; i < city_tiles.Length; i++){
             if(city_tiles[i].stats != null)

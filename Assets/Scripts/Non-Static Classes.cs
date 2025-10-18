@@ -123,7 +123,6 @@ namespace HenrysMapUtils{
         public Tile tile {get; private set;}
         public string name {get; private set;}
         public int ownership_radius {get; private set;}
-        public int money_produced {get; private set;}
 
         public int max_population {get; private set;}
         public int population_used {get; private set;}
@@ -133,8 +132,8 @@ namespace HenrysMapUtils{
         public int industry_used {get; private set;}
 
         public int level {get; private set;}
-        const int upgrade_base = 25;
-        const int upgrade_additive = 25;
+        const int upgrade_base = 15;
+        const int upgrade_additive = 20;
 
         public TileStats(Tile _tile, string _name, int money){
             tile = _tile;
@@ -142,7 +141,6 @@ namespace HenrysMapUtils{
 
             ownership_radius = 2;
             name = _name;
-            money_produced = money;
 
             ResetMaxes();
             ReleaseUsage();
@@ -204,9 +202,7 @@ namespace HenrysMapUtils{
         public int FreePopulation(){return max_population - population_used;}
         public int FreeProduce(){return max_produce - produce_used;}
         public int FreeIndustry(){return max_industry - industry_used;}
-
-        public int UpgradeCost(){
-            return (upgrade_base + (upgrade_additive * level));
-        }
+        public int Value(){return max_industry + max_population + max_produce;}
+        public int UpgradeCost(){return (upgrade_base + (upgrade_additive * level));}
     }
 }
