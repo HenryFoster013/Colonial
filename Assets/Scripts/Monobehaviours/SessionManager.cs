@@ -32,7 +32,7 @@ public class SessionManager : NetworkBehaviour
     int map_data_recieved;
     bool connected;
     
-    const float texture_length_pixels = 16;
+    const float texture_width_pixels = 16;
     MaterialPropertyBlock[] troop_skins;
 
     // BASE //
@@ -188,15 +188,17 @@ public class SessionManager : NetworkBehaviour
 
     void SetupTroopMaterials(){
         float offy = 0;
-        float base_offset = -2f / texture_length_pixels; // Size of one colouring (2px) divided by the size of the image,  * -1 as goes down
+        float base_offset = -2f / texture_width_pixels; // Size of one colouring (2px) divided by the size of the image,  * -1 as goes down
         troop_skins = new MaterialPropertyBlock[_FactionLookup.Length() * 2];
         for(int i = 0; i < _FactionLookup.Length(); i++){
 
-            offy = _FactionLookup.GetFaction(i).TextureOffset() * base_offset * 2f;
+            offy = 0.5f + _FactionLookup.GetFaction(i).TextureOffset() * base_offset;
             MaterialPropertyBlock default_skin = new MaterialPropertyBlock();
             default_skin.SetVector("offy", new Vector2(0, offy));
+            default_skin.SetVector("tiling", new Vector2(1, 0.5f));
             MaterialPropertyBlock disabled_skin = new MaterialPropertyBlock();
-            disabled_skin.SetVector("offy", new Vector2(0, offy + base_offset));
+            disabled_skin.SetVector("offy", new Vector2(0, offy + (base_offset / 2)));
+            disabled_skin.SetVector("tiling", new Vector2(1, 0.5f));
 
             troop_skins[i * 2] = default_skin;
             troop_skins[(i * 2) + 1] = disabled_skin;

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f515b31b64faf524992a34452a563d5a, type: 3}
   m_Name: (Rifle) German
   m_EditorClassIdentifier: 
-  _Type: Jerry
+  _Type: Rifleman
   _Name: Rifleman
   _Cost: 3
   _PopulationCost: 1

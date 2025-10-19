@@ -33,7 +33,7 @@ public class SpawnInfoDisplay : MonoBehaviour{
         last_tile = spawn_tile;
 
         Title.text = troop.Name();
-        Cost.text = faction.Currency() + troop.Cost().ToString();
+        Cost.text = faction.CurrencyFormat(troop.Cost());
         FullBackground.SetActive(true);
         ShortenedBackground.SetActive(false);
 
@@ -61,7 +61,7 @@ public class SpawnInfoDisplay : MonoBehaviour{
             return;
 
         Title.text = piece.Name();
-        Cost.text = faction.Currency() + piece.Cost().ToString();
+        Cost.text = faction.CurrencyFormat(piece.Cost());
         FullBackground.SetActive(false);
         ShortenedBackground.SetActive(true);
         

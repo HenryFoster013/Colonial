@@ -157,7 +157,7 @@ public class PlayerManager : MonoBehaviour
         SpawnInfoPopup.transform.position = Input.mousePosition;
         EndTurnButton.SetActive(OurTurn);
         TurnDisplay.text = "Turn " + _GameplayManager.current_turn.ToString();
-        CoinDisplay.text = _SessionManager.LocalFactionData().Currency() + _GameplayManager.current_coins.ToString();
+        CoinDisplay.text = _SessionManager.LocalFactionData().CurrencyFormat(_GameplayManager.current_coins);
     }
 
     void WateryHighlights(){
@@ -463,7 +463,7 @@ public class PlayerManager : MonoBehaviour
         
         FortStats.SetActive(true);
         UpgradeButton.SetActive(OurTurn && stats.UpgradeCost() <= _GameplayManager.current_coins);
-        FortName.text = stats.name + " (" + stats.Value().ToString() + ")";
+        FortName.text = stats.name + " (" + _SessionManager.LocalFactionData().CurrencyFormat(stats.Value()) + ")";
         FortName_BG.color = stats.tile.owner.Colour();
         StatBars[0].Refresh(stats.max_population, stats.population_used);
         StatBars[1].Refresh(stats.max_produce, stats.produce_used);
@@ -569,7 +569,7 @@ public class PlayerManager : MonoBehaviour
     // UI //
 
     public void FortUpgradeButton(){
-        UpgradeWindow.Setup(_SessionManager.LocalFactionData().Currency() + current_tile.stats.UpgradeCost().ToString(), this);
+        UpgradeWindow.Setup(_SessionManager.LocalFactionData().CurrencyFormat(current_tile.stats.UpgradeCost()), this);
         UpgradeWindow.Open();
     }
 

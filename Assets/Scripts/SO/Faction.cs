@@ -23,9 +23,18 @@ public class Faction : ScriptableObject
     [SerializeField] Sprite _Flag;
     [SerializeField] Sprite _Mini_Flag;
     [SerializeField] string _Currency;
+    [SerializeField] string _CurrencyEnd;
 
     public bool CheckType(string s){
         return (s.ToUpper() == _Type.ToUpper());
+    }
+
+    public string CurrencyFormat(int money){
+        return CurrencyFormat(money.ToString());
+    }
+
+    public string CurrencyFormat(string money){
+        return _Currency + money + _CurrencyEnd;
     }
 
     public string GetTroopName(){return _TroopNameset.RandomName();}
@@ -42,5 +51,4 @@ public class Faction : ScriptableObject
     public PieceData Tower(){return _Tower;}
     public PieceData Fort(){return _Fort;}
     public int TextureOffset(){return _TextureOffset;}
-    public string Currency(){return _Currency;}
 }

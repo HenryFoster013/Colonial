@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f515b31b64faf524992a34452a563d5a, type: 3}
+  m_Name: (Cavalry) Pirates
+  m_EditorClassIdentifier: 
+  _Type: Cavalry
+  _Name: Cavalry
+  _Cost: 3
+  _PopulationCost: 1
+  _ProduceCost: 1
+  _IndustryCost: 0
+  _MoveDistance: 3
+  _AttackDistance: 1
+  _Vision: 10
+  _Health: 3
+  _Damage: 1
+  _MoveOnCloseKill: 1
+  _Prefab: {fileID: 5269036604996546843, guid: 6fcff36308b104b4fadcc32327f0719f, type: 3}
+  _NetPrefabRef:
+    RawGuidValue: fa9dd4c8bb526144da69fcee6e3a3a23
+  _AttackAnim: TroopAttack

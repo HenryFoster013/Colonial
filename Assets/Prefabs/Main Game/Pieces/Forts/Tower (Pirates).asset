@@ -21,7 +21,7 @@ MonoBehaviour:
   _ContainsBillboards: 0
   _Walkable: 1
   _Fort: 1
-  _OwningFaction: {fileID: 0}
+  _OwningFaction: {fileID: 11400000, guid: d5c6eee8c50356f44aec1719e92e90ac, type: 2}
   _Population: 3
   _Produce: 3
   _Industry: 3

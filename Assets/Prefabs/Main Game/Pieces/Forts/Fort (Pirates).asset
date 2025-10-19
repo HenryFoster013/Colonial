@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27076cdd8188395419b12c7eae2156a5, type: 3}
+  m_Name: Fort (Pirates)
+  m_EditorClassIdentifier: 
+  _Type: Fort
+  _Name: Fort (French)
+  _Prefab: {fileID: 7229817698954709211, guid: 5b151eedd80aebb4b9393423f897979e, type: 3}
+  _TroopOffset: 0.389
+  _RandomiseRotation: 0
+  _RandomiseFirstChildRotation: 0
+  _ContainsBillboards: 0
+  _Walkable: 1
+  _Fort: 1
+  _OwningFaction: {fileID: 11400000, guid: d5c6eee8c50356f44aec1719e92e90ac, type: 2}
+  _Population: 2
+  _Produce: 2
+  _Industry: 2
+  _Cost: 0
+  _CompatibleTiles: []
+  _CompatiblePieces: []

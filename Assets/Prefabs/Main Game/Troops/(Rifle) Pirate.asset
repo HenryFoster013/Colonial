@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f515b31b64faf524992a34452a563d5a, type: 3}
+  m_Name: (Rifle) Pirate
+  m_EditorClassIdentifier: 
+  _Type: Rifleman
+  _Name: Rifleman
+  _Cost: 3
+  _PopulationCost: 1
+  _ProduceCost: 0
+  _IndustryCost: 1
+  _MoveDistance: 2
+  _AttackDistance: 3
+  _Vision: 2
+  _Health: 3
+  _Damage: 3
+  _MoveOnCloseKill: 0
+  _Prefab: {fileID: 7115972115337629991, guid: 22dd81a3c63f5d74f9cca8368f1f8bb9, type: 3}
+  _NetPrefabRef:
+    RawGuidValue: 52daaf7c394404041a94770e6706a768
+  _AttackAnim: TroopFireRifle
