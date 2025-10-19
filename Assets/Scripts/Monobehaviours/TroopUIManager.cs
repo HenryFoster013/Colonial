@@ -21,7 +21,7 @@ public class TroopUIManager : MonoBehaviour
     }
 
     public void SetHealthColour(Color colour){
-        HealthText.color = colour;
+        Health_BG.color = colour;
     }
 
     public void UpdateHealth(){
