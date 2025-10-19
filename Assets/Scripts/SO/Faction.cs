@@ -24,6 +24,8 @@ public class Faction : ScriptableObject
     [SerializeField] Sprite _Mini_Flag;
     [SerializeField] string _Currency;
     [SerializeField] string _CurrencyEnd;
+    [Header(" - Misc - ")]
+    [SerializeField] string _DrumOverride;
 
     public bool CheckType(string s){
         return (s.ToUpper() == _Type.ToUpper());
@@ -51,4 +53,5 @@ public class Faction : ScriptableObject
     public PieceData Tower(){return _Tower;}
     public PieceData Fort(){return _Fort;}
     public int TextureOffset(){return _TextureOffset;}
+    public string DrumOverride(){return _DrumOverride;}
 }

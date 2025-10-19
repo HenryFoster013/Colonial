@@ -89,7 +89,12 @@ public class GameplayManager : NetworkBehaviour
     void NewTurn(){
         _PlayerManager.Deselect();
         _PlayerManager.EnableAllTroops();
-        PlaySFX("Drums_1", SFX_Lookup);
+
+        if(_SessionManager.LocalFactionData().DrumOverride() == "")
+            PlaySFX("Drums_1", SFX_Lookup);
+        else
+            PlaySFX(_SessionManager.LocalFactionData().DrumOverride(), SFX_Lookup);
+
 
         if(our_first_turn){
             our_first_turn = false;
