@@ -1,9 +1,6 @@
 To Develop
 
-(leaderboard)
-- current currency needs to be synced
-- owned territory count needs to be synced
-- technologies learned count needs to be synced
+leaderboard UI
 
 need to come to a conclusion on how multiple players of the same faction work
  - troops need an identifying icon to show their owner
