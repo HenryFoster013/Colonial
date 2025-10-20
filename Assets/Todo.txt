@@ -1,7 +1,5 @@
 To Develop
 
-username gen needs to be split into the nameset class
-
 (leaderboard)
 - current currency needs to be synced
 - owned territory count needs to be synced
