@@ -5,15 +5,17 @@ using Fusion;
 
 public class PlayerInstance : NetworkBehaviour{
 
-    [Networked] public int Faction_ID { get; set; }
-    [Networked, Capacity(32)] public string Username { get; set; }
-    [Networked] public bool Host { get; set; }
-    [Networked] public bool Ready { get; set; }
-    [Networked] public int ID { get; set; }
+    [Networked] public int Faction_ID {get; set;}
+    [Networked, Capacity(32)] public string Username {get; set;}
+    [Networked] public bool Host {get; set;}
+    [Networked] public bool Ready {get; set;}
+    [Networked] public int ID {get; set;}
 
     [SerializeField] FactionLookup _FactionLookup;
+
     PlayerManager player_manager;
     private ChangeDetector _changeDetector;
+    int current_currency;
 
     public override void Spawned(){
         if(Object.HasInputAuthority){
@@ -57,8 +59,12 @@ public class PlayerInstance : NetworkBehaviour{
     public void SetManager(PlayerManager manager){player_manager = manager;}
     public void WeAreHost(){Host = true;}
     public void SetID(int id){ID = id;}
+    public void SetMoney(int money){current_currency = money;}
+    public void SpendMoney(int money){current_currency -= money;}
+    public void EarnMoney(int money){current_currency += money;}
 
     // Getters //
     public Faction FactionData(){return _FactionLookup.GetFaction(Faction_ID);}
     public string GetUsername(){return FilterText(Username, 24);}
+    public int Money(){return current_currency;}
 }

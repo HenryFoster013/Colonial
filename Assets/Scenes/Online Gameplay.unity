@@ -2028,6 +2028,7 @@ MonoBehaviour:
   _SessionManager: {fileID: 308904221}
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
   _MapManager: {fileID: 1780067900}
+  LeaderboardWindow: {fileID: 568403777}
   DamageEffect: {fileID: 6489121289303637190, guid: fd7838d6f78d8f5489e83dca2f78c957, type: 3}
   DefeatEffect: {fileID: 8069163334187433995, guid: 640e563a24c5c8e41b14dc24075db742, type: 3}
   _current_turn: 0
@@ -4893,12 +4894,12 @@ GameObject:
   - component: {fileID: 568403776}
   - component: {fileID: 568403777}
   m_Layer: 5
-  m_Name: Upgrade Window (1)
+  m_Name: Leaderboard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &568403776
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4917,7 +4918,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -13, y: -3}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &568403777
@@ -4929,14 +4930,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 568403775}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e48e7824ef2ee248af6de8082031c24, type: 3}
+  m_Script: {fileID: 11500000, guid: 77e6d47d8251dc86ab3ae584fc0a0ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dragRectTransform: {fileID: 1801637055}
   canvas: {fileID: 656314378}
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
-  offset: 60
-  Confirm_Text: {fileID: 0}
+  offset: 10
+  CloseOnSecondOpen: 1
+  _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
+  _GameplayManager: {fileID: 236702219}
+  _MapManager: {fileID: 1780067900}
 --- !u!1 &587031210
 GameObject:
   m_ObjectHideFlags: 0
@@ -5179,7 +5183,7 @@ GameObject:
   - component: {fileID: 652179984}
   - component: {fileID: 652179983}
   m_Layer: 5
-  m_Name: Stats Button
+  m_Name: Leaderboard Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5248,7 +5252,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 652179984}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2146075082}
+        m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
+        m_MethodName: LeaderboardButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &652179984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9940,7 +9956,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1301966252
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11621,6 +11637,7 @@ MonoBehaviour:
   canvas: {fileID: 656314378}
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
   offset: 60
+  CloseOnSecondOpen: 0
   Confirm_Text: {fileID: 1886096447}
 --- !u!1 &1546114815
 GameObject:
@@ -13992,7 +14009,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1801637055
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14013,7 +14030,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 284.56857, y: 191}
+  m_AnchoredPosition: {x: 195, y: 200}
   m_SizeDelta: {x: 271.0368, y: 23.0611}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1801637056
@@ -16208,7 +16225,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Faction statistics
+  m_text: Leaderboard
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f22c851f6ff8a9a40a5de265a18eb3c0, type: 2}
   m_sharedMaterial: {fileID: -425393853074046347, guid: f22c851f6ff8a9a40a5de265a18eb3c0, type: 2}
@@ -17044,6 +17061,7 @@ MonoBehaviour:
   SpawnMenuArrowsHolder: {fileID: 1227609887}
   EndTurnButton: {fileID: 661793618}
   CoinDisplay: {fileID: 503266993}
+  LeaderboardWindow: {fileID: 568403777}
   TurnDisplay: {fileID: 1528910920}
   TurnNameAnim: {fileID: 1557543935}
   TurnNameText: {fileID: 528518315}

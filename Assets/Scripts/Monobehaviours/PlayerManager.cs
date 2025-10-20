@@ -33,6 +33,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] GameObject SpawnMenuArrowsHolder;
     [SerializeField] GameObject EndTurnButton;
     [SerializeField] TMP_Text CoinDisplay;
+    [SerializeField] Leaderboard LeaderboardWindow;
 
     [Header("Turns")]
     [SerializeField] TMP_Text TurnDisplay;
@@ -157,7 +158,7 @@ public class PlayerManager : MonoBehaviour
         SpawnInfoPopup.transform.position = Input.mousePosition;
         EndTurnButton.SetActive(OurTurn);
         TurnDisplay.text = "Turn " + _GameplayManager.current_turn.ToString();
-        CoinDisplay.text = _SessionManager.LocalFactionData().CurrencyFormat(_GameplayManager.current_coins);
+        CoinDisplay.text = _SessionManager.LocalFactionData().CurrencyFormat(_SessionManager.Money());
     }
 
     void WateryHighlights(){
@@ -222,7 +223,7 @@ public class PlayerManager : MonoBehaviour
     // SELECTION //
 
     public void SpawnBuildingButton(PieceData piece){
-        if(_GameplayManager.current_coins >= piece.Cost()){
+        if(Money() >= piece.Cost()){
             _GameplayManager.RPC_SpawnBuilding(current_tile.ID, _PieceLookup.ID(piece));
             CloseSpawnMenu();
             Deselect();
@@ -238,7 +239,7 @@ public class PlayerManager : MonoBehaviour
             TroopData troop = troops[i];
 
             if(CanSpawnTroop(i)){
-                _GameplayManager.SpendStars(troops[i].Cost());
+                _SessionManager.SpendMoney(troops[i].Cost());
                 block_world_clicks = true;
                 _GameplayManager.RPC_SpawnTroop(_TroopLookup.ID(troop), current_tile.ID, _SessionManager.OurInstance.ID);
                 CloseSpawnMenu();
@@ -253,7 +254,7 @@ public class PlayerManager : MonoBehaviour
         TroopData troop = _SessionManager.LocalFactionData().Troops()[troop_id];
         bool valid = troops_owned[troop_id];
         if(valid)
-            valid = troop.Cost() <= _GameplayManager.current_coins;
+            valid = troop.Cost() <= Money();
         if(valid)
             valid = _GameplayManager.ValidTroopSpawn(troop, current_tile);
         return valid;
@@ -462,7 +463,7 @@ public class PlayerManager : MonoBehaviour
             return;
         
         FortStats.SetActive(true);
-        UpgradeButton.SetActive(OurTurn && stats.UpgradeCost() <= _GameplayManager.current_coins);
+        UpgradeButton.SetActive(OurTurn && stats.UpgradeCost() <= Money());
         FortName.text = stats.name + " (" + _SessionManager.LocalFactionData().CurrencyFormat(stats.Value()) + ")";
         FortName_BG.color = stats.tile.owner.Colour();
         StatBars[0].Refresh(stats.max_population, stats.population_used);
@@ -568,14 +569,18 @@ public class PlayerManager : MonoBehaviour
 
     // UI //
 
+    public void LeaderboardButton(){
+        LeaderboardWindow.Open();
+    }
+
     public void FortUpgradeButton(){
         UpgradeWindow.Setup(_SessionManager.LocalFactionData().CurrencyFormat(current_tile.stats.UpgradeCost()), this);
         UpgradeWindow.Open();
     }
 
     public void UpgradeFort(){
-        if(_GameplayManager.current_coins >= current_tile.stats.UpgradeCost()){
-            _GameplayManager.SpendStars(current_tile.stats.UpgradeCost());
+        if(Money() >= current_tile.stats.UpgradeCost()){
+            _SessionManager.SpendMoney(current_tile.stats.UpgradeCost());
             Map.RPC_RequestFortLevel(current_tile.ID, current_tile.stats.level + 1);
             Deselect();
         }
@@ -706,7 +711,7 @@ public class PlayerManager : MonoBehaviour
 
         for(int i = start_point; i < ownership.Length && i < start_point + 4; i++){
             if(ownership[i]){
-                prs[i].SetAfford(_GameplayManager.current_coins);
+                prs[i].SetAfford(Money());
                 prs[i].SetPosition(new Vector2((active_count * offy) + centering, 0));
                 prs[i].SetTile(current_tile);
                 prs[i].Enable();
@@ -766,9 +771,9 @@ public class PlayerManager : MonoBehaviour
             butt = obj.transform.parent.parent.GetComponent<SpawnButton>();
             if(butt != null){
                 if(butt.IsTroop())
-                    SpawnInfoPopup.Refresh(_SessionManager.LocalFactionData().Troops()[butt.Reference()], current_tile.stats, _SessionManager.LocalFactionData(), _GameplayManager.current_coins);
+                    SpawnInfoPopup.Refresh(_SessionManager.LocalFactionData().Troops()[butt.Reference()], current_tile.stats, _SessionManager.LocalFactionData(), Money());
                 else
-                    SpawnInfoPopup.Refresh(butt.Piece(), _GameplayManager.current_coins, _SessionManager.LocalFactionData());
+                    SpawnInfoPopup.Refresh(butt.Piece(), Money(), _SessionManager.LocalFactionData());
                 SpawnInfoPopup.gameObject.SetActive(true);
             }
         }
@@ -780,6 +785,10 @@ public class PlayerManager : MonoBehaviour
         List<RaycastResult> raycastResults = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, raycastResults);
         return raycastResults;
+    }
+
+    public int Money(){
+        return _SessionManager.OurInstance.Money();
     }
 
     // CAMERA //

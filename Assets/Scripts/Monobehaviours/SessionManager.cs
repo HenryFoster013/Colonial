@@ -227,6 +227,13 @@ public class SessionManager : NetworkBehaviour
         }
     }
 
+    // MONEY //
+
+    public int Money(){return OurInstance.Money();}
+    public void SetMoney(int money){OurInstance.SetMoney(money);}
+    public void EarnMoney(int money){OurInstance.EarnMoney(money);}
+    public void SpendMoney(int money){OurInstance.SpendMoney(money);}
+
     // GETTERS //
 
     public MaterialPropertyBlock[] GetTroopMaterials(int faction_id){

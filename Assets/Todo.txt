@@ -1,10 +1,24 @@
 To Develop
-- make namegen for usernames use the name lookup system
-- create the engineer as a class
-- make a tile spawning effect
-- leaderboard
-- win condition
-- balance money
+
+username gen needs to be split into the nameset class
+
+(leaderboard)
+- current currency needs to be synced
+- owned territory count needs to be synced
+- technologies learned count needs to be synced
+
+need to come to a conclusion on how multiple players of the same faction work
+ - troops need an identifying icon to show their owner
+- technologies learned need to be synced or kept seperate
+- alternatively do not allow multiple players within the same faction? Is lowk lame
+
+particle effects need to be made for troop spawning and building contruction
+
+money needs to be balanced
+
+engineer as a class needs to be defined
+
+road system needs to be built
 
 To Model:
 flowers

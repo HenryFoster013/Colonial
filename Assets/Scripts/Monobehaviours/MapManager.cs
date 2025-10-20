@@ -798,6 +798,7 @@ public class MapManager : NetworkBehaviour
     // GETTERS //
 
     public bool CheckVisibility(int tile){return Tiles[tile].visible;}
+    public Tile[] GetCities(){return city_tiles;}
 
     public bool IsOwner(Tile tile, Faction owner){
         return tile.owner == owner;

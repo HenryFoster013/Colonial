@@ -16,6 +16,7 @@ public class GameplayManager : NetworkBehaviour
     [SerializeField] SoundEffectLookup SFX_Lookup;
     ConnectionManager _ConnectionManager;
     [SerializeField] MapManager _MapManager;
+    [SerializeField] Leaderboard LeaderboardWindow;
 
     [Header("Visuals")]
     [SerializeField] GameObject DamageEffect;
@@ -26,7 +27,6 @@ public class GameplayManager : NetworkBehaviour
     int player_count;
     public bool our_first_turn;
 
-    public int current_coins { get; private set; }
     int troop_counter = 1;
 
     public List<Troop> AllTroops;
@@ -34,7 +34,7 @@ public class GameplayManager : NetworkBehaviour
     // Defaults
 
     public void Setup(){
-        current_coins = 5;
+        _SessionManager.SetMoney(5);
         our_first_turn = true;
         current_turn = 1;
         player_sub_turn = 0;
@@ -96,7 +96,7 @@ public class GameplayManager : NetworkBehaviour
             our_first_turn = false;
         }
         else
-            current_coins += _MapManager.TotalValue();
+            _SessionManager.EarnMoney(_MapManager.TotalValue());
     }
 
     // TROOPS //
@@ -234,6 +234,10 @@ public class GameplayManager : NetworkBehaviour
         _MapManager.RPC_PieceChanged(tile_id, piece_id);
     }
 
+    public void ConquestAlert(){
+        LeaderboardWindow.UpdateFortresses();
+    }
+
     // Troop Spawning //
 
     public Troop GetTroopAt(Tile tile){
@@ -247,7 +251,10 @@ public class GameplayManager : NetworkBehaviour
         return troop;
     }
 
-    public void AddTroop(Troop troop){AllTroops.Add(troop);}
+    public void AddTroop(Troop troop){
+        AllTroops.Add(troop);
+        LeaderboardWindow.UpdateTroops();
+    }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_SpawnTroop(int troop_id, int tile, int owner, RpcInfo info = default){
@@ -334,6 +341,6 @@ public class GameplayManager : NetworkBehaviour
         }
     }
 
-    public void SpendStars(int cost){current_coins -= cost;}
+    public void SpendMoney(int cost){_SessionManager.SpendMoney(cost);}
     public void SetConnection(ConnectionManager cm){_ConnectionManager = cm;}
 }

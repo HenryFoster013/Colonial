@@ -7,10 +7,11 @@ using static HenrysUtils;
 public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
 
     [Header("Generic Variables")]
-    [SerializeField] private RectTransform dragRectTransform;
+    public RectTransform dragRectTransform;
     [SerializeField] Canvas canvas;
     public SoundEffectLookup SFX_Lookup;
     [SerializeField] float offset = 60;
+    [SerializeField] bool CloseOnSecondOpen = true;
     Vector2 pos;
 
     void Start(){
@@ -25,8 +26,13 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
     }
 
     public void Open(){
-        PlaySFX("UI_1", SFX_Lookup);
-        SilentOpen();
+        if(CloseOnSecondOpen && dragRectTransform.gameObject.activeSelf){
+            Close();
+        }
+        else{
+            PlaySFX("UI_1", SFX_Lookup);
+            SilentOpen();
+        }
     }
     public void SilentOpen(){
         RandomisePosition();
@@ -41,7 +47,7 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
         dragRectTransform.gameObject.SetActive(false);
     }
 
-    void RandomisePosition(){
+    public void RandomisePosition(){
         dragRectTransform.anchoredPosition = pos + new Vector2(Random.Range(-offset, offset), Random.Range(-offset, offset));
     }
 }
