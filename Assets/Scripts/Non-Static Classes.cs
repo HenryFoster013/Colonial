@@ -185,11 +185,11 @@ namespace HenrysMapUtils{
         public void SetName(string _name){name = _name;}
 
         public void SetLevel(int lvl){
-            if(lvl >= level_limit)
+            if(lvl > level_limit)
                 return;
             
             level = lvl;
-            ownership_radius = 2 + (level * resources_per_level);
+            ownership_radius = 2 + level;
         }
 
         public void AddPopulation(int amount){population_used += amount;}

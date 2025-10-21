@@ -605,6 +605,8 @@ public class MapManager : NetworkBehaviour
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_SetFortLevel(int tile_id, int level, RpcInfo info = default){
+        print(Tiles[tile_id].stats.BelowLevelLimit());
+
         if(!Tiles[tile_id].stats.BelowLevelLimit())
             return;
 
