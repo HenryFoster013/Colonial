@@ -123,17 +123,18 @@ namespace HenrysMapUtils{
         public Tile tile {get; private set;}
         public string name {get; private set;}
         public int ownership_radius {get; private set;}
-
-        public int max_population {get; private set;}
-        public int population_used {get; private set;}
-        public int max_produce {get; private set;}
-        public int produce_used {get; private set;}
-        public int max_industry {get; private set;}
-        public int industry_used {get; private set;}
-
         public int level {get; private set;}
+
+        private int max_population;
+        private int population_used;
+        private int max_produce;
+        private int produce_used;
+        private int max_industry;
+        private int industry_used ;
+
         const int upgrade_base = 15;
         const int upgrade_additive = 20;
+        const int resources_per_level = 1;
 
         public TileStats(Tile _tile, string _name, int money){
             tile = _tile;
@@ -180,7 +181,7 @@ namespace HenrysMapUtils{
 
         public void SetLevel(int lvl){
             level = lvl;
-            ownership_radius = 2 + level;
+            ownership_radius = 2 + (level * resources_per_level);
         }
 
         public void AddPopulation(int amount){population_used += amount;}
@@ -199,10 +200,20 @@ namespace HenrysMapUtils{
 
         // Getters //
 
-        public int FreePopulation(){return max_population - population_used;}
-        public int FreeProduce(){return max_produce - produce_used;}
-        public int FreeIndustry(){return max_industry - industry_used;}
-        public int Value(){return max_industry + max_population + max_produce;}
+        public int FreePopulation(){return MaxPopulation() - population_used;}
+        public int FreeProduce(){return MaxProduce() - produce_used;}
+        public int FreeIndustry(){return MaxIndustry() - industry_used;}
+
+        public int MaxPopulation(){return max_population + (level * resources_per_level);}
+        public int MaxProduce(){return max_produce + (level * resources_per_level);}
+        public int MaxIndustry(){return max_industry + (level * resources_per_level);}
+
+        public int PopulationUsed(){return population_used;}
+        public int ProduceUsed(){return produce_used;}
+        public int IndustryUsed(){return industry_used;}
+
+        public int Value(){return MaxIndustry() + MaxPopulation() + MaxProduce();}
+
         public int UpgradeCost(){return (upgrade_base + (upgrade_additive * level));}
     }
 }

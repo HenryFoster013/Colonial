@@ -2028,7 +2028,6 @@ MonoBehaviour:
   _SessionManager: {fileID: 308904221}
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
   _MapManager: {fileID: 1780067900}
-  LeaderboardWindow: {fileID: 568403777}
   DamageEffect: {fileID: 6489121289303637190, guid: fd7838d6f78d8f5489e83dca2f78c957, type: 3}
   DefeatEffect: {fileID: 8069163334187433995, guid: 640e563a24c5c8e41b14dc24075db742, type: 3}
   _current_turn: 0
@@ -4771,6 +4770,7 @@ MonoBehaviour:
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
   offset: 10
   CloseOnSecondOpen: 1
+  OpenedByDefault: 0
   _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
   _GameplayManager: {fileID: 236702219}
   _MapManager: {fileID: 1780067900}
@@ -11320,6 +11320,7 @@ MonoBehaviour:
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
   offset: 60
   CloseOnSecondOpen: 0
+  OpenedByDefault: 0
   Confirm_Text: {fileID: 1886096447}
 --- !u!1 &1546114815
 GameObject:
@@ -13384,7 +13385,6 @@ MonoBehaviour:
   - {fileID: 1497038871315994472, guid: 9f98975a479c68e4a9cdeaba56ba94b7, type: 3}
   - {fileID: 2505958575200160393, guid: 56fbc02adc3e8964c9a015a0562c5d09, type: 3}
   - {fileID: 7529026757873758582, guid: 7a1deff2df54c7647a9dd762f3b42e57, type: 3}
-  LeaderboardWindow: {fileID: 568403777}
   map_data_raw: []
 --- !u!114 &1780067901
 MonoBehaviour:
@@ -13729,7 +13729,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.34509805, g: 0.45799845, b: 0.5764706, a: 1}
+  m_Color: {r: 0.34509805, g: 0.5291276, b: 0.5764706, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

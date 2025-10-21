@@ -12,10 +12,15 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
     public SoundEffectLookup SFX_Lookup;
     [SerializeField] float offset = 60;
     public bool CloseOnSecondOpen = true;
+    [SerializeField] bool OpenedByDefault = false;
     Vector2 pos;
 
     void Start(){
         pos = dragRectTransform.anchoredPosition;
+        if(OpenedByDefault)
+            SilentOpen();
+        else
+            SilentClose();
     }
 
     public void OnDrag(PointerEventData eventData){

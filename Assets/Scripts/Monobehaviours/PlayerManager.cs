@@ -466,9 +466,9 @@ public class PlayerManager : MonoBehaviour
         UpgradeButton.SetActive(OurTurn && stats.UpgradeCost() <= Money());
         FortName.text = stats.name + " (" + _SessionManager.LocalFactionData().CurrencyFormat(stats.Value()) + ")";
         FortName_BG.color = stats.tile.owner.Colour();
-        StatBars[0].Refresh(stats.max_population, stats.population_used);
-        StatBars[1].Refresh(stats.max_produce, stats.produce_used);
-        StatBars[2].Refresh(stats.max_industry, stats.industry_used);
+        StatBars[0].Refresh(stats.MaxPopulation(), stats.PopulationUsed());
+        StatBars[1].Refresh(stats.MaxProduce(), stats.ProduceUsed());
+        StatBars[2].Refresh(stats.MaxIndustry(), stats.IndustryUsed());
     }
 
     bool IsTroopAttackable(Troop troop){
