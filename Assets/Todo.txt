@@ -1,11 +1,8 @@
 To Develop
 
-leaderboard UI
-
 need to come to a conclusion on how multiple players of the same faction work
  - troops need an identifying icon to show their owner
 - technologies learned need to be synced or kept seperate
-- alternatively do not allow multiple players within the same faction? Is lowk lame
 
 particle effects need to be made for troop spawning and building contruction
 
