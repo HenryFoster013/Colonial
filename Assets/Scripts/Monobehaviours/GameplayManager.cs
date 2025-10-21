@@ -230,7 +230,7 @@ public class GameplayManager : NetworkBehaviour
     public void RPC_SpawnBuilding(int tile_id, int piece_id, RpcInfo info = default){
         if(!BuildingValid(_MapManager.GetTile(tile_id), _PieceLookup.Piece(piece_id)))
             return;
-        _MapManager.RPC_PieceChanged(tile_id, piece_id);
+        _MapManager.RPC_PieceChanged(tile_id, piece_id, true);
     }
 
     // Troop Spawning //

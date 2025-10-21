@@ -43,6 +43,9 @@ public class MapManager : NetworkBehaviour
     [SerializeField] Material BorderMaterial;
     [SerializeField] GameObject[] BorderPrefabs;
 
+    [Header(" - Misc - ")]
+    [SerializeField] GameObject TileEffect;
+
     // Local only
     public bool ready {get; private set;}
     public float GrassLimit {get; private set;}
@@ -567,10 +570,10 @@ public class MapManager : NetworkBehaviour
         
         if(IsTileFortress(tile)){
             if(tile.piece.CheckType("Tower")){
-                RPC_PieceChanged(tile.ID, _PieceLookup.ID(owner.Tower()));
+                RPC_PieceChanged(tile.ID, _PieceLookup.ID(owner.Tower()), false);
             }
             else{
-                RPC_PieceChanged(tile.ID, _PieceLookup.ID(owner.Fort()));
+                RPC_PieceChanged(tile.ID, _PieceLookup.ID(owner.Fort()), false);
             }
 
             RPC_Conquer(tile.ID, _FactionLookup.ID(owner));
@@ -590,10 +593,23 @@ public class MapManager : NetworkBehaviour
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPC_PieceChanged(int tile_id, int piece_id, RpcInfo info = default){
-        Tiles[tile_id].SetPiece(_PieceLookup.Piece(piece_id));
+    public void RPC_PieceChanged(int tile_id, int piece_id, bool play_effect, RpcInfo info = default){
+        PieceData piece = _PieceLookup.Piece(piece_id);
+        Tiles[tile_id].SetPiece(piece);
+        PlayBuildingEffect(Tiles[tile_id], piece, play_effect);
         GeneratePieceModel(Tiles[tile_id]);
         RefreshAllCities();
+    }
+
+    void PlayBuildingEffect(Tile tile, PieceData piece, bool truth){
+
+        // Any return conditions here, these are piece swaps we do not want the effect to spawn for (eg hunting sharks)
+        if(!truth)
+            return;
+        if(IsTileFortress(tile))
+            return;
+
+        GameObject.Instantiate(TileEffect, tile.world_position, Quaternion.identity);
     }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]

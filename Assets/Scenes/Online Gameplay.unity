@@ -13385,6 +13385,7 @@ MonoBehaviour:
   - {fileID: 1497038871315994472, guid: 9f98975a479c68e4a9cdeaba56ba94b7, type: 3}
   - {fileID: 2505958575200160393, guid: 56fbc02adc3e8964c9a015a0562c5d09, type: 3}
   - {fileID: 7529026757873758582, guid: 7a1deff2df54c7647a9dd762f3b42e57, type: 3}
+  TileEffect: {fileID: 7123681873092064626, guid: f939f4df42641de909bee6b04c4b7245, type: 3}
   map_data_raw: []
 --- !u!114 &1780067901
 MonoBehaviour:

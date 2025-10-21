@@ -5,7 +5,6 @@ need to come to a conclusion on how multiple players of the same faction work
 - technologies learned need to be synced or kept seperate
 
 particle effects need to be made for:
- - building contruction
  - tile discovery
 
 money needs to be balanced
