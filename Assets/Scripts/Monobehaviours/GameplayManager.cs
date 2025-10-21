@@ -16,7 +16,6 @@ public class GameplayManager : NetworkBehaviour
     [SerializeField] SoundEffectLookup SFX_Lookup;
     ConnectionManager _ConnectionManager;
     [SerializeField] MapManager _MapManager;
-    [SerializeField] Leaderboard LeaderboardWindow;
 
     [Header("Visuals")]
     [SerializeField] GameObject DamageEffect;
@@ -234,10 +233,6 @@ public class GameplayManager : NetworkBehaviour
         _MapManager.RPC_PieceChanged(tile_id, piece_id);
     }
 
-    public void ConquestAlert(){
-        LeaderboardWindow.UpdateFortresses();
-    }
-
     // Troop Spawning //
 
     public Troop GetTroopAt(Tile tile){
@@ -253,7 +248,6 @@ public class GameplayManager : NetworkBehaviour
 
     public void AddTroop(Troop troop){
         AllTroops.Add(troop);
-        LeaderboardWindow.UpdateTroops();
     }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]

@@ -35,7 +35,7 @@ public class PreviewRenderer : MonoBehaviour{
         cam.targetTexture = rend_text;
 
         button = GameObject.Instantiate(ButtonPrefab, button_holder.position, Quaternion.identity);
-        button.transform.parent = button_holder;
+        button.transform.SetParent(button_holder);
         button.transform.localScale = new Vector3(1,1,1);
         button_manager = button.transform.GetComponent<SpawnButton>();
         

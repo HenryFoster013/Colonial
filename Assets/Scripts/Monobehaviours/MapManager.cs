@@ -584,7 +584,6 @@ public class MapManager : NetworkBehaviour
         }
 
         if(owner == _SessionManager.OurInstance.FactionData()){
-            print("let there be light");
             MarkRadiusAsVisible(tile, radius);
         }
     }

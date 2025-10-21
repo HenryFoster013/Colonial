@@ -11,7 +11,7 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
     [SerializeField] Canvas canvas;
     public SoundEffectLookup SFX_Lookup;
     [SerializeField] float offset = 60;
-    [SerializeField] bool CloseOnSecondOpen = true;
+    public bool CloseOnSecondOpen = true;
     Vector2 pos;
 
     void Start(){
@@ -25,7 +25,7 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
         dragRectTransform.SetAsLastSibling();
     }
 
-    public void Open(){
+    public virtual void Open(){
         if(CloseOnSecondOpen && dragRectTransform.gameObject.activeSelf){
             Close();
         }
