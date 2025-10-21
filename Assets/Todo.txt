@@ -1,11 +1,9 @@
 To Develop
 
+- tech tree system as a whole tbh (just start)
 need to come to a conclusion on how multiple players of the same faction work
  - troops need an identifying icon to show their owner
 - technologies learned need to be synced or kept seperate
-
-particle effects need to be made for:
- - tile discovery
 
 money needs to be balanced
 
