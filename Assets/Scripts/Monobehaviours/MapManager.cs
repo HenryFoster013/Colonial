@@ -7,6 +7,7 @@ using System.Diagnostics;
 using Debug=UnityEngine.Debug;
 using Fusion;
 using HenrysMapUtils;
+using static HenrysUtils;
 
 public class MapManager : NetworkBehaviour
 {
@@ -617,18 +618,29 @@ public class MapManager : NetworkBehaviour
         CheckForMapRegen();
     }
 
+    void ConquestSFX(Tile tile, Faction faction){
+        if(tile.visible){
+            if(faction != null){
+                if(faction != tile.owner)
+                    PlaySFX(faction.Jingle());
+            }
+        }
+    }
+
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_Conquer(int tile_id, int owner_id, RpcInfo info = default){
         int radius = 2;
         TileStats stats = Tiles[tile_id].stats;
-        if(stats != null)
-            radius = stats.ownership_radius;
-        else{
+        Faction faction = _FactionLookup.GetFaction(owner_id);
+
+        ConquestSFX(Tiles[tile_id], faction);
+        
+        if(stats == null){
             stats = new TileStats(Tiles[tile_id], "temp", 3);
             towers_forts_stats.Add(stats);
         }
-
-        Faction faction = _FactionLookup.GetFaction(owner_id);
+        else
+            radius = stats.ownership_radius;
 
         MarkRadiusAsOwned(Tiles[tile_id], radius, faction, false);
         RefreshAllBorders();

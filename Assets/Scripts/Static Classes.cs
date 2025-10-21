@@ -12,6 +12,9 @@ public static class HenrysUtils{
     public static void PlaySFX(SoundEffect sound){SpawnSound(sound);}
 
     public static void SpawnSound(SoundEffect sound){
+        if(sound == null)
+            return;
+
         GameObject new_sfx = new GameObject(sound.Name);
         AudioSource asrc = new_sfx.AddComponent<AudioSource>();
         asrc.clip = sound.Clip();

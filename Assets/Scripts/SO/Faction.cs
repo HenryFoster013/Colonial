@@ -25,7 +25,7 @@ public class Faction : ScriptableObject
     [SerializeField] string _Currency;
     [SerializeField] string _CurrencyEnd;
     [Header(" - Misc - ")]
-    [SerializeField] string _Jingle;
+    [SerializeField] SoundEffect _Jingle;
 
     public bool CheckType(string s){
         return (s.ToUpper() == _Type.ToUpper());
@@ -53,5 +53,5 @@ public class Faction : ScriptableObject
     public PieceData Tower(){return _Tower;}
     public PieceData Fort(){return _Fort;}
     public int TextureOffset(){return _TextureOffset;}
-    public string Jingle(){return _Jingle;}
+    public SoundEffect Jingle(){return _Jingle;}
 }
