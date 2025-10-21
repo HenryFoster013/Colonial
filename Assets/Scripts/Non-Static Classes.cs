@@ -132,9 +132,10 @@ namespace HenrysMapUtils{
         private int max_industry;
         private int industry_used ;
 
-        const int upgrade_base = 15;
-        const int upgrade_additive = 20;
+        const int upgrade_base = 30;
+        const int upgrade_additive = 35;
         const int resources_per_level = 1;
+        const int level_limit = 2;
 
         public TileStats(Tile _tile, string _name, int money){
             tile = _tile;
@@ -174,12 +175,19 @@ namespace HenrysMapUtils{
             industry_used += troop.IndustryCost();
         }
 
+        public bool BelowLevelLimit(){
+            return level < level_limit;
+        }
+
         // Setters //
 
         public void SetOwnershipRadius(int rad){ownership_radius = rad;}
         public void SetName(string _name){name = _name;}
 
         public void SetLevel(int lvl){
+            if(lvl >= level_limit)
+                return;
+            
             level = lvl;
             ownership_radius = 2 + (level * resources_per_level);
         }

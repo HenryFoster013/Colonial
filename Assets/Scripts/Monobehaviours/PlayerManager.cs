@@ -463,7 +463,7 @@ public class PlayerManager : MonoBehaviour
             return;
         
         FortStats.SetActive(true);
-        UpgradeButton.SetActive(OurTurn && stats.UpgradeCost() <= Money());
+        UpgradeButton.SetActive(OurTurn && stats.UpgradeCost() <= Money() && stats.BelowLevelLimit());
         FortName.text = stats.name + " (" + _SessionManager.LocalFactionData().CurrencyFormat(stats.Value()) + ")";
         FortName_BG.color = stats.tile.owner.Colour();
         StatBars[0].Refresh(stats.MaxPopulation(), stats.PopulationUsed());
@@ -579,7 +579,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void UpgradeFort(){
-        if(Money() >= current_tile.stats.UpgradeCost()){
+        if(Money() >= current_tile.stats.UpgradeCost() && current_tile.stats.BelowLevelLimit()){
             _SessionManager.SpendMoney(current_tile.stats.UpgradeCost());
             Map.RPC_RequestFortLevel(current_tile.ID, current_tile.stats.level + 1);
             Deselect();

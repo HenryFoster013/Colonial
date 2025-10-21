@@ -605,6 +605,9 @@ public class MapManager : NetworkBehaviour
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_SetFortLevel(int tile_id, int level, RpcInfo info = default){
+        if(!Tiles[tile_id].stats.BelowLevelLimit())
+            return;
+
         Tiles[tile_id].stats.SetLevel(level);
         MarkRadiusAsOwned(Tiles[tile_id], Tiles[tile_id].stats.ownership_radius, Tiles[tile_id].owner, true);
         RefreshAllBorders();
