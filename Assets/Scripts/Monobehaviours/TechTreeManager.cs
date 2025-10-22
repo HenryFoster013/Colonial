@@ -25,6 +25,7 @@ public class TechTreeManager : MonoBehaviour{
         for(int i = 0; i < Roots.Length; i++){
             start_nodes[i] = new TechNode(Roots[i].FirstNode());
             EstablishOwnershipMap(start_nodes[i]);
+            start_nodes[i].CalculateLayerWidths();
         }
     }
 
@@ -39,8 +40,10 @@ public class TechTreeManager : MonoBehaviour{
 
     // Ownership population
 
-    void EstablishOwnershipMap(TechNode tech){
+    int counter = 0;
 
+    void EstablishOwnershipMap(TechNode tech){
+        
         SetUnlocks(tech);
 
         if(tech.HasChildren()){
@@ -91,5 +94,9 @@ public class TechTreeManager : MonoBehaviour{
         tech.Unlock();
         SetUnlocks(tech);
     }
+
+    // Getters
+
+    public TechNode[] GetRootNodes(){return start_nodes;}
 
 }
