@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96bcec0a3d1d0db4aa93a720cf24b5fd, type: 3}
+  m_Name: Farming
+  m_EditorClassIdentifier: 
+  FollowingTech:
+  - {fileID: 11400000, guid: b8fe6284a41ad1644b82bf25ce532353, type: 2}
+  _Name: Farming
+  _Description: 
+  _Image: {fileID: 0}
+  _Cost: 5
+  TroopUnlocks:
+  - {fileID: 11400000, guid: 19f52be431cf2da418d4950e5061470f, type: 2}
+  BuildingUnlocks:
+  - {fileID: 11400000, guid: 470e315ff2e18564595e3edbe1711c48, type: 2}
+  - {fileID: 11400000, guid: f9cc5fd0a5fed8046a1855d1648945c9, type: 2}

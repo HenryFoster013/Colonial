@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96bcec0a3d1d0db4aa93a720cf24b5fd, type: 3}
+  m_Name: Gunsmithing
+  m_EditorClassIdentifier: 
+  FollowingTech: []
+  _Name: Gunsmithing
+  _Description: 
+  _Image: {fileID: 0}
+  _Cost: 5
+  TroopUnlocks:
+  - {fileID: 11400000, guid: 67d643b8dc5429a44940e098e58a04f0, type: 2}
+  - {fileID: 11400000, guid: dd81d14c8929a2d4eb002c7e6d2659db, type: 2}
+  - {fileID: 11400000, guid: 3d80bec8ebe9291489ff56d68803403d, type: 2}
+  BuildingUnlocks: []

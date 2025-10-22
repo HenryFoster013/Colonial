@@ -1,6 +1,64 @@
-//using System.Collections;
-//using System.Collections.Generic;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+
+namespace HenrysTechUtils{
+
+    public class TechTree{
+        
+        public string title {get; private set;}
+        TechNode starting_node;
+
+        public TechTree(TechnologyDefinition original_definition){
+            starting_node = new TechNode(original_definition);
+        }
+
+    }
+
+    public class TechNode{
+
+        public TechnologyDefinition definition {get; private set;}
+        public bool unlocked {get; private set;}
+
+        TechNode[] following_nodes;
+
+        // CREATION //
+
+        public TechNode(TechnologyDefinition _definition){
+            definition = _definition;
+            unlocked = false;
+            CreateChildNodes();
+        }
+
+        void CreateChildNodes(){
+            TechnologyDefinition[] next_tech = definition.NextTech();
+            following_nodes = new TechNode[next_tech.Length];
+
+            for(int i = 0; i < next_tech.Length; i++){
+                following_nodes[i] = new TechNode(next_tech[i]);
+            }
+        }
+
+        // SETTING //
+
+        public void Unlock(){
+            unlocked = true;
+        }
+
+        // GETTERS //
+        
+        public string Name(){return definition.Name();}
+        public string Description(){return definition.Description();}
+        public int Cost(){return definition.Cost();}
+        public Sprite Graphic(){return definition.Graphic();}
+        public TroopData[] Troops(){return definition.Troops();}
+        public PieceData[] Buildings(){return definition.Buildings();}
+        public TechNode[] Next(){return following_nodes;}
+        public bool HasChildren(){return following_nodes.Length > 0;}
+        public bool HasTroops(){return definition.Troops().Length > 0;}
+        public bool HasBuildings(){return definition.Buildings().Length > 0;}
+    }
+}
 
 namespace HenrysMapUtils{
 
