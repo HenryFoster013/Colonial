@@ -25,7 +25,6 @@ public class TechTreeManager : MonoBehaviour{
         for(int i = 0; i < Roots.Length; i++){
             start_nodes[i] = new TechNode(Roots[i].FirstNode());
             EstablishOwnershipMap(start_nodes[i]);
-            start_nodes[i].CalculateLayerWidths();
         }
     }
 

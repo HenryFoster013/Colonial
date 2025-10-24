@@ -8,11 +8,10 @@ namespace HenrysTechUtils{
 
         public TechnologyDefinition definition {get; private set;}
         public bool unlocked {get; private set;}
-
-        public List<int> layer_widths {get; private set;} = new List<int>();
-        public int depth {get; private set;}
+        public TechNode parent_node {get; private set;}
 
         TechNode[] following_nodes;
+        int width = 0;
 
         // CREATION //
 
@@ -31,28 +30,26 @@ namespace HenrysTechUtils{
 
             for(int i = 0; i < next_tech.Length; i++){
                 following_nodes[i] = new TechNode(next_tech[i]);
+                following_nodes[i].SetParent(this);
             }
         }
 
-        // FUNCTIONALITY //
-
-        public void CalculateLayerWidths(){
-            layer_widths = LayerWidths(new List<int>(), 0);
+        public void SetParent(TechNode node){
+            parent_node = node;
         }
 
-        public List<int> LayerWidths(List<int> depths, int current_depth){
+        public int Width(){
+            if(width != 0)
+                return width;
 
-            depth = current_depth;
-
-            while(current_depth >= depths.Count)
-                depths.Add(0);
-                
-            depths[current_depth] = depths[current_depth] + 1;
-            
-            for(int i = 0; i < following_nodes.Length; i++)
-                depths = following_nodes[i].LayerWidths(depths, current_depth + 1);
-
-            return depths;
+            width = 0;
+            if(HasChildren()){
+                width = ChildrenCount() - 1;
+                foreach(TechNode node in following_nodes){
+                    width += node.Width();
+                }
+            }
+            return width;
         }
 
         // SETTERS //
@@ -67,6 +64,24 @@ namespace HenrysTechUtils{
             if(following_nodes == null)
                 return false;
             return following_nodes.Length > 0;
+        }
+
+        public int ChildrenCount(){
+            if(!HasChildren())
+                return 0;
+            return following_nodes.Length;
+        }
+
+        public int ParentWidth(){
+            if(parent_node == null)
+                return 0;
+            return parent_node.Width();
+        }
+
+        public int SiblingCount(){
+            if(parent_node == null)
+                return 0;
+            return parent_node.ChildrenCount() - 1;
         }
         
         public string Name(){return definition.Name();}
