@@ -55,10 +55,18 @@ namespace HenrysTechUtils{
         // SETTERS //
 
         public void Unlock(){
+            if(!Available())
+                return;
             unlocked = true;
         }
 
         // GETTERS //
+
+        public bool Available(){
+            if(parent_node != null)
+                return parent_node.unlocked;
+            return true;
+        }
 
         public bool HasChildren(){
             if(following_nodes == null)
