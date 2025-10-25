@@ -609,7 +609,7 @@ public class MapManager : NetworkBehaviour
             return;
         if(IsTileFortress(tile))
             return;
-        if(piece.PlayConstructionSound())
+        if(piece.PlayConstructionSound() && tile.visible)
             PlaySFX("Build_Hammers", SFX_Lookup);
 
         GameObject.Instantiate(BuildingEffect, tile.world_position, Quaternion.identity);
