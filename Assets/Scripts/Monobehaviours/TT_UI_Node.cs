@@ -95,29 +95,7 @@ public class TT_UI_Node : MonoBehaviour{
             image.color = connection_colour;
     }
 
-    // SETTERS //
-
-    public void Unlock(){
-        if(!node.unlocked){
-            if(manager.CanAfford(node.Cost())){
-
-                manager.SpendMoney(node.Cost());
-                node.Unlock();
-                manager.Refresh();
-
-                if(node.unlocked){
-                    IconAnim.Play("Bounce", 0, 0f);
-                    PlaySFX("UI_Unlock", SFX_Lookup);
-                }
-                else
-                    PlaySFX("UI_4", SFX_Lookup);
-            }
-            else
-                PlaySFX("UI_4", SFX_Lookup);
-        }
-    }
-
-    // GETTERS //
+    // TEXT GEN //
 
     public string FormatUnlockString(){
 
@@ -146,6 +124,30 @@ public class TT_UI_Node : MonoBehaviour{
 
         return result;
     }
+
+    // SETTERS //
+
+    public void Unlock(){
+        if(!node.unlocked){
+            if(manager.CanAfford(node.Cost())){
+
+                manager.SpendMoney(node.Cost());
+                node.Unlock();
+                manager.Refresh();
+
+                if(node.unlocked){
+                    IconAnim.Play("Bounce", 0, 0f);
+                    PlaySFX("UI_Unlock", SFX_Lookup);
+                }
+                else
+                    PlaySFX("UI_4", SFX_Lookup);
+            }
+            else
+                PlaySFX("UI_4", SFX_Lookup);
+        }
+    }
+
+    // GETTERS //
 
     public int Cost(){return node.Cost();}
     public bool Unlocked(){return node.unlocked;}

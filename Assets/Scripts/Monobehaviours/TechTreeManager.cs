@@ -104,9 +104,8 @@ public class TechTreeManager : MonoBehaviour{
 
     // SETTERS //
 
-    public void Unlock(TechNode tech){
-        tech.Unlock();
-    }
+    public void Unlock(TechNode tech){tech.Unlock();}
+    public void SpendMoney(int cost){_PlayerManager.SpendMoney(cost);}
 
     // GETTERS //
 
@@ -116,14 +115,7 @@ public class TechTreeManager : MonoBehaviour{
         return RootObjects()[index].Title();
     }
 
-    public bool CanAfford(int cost){
-        return (cost <= _PlayerManager.Money());
-    }
-
-    public void SpendMoney(int cost){
-        _PlayerManager.SpendMoney(cost);
-    }
-
+    public bool CanAfford(int cost){return (cost <= _PlayerManager.Money());}
     public string FormatMoney(int money){return faction.CurrencyFormat(money);}
     public TechNode[] RootNodes(){return root_nodes;}
     public TechTreeRoot[] RootObjects(){return Roots;}
