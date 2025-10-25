@@ -99,15 +99,21 @@ public class TT_UI_Node : MonoBehaviour{
 
     public void Unlock(){
         if(!node.unlocked){
-            node.Unlock();
-            manager.Refresh();
-            if(node.unlocked){
-                IconAnim.Play("Bounce", 0, 0f);
-                PlaySFX("UI_Unlock", SFX_Lookup);
+            if(manager.CanAfford(node.Cost())){
+
+                manager.SpendMoney(node.Cost());
+                node.Unlock();
+                manager.Refresh();
+
+                if(node.unlocked){
+                    IconAnim.Play("Bounce", 0, 0f);
+                    PlaySFX("UI_Unlock", SFX_Lookup);
+                }
+                else
+                    PlaySFX("UI_4", SFX_Lookup);
             }
-            else{
+            else
                 PlaySFX("UI_4", SFX_Lookup);
-            }
         }
     }
 

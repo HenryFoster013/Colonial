@@ -7,8 +7,11 @@ using static HenrysUtils;
 public class PreviewRenderer : MonoBehaviour{
     [SerializeField] GameObject RendererPrefab;
     [SerializeField] GameObject ButtonPrefab;
+
     PieceData piece_data;
     TroopData troop_data;
+    TechTreeManager _TechTreeManager;
+
     bool troop_building;
     Camera cam;
     PlayerManager player;
@@ -18,7 +21,8 @@ public class PreviewRenderer : MonoBehaviour{
     GameObject tile_model;
     int reference;
 
-    public void Setup(Transform renderer_holder, Transform button_holder, int iteration, RenderTextureDescriptor rend_text_desc, PlayerManager _player, Color colour, PieceData data, TroopData troop, bool affordable){
+    public void Setup(Transform renderer_holder, Transform button_holder, int iteration, RenderTextureDescriptor rend_text_desc, PlayerManager _player, Color colour, PieceData data, TroopData troop, TechTreeManager ttm){
+        _TechTreeManager = ttm;
         reference = iteration;
         player = _player;
         piece_data = data;
@@ -44,7 +48,15 @@ public class PreviewRenderer : MonoBehaviour{
         else
             player.SpawnModelHolderBuildng(reference, g.transform.GetChild(0));
 
-        button_manager.Setup(this, colour, affordable, rend_text);
+        button_manager.Setup(this, colour, true, rend_text);
+    }
+
+    public bool Unlocked(){
+        if(troop_data != null)
+            return _TechTreeManager.Unlocked(troop_data);
+        if(piece_data != null)
+            return _TechTreeManager.Unlocked(piece_data);
+        return false;
     }
 
     public PieceData GetPieceData(){return piece_data;}

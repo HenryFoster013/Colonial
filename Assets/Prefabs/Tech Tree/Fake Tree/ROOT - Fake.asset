@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c695356784e74743bb4248d5fe93fcf, type: 3}
   m_Name: ROOT - Fake
   m_EditorClassIdentifier: 
-  TreeTitle: 
   FirstTechnology: {fileID: 11400000, guid: 0523c7c38aabbb342814c852344512b5, type: 2}
-  BrightTone: {r: 0.60641915, g: 0.745283, b: 0.4253738, a: 1}
-  DarkTone: {r: 0.18912452, g: 0.3490566, b: 0.1728818, a: 1}
+  TreeTitle: 
+  BrightTone: {r: 0.3406581, g: 0.5943396, b: 0, a: 1}
+  DarkTone: {r: 0.3679245, g: 0, b: 0.22861403, a: 1}

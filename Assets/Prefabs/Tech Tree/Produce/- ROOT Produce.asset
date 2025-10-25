@@ -15,4 +15,4 @@ MonoBehaviour:
   FirstTechnology: {fileID: 11400000, guid: 3fe3a210e0a7235488a3f06c7daaea58, type: 2}
   TreeTitle: PRODUCE
   BrightTone: {r: 0.3372549, g: 0.59607846, b: 0.46269384, a: 1}
-  DarkTone: {r: 0.11013707, g: 0.23584908, b: 0.17299308, a: 1}
+  DarkTone: {r: 0.16700785, g: 0.254717, b: 0.21086241, a: 1}

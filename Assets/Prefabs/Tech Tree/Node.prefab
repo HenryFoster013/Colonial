@@ -390,10 +390,10 @@ MonoBehaviour:
   LeftConnection: {fileID: 9143260164919571868}
   MiddleConnection: {fileID: 9143260164007065515}
   RightConnection: {fileID: 9143260163715522810}
-  OwnedColour: {r: 0.4669811, g: 0.77944046, b: 1, a: 1}
+  OwnedColour: {r: 1, g: 0.88028103, b: 0.4666667, a: 1}
   AvailableColour: {r: 1, g: 1, b: 1, a: 1}
   UnavailableColour: {r: 0.46226418, g: 0.46226418, b: 0.46226418, a: 1}
-  EnabledConnectionColour: {r: 0.7137255, g: 0.88140047, b: 1, a: 0.6}
+  EnabledConnectionColour: {r: 1, g: 0.93797386, b: 0.7137255, a: 0.6}
   DisabledConnectionColour: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 0.6}
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
   IconAnim: {fileID: 234450536994538652}

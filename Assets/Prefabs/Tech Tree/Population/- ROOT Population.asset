@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c695356784e74743bb4248d5fe93fcf, type: 3}
   m_Name: '- ROOT Population'
   m_EditorClassIdentifier: 
-  TreeTitle: POPULATION
   FirstTechnology: {fileID: 11400000, guid: 8b917d54243ed8841b353da1d1b95e3d, type: 2}
+  TreeTitle: POPULATION
   BrightTone: {r: 0.22797258, g: 0.38327807, b: 0.4433962, a: 1}
-  DarkTone: {r: 0.078431375, g: 0.101960786, b: 0.105882354, a: 1}
+  DarkTone: {r: 0.15566039, g: 0.2001348, b: 0.20754719, a: 1}

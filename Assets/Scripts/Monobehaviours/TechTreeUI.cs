@@ -104,6 +104,7 @@ public class TechTreeUI : MonoBehaviour{
 
         PlaySFX("UI_2", SFX_Lookup);
         RefreshTabs();
+        ResetCamera();
     }
 
     // NAVIGATION //
@@ -255,4 +256,7 @@ public class TechTreeUI : MonoBehaviour{
         EventSystem.current.RaycastAll(eventData, raycastResults);
         return raycastResults;
     }
+
+    public bool CanAfford(int cost){return Manager.CanAfford(cost);}
+    public void SpendMoney(int cost){Manager.SpendMoney(cost);}
 }

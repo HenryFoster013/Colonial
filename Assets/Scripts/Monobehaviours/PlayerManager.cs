@@ -112,9 +112,6 @@ public class PlayerManager : MonoBehaviour
     const int HiddenLayer = 7;
 
     int spawn_menu_offset = 0;
-    bool[] troops_owned;
-    bool[] buildings_owned;
-    bool[] buildings_constructable;
     PreviewRenderer[] troop_renders;
     PreviewRenderer[] building_renders;
     Camera[] troop_cameras;
@@ -228,7 +225,7 @@ public class PlayerManager : MonoBehaviour
     // SELECTION //
 
     public void SpawnBuildingButton(PieceData piece){
-        if(Money() >= piece.Cost()){
+        if(CanAfford(piece.Cost())){
             _GameplayManager.RPC_SpawnBuilding(current_tile.ID, _PieceLookup.ID(piece));
             CloseSpawnMenu();
             Deselect();
@@ -244,7 +241,7 @@ public class PlayerManager : MonoBehaviour
             TroopData troop = troops[i];
 
             if(CanSpawnTroop(i)){
-                _SessionManager.SpendMoney(troops[i].Cost());
+                SpendMoney(troops[i].Cost());
                 block_world_clicks = true;
                 _GameplayManager.RPC_SpawnTroop(_TroopLookup.ID(troop), current_tile.ID, _SessionManager.OurInstance.ID);
                 CloseSpawnMenu();
@@ -257,9 +254,9 @@ public class PlayerManager : MonoBehaviour
 
     public bool CanSpawnTroop(int troop_id){
         TroopData troop = _SessionManager.LocalFactionData().Troops()[troop_id];
-        bool valid = troops_owned[troop_id];
+        bool valid = _TechTreeManager.Unlocked(troop);
         if(valid)
-            valid = troop.Cost() <= Money();
+            valid = CanAfford(troop.Cost());
         if(valid)
             valid = _GameplayManager.ValidTroopSpawn(troop, current_tile);
         return valid;
@@ -447,19 +444,9 @@ public class PlayerManager : MonoBehaviour
                 SetupTileStats(Map.GetTile(tile.ID).stats);
             }
             else{
-                if(OurTurn){
-                    SetConstructables(tile);
+                if(OurTurn)
                     OpenSpawnMenu(true);
-                }
             }
-        }
-    }
-
-    public void SetConstructables(Tile tile){
-        buildings_constructable = new bool[buildings_owned.Length];
-        for(int i = 0; i < buildings_owned.Length; i++){
-            bool constructable = buildings_owned[i] && BuildingValid(tile, building_renders[i].GetPieceData());
-            buildings_constructable[i] = constructable;
         }
     }
 
@@ -468,7 +455,7 @@ public class PlayerManager : MonoBehaviour
             return;
         
         FortStats.SetActive(true);
-        UpgradeButton.SetActive(OurTurn && stats.UpgradeCost() <= Money() && stats.BelowLevelLimit());
+        UpgradeButton.SetActive(OurTurn && CanAfford(stats.UpgradeCost()) && stats.BelowLevelLimit());
         FortName.text = stats.name + " (" + _SessionManager.LocalFactionData().CurrencyFormat(stats.Value()) + ")";
         FortName_BG.color = stats.tile.owner.Colour();
         StatBars[0].Refresh(stats.MaxPopulation(), stats.PopulationUsed());
@@ -584,8 +571,8 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void UpgradeFort(){
-        if(Money() >= current_tile.stats.UpgradeCost() && current_tile.stats.BelowLevelLimit()){
-            _SessionManager.SpendMoney(current_tile.stats.UpgradeCost());
+        if(CanAfford(current_tile.stats.UpgradeCost()) && current_tile.stats.BelowLevelLimit()){
+            SpendMoney(current_tile.stats.UpgradeCost());
             Map.RPC_RequestFortLevel(current_tile.ID, current_tile.stats.level + 1);
             Deselect();
         }
@@ -620,32 +607,26 @@ public class PlayerManager : MonoBehaviour
         PieceData[] buildings = _SessionManager.LocalFactionData().Buildings();
         troop_renders = new PreviewRenderer[troops.Length];
         building_renders = new PreviewRenderer[buildings.Length];
-        
-        // REPLACE THIS IN FUTURE
-        // Acts as a mask for which troops we have access to (for the tech tree)
-        troops_owned = new bool[troops.Length];
-        buildings_owned = new bool[buildings.Length];
-        for(int i = 0; i < troops_owned.Length; i++)
-            troops_owned[i] = true;
-        for(int i = 0; i < buildings_owned.Length; i++)
-            buildings_owned[i] = true;
     
         for(int count = 0; count < troops.Length; count++){
             PreviewRenderer new_render = GameObject.Instantiate(PreviewRendererPrefab, Vector3.zero, Quaternion.identity).GetComponent<PreviewRenderer>();
             troop_renders[count] = new_render;
-            new_render.Setup(TroopRendererHolder, TroopButtonHolder, count, desc, this, _SessionManager.LocalFactionData().Colour(), null, _SessionManager.LocalFactionData().Troops()[count], true);
+            new_render.Setup(TroopRendererHolder, TroopButtonHolder, count, desc, this, _SessionManager.LocalFactionData().Colour(), null, _SessionManager.LocalFactionData().Troops()[count], _TechTreeManager);
             new_render.transform.SetParent(PreviewRendererHolder);
         }
 
         for(int count = 0; count < buildings.Length; count++){
             PreviewRenderer new_render = GameObject.Instantiate(PreviewRendererPrefab, Vector3.zero, Quaternion.identity).GetComponent<PreviewRenderer>();
             building_renders[count] = new_render;
-            new_render.Setup(BuildingRendererHolder, BuildingButtonHolder, count, desc, this, _SessionManager.LocalFactionData().Colour(), buildings[count], null, true);
+            new_render.Setup(BuildingRendererHolder, BuildingButtonHolder, count, desc, this, _SessionManager.LocalFactionData().Colour(), buildings[count], null, _TechTreeManager);
             new_render.transform.SetParent(PreviewRendererHolder);
         }
     }
 
     // SPAWN MENU //
+
+    public bool CanAfford(int amount){return Money() >= amount;}
+    public void SpendMoney(int amount){_SessionManager.SpendMoney(amount);}
 
     public void SpawnMenuArrows(int difference){
         spawn_menu_offset += difference;
@@ -697,25 +678,33 @@ public class PlayerManager : MonoBehaviour
         current_spawn_menu_type = troop_building;
 
         if(troop_building)
-            SetupSpawnButtons(building_renders, buildings_constructable);
+            SetupSpawnButtons(building_renders);
         else
-            SetupSpawnButtons(troop_renders, troops_owned);
+            SetupSpawnButtons(troop_renders);
 
         SpawnMenu.SetActive(true);
     }
 
-    public void SetupSpawnButtons(PreviewRenderer[] prs, bool[] ownership){
+    public void SetupSpawnButtons(PreviewRenderer[] prs){
         float offy = 95;
         int active_count = 0;
-        int total_items = CountBooleanArray(ownership);
+        int total_items = 0;
+
+        foreach(PreviewRenderer pr in prs){
+            if(pr.Unlocked())
+                total_items++;
+        }
+        
         ClampSpawnMenuOffset(total_items);
         int start_point = spawn_menu_offset * 4;
         int displayed_count = DisplayedItemCount(total_items, spawn_menu_offset);
         float centering = (-1 * offy * displayed_count) / 2;
         centering += (offy / 2);
+        
+        //BuildingValid(tile, building_renders[i].GetPieceData())
 
-        for(int i = start_point; i < ownership.Length && i < start_point + 4; i++){
-            if(ownership[i]){
+        for(int i = start_point; i < prs.Length && i < start_point + 4; i++){
+            if(prs[i].Unlocked()){
                 prs[i].SetAfford(Money());
                 prs[i].SetPosition(new Vector2((active_count * offy) + centering, 0));
                 prs[i].SetTile(current_tile);
@@ -799,11 +788,13 @@ public class PlayerManager : MonoBehaviour
     // TECH TREE //
 
     public void OpenTechTree(){
+        Deselect();
         _TechTreeManager.OpenUI();
         pause_inputs = true;
     }
 
     public void CloseTechTree(){
+        Deselect();
         _TechTreeManager.CloseUI();
         pause_inputs = false;
     }

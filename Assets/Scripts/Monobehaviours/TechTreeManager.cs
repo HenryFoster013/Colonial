@@ -18,8 +18,8 @@ public class TechTreeManager : MonoBehaviour{
 
     TechNode[] root_nodes;
     Faction faction;
-    Dictionary<TroopData, bool> TroopOwnershipMap = new Dictionary<TroopData, bool>();
-    Dictionary<PieceData, bool> BuildingOwnershipMap = new Dictionary<PieceData, bool>();
+    Dictionary<TroopData, TechNode> TroopOwnershipMap = new Dictionary<TroopData, TechNode>();
+    Dictionary<PieceData, TechNode> BuildingOwnershipMap = new Dictionary<PieceData, TechNode>();
 
     // INTERACTION //
 
@@ -75,17 +75,13 @@ public class TechTreeManager : MonoBehaviour{
         if(tech.HasTroops()){
             foreach(TroopData troop in tech.Troops()){
                 if(!TroopOwnershipMap.ContainsKey(troop))
-                    TroopOwnershipMap.Add(troop, tech.unlocked);
-                else
-                    TroopOwnershipMap[troop] = tech.unlocked;
+                    TroopOwnershipMap.Add(troop, tech);
             }
         }
         if(tech.HasBuildings()){
             foreach(PieceData building in tech.Buildings()){
                 if(!BuildingOwnershipMap.ContainsKey(building))
-                    BuildingOwnershipMap.Add(building, tech.unlocked);
-                else
-                    BuildingOwnershipMap[building] = tech.unlocked;
+                    BuildingOwnershipMap.Add(building, tech);
             }
         }
     }
@@ -95,22 +91,21 @@ public class TechTreeManager : MonoBehaviour{
     public bool Unlocked(TroopData troop){
         if(!TroopOwnershipMap.ContainsKey(troop))
             return false;
-        
-        return (TroopOwnershipMap[troop]);
+        return (TroopOwnershipMap[troop].unlocked);
     }
-
     public bool Unlocked(PieceData building){
         if(!BuildingOwnershipMap.ContainsKey(building))
             return false;
-        
-        return (BuildingOwnershipMap[building]);
+        return (BuildingOwnershipMap[building].unlocked);
     }
+
+    public TechNode ParentNode(TroopData troop){return TroopOwnershipMap[troop];}
+    public TechNode ParentNode(PieceData piece){return BuildingOwnershipMap[piece];}
 
     // SETTERS //
 
     public void Unlock(TechNode tech){
         tech.Unlock();
-        FillMap(tech);
     }
 
     // GETTERS //
@@ -119,6 +114,14 @@ public class TechTreeManager : MonoBehaviour{
         if(index < 0 || index >= RootObjects().Length)
             return "NULL";
         return RootObjects()[index].Title();
+    }
+
+    public bool CanAfford(int cost){
+        return (cost <= _PlayerManager.Money());
+    }
+
+    public void SpendMoney(int cost){
+        _PlayerManager.SpendMoney(cost);
     }
 
     public string FormatMoney(int money){return faction.CurrencyFormat(money);}
