@@ -24,6 +24,9 @@ public class TT_UI_Node : MonoBehaviour{
     [SerializeField] Color EnabledConnectionColour;
     [SerializeField] Color DisabledConnectionColour;
 
+    [Header("Misc")]
+    [SerializeField] Animator IconAnim;
+ 
     const float layer_height = 160;
     const float width_unit = 150;
     TechNode node;
@@ -56,8 +59,12 @@ public class TT_UI_Node : MonoBehaviour{
     }
 
     public void Unlock(){
-        node.Unlock();
-        manager.Refresh();
+        if(!node.unlocked){
+            node.Unlock();
+            manager.Refresh();
+            if(node.unlocked)
+                IconAnim.Play("Bounce", 0, 0f);
+        }
     }
 
     void SetBounds(int depth, int girth, int index, float parent_x){

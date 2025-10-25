@@ -17,15 +17,19 @@ public class TechTreeUI : MonoBehaviour
     List<TT_UI_Node> ui_nodes = new List<TT_UI_Node>();
 
     Vector2 tree_position = Vector2.zero;
-   const float sprint_mult = 1.5f;
-   const float speed = 200f;
-   const float max_width = 1000f;
-   const float max_height = 1000f;
+    const float sprint_mult = 1.5f;
+    const float speed = 500f;
+    const float max_width = 2000f;
+    const float max_height = 1000f;
 
     float tree_scale = 1;
     const float zoom_sensitivity = 30f;
     const float max_scale = 2.25f;
     const float min_scale = 0.5f;
+
+    Vector2 start_mouse_pos;
+    Vector2 mouse_position;
+    bool mousing;
 
     void Start(){
         Establish();
@@ -40,13 +44,32 @@ public class TechTreeUI : MonoBehaviour
     void Navigation(){
         
         // Note, there is no 'camera' here, we are just moving the tree holder.
-
+        
+        MouseControls();
         KeyboardControls();
         CameraZoom();
         ApplyPosition();
     }
 
+    void MouseControls(){
+        mouse_position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+
+        if(Input.GetMouseButtonDown(0)){
+            mousing = true;
+        }
+        if(Input.GetMouseButtonUp(0)){
+            mousing = false;
+            tree_position += mouse_position - start_mouse_pos;
+        }
+
+        if(!mousing)
+            start_mouse_pos = mouse_position;
+    }
+
     void KeyboardControls(){
+
+        if(mousing)
+            return;
 
         float sprint = 1;
         if(Input.GetKey(KeyCode.LeftShift))
@@ -64,7 +87,7 @@ public class TechTreeUI : MonoBehaviour
 
     void ApplyPosition(){
         tree_position = new Vector2(Mathf.Clamp(tree_position.x, -max_width, max_width), Mathf.Clamp(tree_position.y, -max_height, max_height));
-        TreeHolder.anchoredPosition = tree_position;
+        TreeHolder.anchoredPosition = tree_position + mouse_position - start_mouse_pos;
     }
 
     // GENERATION //
