@@ -8,12 +8,12 @@ public class TechTreeManager : MonoBehaviour{
 
     [SerializeField] TechTreeRoot[] Roots;
     [SerializeField] TechnologyDefinition DefaultTechnologies;
-    TechNode[] start_nodes;
+    TechNode[] root_nodes;
     
     Dictionary<TroopData, bool> TroopOwnershipMap = new Dictionary<TroopData, bool>();
     Dictionary<PieceData, bool> BuildingOwnershipMap = new Dictionary<PieceData, bool>();
 
-    // Initialisation
+    // INSTANTIATION //
 
     public void Setup(){
         PopulateTrees();
@@ -21,10 +21,10 @@ public class TechTreeManager : MonoBehaviour{
     }
 
     void PopulateTrees(){
-        start_nodes = new TechNode[Roots.Length];
+        root_nodes = new TechNode[Roots.Length];
         for(int i = 0; i < Roots.Length; i++){
-            start_nodes[i] = new TechNode(Roots[i].FirstNode());
-            EstablishOwnershipMap(start_nodes[i]);
+            root_nodes[i] = new TechNode(Roots[i].FirstNode());
+            EstablishOwnershipMap(root_nodes[i]);
         }
     }
 
@@ -37,14 +37,10 @@ public class TechTreeManager : MonoBehaviour{
         EstablishOwnershipMap(default_tech);
     }
 
-    // Ownership population
-
-    int counter = 0;
+    // OWNERSHIP MAP //
 
     void EstablishOwnershipMap(TechNode tech){
-        
-        SetUnlocks(tech);
-
+        FillMap(tech);
         if(tech.HasChildren()){
             foreach(TechNode child in tech.Next()){
                 EstablishOwnershipMap(child);
@@ -52,7 +48,7 @@ public class TechTreeManager : MonoBehaviour{
         }
     }
 
-    void SetUnlocks(TechNode tech){
+    void FillMap(TechNode tech){
         if(tech.HasTroops()){
             foreach(TroopData troop in tech.Troops()){
                 if(!TroopOwnershipMap.ContainsKey(troop))
@@ -71,7 +67,7 @@ public class TechTreeManager : MonoBehaviour{
         }
     }
 
-    // Troop/Building validation
+    // TROOP / BUILDING VALIDATION //
 
     public bool Unlocked(TroopData troop){
         if(!TroopOwnershipMap.ContainsKey(troop))
@@ -87,15 +83,21 @@ public class TechTreeManager : MonoBehaviour{
         return (BuildingOwnershipMap[building]);
     }
 
-    // Unlocking
+    // SETTERS //
 
     public void Unlock(TechNode tech){
         tech.Unlock();
-        SetUnlocks(tech);
+        FillMap(tech);
     }
 
-    // Getters
+    // GETTERS //
 
-    public TechNode[] GetRootNodes(){return start_nodes;}
+    public string NodeName(int index){
+        if(index < 0 || index >= RootObjects().Length)
+            return "NULL";
+        return RootObjects()[index].Title();
+    }
 
+    public TechNode[] RootNodes(){return root_nodes;}
+    public TechTreeRoot[] RootObjects(){return Roots;}
 }

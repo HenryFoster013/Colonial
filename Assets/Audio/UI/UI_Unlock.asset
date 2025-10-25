@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9485103ad3e85e4e9280994a77c7be5, type: 3}
+  m_Name: UI_Unlock
+  m_EditorClassIdentifier: 
+  Name: UI_Unlock
+  BaseClip: {fileID: 8300000, guid: deafe9481370e4842b74a5bc8528c5f1, type: 3}
+  Mixer: {fileID: 8193749847766800399, guid: f7d701d4c51aa3642b25f9526ef105f5, type: 2}
+  ClipRange: []
+  BasePitch: 0.5
+  PitchVariation: 0.01
+  BaseVolume: 0.8
+  VolumeVariation: 0

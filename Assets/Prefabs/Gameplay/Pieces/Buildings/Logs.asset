@@ -33,3 +33,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3a1b7f6330207a242a0082f313aaa4de, type: 2}
   - {fileID: 11400000, guid: 79a127b177eb43c4c938ce2190c54d2c, type: 2}
   - {fileID: 11400000, guid: 63dccfee067861a4d8e08a11e6256e71, type: 2}
+  _PlayConstructionSound: 1

@@ -977,7 +977,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 10
+        scalar: 15
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -4891,7 +4891,7 @@ GameObject:
   - component: {fileID: 7123681873092064629}
   - component: {fileID: 7123681873092064628}
   m_Layer: 0
-  m_Name: Tile Creation Effect
+  m_Name: Piece Creation Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

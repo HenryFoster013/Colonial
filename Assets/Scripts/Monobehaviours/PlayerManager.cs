@@ -820,10 +820,14 @@ public class PlayerManager : MonoBehaviour
 
         target_camera_pos = camera_pos;
 
-        if(Input.GetKeyDown("e"))
+        if(Input.GetKeyDown("e")){
             target_spine_rot += 45;
-        if(Input.GetKeyDown("q"))
+            PlaySFX("Camera_Pivot", SFX_Lookup);
+        }
+        if(Input.GetKeyDown("q")){
             target_spine_rot += -45;
+            PlaySFX("Camera_Pivot", SFX_Lookup);
+        }
     }
 
     void CameraZoom(){

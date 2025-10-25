@@ -25,6 +25,7 @@ public class PieceData : ScriptableObject
     [SerializeField] int _Cost;
     [SerializeField] TileData[] _CompatibleTiles;
     [SerializeField] PieceData[] _CompatiblePieces;
+    [SerializeField] bool _PlayConstructionSound;
     
 
     public bool CheckType(string s){
@@ -64,6 +65,7 @@ public class PieceData : ScriptableObject
     public float TroopOffset(){return _TroopOffset;}
     public bool Fort(){return _Fort;}
     public Faction Owner(){return _OwningFaction;}
+    public bool PlayConstructionSound(){return _PlayConstructionSound;}
 }
 
 

@@ -1,50 +1,89 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using HenrysTechUtils;
+using static HenrysUtils;
+using TMPro;
 
-public class TechTreeUI : MonoBehaviour
-{
-    // need to do all da math for making the forks correctly space out by themselves and nodes being placed correctly
-    // long one this, should be fun tho
+public class TechTreeUI : MonoBehaviour{
 
+    [Header("Main")]
     [SerializeField] TechTreeManager Manager;
+    [SerializeField] SoundEffectLookup SFX_Lookup;
+
+    [Header("UI")]
+    [SerializeField] TMP_Text TitleText;
+
+    [Header("Instancing")]
     [SerializeField] GameObject NodePrefab;
     [SerializeField] RectTransform TreeHolder;
-    [SerializeField] Transform NodeHolder;
+    [SerializeField] GameObject GenericHolder;
 
-    TechNode[] root_nodes;
+    // Tabs
+    int current_tab = 0;
     List<TT_UI_Node> ui_nodes = new List<TT_UI_Node>();
+    List<GameObject> tree_holders = new List<GameObject>();
 
-    Vector2 tree_position = Vector2.zero;
+    // Positioning
+    Vector2 tree_position;
     const float sprint_mult = 1.5f;
     const float speed = 500f;
     const float max_width = 2000f;
     const float max_height = 1000f;
 
+    // Zoom
     float tree_scale = 1;
     const float zoom_sensitivity = 30f;
     const float max_scale = 2.25f;
     const float min_scale = 0.5f;
 
+    // Mouse Drag
     Vector2 start_mouse_pos;
     Vector2 mouse_position;
     bool mousing;
 
-    void Start(){
+    // SETUP //
+
+    void Start(){Setup();}
+
+    public void Setup(){
+        Clean();
         Establish();
+        RefreshTabs();
     }
 
-    void Update(){
-        Navigation();
+    void Clean(){
+        current_tab = 0;
+        for(int i = 0; i < tree_holders.Count; i++)
+            GameObject.Destroy(tree_holders[i]);
+        tree_holders = new List<GameObject>();
+    }
+
+    // UI INTERACTIONS //
+
+    public void Open(){
+        PlaySFX("UI_Raise", SFX_Lookup);
+    }
+
+    public void Close(){
+        PlaySFX("UI_1", SFX_Lookup);
+    }
+
+    public void ChangeTab(int move){
+        current_tab += move;
+        if(current_tab < 0)
+            current_tab = tree_holders.Count - 1;
+        if(current_tab >= tree_holders.Count)
+            current_tab = 0;
+
+        PlaySFX("UI_2", SFX_Lookup);
+        RefreshTabs();
     }
 
     // NAVIGATION //
 
-    void Navigation(){
-        
-        // Note, there is no 'camera' here, we are just moving the tree holder.
-        
+    void Update(){ // Note, there is no 'camera' here, we are just moving the tree holder.
         MouseControls();
         KeyboardControls();
         CameraZoom();
@@ -53,28 +92,23 @@ public class TechTreeUI : MonoBehaviour
 
     void MouseControls(){
         mouse_position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-
-        if(Input.GetMouseButtonDown(0)){
+        if(Input.GetMouseButtonDown(0))
             mousing = true;
-        }
         if(Input.GetMouseButtonUp(0)){
             mousing = false;
             tree_position += mouse_position - start_mouse_pos;
         }
-
         if(!mousing)
             start_mouse_pos = mouse_position;
     }
 
     void KeyboardControls(){
-
         if(mousing)
             return;
 
         float sprint = 1;
         if(Input.GetKey(KeyCode.LeftShift))
             sprint = sprint_mult;
-        
         Vector2 dir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         tree_position += dir.normalized * speed * Time.deltaTime * sprint * -1;
     }
@@ -93,23 +127,35 @@ public class TechTreeUI : MonoBehaviour
     // GENERATION //
 
     public void Establish(){
+        tree_position = TreeHolder.anchoredPosition;
         Manager.Setup();
         GenerateAllTrees();
     }
 
     void GenerateAllTrees(){
+
         ui_nodes = new List<TT_UI_Node>();
-        root_nodes = Manager.GetRootNodes();
-        foreach(TechNode root in root_nodes){
-            GenerateNode(root, 0, 0, 0);
+
+        for(int i = 0; i < Manager.RootNodes().Length; i++){
+            
+            GameObject tree_master = GameObject.Instantiate(GenericHolder);
+            tree_master.transform.parent = TreeHolder;
+            tree_master.transform.localPosition = Vector3.zero;
+            tree_master.transform.localScale = new Vector3(1f, 1f, 1f);
+            tree_holders.Add(tree_master);
+            tree_master.transform.name = Manager.RootObjects()[i].Title();
+
+            GenerateNode(Manager.RootNodes()[i], tree_master.transform, 0, 0, 0);
         }
+
+        GameObject.Destroy(GenericHolder);
     }
 
-    void GenerateNode(TechNode node, int depth, int index, float parent_x){
+    void GenerateNode(TechNode node, Transform holder, int depth, int index, float parent_x){
         
         GameObject prefab = GameObject.Instantiate(NodePrefab);
 
-        prefab.transform.parent = NodeHolder;
+        prefab.transform.parent = holder;
         prefab.transform.localPosition = Vector3.zero;
         prefab.transform.localScale = new Vector3(1, 1, 1);
 
@@ -120,10 +166,18 @@ public class TechTreeUI : MonoBehaviour
         if(node.HasChildren()){
             int children = node.Next().Length;
             for(int i = 0; i < children; i++){
-                GenerateNode(node.Next()[i], depth + 1, i, ui_node.x_position);
+                GenerateNode(node.Next()[i], holder, depth + 1, i, ui_node.x_position);
             }
         }
 
+    }
+
+    // REFRESHING //
+
+    void RefreshTabs(){
+        for(int i = 0; i < tree_holders.Count; i++)
+            tree_holders[i].SetActive(i == current_tab);
+        TitleText.text = Manager.RootObjects()[current_tab].Title();
     }
 
     public void Refresh(){

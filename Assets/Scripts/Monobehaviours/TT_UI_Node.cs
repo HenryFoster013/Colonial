@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using HenrysTechUtils;
+using static HenrysUtils;
 
 public class TT_UI_Node : MonoBehaviour{
 
@@ -25,6 +26,7 @@ public class TT_UI_Node : MonoBehaviour{
     [SerializeField] Color DisabledConnectionColour;
 
     [Header("Misc")]
+    [SerializeField] SoundEffectLookup SFX_Lookup;
     [SerializeField] Animator IconAnim;
  
     const float layer_height = 160;
@@ -62,8 +64,10 @@ public class TT_UI_Node : MonoBehaviour{
         if(!node.unlocked){
             node.Unlock();
             manager.Refresh();
-            if(node.unlocked)
+            if(node.unlocked){
                 IconAnim.Play("Bounce", 0, 0f);
+                PlaySFX("UI_Unlock", SFX_Lookup);
+            }
         }
     }
 

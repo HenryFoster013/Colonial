@@ -472,6 +472,7 @@ MonoBehaviour:
   UnavailableColour: {r: 0.46226418, g: 0.46226418, b: 0.46226418, a: 1}
   EnabledConnectionColour: {r: 0.7137255, g: 0.88140047, b: 1, a: 0.6}
   DisabledConnectionColour: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 0.6}
+  SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
   IconAnim: {fileID: 234450536994538652}
 --- !u!1 &9143260164007065515
 GameObject:

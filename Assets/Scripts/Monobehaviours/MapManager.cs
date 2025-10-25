@@ -14,6 +14,7 @@ public class MapManager : NetworkBehaviour
     [Header(" - Main - ")]
     [SerializeField] SessionManager _SessionManager;
     [SerializeField] GameplayManager _GameplayManager;
+    [SerializeField] SoundEffectLookup SFX_Lookup;
     public bool AnimatedWater = true;
 
     [Header(" - Map - ")]
@@ -44,7 +45,7 @@ public class MapManager : NetworkBehaviour
     [SerializeField] GameObject[] BorderPrefabs;
 
     [Header(" - Misc - ")]
-    [SerializeField] GameObject TileEffect;
+    [SerializeField] GameObject BuildingEffect;
 
     // Local only
     public bool ready {get; private set;}
@@ -608,8 +609,10 @@ public class MapManager : NetworkBehaviour
             return;
         if(IsTileFortress(tile))
             return;
+        if(piece.PlayConstructionSound())
+            PlaySFX("Build_Hammers", SFX_Lookup);
 
-        GameObject.Instantiate(TileEffect, tile.world_position, Quaternion.identity);
+        GameObject.Instantiate(BuildingEffect, tile.world_position, Quaternion.identity);
     }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
