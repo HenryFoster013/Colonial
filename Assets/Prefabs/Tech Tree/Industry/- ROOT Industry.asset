@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c695356784e74743bb4248d5fe93fcf, type: 3}
   m_Name: '- ROOT Industry'
   m_EditorClassIdentifier: 
-  TreeTitle: INDUSTRY
   FirstTechnology: {fileID: 11400000, guid: 98fd7ea1ba5321147a8dc5813124de29, type: 2}
+  TreeTitle: INDUSTRY
+  BrightTone: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 1}
+  DarkTone: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 1}

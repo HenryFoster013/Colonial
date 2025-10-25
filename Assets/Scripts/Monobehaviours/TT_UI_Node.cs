@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using HenrysTechUtils;
 using static HenrysUtils;
+using System.Linq;
 
 public class TT_UI_Node : MonoBehaviour{
 
@@ -35,6 +36,8 @@ public class TT_UI_Node : MonoBehaviour{
     TechTreeUI manager;
 
     public float x_position {get; private set;}
+
+    // INSTANTIATION //
     
     public void Setup(TechNode _node, TechTreeUI manag, int depth, int girth, int index, float parent_x){
         node = _node;
@@ -42,33 +45,6 @@ public class TT_UI_Node : MonoBehaviour{
         SetConnections(node.ChildrenCount());
         SetBounds(depth, girth, index, parent_x);
         RefreshColours();
-    }
-
-    public void RefreshColours(){
-        Color highlight_colour = UnavailableColour;
-        Color connection_colour = DisabledConnectionColour;
-
-        if(node.unlocked){
-            highlight_colour = OwnedColour;
-            connection_colour = EnabledConnectionColour;
-        }
-        else if(node.Available())
-            highlight_colour = AvailableColour;
-
-        Highlight.color = highlight_colour;
-        foreach(Image image in Connections)
-            image.color = connection_colour;
-    }
-
-    public void Unlock(){
-        if(!node.unlocked){
-            node.Unlock();
-            manager.Refresh();
-            if(node.unlocked){
-                IconAnim.Play("Bounce", 0, 0f);
-                PlaySFX("UI_Unlock", SFX_Lookup);
-            }
-        }
     }
 
     void SetBounds(int depth, int girth, int index, float parent_x){
@@ -100,4 +76,73 @@ public class TT_UI_Node : MonoBehaviour{
         MiddleConnection.gameObject.SetActive(connections == 1 || connections == 3);
         RightConnection.gameObject.SetActive(connections == 2 || connections == 3);
     }
+
+    // REFRESHING //
+
+    public void RefreshColours(){
+        Color highlight_colour = UnavailableColour;
+        Color connection_colour = DisabledConnectionColour;
+
+        if(node.unlocked){
+            highlight_colour = OwnedColour;
+            connection_colour = EnabledConnectionColour;
+        }
+        else if(node.Available())
+            highlight_colour = AvailableColour;
+
+        Highlight.color = highlight_colour;
+        foreach(Image image in Connections)
+            image.color = connection_colour;
+    }
+
+    // SETTERS //
+
+    public void Unlock(){
+        if(!node.unlocked){
+            node.Unlock();
+            manager.Refresh();
+            if(node.unlocked){
+                IconAnim.Play("Bounce", 0, 0f);
+                PlaySFX("UI_Unlock", SFX_Lookup);
+            }
+            else{
+                PlaySFX("UI_4", SFX_Lookup);
+            }
+        }
+    }
+
+    // GETTERS //
+
+    public string FormatUnlockString(){
+
+        List<string> unlocks = new List<string>();
+        for(int i = 0; i < node.definition.Troops().Length; i++)
+            unlocks.Add("<i>" + node.definition.Troops()[i].Name() + "</i>");
+        for(int i = 0; i < node.definition.Buildings().Length; i++)
+            unlocks.Add("<i>" + node.definition.Buildings()[i].Name() + "</i>");
+
+        unlocks = unlocks.Distinct().ToList();
+    
+        if(unlocks.Count == 0)
+            return "Doesn't seem to do much.";
+
+        string result = "Unlocks";
+
+        for(int i = 0; i < unlocks.Count; i++){
+            result += " " + unlocks[i];
+            if(i == unlocks.Count - 2)
+                result += " and";
+            else if(i == unlocks.Count - 1)
+                result += ".";
+            else
+                result += ",";
+        }
+
+        return result;
+    }
+
+    public int Cost(){return node.Cost();}
+    public bool Unlocked(){return node.unlocked;}
+    public string Title(){return node.definition.Name();}
+    public bool Available(){return node.Available();}
 }

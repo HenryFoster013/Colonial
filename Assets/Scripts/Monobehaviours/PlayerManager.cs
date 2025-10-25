@@ -19,6 +19,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] SoundEffectLookup SFX_Lookup;
     [SerializeField] SessionManager _SessionManager;
     [SerializeField] GameplayManager _GameplayManager;
+    [SerializeField] TechTreeManager _TechTreeManager;
     
     [Header(" --- CAMERA --- ")]
     [SerializeField] Camera _Camera;
@@ -86,6 +87,8 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] GameObject RedHighlightPrefab;
     [SerializeField] Transform RedHighlightHook;
     [SerializeField] Color DisabledColour;
+
+    bool pause_inputs;
      
     float camera_speed = 7f;
     float camera_sprnt_mult = 2f;
@@ -146,6 +149,8 @@ public class PlayerManager : MonoBehaviour
 
     void ResetUI(){
         CloseSpawnMenu();
+        pause_inputs = false;
+        _TechTreeManager.Setup(_SessionManager.LocalFactionData());
         FactionName.text = _SessionManager.LocalFactionData().Name().Replace(' ', '\n');
         FactionFlag.sprite = _SessionManager.LocalFactionData().Flag();
         UpgradeWindow.SilentClose();
@@ -791,9 +796,24 @@ public class PlayerManager : MonoBehaviour
         return _SessionManager.OurInstance.Money();
     }
 
+    // TECH TREE //
+
+    public void OpenTechTree(){
+        _TechTreeManager.OpenUI();
+        pause_inputs = true;
+    }
+
+    public void CloseTechTree(){
+        _TechTreeManager.CloseUI();
+        pause_inputs = false;
+    }
+
     // CAMERA //
 
     void CameraLogic(){
+        if(pause_inputs)
+            return;
+
         KeyboardCameraControls();
         CameraZoom();
         ClampCamera();

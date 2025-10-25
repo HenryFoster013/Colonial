@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TreeTitle: 
   FirstTechnology: {fileID: 11400000, guid: 0523c7c38aabbb342814c852344512b5, type: 2}
+  BrightTone: {r: 0.60641915, g: 0.745283, b: 0.4253738, a: 1}
+  DarkTone: {r: 0.18912452, g: 0.3490566, b: 0.1728818, a: 1}

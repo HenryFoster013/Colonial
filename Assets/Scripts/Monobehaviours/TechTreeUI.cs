@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using HenrysTechUtils;
 using static HenrysUtils;
 using TMPro;
@@ -14,6 +15,18 @@ public class TechTreeUI : MonoBehaviour{
 
     [Header("UI")]
     [SerializeField] TMP_Text TitleText;
+    [SerializeField] Image BG_Bright;
+    [SerializeField] Image BG_Dark;
+
+    [Header("Popup Display")]
+    [SerializeField] GameObject NodePopup;
+    [SerializeField] TMP_Text NP_Title;
+    [SerializeField] TMP_Text NP_Description;
+    [SerializeField] RectTransform NP_DescriptionRect;
+    [SerializeField] GameObject NP_CurrencyTab;
+    [SerializeField] TMP_Text NP_Cost;
+    [SerializeField] GameObject NP_CanAfford;
+    [SerializeField] GameObject NP_CantAfford;
 
     [Header("Instancing")]
     [SerializeField] GameObject NodePrefab;
@@ -24,9 +37,13 @@ public class TechTreeUI : MonoBehaviour{
     int current_tab = 0;
     List<TT_UI_Node> ui_nodes = new List<TT_UI_Node>();
     List<GameObject> tree_holders = new List<GameObject>();
+    bool setup = false;
+    Vector2 descript_pos_locked = new Vector2(103.1548f, -15.38727f);
+    Vector2 descript_pos_unlocked = new Vector2(103.1548f, 5f);
 
     // Positioning
     Vector2 tree_position;
+    Vector2 default_position;
     const float sprint_mult = 1.5f;
     const float speed = 500f;
     const float max_width = 2000f;
@@ -45,9 +62,15 @@ public class TechTreeUI : MonoBehaviour{
 
     // SETUP //
 
-    void Start(){Setup();}
+    public void Check(){
+        if(!setup){
+            setup = true;
+            Setup();
+        }
+        ResetCamera();
+    }
 
-    public void Setup(){
+    void Setup(){
         Clean();
         Establish();
         RefreshTabs();
@@ -60,15 +83,17 @@ public class TechTreeUI : MonoBehaviour{
         tree_holders = new List<GameObject>();
     }
 
+    void ResetCamera(){
+        mousing = false;
+        mouse_position = Input.mousePosition;
+        start_mouse_pos = mouse_position;
+        tree_position = default_position;
+        tree_scale = 1;
+        ApplyPosition();
+        TreeHolder.localScale = new Vector3(tree_scale, tree_scale, tree_scale);
+    }
+
     // UI INTERACTIONS //
-
-    public void Open(){
-        PlaySFX("UI_Raise", SFX_Lookup);
-    }
-
-    public void Close(){
-        PlaySFX("UI_1", SFX_Lookup);
-    }
 
     public void ChangeTab(int move){
         current_tab += move;
@@ -88,6 +113,7 @@ public class TechTreeUI : MonoBehaviour{
         KeyboardControls();
         CameraZoom();
         ApplyPosition();
+        NodePopupMenu(GetEventSystemRaycastResults());
     }
 
     void MouseControls(){
@@ -128,7 +154,7 @@ public class TechTreeUI : MonoBehaviour{
 
     public void Establish(){
         tree_position = TreeHolder.anchoredPosition;
-        Manager.Setup();
+        default_position = tree_position;
         GenerateAllTrees();
     }
 
@@ -139,7 +165,7 @@ public class TechTreeUI : MonoBehaviour{
         for(int i = 0; i < Manager.RootNodes().Length; i++){
             
             GameObject tree_master = GameObject.Instantiate(GenericHolder);
-            tree_master.transform.parent = TreeHolder;
+            tree_master.transform.SetParent(TreeHolder);
             tree_master.transform.localPosition = Vector3.zero;
             tree_master.transform.localScale = new Vector3(1f, 1f, 1f);
             tree_holders.Add(tree_master);
@@ -155,7 +181,7 @@ public class TechTreeUI : MonoBehaviour{
         
         GameObject prefab = GameObject.Instantiate(NodePrefab);
 
-        prefab.transform.parent = holder;
+        prefab.transform.SetParent(holder);
         prefab.transform.localPosition = Vector3.zero;
         prefab.transform.localScale = new Vector3(1, 1, 1);
 
@@ -178,6 +204,8 @@ public class TechTreeUI : MonoBehaviour{
         for(int i = 0; i < tree_holders.Count; i++)
             tree_holders[i].SetActive(i == current_tab);
         TitleText.text = Manager.RootObjects()[current_tab].Title();
+        BG_Bright.color = Manager.RootObjects()[current_tab].BrightColour();
+        BG_Dark.color = Manager.RootObjects()[current_tab].DarkColour();
     }
 
     public void Refresh(){
@@ -188,5 +216,43 @@ public class TechTreeUI : MonoBehaviour{
         foreach(TT_UI_Node ui_node in ui_nodes){
             ui_node.RefreshColours();
         }
+    }
+
+    // HOVER MENU //
+
+    void NodePopupMenu(List<RaycastResult> eventSystemRaysastResults){
+        NodePopup.SetActive(false);
+        for (int index = 0; index < eventSystemRaysastResults.Count; index++){
+            RaycastResult curRaysastResult = eventSystemRaysastResults[index];
+            if (curRaysastResult.gameObject.tag == "Hoverable")
+                NodePopupDetails(curRaysastResult.gameObject);
+        }
+    }
+
+    void NodePopupDetails(GameObject node_button){
+        TT_UI_Node node_behaviour = node_button.transform.parent.transform.parent.GetComponent<TT_UI_Node>();
+        NodePopup.transform.position = Input.mousePosition;
+        NodePopup.SetActive(true);
+
+        NP_Title.text = node_behaviour.Title();
+        NP_Description.text = node_behaviour.FormatUnlockString();
+        NP_CurrencyTab.SetActive(!node_behaviour.Unlocked() && node_behaviour.Available());
+
+        if(!node_behaviour.Unlocked() && node_behaviour.Available()){
+            NP_Cost.text = Manager.FormatMoney(node_behaviour.Cost());
+            NP_DescriptionRect.anchoredPosition = descript_pos_locked;
+            NP_CanAfford.SetActive(node_behaviour.Cost() <= Manager.Money());
+            NP_CantAfford.SetActive(node_behaviour.Cost() > Manager.Money());
+        }
+        else
+            NP_DescriptionRect.anchoredPosition = descript_pos_unlocked;
+    }
+
+    static List<RaycastResult> GetEventSystemRaycastResults(){
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+        List<RaycastResult> raycastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, raycastResults);
+        return raycastResults;
     }
 }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Pig Sty
   m_EditorClassIdentifier: 
   _Type: Pig Sty
-  _Name: Pig Sty
+  _Name: Pig-sty
   _Prefab: {fileID: 753328104817070758, guid: 7be264ca84f276b4e88a34026250ac30, type: 3}
   _TroopOffset: 0
   _RandomiseRotation: 0

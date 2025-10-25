@@ -16,7 +16,7 @@ MonoBehaviour:
   BaseClip: {fileID: 8300000, guid: a101903294b08df40a370fd444a592d3, type: 3}
   Mixer: {fileID: 8193749847766800399, guid: f7d701d4c51aa3642b25f9526ef105f5, type: 2}
   ClipRange: []
-  BasePitch: 0.6
+  BasePitch: 1
   PitchVariation: 0.05
   BaseVolume: 0.5
   VolumeVariation: 0

@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TreeTitle: POPULATION
   FirstTechnology: {fileID: 11400000, guid: 8b917d54243ed8841b353da1d1b95e3d, type: 2}
+  BrightTone: {r: 0.22797258, g: 0.38327807, b: 0.4433962, a: 1}
+  DarkTone: {r: 0.078431375, g: 0.101960786, b: 0.105882354, a: 1}

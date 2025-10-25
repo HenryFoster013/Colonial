@@ -3,21 +3,44 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using HenrysTechUtils;
+using static HenrysUtils;
 
 public class TechTreeManager : MonoBehaviour{
 
+    [Header("Technologies")]
     [SerializeField] TechTreeRoot[] Roots;
     [SerializeField] TechnologyDefinition DefaultTechnologies;
+    [Header("UI")]
+    [SerializeField] TechTreeUI UI;
+    [Header("References")]
+    [SerializeField] PlayerManager _PlayerManager;
+    [SerializeField] SoundEffectLookup SFX_Lookup;
+
     TechNode[] root_nodes;
-    
+    Faction faction;
     Dictionary<TroopData, bool> TroopOwnershipMap = new Dictionary<TroopData, bool>();
     Dictionary<PieceData, bool> BuildingOwnershipMap = new Dictionary<PieceData, bool>();
 
+    // INTERACTION //
+
+    public void OpenUI(){
+        PlaySFX("UI_Raise", SFX_Lookup);
+        UI.gameObject.SetActive(true);
+        UI.Check();
+    }
+
+    public void CloseUI(){
+        PlaySFX("UI_1", SFX_Lookup);
+        UI.gameObject.SetActive(false);
+    }
+
     // INSTANTIATION //
 
-    public void Setup(){
+    public void Setup(Faction our_faction){
         PopulateTrees();
         SetDefaults();
+        faction = our_faction;
+        UI.gameObject.SetActive(false);
     }
 
     void PopulateTrees(){
@@ -98,6 +121,8 @@ public class TechTreeManager : MonoBehaviour{
         return RootObjects()[index].Title();
     }
 
+    public string FormatMoney(int money){return faction.CurrencyFormat(money);}
     public TechNode[] RootNodes(){return root_nodes;}
     public TechTreeRoot[] RootObjects(){return Roots;}
+    public int Money(){return _PlayerManager.Money();}
 }

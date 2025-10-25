@@ -31,5 +31,4 @@ public class TechnologyDefinition : ScriptableObject{
     public Sprite Graphic(){return _Image;}
     public TroopData[] Troops(){return TroopUnlocks;}
     public PieceData[] Buildings(){return BuildingUnlocks;}
-
 }

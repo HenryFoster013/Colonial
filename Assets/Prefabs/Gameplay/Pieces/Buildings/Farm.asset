@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Farm
   m_EditorClassIdentifier: 
   _Type: Farm
-  _Name: Farm
+  _Name: Cropland
   _Prefab: {fileID: 8521195677729410137, guid: d02530bef4000624d95b29b8b945751b, type: 3}
   _TroopOffset: 0
   _RandomiseRotation: 0
