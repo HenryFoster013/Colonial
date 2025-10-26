@@ -1,15 +1,18 @@
 To Develop
 
-- tech tree system as a whole tbh (just start)
 need to come to a conclusion on how multiple players of the same faction work
- - troops need an identifying icon to show their owner
-- technologies learned need to be synced or kept seperate
+ - troops may need an identifying icon to show their owner
 
-money needs to be balanced
+Alert system (player destroyed, fort taken etc)
 
-engineer as a class needs to be defined
+Bargaining system
 
 road system needs to be built
+ - trains to build off of this
+
+tech tree needs to be fleshed out with technologies
+money needs to be balanced
+engineer as a class needs to be defined
 
 To Model:
 flowers
