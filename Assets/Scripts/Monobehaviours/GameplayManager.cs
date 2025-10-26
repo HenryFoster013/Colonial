@@ -111,7 +111,7 @@ public class GameplayManager : NetworkBehaviour
     public Troop GetTroop(int id){
         Troop troop = null;
         for(int i = 0; i < AllTroops.Count && troop == null; i++){
-            if(AllTroops[i] != null){
+            if(ValidateTroop(AllTroops[i])){
                 if(AllTroops[i].UniqueID == id) //mark
                     troop = AllTroops[i];
             }
@@ -125,7 +125,7 @@ public class GameplayManager : NetworkBehaviour
 
     public List<Tile> WalkableTileFilter(List<Tile> tiles){
         foreach(Troop t in AllTroops){
-            if(t != null)
+            if(ValidateTroop(t))
                 tiles.Remove(_MapManager.GetTile(t.current_tile));
         }
         return tiles;
@@ -134,7 +134,7 @@ public class GameplayManager : NetworkBehaviour
     public List<Tile> EnemyTileFilter(List<Tile> tiles){
         List<Tile> result = new List<Tile>();
         foreach(Troop t in AllTroops){
-            if(t != null){
+            if(ValidateTroop(t)){
                 Tile tile = _MapManager.GetTile(t.current_tile);
                 if(tiles.Contains(tile) && tile.visible && t.FactionID() != _SessionManager.OurInstance.Faction_ID){
                     result.Add(tile);
@@ -153,19 +153,24 @@ public class GameplayManager : NetworkBehaviour
 
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_AttackTroop(int attacking_id, int target_id, bool original, RpcInfo info = default){
-        AttackTroop(attacking_id, target_id, original);
+        AttackTroop(attacking_id, target_id, original, GetTroop(target_id).transform.position);
     }
 
-    void AttackTroop(int attacking_id, int target_id, bool original_attack){
+    void AttackTroop(int attacking_id, int target_id, bool original_attack, Vector3 old_target_pos){
 
         Troop attacking_troop = GetTroop(attacking_id);
-        Troop target_troop = GetTroop(target_id); // mark
+        Troop target_troop = GetTroop(target_id);
+
+        if(!ValidateTroop(attacking_troop))
+            return;
         
         attacking_troop.AttackAnim();
-        attacking_troop.RotateAt(target_troop.transform.position);
-        if(target_troop != null){
+        attacking_troop.RotateAt(old_target_pos);
+
+        if(ValidateTroop(target_troop)){
             target_troop.DamageAnim();
             target_troop.RotateAt(attacking_troop.transform.position);
+            attacking_troop.RotateAt(target_troop.transform.position);
         }
 
         if(attacking_troop.Owner == _SessionManager.OurInstance.ID){
@@ -238,7 +243,7 @@ public class GameplayManager : NetworkBehaviour
     public Troop GetTroopAt(Tile tile){
         Troop troop = null;
         foreach(Troop t in AllTroops){
-            if(t != null){
+            if(ValidateTroop(t)){
                 if(t.current_tile == tile.ID)
                     troop = t;
             }
@@ -306,15 +311,17 @@ public class GameplayManager : NetworkBehaviour
     public bool TroopOnTile(Tile tile){
         bool return_val = false;
         for(int i = 0; i < AllTroops.Count && !return_val; i++){
-            if(AllTroops[i] != null)
+            if(ValidateTroop(AllTroops[i]))
                 return_val = AllTroops[i].current_tile == tile.ID;
         }
         return return_val;
     }
 
     public void SetTroopPos(Troop troop, int id, int owner){
-        if(troop.Owner == owner && troop != null)
-            troop.current_tile = id;
+        if(ValidateTroop(troop)){
+            if(troop.Owner == owner)
+                troop.current_tile = id;
+        }
     }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
@@ -331,7 +338,8 @@ public class GameplayManager : NetworkBehaviour
     void RefreshAllCities(){
         _MapManager.CleanCities();
         foreach(Troop troop in AllTroops){
-            _MapManager.AddTroopStats(troop);
+            if(ValidateTroop(troop))
+                _MapManager.AddTroopStats(troop);
         }
     }
 

@@ -28,8 +28,6 @@ public class Nameset : ScriptableObject
     }
 
     public string RandomName(){
-        Debug.Log(Prefixes);
-        Debug.Log(Suffixes);
         return Name(Random.Range(0, Prefixes.Length), Random.Range(0, Suffixes.Length));
     }
     public string Name(int prex, int sufx){

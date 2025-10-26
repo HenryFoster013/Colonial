@@ -9,6 +9,7 @@ public class Troop : NetworkBehaviour{
     
     [Header(" - MAIN - ")]
     public TroopData Data;
+    [HideInInspector] public bool spawned {get; private set;}
     [SerializeField] FactionLookup _FactionLookup;
     [SerializeField] SoundEffectLookup SFX_Lookup;
     [SerializeField] Collider Col;
@@ -41,24 +42,39 @@ public class Troop : NetworkBehaviour{
     const int mesh_default_layer = 0;
     const int mesh_highlight_layer = 9;
     public int tile_buffer = -1;
-    bool used_move, used_special, setup, spawned, first_move_completed, selected;
+    bool used_move, used_special, first_move_completed, selected;
 
     // SETUP //
 
-    void Start(){Setup();}
-    public override void Spawned(){spawned = true;}
+    public override void Spawned(){
+        Setup();
+    }
+
+    public override void Despawned(NetworkRunner runner, bool hasState){
+        spawned = false;
+    }
 
     void Update(){
-        CheckForDataSetup();
+        if(!spawned){
+            CheckForData();
+            return;
+        }
+            
         CheckForMovement();
         CheckVisibility();
         UI.UpdateHealth();
     }
 
+    void CheckForData(){
+        if(UniqueID != 0){
+            GotDataSetup();
+            spawned = true;
+        }
+    }
+
     // SETUP //
 
     void Setup(){
-
         _SessionManager = GameObject.FindGameObjectWithTag("Session Manager").GetComponent<SessionManager>();
         _PlayerManager = GameObject.FindGameObjectWithTag("Player Manager").GetComponent<PlayerManager>();
         _MapManager = GameObject.FindGameObjectWithTag("Map Manager").GetComponent<MapManager>();
@@ -69,7 +85,7 @@ public class Troop : NetworkBehaviour{
         
         transform.eulerAngles = new Vector3(0f, 90f, 0f);
         DisplayModel(false);
-        Anim.SetBool("selected", selected);
+        Anim.SetBool("selected", false);
 
         used_move = true;
         used_special = true;
@@ -85,25 +101,13 @@ public class Troop : NetworkBehaviour{
     public void EnableConquest(bool valid){
         UI.ConquerVisible(valid);
     }
-
-    void CheckForDataSetup(){
-        if(!setup && spawned){
-            if(UniqueID != 0)
-                GotDataSetup();
-        }
-    }
     
     void GotDataSetup(){
+        spawned = true;
         _PlayerManager.AddTroop(this);
-        setup = true;
         faction = _FactionLookup.GetFaction(Faction_ID);
-        UI.SetHealthColour(FactionData().Colour());
-        SetupMaterial();
-        UpdateModel();
-    }
-
-    void SetupMaterial(){
         skins = _SessionManager.GetTroopMaterials(Faction_ID);
+        UI.SetHealthColour(FactionData().Colour());
         UpdateModel();
     }
 
@@ -114,7 +118,7 @@ public class Troop : NetworkBehaviour{
     // MOVEMENT //
 
     public void SetSelected(bool select){
-        if(UniqueID == 0)
+        if(!spawned)
             return;   
 
         selected = select;
@@ -122,7 +126,7 @@ public class Troop : NetworkBehaviour{
     }
 
     void CheckForMovement(){
-        if(UniqueID == 0)
+        if(!spawned)
             return;    
         if(current_tile != tile_buffer)
             SetPosition();
@@ -154,10 +158,10 @@ public class Troop : NetworkBehaviour{
     // GRAPHICS //
 
     public void CheckVisibility(){
-        if(UniqueID == 0)
+        if(!spawned)
             return;   
 
-        bool visible = setup && first_move_completed && _MapManager.CheckVisibility(current_tile);
+        bool visible = spawned && first_move_completed && _MapManager.CheckVisibility(current_tile);
         
         Col.enabled = visible;
         DisplayModel(visible);

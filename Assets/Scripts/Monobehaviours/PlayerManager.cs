@@ -303,6 +303,9 @@ public class PlayerManager : MonoBehaviour
         special_tiles = new List<Tile>();
         attackable_tiles = new List<Tile>();
 
+        if(!ValidateTroop(troop))
+            return;
+
         if(!troop.UsedSpecial()){
             attackable_tiles = _GameplayManager.EnemyTileFilter(Map.TilesByDistance(troop.current_tile, troop.Data.AttackDistance(), false));
             special_tiles = _GameplayManager.SpecialTileFilter(Map.TilesByDistance(troop.current_tile, 1, false));
@@ -320,6 +323,9 @@ public class PlayerManager : MonoBehaviour
         special_tiles = new List<Tile>();
         attackable_tiles = new List<Tile>();
 
+        if(!ValidateTroop(troop))
+            return true;
+
         if(!troop.UsedSpecial()){
             attackable_tiles = _GameplayManager.EnemyTileFilter(Map.TilesByDistance(troop.current_tile, troop.Data.AttackDistance(), false));
             special_tiles = _GameplayManager.SpecialTileFilter(Map.TilesByDistance(troop.current_tile, 1, false));
@@ -330,6 +336,9 @@ public class PlayerManager : MonoBehaviour
     }
 
     void GetTroopRanges(Troop troop){
+
+        if(!ValidateTroop(troop))
+            return;
 
         if(troop.Owner != _SessionManager.OurInstance.ID)
             return;
@@ -464,6 +473,9 @@ public class PlayerManager : MonoBehaviour
     }
 
     bool IsTroopAttackable(Troop troop){
+        if(!ValidateTroop(troop))
+            return false;
+
         bool result = false;
         if(current_troop != null){
             bool current_is_ours = current_troop.FactionID() == _SessionManager.OurInstance.Faction_ID;
@@ -477,13 +489,15 @@ public class PlayerManager : MonoBehaviour
     }
 
     void AttackTroop(Troop troop){
-        if(troop != null && current_troop != null){
+        if(ValidateTroop(troop) && ValidateTroop(current_troop))
             _GameplayManager.RPC_AttackTroop(current_troop.UniqueID, troop.UniqueID, true);
-        }
         Deselect();
     }
 
     void SelectTroop(Troop troop){
+
+        if(!ValidateTroop(troop))
+            return;
 
         if(IsTroopAttackable(troop)){
             AttackTroop(troop);
@@ -521,10 +535,13 @@ public class PlayerManager : MonoBehaviour
         PlaySFX("Pickup", SFX_Lookup);
     }
 
-    public void AddTroop(Troop t){
-        if(t.Owner == _SessionManager.OurInstance.ID){
-            OurTroops.Add(t);
-            t.SetEventCamera(_Camera);
+    public void AddTroop(Troop troop){
+        if(!ValidateTroop(troop))
+            return;
+
+        if(troop.Owner == _SessionManager.OurInstance.ID){
+            OurTroops.Add(troop);
+            troop.SetEventCamera(_Camera);
         }
     }
 
@@ -544,17 +561,18 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void DisableAllTroops(){
-        foreach(Troop t in OurTroops){
-            if(t != null)
-                t.EndTurn();
+        foreach(Troop troop in OurTroops){
+            if(ValidateTroop(troop))
+                troop.EndTurn();
         }
     }
 
     public void EnableAllTroops(){
-        foreach(Troop t in OurTroops){
-            if(t != null){
-                t.NewTurn();
-                t.EnableConquest(Map.ForeignFortress(t.current_tile));
+        foreach(Troop troop in OurTroops){
+            print(ValidateTroop(troop));
+            if(ValidateTroop(troop)){
+                troop.NewTurn();
+                troop.EnableConquest(Map.ForeignFortress(troop.current_tile));
             }
         }
     }

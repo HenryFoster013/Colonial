@@ -539,7 +539,9 @@ public class MapManager : NetworkBehaviour
     }
 
     public void AddTroopStats(Troop troop){
-        if(troop.HomeTile == 0)
+        if(troop == null)
+            return;
+        if(!troop.spawned)
             return;
         if(troop.FactionData() != Tiles[troop.HomeTile].owner)
             return;

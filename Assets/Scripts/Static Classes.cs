@@ -52,6 +52,18 @@ public static class HenrysUtils{
     public static TileLookup GetTileLookup(){return Resources.Load<TileLookup>("_ Tile Lookup");}
     public static TroopLookup GetTroopLookup(){return Resources.Load<TroopLookup>("_ Troop Lookup");}
 
+    // VALIDATION //
+
+    public static bool BuildingValid(Tile tile, PieceData piece){
+        return piece.Compatible(tile.piece) && piece.Compatible(tile.type);
+    }
+
+    public static bool ValidateTroop(Troop troop){
+        if(troop == null)
+            return false;
+        return troop.spawned;
+    }
+
     // MISC //
 
     public static int CountBooleanArray(bool[] array){
@@ -70,9 +82,5 @@ public static class HenrysUtils{
             if (child.GetComponentInChildren<Transform>() != null)
                 SetLayer(child.gameObject, _layer);
         }
-    }
-
-    public static bool BuildingValid(Tile tile, PieceData piece){
-        return piece.Compatible(tile.piece) && piece.Compatible(tile.type);
     }
 }
