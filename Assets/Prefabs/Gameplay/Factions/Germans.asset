@@ -35,3 +35,5 @@ MonoBehaviour:
   _Flag: {fileID: 21300000, guid: a178a16e3d8758b47a42f030b19ae0ce, type: 3}
   _Mini_Flag: {fileID: 21300000, guid: c34ea7e1c27d64940b892903654abda9, type: 3}
   _Currency: DM
+  _CurrencyEnd: 
+  _Jingle: {fileID: 11400000, guid: becfa95d9092e7041b028d0d9e84f887, type: 2}

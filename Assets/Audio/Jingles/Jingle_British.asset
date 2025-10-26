@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9485103ad3e85e4e9280994a77c7be5, type: 3}
-  m_Name: British_Jingle
+  m_Name: Jingle_British
   m_EditorClassIdentifier: 
   Name: British_Jingle
   BaseClip: {fileID: 8300000, guid: 0132585aebff5cb44b5f47261755e826, type: 3}

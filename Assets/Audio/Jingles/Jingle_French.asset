@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9485103ad3e85e4e9280994a77c7be5, type: 3}
-  m_Name: Pirate_Jingle
+  m_Name: Jingle_French
   m_EditorClassIdentifier: 
-  Name: Pirate_Jingle
-  BaseClip: {fileID: 8300000, guid: 412687033e79f9540b98361c9df0fbdb, type: 3}
+  Name: British_French
+  BaseClip: {fileID: 8300000, guid: 931c077d1e5f2b44b8367ee74ed6115a, type: 3}
   Mixer: {fileID: 8193749847766800399, guid: f7d701d4c51aa3642b25f9526ef105f5, type: 2}
   ClipRange: []
   BasePitch: 1
