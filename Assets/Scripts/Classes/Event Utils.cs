@@ -12,23 +12,20 @@ namespace EventUtils{
 
         // INSTANTIATION //
 
-        public WorldEvent(int start, int end){
-            BaseValues();
-            CheckFirst();
-        }
-
-        void BaseValues(){
+        public WorldEvent(int start, int end, int current_turn){
             start_turn = start;
             end_turn = end;
             done_first = false;
             done_last = false;
+
+            CheckFirst(current_turn);
         }
 
         // TURN CHECKS //
 
-        public void Check(){
-            CheckFirst();
-            CheckLast();
+        public void Check(int current_turn){
+            CheckFirst(current_turn);
+            CheckLast(current_turn);
         }
 
         void CheckFirst(int current_turn){
@@ -53,7 +50,7 @@ namespace EventUtils{
 
         // GETTERS //
 
-        public bool Active(int current_turn){return start_turn <= current_turn && !Retired();}
+        public bool Active(int current_turn){return start_turn <= current_turn && !Retired(current_turn);}
         public bool Retired(int current_turn){return (current_turn >= end_turn);}
     }
 
@@ -77,17 +74,17 @@ namespace EventUtils{
         void CheckEvents(){
             if(ongoing_events.Count == 0)
                 return;
-            foreach(WorldEvent event in ongoing_events)
-                event.Check();
+            foreach(WorldEvent world_event in ongoing_events)
+                world_event.Check(current_turn);
         }
 
         void CleanEvents(){
             if(ongoing_events.Count == 0)
                 return;
             List<WorldEvent> cleaned_events = new List<WorldEvent>();
-            foreach(WorldEvent event in ongoing_events){
-                if(!ongoing_events[i].Retired(current_turn))
-                    cleaned_events.Add(ongoing_events[i]);
+            foreach(WorldEvent world_event in ongoing_events){
+                if(world_event.Retired(current_turn))
+                    cleaned_events.Add(world_event);
             }
             ongoing_events = cleaned_events;
         }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using HenrysMapUtils;
+using MapUtils;
 using static GenericUtils;
 
 public class PreviewRenderer : MonoBehaviour{

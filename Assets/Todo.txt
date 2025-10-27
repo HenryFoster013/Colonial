@@ -1,5 +1,7 @@
 To Develop
 
+Make the prices in the tech tree scale with money earned
+
 need to come to a conclusion on how multiple players of the same faction work
  - troops may need an identifying icon to show their owner
 

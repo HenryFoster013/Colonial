@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static HenrysUtils;
+using static GenericUtils;
 
 [CreateAssetMenu(fileName = "New Nameset", menuName = "Custom/Nameset")]
 public class Nameset : ScriptableObject

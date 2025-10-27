@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using HenrysTechUtils;
-using static HenrysUtils;
+using TechUtils;
+using static GenericUtils;
 using System.Linq;
 
 public class TT_UI_Node : MonoBehaviour{
