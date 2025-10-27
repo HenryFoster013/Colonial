@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static HenrysUtils;
+using static GenericUtils;
 
 public class AmbiencePlayer : MonoBehaviour{
     

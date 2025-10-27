@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using HenrysMapUtils;
-using static HenrysUtils;
+using MapUtils;
+using static GenericUtils;
 using UnityEngine.UI;
 
 public class Leaderboard : Window{

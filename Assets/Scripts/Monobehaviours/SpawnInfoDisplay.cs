@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using HenrysMapUtils;
+using MapUtils;
 
 public class SpawnInfoDisplay : MonoBehaviour{
     [SerializeField] GameObject FullBackground;

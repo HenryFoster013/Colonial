@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
-using static HenrysUtils;
-using HenrysMapUtils;
+using static GenericUtils;
+using MapUtils;
 
 public class Troop : NetworkBehaviour{
     

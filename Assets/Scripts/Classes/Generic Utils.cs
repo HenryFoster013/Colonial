@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
-using HenrysMapUtils;
+using MapUtils;
 
-public static class HenrysUtils{
+public static class GenericUtils{
     
     // SOUND EFFECTS //
     

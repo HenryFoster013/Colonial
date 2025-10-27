@@ -6,8 +6,8 @@ using System.Linq;
 using System.Diagnostics;
 using Debug=UnityEngine.Debug;
 using Fusion;
-using HenrysMapUtils;
-using static HenrysUtils;
+using MapUtils;
+using static GenericUtils;
 
 public class MapManager : NetworkBehaviour
 {

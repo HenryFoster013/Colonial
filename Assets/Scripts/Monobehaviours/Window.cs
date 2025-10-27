@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static HenrysUtils;
+using static GenericUtils;
 
 public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
 

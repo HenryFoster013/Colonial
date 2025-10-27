@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 using Random=System.Random;
 using UnityEngine.UI;
 using TMPro;
-using static HenrysUtils;
+using static GenericUtils;
 
 public class LobbyUI : MonoBehaviour
 {

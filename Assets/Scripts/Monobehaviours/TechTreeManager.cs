@@ -2,8 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using HenrysTechUtils;
-using static HenrysUtils;
+using TechUtils;
+using static GenericUtils;
 
 public class TechTreeManager : MonoBehaviour{
 

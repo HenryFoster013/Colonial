@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using HenrysMapUtils;
-using static HenrysUtils;
+using static GenericUtils;
 
 public class PreviewRenderer : MonoBehaviour{
     [SerializeField] GameObject RendererPrefab;

@@ -5,8 +5,8 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 using UnityEngine.EventSystems;
-using static HenrysUtils;
-using HenrysMapUtils;
+using static GenericUtils;
+using MapUtils;
 using Fusion;
 
 public class PlayerManager : MonoBehaviour

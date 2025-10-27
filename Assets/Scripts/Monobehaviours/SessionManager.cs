@@ -7,7 +7,7 @@ using System.Linq;
 using Fusion.Sockets;
 using Fusion;
 using TMPro;
-using HenrysMapUtils;
+using MapUtils;
 
 public class SessionManager : NetworkBehaviour
 {

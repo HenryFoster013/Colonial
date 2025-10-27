@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
-using static HenrysUtils;
+using static GenericUtils;
 
 public class NameSelection : MonoBehaviour
 {

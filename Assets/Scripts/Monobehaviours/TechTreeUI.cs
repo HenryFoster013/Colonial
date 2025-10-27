@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using HenrysTechUtils;
-using static HenrysUtils;
+using TechUtils;
+using static GenericUtils;
 using TMPro;
 
 public class TechTreeUI : MonoBehaviour{
