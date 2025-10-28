@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,43 +14,41 @@ namespace EventUtils{
         // INSTANTIATION //
 
         public WorldEvent(int start, int end, int current_turn){
+            BaseValues(start, end);
+            CheckEvent(current_turn, start_turn, ref done_first, StartEvent);
+        }
+
+        void BaseValues(int start, int end){
             start_turn = start;
             end_turn = end;
             done_first = false;
             done_last = false;
-
-            CheckFirst(current_turn);
         }
 
-        // TURN CHECKS //
+        // TICK //
 
-        public void Check(int current_turn){
-            CheckFirst(current_turn);
-            CheckLast(current_turn);
+        public void Tick(int current_turn){
+            CheckEvent(current_turn, start_turn, ref done_first, StartEvent);
+            CheckEvent(current_turn, end_turn, ref done_last, EndEvent);
         }
 
-        void CheckFirst(int current_turn){
-            if(done_first)
-                return;
-            if(current_turn == start_turn)
-                StartEvent();
+        // CHECK //
+
+        void CheckEvent(int current_turn, int event_turn, ref bool event_flag, Action event_function){
+            if(!event_flag)
+                CheckEvent(current_turn, event_turn, event_function);
         }
 
-        void CheckLast(int current_turn){
-            if(done_last)
-                return;
-            if(current_turn == end_turn)
-                EndEvent();
+        void CheckEvent(int current_turn, int event_turn, Action event_function){
+            if(current_turn == event_turn)
+                event_function();
         }
 
         // EXPANDABLES //
-
         public void StartEvent(){ }
-
         public void EndEvent(){ }
 
         // GETTERS //
-
         public bool Active(int current_turn){return start_turn <= current_turn && !Retired(current_turn);}
         public bool Retired(int current_turn){return (current_turn >= end_turn);}
     }
@@ -71,11 +70,13 @@ namespace EventUtils{
             CleanEvents();
         }
 
+        // MANAGEABLE //
+
         void CheckEvents(){
             if(ongoing_events.Count == 0)
                 return;
             foreach(WorldEvent world_event in ongoing_events)
-                world_event.Check(current_turn);
+                world_event.Tick(current_turn);
         }
 
         void CleanEvents(){
