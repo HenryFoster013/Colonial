@@ -13,6 +13,8 @@ namespace EventUtils{
         int activation_turn;
         int end_turn;
         int target_player; // -1 == all (immediate)
+
+        EventRenderer outside_manager;
         
         // Instantiation //
         public WorldEvent(int start, int end, int target){
@@ -30,16 +32,11 @@ namespace EventUtils{
 
         // Setters
         void SetType(string _type){type = _type;}
+        void SetEventRenderer(EventRenderer messanger){outside_manager = messanger;}
 
         // Getters
-        public bool Active(int current_turn, int current_player){
-            return !Retired(current_turn) && (target_player == -1 || target_player == current_player);
-        }
-
-        public bool Retired(int current_turn){
-            return (current_turn < activation_turn || current_turn >= end_turn);
-        }
-
+        public bool Active(int current_turn, int current_player){return !Retired(current_turn) && (target_player == -1 || target_player == current_player);}
+        public bool Retired(int current_turn){return (current_turn < activation_turn || current_turn >= end_turn);}
         public bool CheckType(string input){return (type.ToUpper() == input.ToUpper());}
     }
 
@@ -49,7 +46,13 @@ namespace EventUtils{
         int current_turn;
         int current_player;
 
-        public WorldEventManager(){ }
+        // These are the references to monobehaviours used to render events in the scene
+        // Eg, out_manag manager for popups and other managers for things like tornados or whatever
+        EventRenderer outside_manager;
+
+        public WorldEventManager(EventRenderer out_managr){ 
+            outside_manager = out_managr;
+        }
 
         public void Tick(int turn, int player){
             current_turn = turn;
@@ -58,7 +61,10 @@ namespace EventUtils{
             CleanEvents();
         }
 
-        public void Add(WorldEvent new_event){ongoing_events.Add(new_event);}
+        public void Add(WorldEvent new_event){
+            ongoing_events.Add(new_event);
+            new_event.SetEventRenderer(outside_manager);
+        }
 
         //  Management //
 

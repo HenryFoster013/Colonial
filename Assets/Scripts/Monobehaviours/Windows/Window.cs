@@ -6,13 +6,20 @@ using static GenericUtils;
 
 public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
 
-    [Header("Generic Variables")]
+    [Header("Positioning")]
     public RectTransform dragRectTransform;
     [SerializeField] Canvas canvas;
-    public SoundEffectLookup SFX_Lookup;
     [SerializeField] float offset = 60;
+    
+    [Header("Openly / Closing")]
     public bool CloseOnSecondOpen = true;
     [SerializeField] bool OpenedByDefault = false;
+    public bool DestroyOnClose = false;
+
+    [Header("Sound Effects")]
+    public SoundEffect OpenSFX;
+    public SoundEffect CloseSFX;
+
     Vector2 pos;
 
     void Start(){
@@ -35,7 +42,7 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
             Close();
         }
         else{
-            PlaySFX("UI_1", SFX_Lookup);
+            PlaySFX(OpenSFX);
             SilentOpen();
         }
     }
@@ -45,8 +52,10 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
     }
 
     public void Close(){
-        PlaySFX("UI_2", SFX_Lookup);
+        PlaySFX(CloseSFX);
         SilentClose();
+        if(DestroyOnClose)
+            Destroy(this.gameObject);
     }
     public void SilentClose(){
         dragRectTransform.gameObject.SetActive(false);
