@@ -5,78 +5,68 @@ using UnityEngine;
 
 namespace EventUtils{
 
+    // BASE CLASSES //
+
     public class WorldEvent{
 
-        public int start_turn {get; private set;}
-        public int end_turn {get; private set;}
-        bool done_first, done_last;
-
-        // INSTANTIATION //
-
-        public WorldEvent(int start, int end, int current_turn){
-            BaseValues(start, end);
-            CheckEvent(current_turn, start_turn, ref done_first, StartEvent);
-        }
-
-        void BaseValues(int start, int end){
-            start_turn = start;
+        string type = "NULL";
+        int activation_turn;
+        int end_turn;
+        int target_player; // -1 == all (immediate)
+        
+        // Instantiation //
+        public WorldEvent(int start, int end, int target){
+            activation_turn = start;
             end_turn = end;
-            done_first = false;
-            done_last = false;
+            target_player = target;
         }
 
-        // TICK //
+        public WorldEvent(int turn, int target) : this(turn, turn + 1, target) { }
+        public WorldEvent(int turn) : this(turn, turn + 1, -1) { }
 
-        public void Tick(int current_turn){
-            CheckEvent(current_turn, start_turn, ref done_first, StartEvent);
-            CheckEvent(current_turn, end_turn, ref done_last, EndEvent);
+        // Expandables
+        public virtual void Functionality(){ }
+        public virtual void Timekeep(int current_turn, int current_player) { }
+
+        // Setters
+        void SetType(string _type){type = _type;}
+
+        // Getters
+        public bool Active(int current_turn, int current_player){
+            return !Retired(current_turn) && (target_player == -1 || target_player == current_player);
         }
 
-        // CHECK //
-
-        void CheckEvent(int current_turn, int event_turn, ref bool event_flag, Action event_function){
-            if(!event_flag)
-                CheckEvent(current_turn, event_turn, event_function);
+        public bool Retired(int current_turn){
+            return (current_turn < activation_turn || current_turn >= end_turn);
         }
 
-        void CheckEvent(int current_turn, int event_turn, Action event_function){
-            if(current_turn == event_turn)
-                event_function();
-        }
-
-        // EXPANDABLES //
-        public void StartEvent(){ }
-        public void EndEvent(){ }
-
-        // GETTERS //
-        public bool Active(int current_turn){return start_turn <= current_turn && !Retired(current_turn);}
-        public bool Retired(int current_turn){return (current_turn >= end_turn);}
+        public bool CheckType(string input){return (type.ToUpper() == input.ToUpper());}
     }
 
     public class WorldEventManager{
 
         List<WorldEvent> ongoing_events = new List<WorldEvent>();
         int current_turn;
+        int current_player;
 
-        public WorldEventManager(int base_turn){
-            current_turn = base_turn;
-        }
+        public WorldEventManager(){ }
 
-        // TURN CLOCK //
-
-        public void NewTurn(){
-            current_turn++;
+        public void Tick(int turn, int player){
+            current_turn = turn;
+            current_player = player;
             CheckEvents();
             CleanEvents();
         }
 
-        // MANAGEABLE //
+        public void Add(WorldEvent new_event){ongoing_events.Add(new_event);}
+
+        //  Management //
 
         void CheckEvents(){
             if(ongoing_events.Count == 0)
                 return;
             foreach(WorldEvent world_event in ongoing_events)
-                world_event.Tick(current_turn);
+                world_event.Timekeep(current_turn, current_player);
         }
 
         void CleanEvents(){

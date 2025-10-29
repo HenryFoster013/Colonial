@@ -56,6 +56,7 @@ public class Leaderboard : Window{
                 new_tab.transform.SetParent(TabHook);
                 new_tab.transform.localPosition = Vector3.zero;
                 new_tab.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, genuine * -30f);
+                new_tab.transform.localScale = new Vector3(1,1,1);
                 new_tab.GetComponent<FactionLeaderboardTab>().UpdateInfo(_FactionLookup.GetFaction(i), percentage);
                 genuine++;
             }

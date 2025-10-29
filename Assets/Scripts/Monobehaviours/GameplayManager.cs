@@ -4,6 +4,7 @@ using UnityEngine;
 using Fusion;
 using static GenericUtils;
 using MapUtils;
+using EventUtils;
 
 public class GameplayManager : NetworkBehaviour
 {
@@ -29,14 +30,19 @@ public class GameplayManager : NetworkBehaviour
     int troop_counter = 1;
 
     public List<Troop> AllTroops;
+    WorldEventManager event_manager;
 
     // Defaults
 
     public void Setup(){
-        _SessionManager.SetMoney(5);
         our_first_turn = true;
+
         current_turn = 1;
         player_sub_turn = 0;
+        event_manager = new WorldEventManager();
+        event_manager.Add(new DebugEvent(current_turn));
+        
+        _SessionManager.SetMoney(5);
         player_count = _SessionManager.player_instances.Count;
         if(_SessionManager.Hosting)
             RPC_SetTurn(0);
@@ -55,13 +61,11 @@ public class GameplayManager : NetworkBehaviour
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_AskToMoveTurn(int id, RpcInfo info = default){
         if(id == _SessionManager.player_instances[player_sub_turn].ID){
-        
             player_sub_turn++;
             if(player_sub_turn >= _SessionManager.player_instances.Count){
                 player_sub_turn = 0;
                 current_turn++;
             }
-
             RPC_SetTurn(_SessionManager.player_instances[player_sub_turn].ID);
         }
     }
@@ -83,6 +87,8 @@ public class GameplayManager : NetworkBehaviour
             _PlayerManager.UpdateTurnNameDisplay(_SessionManager.player_instances[player].GetUsername() + "'s turn.");
         else
             _PlayerManager.UpdateTurnNameDisplay("Our turn.");
+
+        event_manager.Tick(current_turn, player);
     }
 
     void NewTurn(){
@@ -261,7 +267,7 @@ public class GameplayManager : NetworkBehaviour
     }
 
     public bool ValidTroopSpawn(TroopData troop, Tile tile){
-        bool valid = _MapManager.IsTileFortress(tile);
+        bool valid = IsTileFortress(tile);
 
         if(valid)
             valid = troop.PopulationCost() <= tile.stats.FreePopulation();
@@ -281,7 +287,7 @@ public class GameplayManager : NetworkBehaviour
         if(TroopOnTile(tile))
             return;
 
-        if(!_MapManager.CheckTileOwnership(tile, _FactionLookup.GetFaction(_SessionManager.PlayerFactionID(owner))))
+        if(!CheckTileOwnership(tile, _FactionLookup.GetFaction(_SessionManager.PlayerFactionID(owner))))
             return;
 
         if(!ValidTroopSpawn(troop_data, tile))

@@ -64,6 +64,14 @@ public static class GenericUtils{
         return troop.spawned;
     }
 
+    public static bool IsTileFortress(Tile tile){
+        return (tile.piece.CheckType("Tower") || tile.piece.CheckType("Fort"));
+    }
+
+    public static bool CheckTileOwnership(Tile tile, Faction owner){
+        return (tile.owner == owner);
+    }
+
     // MISC //
 
     public static int CountBooleanArray(bool[] array){

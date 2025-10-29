@@ -446,7 +446,7 @@ public class PlayerManager : MonoBehaviour
     void CheckTileData(Tile tile){
         CloseSpawnMenu();
         FortStats.SetActive(false);
-        if(Map.CheckTileOwnership(tile, _SessionManager.LocalFactionData())){
+        if(CheckTileOwnership(tile, _SessionManager.LocalFactionData())){
             if(tile.piece.Fort()){
                 if(!_GameplayManager.TroopOnTile(tile) && OurTurn)
                     OpenSpawnMenu(false);
@@ -569,7 +569,6 @@ public class PlayerManager : MonoBehaviour
 
     public void EnableAllTroops(){
         foreach(Troop troop in OurTroops){
-            print(ValidateTroop(troop));
             if(ValidateTroop(troop)){
                 troop.NewTurn();
                 troop.EnableConquest(Map.ForeignFortress(troop.current_tile));
@@ -722,7 +721,7 @@ public class PlayerManager : MonoBehaviour
         //BuildingValid(tile, building_renders[i].GetPieceData())
 
         for(int i = start_point; i < prs.Length && i < start_point + 4; i++){
-            if(prs[i].Unlocked()){
+            if(prs[i].Unlocked() && prs[i].Validate(current_tile)){
                 prs[i].SetAfford(Money());
                 prs[i].SetPosition(new Vector2((active_count * offy) + centering, 0));
                 prs[i].SetTile(current_tile);

@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SoundEffectLookupSO
   Sounds:
   - {fileID: 11400000, guid: 091990f0ef7a8d644bfb847bb6fcbc8a, type: 2}
-  - {fileID: 11400000, guid: fce191e740a807949b648e41b3d52817, type: 2}
   - {fileID: 11400000, guid: beb45acc949309341b284d98fbcf794b, type: 2}
   - {fileID: 11400000, guid: 6007ae58049950c40b41d2a40b5bbc0b, type: 2}
   - {fileID: 11400000, guid: 1114402b4fe8cac4c9bd70b7f9a3312e, type: 2}

@@ -102,4 +102,14 @@ public class PreviewRenderer : MonoBehaviour{
         else
             player.SpawnTroopButton(reference);
     }
+
+    public bool Validate(Tile tile){
+        if(troop_data != null){
+            return IsTileFortress(tile);
+        }
+        else if(piece_data != null){
+            return piece_data.Compatible(tile.type) && piece_data.Compatible(tile.piece);
+        }
+        return false;
+    }
 }

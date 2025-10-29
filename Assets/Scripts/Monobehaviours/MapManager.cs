@@ -559,14 +559,6 @@ public class MapManager : NetworkBehaviour
         return valid;
     }
 
-    public bool IsTileFortress(Tile tile){
-        return (tile.piece.CheckType("Tower") || tile.piece.CheckType("Fort"));
-    }
-
-    public bool CheckTileOwnership(Tile tile, Faction owner){
-        return (tile.owner == owner);
-    }
-
     public void Conquer(Tile tile, Faction owner){
         if(!_SessionManager.Hosting)
             return;
