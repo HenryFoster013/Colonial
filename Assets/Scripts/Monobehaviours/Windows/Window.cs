@@ -32,10 +32,26 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
     }
 
     public void OnDrag(PointerEventData eventData){
+        if(!GotCanvas())
+            return;
         dragRectTransform.anchoredPosition += eventData.delta/canvas.scaleFactor;
     }
     public void OnPointerDown(PointerEventData eventData){
         dragRectTransform.SetAsLastSibling();
+    }
+
+    bool GotCanvas(){
+        if(canvas != null)
+            return true;
+
+        Transform search = this.transform;
+        while(search.parent != null && canvas == null){
+            search = search.parent;
+            if(TryGetComponent<Canvas>(out Canvas canny))
+                canvas = canny;
+        }
+
+        return canvas != null;
     }
 
     public virtual void Open(){

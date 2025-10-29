@@ -8,6 +8,7 @@ public class EventManager : MonoBehaviour{
 
     WorldEventManager manager;
 
+    [Header(" - Alert UI - ")]
     [SerializeField] Transform WindowHook;
     [SerializeField] GameObject NewspaperPrefab;
 
