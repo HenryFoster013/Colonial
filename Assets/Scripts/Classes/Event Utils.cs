@@ -12,7 +12,10 @@ namespace EventUtils{
         string type = "NULL";
         int activation_turn;
         int end_turn;
-        int target_player; // -1 == all (immediate)
+
+        // Note! This is not who can see it, but who's subturn it occurs on!
+        // -1 can be used as a "don't care"
+        int target_player; 
 
         public EventManager outside_manager;
         
@@ -64,6 +67,7 @@ namespace EventUtils{
         public void Add(WorldEvent new_event){
             ongoing_events.Add(new_event);
             new_event.SetEventManager(outside_manager);
+            Tick(current_turn, current_player); // Used for immediate events (such as accepting peace)
         }
 
         //  Management //

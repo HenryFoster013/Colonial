@@ -12,7 +12,6 @@ public class EventManager : MonoBehaviour{
     [SerializeField] Transform WindowHook;
     [SerializeField] GameObject NewspaperPrefab;
 
-    
     public void Setup() {
         manager = new WorldEventManager(this);
     }
