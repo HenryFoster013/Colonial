@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using static GenericUtils;
 using TMPro;
 using UnityEngine.UI;
+using EventUtils;
 
 public class NewspaperWindow : Window {
 
@@ -23,11 +24,11 @@ public class NewspaperWindow : Window {
 
         Header.text = message.Header();
         Body.text = message.Body();
-        SetupFlags();
+        SetupFlags(message);
         SilentOpen();
     }
 
-    public void SetupFlags(){
+    public void SetupFlags(MessageContents message){
         BaseFlag.sprite = message.BaseFlag();
         OverlayFlag.gameObject.SetActive(message.OverlayFlag() != null);
         OverlayFlag.sprite = message.OverlayFlag();

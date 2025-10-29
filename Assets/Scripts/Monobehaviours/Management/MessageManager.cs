@@ -4,7 +4,7 @@ using UnityEngine;
 using static GenericUtils;
 using EventUtils;
 
-public class EventRenderer : MonoBehaviour{
+public class EventManager : MonoBehaviour{
 
     WorldEventManager manager;
 
@@ -30,10 +30,11 @@ public class EventRenderer : MonoBehaviour{
         }
     }
 
-    GameObject CreateWindow(gameObject prefab){
-        GameObject window = GameObject.Insantiate(prefab);
-        window.SetParent(WindowHook);
+    GameObject CreateWindow(GameObject prefab){
+        GameObject window = GameObject.Instantiate(prefab);
+        window.transform.SetParent(WindowHook);
         window.transform.position = Vector3.zero;
         window.transform.localScale = new Vector3(1,1,1);
+        return window;
     }
 }

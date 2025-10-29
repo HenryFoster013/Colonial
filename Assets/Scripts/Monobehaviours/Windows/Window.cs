@@ -17,6 +17,7 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
     public bool DestroyOnClose = false;
 
     [Header("Sound Effects")]
+    public SoundEffectLookup SFX_Lookup;
     public SoundEffect OpenSFX;
     public SoundEffect CloseSFX;
 

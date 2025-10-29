@@ -17,7 +17,7 @@ public class GameplayManager : NetworkBehaviour
     [SerializeField] SoundEffectLookup SFX_Lookup;
     ConnectionManager _ConnectionManager;
     [SerializeField] MapManager _MapManager;
-    [SerializeField] MessageManager _MessageManager;
+    [SerializeField] EventManager _EventManager;
 
     [Header("Visuals")]
     [SerializeField] GameObject DamageEffect;
@@ -37,7 +37,7 @@ public class GameplayManager : NetworkBehaviour
         our_first_turn = true;
         current_turn = 1;
         player_sub_turn = 0;
-        MessageManager.Setup();
+        _EventManager.Setup();
         _SessionManager.SetMoney(5);
         player_count = _SessionManager.player_instances.Count;
         if(_SessionManager.Hosting)
@@ -84,7 +84,7 @@ public class GameplayManager : NetworkBehaviour
         else
             _PlayerManager.UpdateTurnNameDisplay("Our turn.");
 
-        MessageManager.Tick(current_turn, player);
+        _EventManager.Tick(current_turn, player);
     }
 
     void NewTurn(){

@@ -27,7 +27,7 @@ namespace EventUtils{
             msg_contents = contents;
         }
 
-        public void Timekeep(int turn, int player){
+        public override void Timekeep(int turn, int player){
             if(base.Active(turn, player))
                 Functionality();
         }

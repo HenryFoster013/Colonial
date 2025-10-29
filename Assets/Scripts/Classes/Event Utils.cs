@@ -14,7 +14,7 @@ namespace EventUtils{
         int end_turn;
         int target_player; // -1 == all (immediate)
 
-        EventRenderer outside_manager;
+        public EventManager outside_manager;
         
         // Instantiation //
         public WorldEvent(int start, int end, int target){
@@ -31,8 +31,8 @@ namespace EventUtils{
         public virtual void Timekeep(int current_turn, int current_player) { }
 
         // Setters
-        void SetType(string _type){type = _type;}
-        void SetEventRenderer(EventRenderer messanger){outside_manager = messanger;}
+        public void SetType(string _type){type = _type;}
+        public void SetEventManager(EventManager messanger){outside_manager = messanger;}
 
         // Getters
         public bool Active(int current_turn, int current_player){return !Retired(current_turn) && (target_player == -1 || target_player == current_player);}
@@ -48,9 +48,9 @@ namespace EventUtils{
 
         // These are the references to monobehaviours used to render events in the scene
         // Eg, out_manag manager for popups and other managers for things like tornados or whatever
-        EventRenderer outside_manager;
+        EventManager outside_manager;
 
-        public WorldEventManager(EventRenderer out_managr){ 
+        public WorldEventManager(EventManager out_managr){ 
             outside_manager = out_managr;
         }
 
@@ -63,7 +63,7 @@ namespace EventUtils{
 
         public void Add(WorldEvent new_event){
             ongoing_events.Add(new_event);
-            new_event.SetEventRenderer(outside_manager);
+            new_event.SetEventManager(outside_manager);
         }
 
         //  Management //
