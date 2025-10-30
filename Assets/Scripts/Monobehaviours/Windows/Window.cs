@@ -37,7 +37,7 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
         dragRectTransform.anchoredPosition += eventData.delta/canvas.scaleFactor;
     }
     public void OnPointerDown(PointerEventData eventData){
-        dragRectTransform.SetAsLastSibling();
+        dragRectTransform.parent.SetAsLastSibling();
     }
 
     bool GotCanvas(){
