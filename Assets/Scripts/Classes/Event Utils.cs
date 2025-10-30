@@ -9,38 +9,24 @@ namespace EventUtils{
 
     public class WorldEvent{
 
-        string type = "NULL";
         int activation_turn;
-        int end_turn;
-
-        // Note! This is not who can see it, but who's subturn it occurs on!
-        // -1 can be used as a "don't care"
-        int target_player; 
-
+        int target_player; // -1 for "I don't care", not who can see it but the sub turn it occurs on        
         public EventManager outside_manager;
         
-        // Instantiation //
-        public WorldEvent(int start, int end, int target){
+        // Instantiation
+        public void SetEventManager(EventManager messanger){outside_manager = messanger;}
+        public WorldEvent(int turn) : this(turn, -1) { }
+        public WorldEvent(int start, int target){
             activation_turn = start;
-            end_turn = end;
             target_player = target;
         }
 
-        public WorldEvent(int turn, int target) : this(turn, turn + 1, target) { }
-        public WorldEvent(int turn) : this(turn, turn + 1, -1) { }
-
+        // Clock
+        public bool Active(int current_turn, int current_player){return current_turn == activation_turn && (target_player == -1 || target_player == current_player);}
+        public bool Retired(int current_turn){return (current_turn > activation_turn);}
+        
         // Expandables
         public virtual void Functionality(){ }
-        public virtual void Timekeep(int current_turn, int current_player) { }
-
-        // Setters
-        public void SetType(string _type){type = _type;}
-        public void SetEventManager(EventManager messanger){outside_manager = messanger;}
-
-        // Getters
-        public bool Active(int current_turn, int current_player){return !Retired(current_turn) && (target_player == -1 || target_player == current_player);}
-        public bool Retired(int current_turn){return (current_turn < activation_turn || current_turn >= end_turn);}
-        public bool CheckType(string input){return (type.ToUpper() == input.ToUpper());}
     }
 
     public class WorldEventManager{
@@ -60,8 +46,7 @@ namespace EventUtils{
         public void Tick(int turn, int player){
             current_turn = turn;
             current_player = player;
-            CheckEvents();
-            CleanEvents();
+            RunEvents();
         }
 
         public void Add(WorldEvent new_event){
@@ -72,21 +57,22 @@ namespace EventUtils{
 
         //  Management //
 
-        void CheckEvents(){
-            if(ongoing_events.Count == 0)
-                return;
-            foreach(WorldEvent world_event in ongoing_events)
-                world_event.Timekeep(current_turn, current_player);
-        }
+        void RunEvents(){
 
-        void CleanEvents(){
             if(ongoing_events.Count == 0)
                 return;
+
             List<WorldEvent> cleaned_events = new List<WorldEvent>();
+            
             foreach(WorldEvent world_event in ongoing_events){
-                if(world_event.Retired(current_turn))
-                    cleaned_events.Add(world_event);
+                if(world_event.Active(current_turn, current_player))
+                    world_event.Functionality();
+                else{
+                    if(!world_event.Retired(current_turn))
+                        cleaned_events.Add(world_event);
+                }
             }
+
             ongoing_events = cleaned_events;
         }
     }

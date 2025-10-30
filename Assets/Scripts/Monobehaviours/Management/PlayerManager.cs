@@ -20,6 +20,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] SessionManager _SessionManager;
     [SerializeField] GameplayManager _GameplayManager;
     [SerializeField] TechTreeManager _TechTreeManager;
+    [SerializeField] EventManager _EventManager;
     
     [Header(" --- CAMERA --- ")]
     [SerializeField] Camera _Camera;
@@ -475,22 +476,21 @@ public class PlayerManager : MonoBehaviour
     bool IsTroopAttackable(Troop troop){
         if(!ValidateTroop(troop))
             return false;
+        if(current_troop == null)
+            return false;
+        if(_GameplayManager.truce_manager.Truced(current_troop.FactionData(), _SessionManager.OurInstance.FactionData()))
+            return false;
 
-        bool result = false;
-        if(current_troop != null){
-            bool current_is_ours = current_troop.FactionID() == _SessionManager.OurInstance.Faction_ID;
-            bool target_not_ours = troop.FactionID() != _SessionManager.OurInstance.Faction_ID;
-            bool in_range = attackable_tiles.Contains(Map.GetTile(troop.current_tile));
+        bool current_is_ours = current_troop.FactionID() == _SessionManager.OurInstance.Faction_ID;
+        bool target_not_ours = troop.FactionID() != _SessionManager.OurInstance.Faction_ID;
+        bool in_range = attackable_tiles.Contains(Map.GetTile(troop.current_tile));
 
-            result = current_is_ours && target_not_ours && in_range;
-        }
-
-        return result;
+        return current_is_ours && target_not_ours && in_range;
     }
 
     void AttackTroop(Troop troop){
         if(ValidateTroop(troop) && ValidateTroop(current_troop))
-            _GameplayManager.RPC_AttackTroop(current_troop.UniqueID, troop.UniqueID, true);
+            _GameplayManager.RPC_AttackTroop(current_troop.UniqueID, troop.UniqueID, true, current_troop.Faction_ID, troop.Faction_ID);
         Deselect();
     }
 

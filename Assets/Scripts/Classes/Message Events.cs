@@ -12,12 +12,7 @@ namespace EventUtils{
         public MessageEvent(int trn, int player_id, MessageContents contents) : base(trn, player_id){ 
             msg_contents = contents;
         }
-
-        public override void Timekeep(int turn, int player){
-            if(base.Active(turn, player))
-                Functionality();
-        }
-
+        
         public override void Functionality(){
             outside_manager.Message(msg_contents);
         }

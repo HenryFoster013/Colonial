@@ -5,6 +5,7 @@ using Fusion;
 using static GenericUtils;
 using MapUtils;
 using EventUtils;
+using TruceUtils;
 
 public class GameplayManager : NetworkBehaviour
 {
@@ -31,12 +32,15 @@ public class GameplayManager : NetworkBehaviour
     int troop_counter = 1;
     public List<Troop> AllTroops;
 
+    public TruceManager truce_manager {get; private set;}
+
     // Defaults
 
     public void Setup(){
         our_first_turn = true;
         current_turn = 1;
         player_sub_turn = 0;
+        truce_manager = new TruceManager();
         _EventManager.Setup();
         _SessionManager.SetMoney(5);
         player_count = _SessionManager.player_instances.Count;
@@ -154,16 +158,19 @@ public class GameplayManager : NetworkBehaviour
     // Troop Combat //
 
     [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_AttackTroop(int attacking_id, int target_id, bool original, RpcInfo info = default){
-        AttackTroop(attacking_id, target_id, original, GetTroop(target_id).transform.position);
+    public void RPC_AttackTroop(int attacking_id, int target_id, bool original, int fac_attk, int fac_targ, RpcInfo info = default){
+        AttackTroop(attacking_id, target_id, original, fac_attk, fac_targ, GetTroop(target_id).transform.position);
     }
 
-    void AttackTroop(int attacking_id, int target_id, bool original_attack, Vector3 old_target_pos){
+    void AttackTroop(int attacking_id, int target_id, bool original_attack, int fac_attk, int fac_targ, Vector3 old_target_pos){
 
         Troop attacking_troop = GetTroop(attacking_id);
         Troop target_troop = GetTroop(target_id);
 
         if(!ValidateTroop(attacking_troop))
+            return;
+        
+        if(truce_manager.Truced(_FactionLookup.GetFaction(fac_attk), _FactionLookup.GetFaction(fac_targ)))
             return;
         
         attacking_troop.AttackAnim();
@@ -194,7 +201,7 @@ public class GameplayManager : NetworkBehaviour
             }
             else{
                 if(original_attack){
-                    StartCoroutine(Slapback(attacking_id, target_id));
+                    StartCoroutine(Slapback(attacking_id, target_id, fac_attk, fac_targ));
                 }
                 RPC_DamageEffect(target_troop.current_tile);
             }
@@ -214,9 +221,9 @@ public class GameplayManager : NetworkBehaviour
         SpawnEffect(DamageEffect, tile);
     }
 
-    IEnumerator Slapback(int attacking_id, int target_id){
+    IEnumerator Slapback(int attacking_id, int target_id, int fac_attk, int fac_targ){
         yield return new WaitForSeconds(0.5f);
-        RPC_AttackTroop(target_id, attacking_id, false);
+        RPC_AttackTroop(target_id, attacking_id, false, fac_attk, fac_targ);
     }
 
     int CalculateDamage(Troop troop, bool original){
