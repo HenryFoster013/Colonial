@@ -2076,7 +2076,7 @@ MonoBehaviour:
   _SessionManager: {fileID: 308904221}
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
   _MapManager: {fileID: 1780067900}
-  _EventManager: {fileID: 0}
+  _EventManager: {fileID: 40861723}
   DamageEffect: {fileID: 6489121289303637190, guid: fd7838d6f78d8f5489e83dca2f78c957, type: 3}
   DefeatEffect: {fileID: 8069163334187433995, guid: 640e563a24c5c8e41b14dc24075db742, type: 3}
   _current_turn: 0
@@ -17189,6 +17189,7 @@ MonoBehaviour:
   _SessionManager: {fileID: 308904221}
   _GameplayManager: {fileID: 236702219}
   _TechTreeManager: {fileID: 1329537895}
+  _EventManager: {fileID: 0}
   _Camera: {fileID: 86466292}
   CameraHook: {fileID: 776516041}
   CameraSpine: {fileID: 1029655847}
