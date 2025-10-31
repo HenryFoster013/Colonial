@@ -4,14 +4,20 @@ using UnityEngine;
 
 public class DestroyOverTime : MonoBehaviour
 {
+    [SerializeField] bool AutoDelete = true;
     [SerializeField] float Delay;
 
     void Start(){
-        StartCoroutine(LIGHTWEIGHTBABY());
+        if(AutoDelete)
+            StartDeletion(Delay);
     }
 
-    IEnumerator LIGHTWEIGHTBABY(){
-        yield return new WaitForSeconds(Delay);
+    public void StartDeletion(float _time){
+        StartCoroutine(LIGHTWEIGHTBABY(_time));
+    }
+
+    IEnumerator LIGHTWEIGHTBABY(float _time){
+        yield return new WaitForSeconds(_time);
         Destroy(this.gameObject);
     }
 }

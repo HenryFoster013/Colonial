@@ -22,7 +22,7 @@ public static class GenericUtils{
         asrc.pitch = sound.Pitch();
         asrc.outputAudioMixerGroup  = sound.Mixer;
         asrc.Play();
-        DeleteAfterTime deletor = new_sfx.AddComponent<DeleteAfterTime>();
+        DestroyOverTime deletor = new_sfx.AddComponent<DestroyOverTime>();
         deletor.StartDeletion(asrc.clip.length + 1f);
         GameObject.DontDestroyOnLoad(new_sfx);
     }
