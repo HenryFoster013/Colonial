@@ -34,8 +34,8 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] GameObject SpawnMenuArrowsHolder;
     [SerializeField] GameObject EndTurnButton;
     [SerializeField] TMP_Text CoinDisplay;
-    [SerializeField] Leaderboard LeaderboardWindow;
-    [SerializeField] FactionWindow FactionInfoWindow;
+    public Leaderboard LeaderboardWindow;
+    public FactionWindow FactionInfoWindow;
 
     [Header("Turns")]
     [SerializeField] TMP_Text TurnDisplay;
@@ -582,7 +582,15 @@ public class PlayerManager : MonoBehaviour
 
     // UI //
 
+    public void CloseUnnecessaryWindows(){
+        FactionInfoWindow.Close();
+    }
+
     public void OpenFactionInformation(Faction faction){
+        if(!OurTurn)
+            return;
+        if(faction == _SessionManager.OurInstance.FactionData())
+            return;
         FactionInfoWindow.Load(faction);
     }
 

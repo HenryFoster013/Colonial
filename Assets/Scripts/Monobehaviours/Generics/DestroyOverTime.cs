@@ -5,7 +5,7 @@ using UnityEngine;
 public class DestroyOverTime : MonoBehaviour
 {
     [SerializeField] bool AutoDelete = true;
-    [SerializeField] float Delay;
+    [SerializeField] float Delay = 999;
 
     void Start(){
         if(AutoDelete)

@@ -9,7 +9,7 @@ public class PeaceOfferingWindow : Window
 {
     [Header("Treaty Specifics")]
     [SerializeField] TMP_Text Body;
-    [TextArea] string BaseMessage;
+    [TextArea] public string BaseMessage;
     [SerializeField] SoundEffect AcceptSFX;
 
     Faction faction_one;
@@ -19,18 +19,18 @@ public class PeaceOfferingWindow : Window
     GameplayManager _GamePlayManager;
 
     public void Setup(GameplayManager manager, MessageContents message){
+        _GamePlayManager = manager;
         faction_one = message.FactionOne();
         faction_two = message.FactionTwo();
         our_name = _GamePlayManager.LocalUsername();
         their_name = message.Header();
-        _GamePlayManager = manager;
 
         Body.text = FormatMessage(BaseMessage);
     }
 
     string FormatMessage(string msg){
         msg = msg.Replace("{0}", our_name);
-        msg = msg.Replace("{1}", faction_two.Name().ToUpper());
+        msg = msg.Replace("{1}", faction_one.Name().ToUpper());
         msg = msg.Replace("{2}", their_name);
         return msg;
     }

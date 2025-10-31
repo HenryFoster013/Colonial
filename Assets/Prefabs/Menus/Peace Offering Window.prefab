@@ -256,7 +256,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2139560194563777355}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5433016255108339368}
+        m_TargetAssemblyTypeName: PeaceOfferingWindow, Assembly-CSharp
+        m_MethodName: Accept
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2139560194992869129
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,7 +390,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2139560194992869172}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5433016255108339368}
+        m_TargetAssemblyTypeName: Window, Assembly-CSharp
+        m_MethodName: Close
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2139560195441953062
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,6 +808,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 5433016255108339368}
+        m_TargetAssemblyTypeName: Window, Assembly-CSharp
+        m_MethodName: Close
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Window, Assembly-CSharp
         m_MethodName: Close
@@ -856,6 +892,21 @@ MonoBehaviour:
   OpenSFX: {fileID: 11400000, guid: 48613beb2a7ed6e428332e962b5f14e0, type: 2}
   CloseSFX: {fileID: 11400000, guid: 59ba4fde20312f947990fe2d62daa33d, type: 2}
   Body: {fileID: 4245795693530945020}
+  BaseMessage: 'Dear <i>{0}</i>
+
+
+    We would like to extend
+
+    an offer of peace
+    on behalf of the <i>{1}</i>.
+
+
+    Please take time to consider our offer.
+
+
+    Signed
+
+    <i>{2}</i>'
   AcceptSFX: {fileID: 11400000, guid: 121a9297bbccb564c91a89babe36c56a, type: 2}
 --- !u!1 &4245795694346965413
 GameObject:
@@ -895,9 +946,9 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -2.5}
   m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 24.063892, y: -149.69173}
-  m_SizeDelta: {x: 101.889, y: 222.5807}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 105.2, y: -121.1}
+  m_SizeDelta: {x: 201.889, y: 222.5807}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4245795694346965408
 CanvasRenderer:

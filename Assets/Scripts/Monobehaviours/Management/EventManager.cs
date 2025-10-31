@@ -44,7 +44,7 @@ public class EventManager : MonoBehaviour{
     GameObject CreateWindow(GameObject prefab){
         GameObject window = GameObject.Instantiate(prefab);
         window.transform.SetParent(WindowHook);
-        window.transform.position = Vector3.zero;
+        window.transform.localPosition = Vector3.zero;
         window.transform.localScale = new Vector3(1,1,1);
         return window;
     }

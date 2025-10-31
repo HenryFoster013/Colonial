@@ -92,6 +92,7 @@ public class GameplayManager : NetworkBehaviour
 
     void NewTurn(){
         harassed_factions = new bool[_FactionLookup.Length()];
+        _PlayerManager.CloseUnnecessaryWindows();
         _PlayerManager.Deselect();
         _PlayerManager.EnableAllTroops();
 
@@ -113,17 +114,25 @@ public class GameplayManager : NetworkBehaviour
     public string LocalUsername(){return _SessionManager.OurInstance.GetUsername();}
 
     public void FlipPeace(Faction target){
+
+        if(!_PlayerManager.OurTurn)
+            return;
         
         int target_id =  _FactionLookup.ID(target);
         if(Harassed(target_id))
             return;
 
+        _PlayerManager.LeaderboardWindow.Close();
         if(!truce_manager.Truced(_SessionManager.OurInstance.FactionData(), target)){
             RPC_OfferTreaty(_SessionManager.OurInstance.Faction_ID, target_id);
         }    
     }
 
     public void MessageFaction(Faction target){
+
+        if(!_PlayerManager.OurTurn)
+            return;
+
         int target_id =  _FactionLookup.ID(target);
         if(Harassed(target_id))
             return;

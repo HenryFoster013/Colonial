@@ -31,6 +31,10 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
             SilentClose();
     }
 
+    void Update(){
+        GotCanvas();
+    }
+
     public void OnDrag(PointerEventData eventData){
         if(!GotCanvas())
             return;
@@ -47,7 +51,7 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
         Transform search = this.transform;
         while(search.parent != null && canvas == null){
             search = search.parent;
-            if(TryGetComponent<Canvas>(out Canvas canny))
+            if(search.TryGetComponent<Canvas>(out Canvas canny))
                 canvas = canny;
         }
 
