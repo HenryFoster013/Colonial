@@ -1,0 +1,43 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+using static GenericUtils;
+using EventUtils;
+
+public class PeaceOfferingWindow : Window
+{
+    [Header("Treaty Specifics")]
+    [SerializeField] TMP_Text Body;
+    [TextArea] string BaseMessage;
+    [SerializeField] SoundEffect AcceptSFX;
+
+    Faction faction_one;
+    Faction faction_two;
+    string our_name;
+    string their_name;
+    GameplayManager _GamePlayManager;
+
+    public void Setup(GameplayManager manager, MessageContents message){
+        faction_one = message.FactionOne();
+        faction_two = message.FactionTwo();
+        our_name = _GamePlayManager.LocalUsername();
+        their_name = message.Header();
+        _GamePlayManager = manager;
+
+        Body.text = FormatMessage(BaseMessage);
+    }
+
+    string FormatMessage(string msg){
+        msg = msg.Replace("{0}", our_name);
+        msg = msg.Replace("{1}", faction_two.Name().ToUpper());
+        msg = msg.Replace("{2}", their_name);
+        return msg;
+    }
+
+    public void Accept(){
+        _GamePlayManager.MakePeace(faction_one, faction_two);
+        PlaySFX(AcceptSFX);
+        Destroy(this.gameObject);
+    }
+}

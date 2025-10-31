@@ -37,6 +37,7 @@ public class GameplayManager : NetworkBehaviour
     // Defaults
 
     public void Setup(){
+        harassed_factions = new bool[_FactionLookup.Length()];
         our_first_turn = true;
         current_turn = 1;
         player_sub_turn = 0;
@@ -87,11 +88,10 @@ public class GameplayManager : NetworkBehaviour
             _PlayerManager.UpdateTurnNameDisplay(_SessionManager.player_instances[player].GetUsername() + "'s turn.");
         else
             _PlayerManager.UpdateTurnNameDisplay("Our turn.");
-
-        _EventManager.Tick(current_turn, player);
     }
 
     void NewTurn(){
+        harassed_factions = new bool[_FactionLookup.Length()];
         _PlayerManager.Deselect();
         _PlayerManager.EnableAllTroops();
 
@@ -102,6 +102,65 @@ public class GameplayManager : NetworkBehaviour
         }
         else
             _SessionManager.EarnMoney(_MapManager.TotalValue());
+        
+        _EventManager.Tick();
+    }
+
+    // EVENTS //
+
+    bool[] harassed_factions;
+
+    public string LocalUsername(){return _SessionManager.OurInstance.GetUsername();}
+
+    public void FlipPeace(Faction target){
+        
+        int target_id =  _FactionLookup.ID(target);
+        if(Harassed(target_id))
+            return;
+
+        if(!truce_manager.Truced(_SessionManager.OurInstance.FactionData(), target)){
+            RPC_OfferTreaty(_SessionManager.OurInstance.Faction_ID, target_id);
+        }    
+    }
+
+    public void MessageFaction(Faction target){
+        int target_id =  _FactionLookup.ID(target);
+        if(Harassed(target_id))
+            return;
+        
+        // send message event here
+    }
+
+    bool Harassed(int target_id){
+        bool return_val = harassed_factions[target_id];
+        harassed_factions[target_id] = true;
+        return return_val;
+    }
+
+    public void MakePeace(Faction fac_one, Faction fac_two){
+        RPC_MakePeace(_FactionLookup.ID(fac_one), _FactionLookup.ID(fac_two));
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPC_MakePeace(int fac_one_id, int fac_two_id){
+        truce_manager.NewTruce(_FactionLookup.GetFaction(fac_one_id), _FactionLookup.GetFaction(fac_two_id));
+        // spawn the window immedietly here
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPC_OfferTreaty(int offering_faction_id, int target_faction_id){
+
+        Faction fac_offer = _FactionLookup.GetFaction(offering_faction_id);
+        Faction fac_targ = _FactionLookup.GetFaction(target_faction_id);
+
+        if(fac_offer == null || fac_targ == null)
+            return;        
+        if(truce_manager.Truced(fac_offer, fac_targ))
+            return;
+        if(target_faction_id != _SessionManager.OurInstance.Faction_ID)
+            return;
+        
+        _EventManager.Add(new MessageEvent(new MessageContents("PEACE", LocalUsername(), "", fac_offer, fac_targ)));
     }
 
     // TROOPS //

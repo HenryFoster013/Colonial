@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9485103ad3e85e4e9280994a77c7be5, type: 3}
+  m_Name: Morse_Code
+  m_EditorClassIdentifier: 
+  Name: Morse_Code
+  BaseClip: {fileID: 0}
+  Mixer: {fileID: 8193749847766800399, guid: f7d701d4c51aa3642b25f9526ef105f5, type: 2}
+  ClipRange:
+  - {fileID: 8300000, guid: 6c7da9acfd5605d4d877c5a715eebf81, type: 3}
+  - {fileID: 8300000, guid: e59fa814534a3b74c90831770ccf9eba, type: 3}
+  - {fileID: 8300000, guid: 3128e462d4a24f548a519494b9d6b872, type: 3}
+  BasePitch: 1
+  PitchVariation: 0.1
+  BaseVolume: 0.7
+  VolumeVariation: 0

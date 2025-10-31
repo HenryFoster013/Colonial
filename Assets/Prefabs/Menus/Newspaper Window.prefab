@@ -192,8 +192,8 @@ MonoBehaviour:
   OpenedByDefault: 1
   DestroyOnClose: 1
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
-  OpenSFX: {fileID: 11400000, guid: 1114402b4fe8cac4c9bd70b7f9a3312e, type: 2}
-  CloseSFX: {fileID: 11400000, guid: e1d03495680746c45ad91f90d29ed044, type: 2}
+  OpenSFX: {fileID: 11400000, guid: ceceb6d56de0c7e449649bdce588419f, type: 2}
+  CloseSFX: {fileID: 11400000, guid: 59ba4fde20312f947990fe2d62daa33d, type: 2}
   Header: {fileID: 4879357157245376181}
   Body: {fileID: 6749465950023498979}
   BaseFlag: {fileID: 6749465949370971857}

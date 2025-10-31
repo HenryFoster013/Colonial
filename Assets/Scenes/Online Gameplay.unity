@@ -349,8 +349,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 752af31ef677ce65cb0601b61b38bb65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _GamePlayManager: {fileID: 236702219}
   WindowHook: {fileID: 1704487418}
   NewspaperPrefab: {fileID: 4879357159098280742, guid: 5cd59412abc9c3373b5ee38b24f29d7a, type: 3}
+  PeacePrefab: {fileID: 4245795694312073327, guid: 6b8ebb4577efa684f84ff479cf696268, type: 3}
 --- !u!1 &48529154
 GameObject:
   m_ObjectHideFlags: 0
@@ -18650,7 +18652,6 @@ MonoBehaviour:
   _SessionManager: {fileID: 308904221}
   _GameplayManager: {fileID: 236702219}
   _TechTreeManager: {fileID: 1329537895}
-  _EventManager: {fileID: 40861723}
   _Camera: {fileID: 86466292}
   CameraHook: {fileID: 776516041}
   CameraSpine: {fileID: 1029655847}
@@ -20064,6 +20065,8 @@ MonoBehaviour:
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
   OpenSFX: {fileID: 11400000, guid: 1114402b4fe8cac4c9bd70b7f9a3312e, type: 2}
   CloseSFX: {fileID: 11400000, guid: e1d03495680746c45ad91f90d29ed044, type: 2}
+  _PlayerManager: {fileID: 2146075082}
+  _GamePlayManager: {fileID: 236702219}
   Colorised:
   - {fileID: 2973390158120737611}
   - {fileID: 1319635977}

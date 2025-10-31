@@ -20,7 +20,6 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] SessionManager _SessionManager;
     [SerializeField] GameplayManager _GameplayManager;
     [SerializeField] TechTreeManager _TechTreeManager;
-    [SerializeField] EventManager _EventManager;
     
     [Header(" --- CAMERA --- ")]
     [SerializeField] Camera _Camera;
@@ -584,7 +583,7 @@ public class PlayerManager : MonoBehaviour
     // UI //
 
     public void OpenFactionInformation(Faction faction){
-        FactionInfoWindow.Load(faction, this);
+        FactionInfoWindow.Load(faction);
     }
 
     public void LeaderboardButton(){

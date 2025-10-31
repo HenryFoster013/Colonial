@@ -8,16 +8,24 @@ public class EventManager : MonoBehaviour{
 
     WorldEventManager manager;
 
+    [Header("- References -")]
+    [SerializeField] GameplayManager _GamePlayManager;
+
     [Header(" - Alert UI - ")]
     [SerializeField] Transform WindowHook;
     [SerializeField] GameObject NewspaperPrefab;
+    [SerializeField] GameObject PeacePrefab;
 
     public void Setup() {
         manager = new WorldEventManager(this);
     }
 
-    public void Tick(int turn, int player){
-        manager.Tick(turn, player);
+    public void Tick(){
+        manager.RunEvents();
+    }
+
+    public void Add(WorldEvent new_event){
+        manager.Add(new_event);
     }
 
     // UI Alerts //
@@ -26,6 +34,9 @@ public class EventManager : MonoBehaviour{
         switch(message.Type()){
             case "NEWSPAPER":
                 CreateWindow(NewspaperPrefab).GetComponent<NewspaperWindow>().Setup(message);
+                break;
+            case "PEACE":
+                CreateWindow(PeacePrefab).GetComponent<PeaceOfferingWindow>().Setup(_GamePlayManager, message);
                 break;
         }
     }

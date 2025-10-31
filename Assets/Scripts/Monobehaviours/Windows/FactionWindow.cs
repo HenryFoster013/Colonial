@@ -6,6 +6,10 @@ using TMPro;
 
 public class FactionWindow : Window {
 
+    [Header("References")]
+    [SerializeField] PlayerManager _PlayerManager;
+    [SerializeField] GameplayManager _GamePlayManager;
+    
     [Header("UI")]
     [SerializeField] Image[] Colorised;
     [SerializeField] Image Flag;
@@ -14,11 +18,9 @@ public class FactionWindow : Window {
     [SerializeField] TMP_Text PeaceWarText;
 
     Faction faction;
-    PlayerManager player;
 
-    public void Load(Faction _faction, PlayerManager playa){
+    public void Load(Faction _faction){
         faction  =_faction;
-        player = playa;
 
         Flag.sprite = faction.Flag();
         foreach(Image colorised in Colorised){
@@ -28,7 +30,7 @@ public class FactionWindow : Window {
         Header.text = faction.Name();
         NationName.text = faction.Name();
         PeaceWarText.text = "Offer Peace";
-        if(player.AtPeace(faction))
+        if(_PlayerManager.AtPeace(faction))
             PeaceWarText.text = "Break Peace";
 
         Open();
@@ -40,7 +42,7 @@ public class FactionWindow : Window {
     }
 
     public void PeaceWar(){
-
+        _GamePlayManager.FlipPeace(faction);
         Close();
     }
 

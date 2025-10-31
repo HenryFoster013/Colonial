@@ -9,7 +9,7 @@ namespace EventUtils{
 
         MessageContents msg_contents;
         
-        public MessageEvent(int trn, int player_id, MessageContents contents) : base(trn, player_id){ 
+        public MessageEvent(MessageContents contents){ 
             msg_contents = contents;
         }
         
@@ -40,7 +40,8 @@ namespace EventUtils{
         public bool CheckType(string input){return Type() == input.ToUpper();}
         public string Header(){return Format(header);}
         public string Body(){return Format(header);}
-
+        public Faction FactionOne(){return faction_one;}
+        public Faction FactionTwo(){return faction_two;}
         public Sprite BaseFlag(){return GetFlag(faction_one);}
         public Sprite OverlayFlag(){return GetFlag(faction_two);}
 
