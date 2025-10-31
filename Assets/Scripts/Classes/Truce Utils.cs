@@ -37,6 +37,9 @@ namespace TruceUtils{
         }
 
         public bool Truced(Faction fac_one, Faction fac_two){
+            CheckEmpty(fac_one);
+            CheckEmpty(fac_two);
+
             List<Faction> truced = truce_lookup[fac_one];
             if(truced.Count == 0)
                 return false;

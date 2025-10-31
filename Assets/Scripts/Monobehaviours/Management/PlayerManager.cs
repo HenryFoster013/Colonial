@@ -36,6 +36,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] GameObject EndTurnButton;
     [SerializeField] TMP_Text CoinDisplay;
     [SerializeField] Leaderboard LeaderboardWindow;
+    [SerializeField] FactionWindow FactionInfoWindow;
 
     [Header("Turns")]
     [SerializeField] TMP_Text TurnDisplay;
@@ -478,7 +479,7 @@ public class PlayerManager : MonoBehaviour
             return false;
         if(current_troop == null)
             return false;
-        if(_GameplayManager.truce_manager.Truced(current_troop.FactionData(), _SessionManager.OurInstance.FactionData()))
+        if(troop.FactionData())
             return false;
 
         bool current_is_ours = current_troop.FactionID() == _SessionManager.OurInstance.Faction_ID;
@@ -486,6 +487,10 @@ public class PlayerManager : MonoBehaviour
         bool in_range = attackable_tiles.Contains(Map.GetTile(troop.current_tile));
 
         return current_is_ours && target_not_ours && in_range;
+    }
+
+    public bool AtPeace(Faction faction){
+        return _GameplayManager.truce_manager.Truced(_SessionManager.OurInstance.FactionData(), faction);
     }
 
     void AttackTroop(Troop troop){
@@ -577,6 +582,10 @@ public class PlayerManager : MonoBehaviour
     }
 
     // UI //
+
+    public void OpenFactionInformation(Faction faction){
+        FactionInfoWindow.Load(faction, this);
+    }
 
     public void LeaderboardButton(){
         LeaderboardWindow.Open();
