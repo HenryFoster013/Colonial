@@ -20,24 +20,23 @@ public class FactionWindow : Window {
     Faction faction;
 
     public void Load(Faction _faction){
-        faction  =_faction;
+        faction =_faction;
+        RefreshUI();
+        Open();
+    }
 
+    public void RefreshUI(){
         Flag.sprite = faction.Flag();
-        foreach(Image colorised in Colorised){
+        foreach(Image colorised in Colorised)
             colorised.color = faction.Colour();
-        }
-
         Header.text = faction.Name();
         NationName.text = faction.Name();
         PeaceWarText.text = "Offer Peace";
         if(_PlayerManager.AtPeace(faction))
             PeaceWarText.text = "Break Peace";
-
-        Open();
     }
 
     public void Embassy(){
-
         Close();
     }
 
@@ -47,7 +46,6 @@ public class FactionWindow : Window {
     }
 
     public void Message(){
-
         Close();
     }
 }

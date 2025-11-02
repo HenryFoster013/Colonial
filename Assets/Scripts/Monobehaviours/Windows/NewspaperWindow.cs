@@ -23,9 +23,10 @@ public class NewspaperWindow : Window {
         }
 
         Header.text = message.Header();
-        Body.text = message.Body();
+        Body.text = message.Format(Body.text);
         SetupFlags(message);
         SilentOpen();
+        PlaySFX(OpenSFX);
     }
 
     public void SetupFlags(MessageContents message){

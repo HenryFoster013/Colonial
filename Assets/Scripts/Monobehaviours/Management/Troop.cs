@@ -72,6 +72,8 @@ public class Troop : NetworkBehaviour{
         }
     }
 
+
+
     // SETUP //
 
     void Setup(){
@@ -165,7 +167,10 @@ public class Troop : NetworkBehaviour{
         
         Col.enabled = visible;
         DisplayModel(visible);
+        UI.PeaceVisible(AtPeace());
     }
+
+    bool AtPeace(){return _GameplayManager.AtPeace(faction);}
 
     void DisplayModel(bool visible){
         Shadow.SetActive(visible);

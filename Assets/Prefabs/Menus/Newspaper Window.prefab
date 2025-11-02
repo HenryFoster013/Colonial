@@ -188,7 +188,7 @@ MonoBehaviour:
   dragRectTransform: {fileID: 4879357159134614255}
   canvas: {fileID: 0}
   offset: 60
-  CloseOnSecondOpen: 1
+  CloseOnSecondOpen: 0
   OpenedByDefault: 1
   DestroyOnClose: 1
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
@@ -932,7 +932,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6732880250803793969}
         m_TargetAssemblyTypeName: Window, Assembly-CSharp
         m_MethodName: Close
         m_Mode: 1
@@ -1088,9 +1088,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: The British Empire and the German Empire have agreed to a ceasefire and
-    immediate truce for the next seven turns.  Some hope this is the beginning for
-    a faithful allyship, others fear a sudden break.
+  m_text: The {0} and the {1} have agreed to a ceasefire and immediate truce for
+    the next few turns. Some hope this is the beginning for a faithful allyship,
+    others fear a sudden break.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 39563f13889e0c1478a953ffdcf15e47, type: 2}
   m_sharedMaterial: {fileID: -8930675087285189417, guid: 39563f13889e0c1478a953ffdcf15e47, type: 2}

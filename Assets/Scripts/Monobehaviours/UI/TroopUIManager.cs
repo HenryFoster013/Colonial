@@ -14,7 +14,8 @@ public class TroopUIManager : MonoBehaviour
     [SerializeField] Image Health_BG;
     [SerializeField] TMP_Text HealthText;
     [Header(" - Conquest - ")]
-    [SerializeField] GameObject Conquer_Holder;
+    [SerializeField] GameObject ConquerHolder;
+    [SerializeField] GameObject PeaceIcon;
 
     public void SetCamera(Camera cam){
         _Canvas.worldCamera = cam;
@@ -28,13 +29,9 @@ public class TroopUIManager : MonoBehaviour
         HealthText.text = troop.health.ToString();
     }
     
-    public void SetVisible(bool visible){
-        UI_Holder.SetActive(visible);
-    }
-
-    public void ConquerVisible(bool visible){
-        Conquer_Holder.SetActive(visible);
-    }
+    public void SetVisible(bool visible){UI_Holder.SetActive(visible);}
+    public void ConquerVisible(bool visible){ConquerHolder.SetActive(visible);}
+    public void PeaceVisible(bool visible){PeaceIcon.SetActive(visible);}
 
     public void ConquerButton(){
         troop.ConquestNow();

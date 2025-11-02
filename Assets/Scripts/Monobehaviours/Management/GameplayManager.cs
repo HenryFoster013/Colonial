@@ -123,7 +123,7 @@ public class GameplayManager : NetworkBehaviour
             return;
 
         _PlayerManager.LeaderboardWindow.Close();
-        if(!truce_manager.Truced(_SessionManager.OurInstance.FactionData(), target)){
+        if(!AtPeace(target)){
             RPC_OfferTreaty(_SessionManager.OurInstance.Faction_ID, target_id);
         }    
     }
@@ -146,14 +146,35 @@ public class GameplayManager : NetworkBehaviour
         return return_val;
     }
 
+    public bool AtPeace(Faction faction){
+        return truce_manager.Truced(_SessionManager.OurInstance.FactionData(), faction);
+    }
+
+    public bool AreWe(Faction faction){
+        return _SessionManager.OurInstance.FactionData() == faction;
+    }
+
     public void MakePeace(Faction fac_one, Faction fac_two){
         RPC_MakePeace(_FactionLookup.ID(fac_one), _FactionLookup.ID(fac_two));
     }
 
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_MakePeace(int fac_one_id, int fac_two_id){
-        truce_manager.NewTruce(_FactionLookup.GetFaction(fac_one_id), _FactionLookup.GetFaction(fac_two_id));
-        // spawn the window immedietly here
+
+        Faction faction_one = _FactionLookup.GetFaction(fac_one_id);
+        Faction faction_two = _FactionLookup.GetFaction(fac_two_id);
+
+        if(truce_manager.Truced(faction_one, faction_two))
+            return;
+
+        truce_manager.NewTruce(faction_one, faction_two);
+
+        string[] peace_titles = {"PEACE AT LAST", "UNEASY TRUCE", "WAR IS OVER", "WORTHY ALLIES"};
+        string title = peace_titles[Random.Range(0, peace_titles.Length)];
+        _EventManager.Message(new MessageContents("NEWSPAPER", title, "", faction_one, faction_two));
+
+        _PlayerManager.LeaderboardWindow.RefreshUI();
+        _PlayerManager.FactionInfoWindow.RefreshUI();
     }
 
     [Rpc(RpcSources.All, RpcTargets.All)]
@@ -210,7 +231,7 @@ public class GameplayManager : NetworkBehaviour
         foreach(Troop t in AllTroops){
             if(ValidateTroop(t)){
                 Tile tile = _MapManager.GetTile(t.current_tile);
-                if(tiles.Contains(tile) && tile.visible && t.FactionID() != _SessionManager.OurInstance.Faction_ID){
+                if(tiles.Contains(tile) && tile.visible && t.FactionID() != _SessionManager.OurInstance.Faction_ID && !AtPeace(t.FactionData())){
                     result.Add(tile);
                 }
             }

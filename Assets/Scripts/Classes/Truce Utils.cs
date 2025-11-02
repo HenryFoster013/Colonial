@@ -8,7 +8,7 @@ namespace TruceUtils{
 
         public TruceManager() { }
 
-        Dictionary<Faction, List<Faction>> truce_lookup = new Dictionary<Faction, List<Faction>>();
+        Dictionary<Faction, HashSet<Faction>> truce_lookup = new Dictionary<Faction, HashSet<Faction>>();
 
         public void NewTruce(Faction fac_one, Faction fac_two){
             if(Truced(fac_one, fac_two))
@@ -38,23 +38,12 @@ namespace TruceUtils{
 
         public bool Truced(Faction fac_one, Faction fac_two){
             CheckEmpty(fac_one);
-            CheckEmpty(fac_two);
-
-            List<Faction> truced = truce_lookup[fac_one];
-            if(truced.Count == 0)
-                return false;
-
-            foreach(Faction fac in truced){
-                if(fac == fac_two)
-                    return true;
-            }
-
-            return false;
+            return truce_lookup[fac_one].Contains(fac_two);
         }
 
         void CheckEmpty(Faction faction){
             if(!truce_lookup.ContainsKey(faction)){
-                truce_lookup.Add(faction, new List<Faction>());
+                truce_lookup.Add(faction, new HashSet<Faction>());
             }
         }
     }

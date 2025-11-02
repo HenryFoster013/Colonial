@@ -39,7 +39,7 @@ namespace EventUtils{
         public string Type(){return type.ToUpper();}
         public bool CheckType(string input){return Type() == input.ToUpper();}
         public string Header(){return Format(header);}
-        public string Body(){return Format(header);}
+        public string Body(){return Format(body);}
         public Faction FactionOne(){return faction_one;}
         public Faction FactionTwo(){return faction_two;}
         public Sprite BaseFlag(){return GetFlag(faction_one);}
@@ -51,7 +51,7 @@ namespace EventUtils{
             return fac.Flag();
         }
 
-        string Format(string input){
+        public string Format(string input){
             if(faction_one != null)
                 input = input.Replace("{0}", faction_one.Name());
             if(faction_two != null)
