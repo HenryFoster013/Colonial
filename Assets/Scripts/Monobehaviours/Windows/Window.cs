@@ -70,6 +70,7 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
     public void SilentOpen(){
         RandomisePosition();
         dragRectTransform.gameObject.SetActive(true);
+        dragRectTransform.parent.SetAsLastSibling();
     }
 
     public void Close(){
