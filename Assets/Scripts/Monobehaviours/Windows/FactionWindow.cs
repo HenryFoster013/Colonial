@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using static GenericUtils;
 
 public class FactionWindow : Window {
 
     [Header("References")]
     [SerializeField] PlayerManager _PlayerManager;
     [SerializeField] GameplayManager _GamePlayManager;
+    [SerializeField] SoundEffectLookup SFX_Lookup;
     
     [Header("UI")]
     [SerializeField] Image[] Colorised;
@@ -42,7 +44,8 @@ public class FactionWindow : Window {
 
     public void PeaceWar(){
         _GamePlayManager.FlipPeace(faction);
-        Close();
+        PlaySFX("Morse_Code", SFX_Lookup);
+        SilentClose();
     }
 
     public void Message(){

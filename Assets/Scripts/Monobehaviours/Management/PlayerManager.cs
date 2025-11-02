@@ -588,11 +588,11 @@ public class PlayerManager : MonoBehaviour
 
     public void OpenFactionInformation(Faction faction){
         if(!OurTurn){
-            PlaySFX("UI_Error", SFX_Lookup);
+            PlaySFX("UI_4", SFX_Lookup);
             return;
         }
         if(faction == _SessionManager.OurInstance.FactionData()){
-            PlaySFX("UI_Error", SFX_Lookup);
+            PlaySFX("UI_4", SFX_Lookup);
             return;
         }
         FactionInfoWindow.Load(faction);

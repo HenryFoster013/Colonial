@@ -104,7 +104,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks{
     public async void RefreshLobbyConnection(){
         connected_to_lobby = false;
         UpdateLobbyUI();
-        await System.Threading.Tasks.Task.Delay(100);
+        await System.Threading.Tasks.Task.Delay(50);
         await _runner.JoinSessionLobby(SessionLobby.Shared);
         connected_to_lobby = true;
         UpdateLobbyUI();
