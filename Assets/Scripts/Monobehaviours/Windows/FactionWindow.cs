@@ -48,10 +48,8 @@ public class FactionWindow : Window {
     public bool CheckHarassed(){
         if(!_GameplayManager.CanUseFactionUI(faction)){
             PlaySFX("UI_4", SFX_Lookup);
-            print("Click failed");
             return true;
         }
-        print("Click is so fucking sexy i need it in me right fucking now");
         return false;
     }
 

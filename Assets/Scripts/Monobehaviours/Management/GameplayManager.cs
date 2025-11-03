@@ -120,7 +120,6 @@ public class GameplayManager : NetworkBehaviour
             return false;
         if(Harassed(_FactionLookup.ID(target)))
             return false;
-        print("Wow, widderwally the truest thing evah");
         return true;
     }
 
