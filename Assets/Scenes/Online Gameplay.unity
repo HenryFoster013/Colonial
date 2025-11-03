@@ -10919,7 +10919,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Roots:
-  - {fileID: 11400000, guid: 00ddfe5cfeea0514292b8ed78e43c0dc, type: 2}
   - {fileID: 11400000, guid: f1000d834f9fe5b46bbba8e3bd9043e7, type: 2}
   - {fileID: 11400000, guid: 8a3c35243a29836418f90fb1a3f29c1a, type: 2}
   - {fileID: 11400000, guid: 58dac6b521de9604e9799a75b4b9611d, type: 2}
