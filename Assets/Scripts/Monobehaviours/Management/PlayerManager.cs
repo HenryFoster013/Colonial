@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 using TMPro;
 using System.Linq;
 using UnityEngine.EventSystems;
@@ -21,6 +22,10 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] GameplayManager _GameplayManager;
     [SerializeField] TechTreeManager _TechTreeManager;
     [SerializeField] EventManager _EventManager;
+
+    [Header("--- SOUND ---")]
+
+    [SerializeField] AudioMixer Mixer;
     
     [Header(" --- CAMERA --- ")]
     [SerializeField] Camera _Camera;
@@ -120,6 +125,10 @@ public class PlayerManager : MonoBehaviour
     Camera[] troop_cameras;
     Camera[] building_cameras;
 
+    float target_music_vol, target_ambience_vol;
+    float music_vol, ambience_vol;
+    const float amb_msc_fade_time = 0.8f;
+
     // BASE //
 
     public void Setup(){
@@ -132,6 +141,7 @@ public class PlayerManager : MonoBehaviour
         ClickingLogic();
         SelectionLogic();
         Animate();
+        BgMusic();
     }
 
     // SETUP //
@@ -149,11 +159,22 @@ public class PlayerManager : MonoBehaviour
 
     void ResetUI(){
         CloseSpawnMenu();
+        target_ambience_vol = 1;
+        target_music_vol = 0;
         pause_inputs = false;
         _TechTreeManager.Setup(_SessionManager.LocalFactionData());
         FactionName.text = _SessionManager.LocalFactionData().Name().Replace(' ', '\n');
         FactionFlag.sprite = _SessionManager.LocalFactionData().Flag();
         UpgradeWindow.SilentClose();
+    }
+
+    // MUSIC //
+
+    void BgMusic(){
+        music_vol = Mathf.Lerp(music_vol, target_music_vol, Time.deltaTime / amb_msc_fade_time);
+        ambience_vol = Mathf.Lerp(ambience_vol, target_ambience_vol, Time.deltaTime / amb_msc_fade_time);
+        Mixer.SetFloat("MusicVolume", FloatToDecibel(music_vol));
+        Mixer.SetFloat("AmbienceVolume", FloatToDecibel(ambience_vol));
     }
 
     // ANIMATION //
@@ -836,12 +857,16 @@ public class PlayerManager : MonoBehaviour
         Deselect();
         _TechTreeManager.OpenUI();
         pause_inputs = true;
+        target_ambience_vol = 0;
+        target_music_vol = 1;
     }
 
     public void CloseTechTree(){
         Deselect();
         _TechTreeManager.CloseUI();
         pause_inputs = false;
+        target_ambience_vol = 1;
+        target_music_vol = 0;
     }
 
     // CAMERA //

@@ -27,6 +27,12 @@ public static class GenericUtils{
         GameObject.DontDestroyOnLoad(new_sfx);
     }
 
+    public static float FloatToDecibel(float input){ // float range 0 -> 1
+        input = Mathf.Clamp(input, 0f, 1f);
+        input = Mathf.Clamp(Mathf.Log10(input) * 20f, -80f, 0f);
+        return input;
+    }
+
     // SEED GEN //
 
     public static void SeedShuffle<T>(ref T[] array, int seed){
