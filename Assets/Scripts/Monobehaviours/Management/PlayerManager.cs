@@ -20,6 +20,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] SessionManager _SessionManager;
     [SerializeField] GameplayManager _GameplayManager;
     [SerializeField] TechTreeManager _TechTreeManager;
+    [SerializeField] EventManager _EventManager;
     
     [Header(" --- CAMERA --- ")]
     [SerializeField] Camera _Camera;
@@ -478,7 +479,9 @@ public class PlayerManager : MonoBehaviour
             return false;
         if(current_troop == null)
             return false;
-        if(troop.FactionData())
+        if(_GameplayManager.AreWe(troop.FactionData()))
+            return false;
+        if(_GameplayManager.AtPeace(troop.FactionData()))
             return false;
 
         bool current_is_ours = current_troop.FactionID() == _SessionManager.OurInstance.Faction_ID;
@@ -493,8 +496,11 @@ public class PlayerManager : MonoBehaviour
     }
 
     void AttackTroop(Troop troop){
-        if(ValidateTroop(troop) && ValidateTroop(current_troop))
+        if(ValidateTroop(troop) && ValidateTroop(current_troop)){
+            print("testing... testing");
+            _EventManager.TestWar(_SessionManager.OurInstance.FactionData(), troop.FactionData());
             _GameplayManager.RPC_AttackTroop(current_troop.UniqueID, troop.UniqueID, true, current_troop.Faction_ID, troop.Faction_ID);
+        }
         Deselect();
     }
 

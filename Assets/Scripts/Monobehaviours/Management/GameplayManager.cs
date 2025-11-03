@@ -75,14 +75,14 @@ public class GameplayManager : NetworkBehaviour
     public void RPC_SetTurn(int player, RpcInfo info = default){
 
         bool our_turn = _SessionManager.OurInstance.ID == player;
-
+        if(_PlayerManager.OurTurn && !our_turn) // Our turn just passed
+            _EventManager.CleanTurnSensitiveAlerts();
         _PlayerManager.OurTurn = our_turn;
-        if(our_turn){
+
+        if(our_turn)
             NewTurn();
-        }
-        else{
+        else
             _PlayerManager.DisableAllTroops();
-        }
 
         if(_SessionManager.player_instances[player] != _SessionManager.OurInstance)
             _PlayerManager.UpdateTurnNameDisplay(_SessionManager.player_instances[player].GetUsername() + "'s turn.");
@@ -104,6 +104,7 @@ public class GameplayManager : NetworkBehaviour
         else
             _SessionManager.EarnMoney(_MapManager.TotalValue());
         
+        _EventManager.CleanTurnSensitiveAlerts();
         _EventManager.Tick();
     }
 
@@ -117,15 +118,15 @@ public class GameplayManager : NetworkBehaviour
 
         if(!_PlayerManager.OurTurn)
             return;
-        
         int target_id =  _FactionLookup.ID(target);
         if(Harassed(target_id))
             return;
+        if(AtPeace(target))
+            return;
 
         _PlayerManager.LeaderboardWindow.Close();
-        if(!AtPeace(target)){
-            RPC_OfferTreaty(_SessionManager.OurInstance.Faction_ID, target_id);
-        }    
+        _PlayerManager.DisableAllTroops();
+        RPC_OfferTreaty(_SessionManager.OurInstance.Faction_ID, target_id);
     }
 
     public void MessageFaction(Faction target){
@@ -155,6 +156,9 @@ public class GameplayManager : NetworkBehaviour
     }
 
     public void MakePeace(Faction fac_one, Faction fac_two){
+        if(truce_manager.Truced(fac_one, fac_two))
+            return;
+
         RPC_MakePeace(_FactionLookup.ID(fac_one), _FactionLookup.ID(fac_two));
     }
 

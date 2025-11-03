@@ -40,4 +40,10 @@ public class PeaceOfferingWindow : Window
         PlaySFX(AcceptSFX);
         Destroy(this.gameObject);
     }
+
+    public void TestWar(Faction fact_main, Faction fact_targ){
+        if((fact_main == faction_one && fact_targ == faction_two) || (fact_targ == faction_one && fact_main == faction_two)){
+            Close();
+        }
+    }
 }

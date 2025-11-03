@@ -51,16 +51,22 @@ public class Leaderboard : Window{
 
         for(int i = 0; i < scores.Length; i++){
             if(scores[i] > 0){
+
                 float percentage = ((float)scores[i] / float_total) * 100f;
-                
                 GameObject new_tab = GameObject.Instantiate(TabPrefab);
+                Faction faction = _FactionLookup.GetFaction(i);
+                int location = 1 + genuine;
+                if(_GameplayManager.AreWe(faction))
+                    location = 0;
+                else
+                    genuine++;
+
                 new_tab.transform.SetParent(TabHook);
                 new_tab.transform.localPosition = Vector3.zero;
-                new_tab.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, genuine * -30f);
                 new_tab.transform.localScale = new Vector3(1,1,1);
-                Faction faction = _FactionLookup.GetFaction(i);
+
+                new_tab.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, location * -30f);
                 new_tab.GetComponent<FactionLeaderboardTab>().UpdateInfo(faction, percentage, _GameplayManager.AtPeace(faction), _GameplayManager.AreWe(faction), _PlayerManager);
-                genuine++;
             }
         }
     }

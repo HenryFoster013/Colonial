@@ -9,8 +9,7 @@ public class FactionWindow : Window {
 
     [Header("References")]
     [SerializeField] PlayerManager _PlayerManager;
-    [SerializeField] GameplayManager _GamePlayManager;
-    [SerializeField] SoundEffectLookup SFX_Lookup;
+    [SerializeField] GameplayManager _GameplayManager;
     
     [Header("UI")]
     [SerializeField] Image[] Colorised;
@@ -43,7 +42,7 @@ public class FactionWindow : Window {
     }
 
     public void PeaceWar(){
-        _GamePlayManager.FlipPeace(faction);
+        _GameplayManager.FlipPeace(faction);
         PlaySFX("Morse_Code", SFX_Lookup);
         SilentClose();
     }

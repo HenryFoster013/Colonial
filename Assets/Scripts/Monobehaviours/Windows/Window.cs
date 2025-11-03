@@ -76,11 +76,11 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
     public void Close(){
         PlaySFX(CloseSFX);
         SilentClose();
-        if(DestroyOnClose)
-            Destroy(this.gameObject);
     }
     public void SilentClose(){
         dragRectTransform.gameObject.SetActive(false);
+        if(DestroyOnClose)
+            Destroy(this.gameObject);
     }
 
     public void RandomisePosition(){
