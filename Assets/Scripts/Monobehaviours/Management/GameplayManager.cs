@@ -91,6 +91,7 @@ public class GameplayManager : NetworkBehaviour
     }
 
     void NewTurn(){
+        _MapManager.RecalculateTotalValue();
         harassed_factions = new bool[_FactionLookup.Length()];
         _PlayerManager.CloseUnnecessaryWindows();
         _PlayerManager.Deselect();

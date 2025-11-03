@@ -35,6 +35,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] GameObject SpawnMenuArrowsHolder;
     [SerializeField] GameObject EndTurnButton;
     [SerializeField] TMP_Text CoinDisplay;
+    [SerializeField] TMP_Text EarningsDisplay;
     public Leaderboard LeaderboardWindow;
     public FactionWindow FactionInfoWindow;
 
@@ -163,6 +164,7 @@ public class PlayerManager : MonoBehaviour
         EndTurnButton.SetActive(OurTurn);
         TurnDisplay.text = "Turn " + _GameplayManager.current_turn.ToString();
         CoinDisplay.text = _SessionManager.LocalFactionData().CurrencyFormat(_SessionManager.Money());
+        EarningsDisplay.text = "(+ " + Map.TotalValue() + ")";
     }
 
     void WateryHighlights(){

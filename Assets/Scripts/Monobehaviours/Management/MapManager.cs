@@ -271,6 +271,7 @@ public class MapManager : NetworkBehaviour
         
         // Extras pass
         ExtrasPass();
+        RecalculateTotalValue();
     }
 
     public void GenerateMap(){
@@ -414,6 +415,7 @@ public class MapManager : NetworkBehaviour
         foreach(TileStats stats in towers_forts_stats){
             stats.RefreshDetails(this);
         }
+        RecalculateTotalValue();
     }
 
     public string TileToLocationName(Tile tile){
@@ -513,10 +515,13 @@ public class MapManager : NetworkBehaviour
 
     // TILE OWNERSHIP //
 
-    public int TotalValue(){
+    int total_value;
+    public int TotalValue(){return total_value;}
+    public void RecalculateTotalValue(){
+        total_value = 0;
         if(city_tiles == null)
-            return 0;
-
+            return;
+        
         int return_val = 0;
         for(int i = 0; i < city_tiles.Length; i++){
             if(city_tiles[i] != null){
@@ -528,7 +533,7 @@ public class MapManager : NetworkBehaviour
             }
         }
         
-        return return_val;
+        total_value = return_val;
     }
 
     public void CleanCities(){
@@ -536,6 +541,7 @@ public class MapManager : NetworkBehaviour
             if(city_tiles[i].stats != null)
                 city_tiles[i].stats.ReleaseUsage();
         }
+        RecalculateTotalValue();
     }
 
     public void AddTroopStats(Troop troop){
@@ -659,6 +665,7 @@ public class MapManager : NetworkBehaviour
         RefreshAllBorders();
         stats.SetName(TileToLocationName(Tiles[tile_id]));
         stats.RefreshDetails(this);
+        RecalculateTotalValue();
     }
 
     void MarkTileAsOwned(Tile tile, Faction owner, bool do_not_overwrite){
