@@ -609,6 +609,8 @@ public class MapManager : NetworkBehaviour
             return;
         if(IsTileFortress(tile))
             return;
+        if(!tile.visible)
+            return;
         if(piece.PlayConstructionSound() && tile.visible)
             PlaySFX("Build_Hammers", SFX_Lookup);
 
