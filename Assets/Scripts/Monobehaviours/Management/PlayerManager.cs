@@ -19,7 +19,6 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] SoundEffectLookup SFX_Lookup;
     [SerializeField] SessionManager _SessionManager;
     [SerializeField] GameplayManager _GameplayManager;
-    [SerializeField] ConnectionManager _ConnectionManager;
     [SerializeField] TechTreeManager _TechTreeManager;
     [SerializeField] EventManager _EventManager;
     
@@ -496,21 +495,6 @@ public class PlayerManager : MonoBehaviour
 
     public bool AtPeace(Faction faction){
         return _GameplayManager.truce_manager.Truced(_SessionManager.OurInstance.FactionData(), faction);
-    }
-
-    public List<int> DespawnTerritoryTroops(Faction target){
-        List<int> returns = new List<int>();
-        if(OurTroops.Count == 0)
-            return returns;
-        foreach(Troop troop in OurTroops){
-            Tile tile = Map.GetTile(troop.current_tile);
-            if(tile.owner == target){
-                _ConnectionManager.Despawn(troop.gameObject.GetComponent<NetworkObject>());
-                returns.Add(troop.current_tile);
-                Map.SpawnParticleEffect(tile);
-            }
-        } 
-        return returns;
     }
 
     void AttackTroop(Troop troop){

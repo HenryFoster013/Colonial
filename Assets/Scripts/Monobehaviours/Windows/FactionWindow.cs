@@ -29,6 +29,9 @@ public class FactionWindow : Window {
     }
 
     public void RefreshUI(){
+        if(faction == null)
+            return;
+
         Flag.sprite = faction.Flag();
         foreach(Image colorised in Colorised)
             colorised.color = faction.Colour();
@@ -37,16 +40,18 @@ public class FactionWindow : Window {
         PeaceWarText.text = "Offer Peace";
         if(_PlayerManager.AtPeace(faction))
             PeaceWarText.text = "Break Peace";
-        bool active_func = _GameplayManager.TestFactionUI(faction);
+        bool active_func = _GameplayManager.CanUseFactionUI(faction);
         DarkenerEnabled.SetActive(active_func);
         DarkenerDisabled.SetActive(!active_func);
     }
 
     public bool CheckHarassed(){
-        if(!_GameplayManager.TestFactionUI(faction)){
+        if(!_GameplayManager.CanUseFactionUI(faction)){
             PlaySFX("UI_4", SFX_Lookup);
+            print("Click failed");
             return true;
         }
+        print("Click is so fucking sexy i need it in me right fucking now");
         return false;
     }
 
