@@ -380,7 +380,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 225.61781, y: -88.9}
+  m_AnchoredPosition: {x: 225.61781, y: -81.5}
   m_SizeDelta: {x: 440.7644, y: 48.5202}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &188773757
@@ -405,8 +405,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Session closed unexpectedly.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f22c851f6ff8a9a40a5de265a18eb3c0, type: 2}
-  m_sharedMaterial: {fileID: -425393853074046347, guid: f22c851f6ff8a9a40a5de265a18eb3c0, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a338c095f9ae4b0429631468e384e4af, type: 2}
+  m_sharedMaterial: {fileID: -2340918611432197366, guid: a338c095f9ae4b0429631468e384e4af, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1038,8 +1038,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Connection Error
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6ee0b18278936d445bfe16aaae7b449c, type: 2}
-  m_sharedMaterial: {fileID: -425393853074046347, guid: 6ee0b18278936d445bfe16aaae7b449c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ea121e20761632844a474ed58899b7f7, type: 2}
+  m_sharedMaterial: {fileID: -2340918611432197366, guid: ea121e20761632844a474ed58899b7f7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1069,7 +1069,7 @@ MonoBehaviour:
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 36
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535

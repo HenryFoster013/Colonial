@@ -892,8 +892,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Faction Name
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f22c851f6ff8a9a40a5de265a18eb3c0, type: 2}
-  m_sharedMaterial: {fileID: -425393853074046347, guid: f22c851f6ff8a9a40a5de265a18eb3c0, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a338c095f9ae4b0429631468e384e4af, type: 2}
+  m_sharedMaterial: {fileID: -2340918611432197366, guid: a338c095f9ae4b0429631468e384e4af, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

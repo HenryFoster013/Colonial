@@ -1278,8 +1278,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Title
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6ee0b18278936d445bfe16aaae7b449c, type: 2}
-  m_sharedMaterial: {fileID: -425393853074046347, guid: 6ee0b18278936d445bfe16aaae7b449c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ea121e20761632844a474ed58899b7f7, type: 2}
+  m_sharedMaterial: {fileID: -2340918611432197366, guid: ea121e20761632844a474ed58899b7f7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1309,7 +1309,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1413,8 +1413,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Name
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6ee0b18278936d445bfe16aaae7b449c, type: 2}
-  m_sharedMaterial: {fileID: -425393853074046347, guid: 6ee0b18278936d445bfe16aaae7b449c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ea121e20761632844a474ed58899b7f7, type: 2}
+  m_sharedMaterial: {fileID: -2340918611432197366, guid: ea121e20761632844a474ed58899b7f7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1444,7 +1444,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1548,8 +1548,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Confirm
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6ee0b18278936d445bfe16aaae7b449c, type: 2}
-  m_sharedMaterial: {fileID: -425393853074046347, guid: 6ee0b18278936d445bfe16aaae7b449c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ea121e20761632844a474ed58899b7f7, type: 2}
+  m_sharedMaterial: {fileID: -2340918611432197366, guid: ea121e20761632844a474ed58899b7f7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1579,7 +1579,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1671,9 +1671,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NextScene: Title Screen
-  Titles: {fileID: 4900000, guid: c1348f1b0cb56c1499ab04549604aeb9, type: 3}
-  Names: {fileID: 4900000, guid: f27343cc0feb7fe438b690cbe3d7716b, type: 3}
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
+  PlayerNameset: {fileID: 0}
   BG: {fileID: 218682739}
   Menu: {fileID: 1412633481}
   Model: {fileID: 658885016917897278}
@@ -1875,8 +1874,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Name them!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6ee0b18278936d445bfe16aaae7b449c, type: 2}
-  m_sharedMaterial: {fileID: -425393853074046347, guid: 6ee0b18278936d445bfe16aaae7b449c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ea121e20761632844a474ed58899b7f7, type: 2}
+  m_sharedMaterial: {fileID: -2340918611432197366, guid: ea121e20761632844a474ed58899b7f7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

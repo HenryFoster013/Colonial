@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b301e9de3c47066449ff26960dff0a2a
+guid: 18a71293f7989554d9aac6b78f53cec4
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Varela Round
+  - Outfit
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
