@@ -12,6 +12,7 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
     [SerializeField] float offset = 60;
     
     [Header("Openly / Closing")]
+    public bool IgnoreStartOpenClose = false;
     public bool CloseOnSecondOpen = true;
     [SerializeField] bool OpenedByDefault = false;
     public bool DestroyOnClose = false;
@@ -25,6 +26,8 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
 
     void Start(){
         pos = dragRectTransform.anchoredPosition;
+        if(IgnoreStartOpenClose)
+            return;
         if(OpenedByDefault)
             SilentOpen();
         else

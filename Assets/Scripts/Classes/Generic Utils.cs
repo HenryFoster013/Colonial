@@ -60,6 +60,22 @@ public static class GenericUtils{
 
     // VALIDATION //
 
+    public static bool ValidateMessage(string message, int max_length){
+        if(message.Length > max_length)
+            return false;
+        if(message.Length == 0)
+            return false;
+        if(message != message.Trim())
+            return false;
+        if(message.Trim() == "")
+            return false;
+        return true;
+    }
+
+    public static string FormatString(string message){
+        return message.Trim();
+    }
+
     public static bool BuildingValid(Tile tile, PieceData piece){
         return piece.Compatible(tile.piece) && piece.Compatible(tile.type);
     }

@@ -612,7 +612,7 @@ public class PlayerManager : MonoBehaviour
     // UI //
 
     public void CloseUnnecessaryWindows(){
-        FactionInfoWindow.Close();
+        FactionInfoWindow.SilentClose();
     }
 
     public void OpenFactionInformation(Faction faction){

@@ -38,6 +38,7 @@ public class GameplayManager : NetworkBehaviour
 
     public void Setup(){
         harassed_factions = new bool[_FactionLookup.Length()];
+        harassed_by = new bool[_FactionLookup.Length()];
         our_first_turn = true;
         current_turn = 1;
         player_sub_turn = 0;
@@ -93,6 +94,7 @@ public class GameplayManager : NetworkBehaviour
     void NewTurn(){
         _MapManager.RecalculateTotalValue();
         harassed_factions = new bool[_FactionLookup.Length()];
+        harassed_by = new bool[_FactionLookup.Length()];
         _PlayerManager.CloseUnnecessaryWindows();
         _PlayerManager.Deselect();
         _PlayerManager.EnableAllTroops();
@@ -112,6 +114,7 @@ public class GameplayManager : NetworkBehaviour
     // EVENTS //
 
     bool[] harassed_factions;
+    bool[] harassed_by;
 
     public string LocalUsername(){return _SessionManager.OurInstance.GetUsername();}
 
@@ -132,7 +135,7 @@ public class GameplayManager : NetworkBehaviour
         if(!AtPeace(target)){
             _PlayerManager.LeaderboardWindow.Close();
             _PlayerManager.DisableAllTroops();
-            RPC_OfferTreaty(_SessionManager.OurInstance.Faction_ID, target_id);
+            RPC_OfferTreaty(_SessionManager.OurInstance.Faction_ID, target_id, LocalUsername());
         }
         else
             MakeWar(target);
@@ -154,7 +157,35 @@ public class GameplayManager : NetworkBehaviour
     }
 
     bool Harassed(int target_id){
+        if(target_id == _SessionManager.OurInstance.Faction_ID)
+            return false;
         return harassed_factions[target_id];
+    }
+
+    bool HarassedBy(int target_id){
+        if(target_id == _SessionManager.OurInstance.Faction_ID)
+            return false;
+        return harassed_by[target_id];
+    }
+
+    public void SendMessage(Faction faction, string message){
+        int faction_id = _FactionLookup.ID(faction);
+        if(Harassed(faction_id) || !ValidateMessage(message, 120))
+            return;
+        harassed_factions[faction_id] = true;
+        _PlayerManager.FactionInfoWindow.RefreshUI();
+        RPC_SendMessage(faction_id, _FactionLookup.ID(_SessionManager.OurInstance.FactionData()), message, LocalUsername());
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPC_SendMessage(int faction_id, int from_id, string message, string username){
+        if(_FactionLookup.GetFaction(faction_id) != _SessionManager.OurInstance.FactionData())
+            return;
+        if(!ValidateMessage(message, 120))
+            return;
+        if(HarassedBy(from_id))
+            return;
+        _EventManager.Message(new MessageContents("PRIVATE MESSAGE", username, message, null, null));
     }
 
     public bool AtPeace(Faction faction){
@@ -166,7 +197,6 @@ public class GameplayManager : NetworkBehaviour
     }
 
     public void MakeWar(Faction target){
-
         if(!truce_manager.Truced(_SessionManager.OurInstance.FactionData(), target))
             return;
 
@@ -255,7 +285,7 @@ public class GameplayManager : NetworkBehaviour
     }
 
     [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_OfferTreaty(int offering_faction_id, int target_faction_id){
+    public void RPC_OfferTreaty(int offering_faction_id, int target_faction_id, string username){
 
         Faction fac_offer = _FactionLookup.GetFaction(offering_faction_id);
         Faction fac_targ = _FactionLookup.GetFaction(target_faction_id);
@@ -267,7 +297,7 @@ public class GameplayManager : NetworkBehaviour
         if(target_faction_id != _SessionManager.OurInstance.Faction_ID)
             return;
         
-        _EventManager.Add(new MessageEvent(new MessageContents("PEACE", LocalUsername(), "", fac_offer, fac_targ)));
+        _EventManager.Add(new MessageEvent(new MessageContents("PEACE", username, "", fac_offer, fac_targ)));
         _PlayerManager.LeaderboardWindow.RefreshUI();
         _PlayerManager.FactionInfoWindow.RefreshUI();
     }

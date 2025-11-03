@@ -10,6 +10,7 @@ public class FactionWindow : Window {
     [Header("References")]
     [SerializeField] PlayerManager _PlayerManager;
     [SerializeField] GameplayManager _GameplayManager;
+    public MessageInputWindow PrivateMessageWindow;
 
     [Header("UI")]
     [SerializeField] Image[] Colorised;
@@ -43,6 +44,12 @@ public class FactionWindow : Window {
         bool active_func = _GameplayManager.CanUseFactionUI(faction);
         DarkenerEnabled.SetActive(active_func);
         DarkenerDisabled.SetActive(!active_func);
+    }
+
+    public void PrivateMessageButton(){
+        if(CheckHarassed())
+            return;
+        PrivateMessageWindow.Setup(faction);
     }
 
     public bool CheckHarassed(){
