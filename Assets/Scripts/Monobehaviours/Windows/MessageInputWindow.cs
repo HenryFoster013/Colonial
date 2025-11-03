@@ -26,5 +26,4 @@ public class MessageInputWindow : Window{
         PlaySFX(SendSFX);
         SilentClose();
     }
-
 }
