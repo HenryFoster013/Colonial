@@ -137,6 +137,9 @@ public class GameplayManager : NetworkBehaviour
         }
         else
             MakeWar(target);
+        
+        _PlayerManager.LeaderboardWindow.RefreshUI();
+        _PlayerManager.FactionInfoWindow.RefreshUI();
     }
 
     public void MessageFaction(Faction target){
@@ -194,6 +197,8 @@ public class GameplayManager : NetworkBehaviour
         string[] war_titles = {"WAR DECLARED", "WAR!", "THE GREAT BACKSTAB", "ALLIANCE BREAKS!", "END OF ALL PEACE", "FIRST BLOOD", "CONQUEST BEGINS"};
         string title = war_titles[Random.Range(0, war_titles.Length)];
         _EventManager.Message(new MessageContents("NEWSPAPER", title, "WAR", faction_declaring, faction_target));
+        _PlayerManager.LeaderboardWindow.RefreshUI();
+        _PlayerManager.FactionInfoWindow.RefreshUI();
     }
 
     public void MakePeace(Faction fac_one, Faction fac_two){
@@ -236,6 +241,8 @@ public class GameplayManager : NetworkBehaviour
             return;
         
         _EventManager.Add(new MessageEvent(new MessageContents("PEACE", LocalUsername(), "", fac_offer, fac_targ)));
+        _PlayerManager.LeaderboardWindow.RefreshUI();
+        _PlayerManager.FactionInfoWindow.RefreshUI();
     }
 
     // TROOPS //
