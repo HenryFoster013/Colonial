@@ -324,6 +324,8 @@ public class GameplayManager : NetworkBehaviour
         int damage = troop.Data.Damage();
         if(!original)
             damage = damage / 2;
+        if(damage < 1)
+            damage = 1;
         return damage;
     }
 
