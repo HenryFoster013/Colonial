@@ -10,7 +10,7 @@ public class FactionWindow : Window {
     [Header("References")]
     [SerializeField] PlayerManager _PlayerManager;
     [SerializeField] GameplayManager _GameplayManager;
-    
+
     [Header("UI")]
     [SerializeField] Image[] Colorised;
     [SerializeField] Image Flag;
@@ -37,17 +37,31 @@ public class FactionWindow : Window {
             PeaceWarText.text = "Break Peace";
     }
 
+    public bool CheckHarassed(){
+        if(!_GameplayManager.TestFactionUI(faction)){
+            PlaySFX("UI_4", SFX_Lookup);
+            return true;
+        }
+        return false;
+    }
+
     public void Embassy(){
+        if(CheckHarassed())
+            return;
         Close();
     }
 
     public void PeaceWar(){
+        if(CheckHarassed())
+            return;
         _GameplayManager.FlipPeace(faction);
         PlaySFX("Morse_Code", SFX_Lookup);
         SilentClose();
     }
 
     public void Message(){
+        if(CheckHarassed())
+            return;
         Close();
     }
 }

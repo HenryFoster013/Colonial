@@ -115,19 +115,28 @@ public class GameplayManager : NetworkBehaviour
 
     public string LocalUsername(){return _SessionManager.OurInstance.GetUsername();}
 
-    public void FlipPeace(Faction target){
-
+    public bool TestFactionUI(Faction target){
         if(!_PlayerManager.OurTurn)
-            return;
-        int target_id =  _FactionLookup.ID(target);
-        if(Harassed(target_id))
-            return;
-        if(AtPeace(target))
+            return false;
+        if(Harassed(_FactionLookup.ID(target)))
+            return false;
+
+        return true;
+    }
+
+    public void FlipPeace(Faction target){
+        if(!TestFactionUI(target))
             return;
 
-        _PlayerManager.LeaderboardWindow.Close();
-        _PlayerManager.DisableAllTroops();
-        RPC_OfferTreaty(_SessionManager.OurInstance.Faction_ID, target_id);
+        int target_id =  _FactionLookup.ID(target);
+        if(!AtPeace(target)){
+            harassed_factions[target_id] = true;
+            _PlayerManager.LeaderboardWindow.Close();
+            _PlayerManager.DisableAllTroops();
+            RPC_OfferTreaty(_SessionManager.OurInstance.Faction_ID, target_id);
+        }
+        else
+            MakeWar(target);
     }
 
     public void MessageFaction(Faction target){
@@ -156,6 +165,37 @@ public class GameplayManager : NetworkBehaviour
         return _SessionManager.OurInstance.FactionData() == faction;
     }
 
+    public void MakeWar(Faction target){
+
+        if(!truce_manager.Truced(_SessionManager.OurInstance.FactionData(), target))
+            return;
+
+        RPC_MakeWar(_SessionManager.OurInstance.Faction_ID, _FactionLookup.ID(target), _PlayerManager.DespawnTerritoryTroops(target).ToArray());
+        _PlayerManager.DisableAllTroops();
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPC_MakeWar(int faction_declaring_id, int faction_target_id, int[] despawn_locations, RpcInfo info = default){
+        
+        Faction faction_declaring = _FactionLookup.GetFaction(faction_declaring_id);
+        Faction faction_target = _FactionLookup.GetFaction(faction_target_id);
+
+        if(!truce_manager.Truced(faction_declaring, faction_target))
+            return;
+
+        truce_manager.BreakTruce(faction_declaring, faction_target);
+
+        if(despawn_locations.Length == 0)
+            return;
+        foreach(int local in despawn_locations){
+            _MapManager.SpawnParticleEffect(local);
+        }
+        
+        string[] war_titles = {"WAR DECLARED", "WAR!", "THE GREAT BACKSTAB", "ALLIANCE BREAKS!", "END OF ALL PEACE", "FIRST BLOOD", "CONQUEST BEGINS"};
+        string title = war_titles[Random.Range(0, war_titles.Length)];
+        _EventManager.Message(new MessageContents("NEWSPAPER", title, "WAR", faction_declaring, faction_target));
+    }
+
     public void MakePeace(Faction fac_one, Faction fac_two){
         if(truce_manager.Truced(fac_one, fac_two))
             return;
@@ -176,7 +216,7 @@ public class GameplayManager : NetworkBehaviour
 
         string[] peace_titles = {"PEACE AT LAST", "UNEASY TRUCE", "WAR IS OVER", "WORTHY ALLIES"};
         string title = peace_titles[Random.Range(0, peace_titles.Length)];
-        _EventManager.Message(new MessageContents("NEWSPAPER", title, "", faction_one, faction_two));
+        _EventManager.Message(new MessageContents("NEWSPAPER", title, "PEACE", faction_one, faction_two));
 
         _PlayerManager.LeaderboardWindow.RefreshUI();
         _PlayerManager.FactionInfoWindow.RefreshUI();

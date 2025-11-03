@@ -14,6 +14,10 @@ public class NewspaperWindow : Window {
     [SerializeField] TMP_Text Body;
     [SerializeField] Image BaseFlag;
     [SerializeField] Image OverlayFlag;
+    [Header("Texts")]
+    [TextArea] public string PeaceText;
+    [TextArea] public string WarText;
+
 
     public void Setup(MessageContents message){
         if(!message.CheckType("NEWSPAPER")){
@@ -22,8 +26,12 @@ public class NewspaperWindow : Window {
             return;
         }
 
+        if(message.Body() == "WAR")
+            Body.text = message.Format(WarText);
+        else
+            Body.text = message.Format(PeaceText);
+
         Header.text = message.Header();
-        Body.text = message.Format(Body.text);
         SetupFlags(message);
         SilentOpen();
         PlaySFX(OpenSFX);

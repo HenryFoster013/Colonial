@@ -198,6 +198,12 @@ MonoBehaviour:
   Body: {fileID: 6749465950023498979}
   BaseFlag: {fileID: 6749465949370971857}
   OverlayFlag: {fileID: 6749465948636476378}
+  PeaceText: The {0} and the {1} have agreed to a ceasefire and immediate truce for
+    the next few turns. Some hope this is the beginning for a faithful allyship,
+    others fear a sudden break.
+  WarText: Fears climax as the {0} declares war upon the {1}. Both nations have already
+    mobilized and are ready for violent conflict over the next following weeks. Many
+    pray for peace whilst patriots celebrate in the streets.
 --- !u!1 &4879357159134614252
 GameObject:
   m_ObjectHideFlags: 0
@@ -1088,9 +1094,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: The {0} and the {1} have agreed to a ceasefire and immediate truce for
-    the next few turns. Some hope this is the beginning for a faithful allyship,
-    others fear a sudden break.
+  m_text: Fears climax as the {0} declares war upon the {1}. Both nations have already
+    mobilized and are ready for violent conflict over the next following weeks. Many
+    pray for peace whilst patriots celebrate in the streets.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 39563f13889e0c1478a953ffdcf15e47, type: 2}
   m_sharedMaterial: {fileID: -8930675087285189417, guid: 39563f13889e0c1478a953ffdcf15e47, type: 2}

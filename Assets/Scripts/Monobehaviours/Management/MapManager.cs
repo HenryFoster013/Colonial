@@ -614,6 +614,12 @@ public class MapManager : NetworkBehaviour
             
         if(piece.PlayConstructionSound())
             PlaySFX("Build_Hammers", SFX_Lookup);
+        SpawnParticleEffect(tile);
+    }
+
+
+    public void SpawnParticleEffect(int tile){SpawnParticleEffect(GetTile(tile));}
+    public void SpawnParticleEffect(Tile tile){
         GameObject.Instantiate(BuildingEffect, tile.world_position, Quaternion.identity);
     }
 

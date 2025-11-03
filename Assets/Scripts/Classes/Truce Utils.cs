@@ -23,7 +23,7 @@ namespace TruceUtils{
                 truce_lookup[fac_two].Add(fac_one);
         }
 
-        public void EndTruce(Faction fac_one, Faction fac_two){
+        public void BreakTruce(Faction fac_one, Faction fac_two){
             if(!Truced(fac_one, fac_two))
                 return;
             
