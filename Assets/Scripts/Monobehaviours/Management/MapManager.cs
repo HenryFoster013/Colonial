@@ -611,9 +611,9 @@ public class MapManager : NetworkBehaviour
             return;
         if(!tile.visible)
             return;
-        if(piece.PlayConstructionSound() && tile.visible)
+            
+        if(piece.PlayConstructionSound())
             PlaySFX("Build_Hammers", SFX_Lookup);
-
         GameObject.Instantiate(BuildingEffect, tile.world_position, Quaternion.identity);
     }
 
