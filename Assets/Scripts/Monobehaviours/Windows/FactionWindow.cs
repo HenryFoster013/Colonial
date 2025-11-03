@@ -17,6 +17,8 @@ public class FactionWindow : Window {
     [SerializeField] TMP_Text Header;
     [SerializeField] TMP_Text NationName;
     [SerializeField] TMP_Text PeaceWarText;
+    [SerializeField] GameObject DarkenerEnabled;
+    [SerializeField] GameObject DarkenerDisabled;
 
     Faction faction;
 
@@ -35,6 +37,9 @@ public class FactionWindow : Window {
         PeaceWarText.text = "Offer Peace";
         if(_PlayerManager.AtPeace(faction))
             PeaceWarText.text = "Break Peace";
+        bool active_func = _GameplayManager.TestFactionUI(faction);
+        DarkenerEnabled.SetActive(active_func);
+        DarkenerDisabled.SetActive(!active_func);
     }
 
     public bool CheckHarassed(){
