@@ -21,8 +21,6 @@ public class TechnologyDefinition : ScriptableObject{
     [SerializeField] PieceData[] BuildingUnlocks;
     [SerializeField] string[] OddUnlocks;
 
-    // FUNCIONALITY //
-
     // GETTERS //
 
     public TechnologyDefinition[] NextTech(){return FollowingTech;}
