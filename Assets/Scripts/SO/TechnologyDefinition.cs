@@ -19,7 +19,7 @@ public class TechnologyDefinition : ScriptableObject{
     [Header(" - Unlocks - ")]
     [SerializeField] TroopData[] TroopUnlocks;
     [SerializeField] PieceData[] BuildingUnlocks;
-    [SerializeField] string[] OddUnlocks;
+    [SerializeField] AbstractTechnology[] AbstractUnlocks;
 
     // GETTERS //
 
@@ -30,5 +30,5 @@ public class TechnologyDefinition : ScriptableObject{
     public Sprite Graphic(){return _Image;}
     public TroopData[] Troops(){return TroopUnlocks;}
     public PieceData[] Buildings(){return BuildingUnlocks;}
-    public string[] Odds(){return OddUnlocks;}
+    public AbstractTechnology[] Abstracts(){return AbstractUnlocks;}
 }
