@@ -27,7 +27,7 @@ public class PlayerCommunicationManager : NetworkBehaviour
 
     public string LocalUsername(){return _SessionManager.OurInstance.GetUsername();}
     public Faction LocalFaction(){return _SessionManager.OurInstance.FactionData();}
-    public int LocalFactionID(){return LocalFactionID();}
+    public int LocalFactionID(){return _SessionManager.OurInstance.Faction_ID;}
     public bool AtPeace(Faction faction){return truce_manager.Truced(LocalFaction(), faction);}
     public bool AreWe(Faction faction){return faction == LocalFaction();}
     public bool AreWe(int faction_id){return faction_id == LocalFactionID();}
@@ -110,7 +110,7 @@ public class PlayerCommunicationManager : NetworkBehaviour
         MarkHarassed(target);
 
         if(!AtPeace(target)){
-            if(!_TechTreeManager.Unlocked("PEACE OFFERINGS")){
+            if(!_TechTreeManager.Unlocked("OFFER PEACE")){
                 PlaySFX("UI_4", SFX_Lookup);
                 return;
             }
@@ -123,7 +123,7 @@ public class PlayerCommunicationManager : NetworkBehaviour
     }
 
     public void OfferPeace(Faction target){
-        if(!truce_manager.Truced(LocalFaction(), target) || !_TechTreeManager.Unlocked("PEACE OFFERINGS"))
+        if(!truce_manager.Truced(LocalFaction(), target) || !_TechTreeManager.Unlocked("OFFER PEACE"))
             return;
         
         LeaderboardWindow.SilentClose();

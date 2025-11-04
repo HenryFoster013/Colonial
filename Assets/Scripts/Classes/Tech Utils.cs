@@ -92,28 +92,25 @@ namespace TechUtils{
             return parent_node.ChildrenCount() - 1;
         }
         
+        public TechNode[] Next(){return following_nodes;}
+
         public string Name(){return definition.Name();}
         public string Description(){return definition.Description();}
         public int Cost(){return definition.Cost();}
         public Sprite Graphic(){return definition.Graphic();}
+        
         public TroopData[] Troops(){return definition.Troops();}
         public PieceData[] Buildings(){return definition.Buildings();}
-        public TechNode[] Next(){return following_nodes;}
-        public bool HasTroops(){return definition.Troops().Length > 0;}
-        public bool HasBuildings(){return definition.Buildings().Length > 0;}
-    }
-
-    public class AbstractTechManager{
-
-        List<string> unlocked_abstr_tech = new List<string>();
-
-        public AbstractTechManager(){unlocked_abstr_tech = new List<string>();}
-
-        public bool Unlocked(string tech){return unlocked_abstr_tech.Contains(tech);}
-
-        public void Unlock(string tech){
-            if(!unlocked_abstr_tech.Contains(tech))
-                unlocked_abstr_tech.Add(tech);
+        public string[] Abstracts(){return definition.Abstracts();}
+       
+        public bool HasArray<T>(T[] check_array){
+            if(check_array == null)
+                return false;
+            return check_array.Length > 0;
         }
+
+        public bool HasTroops(){return HasArray(Troops());}
+        public bool HasBuildings(){return HasArray(Buildings());}
+        public bool HasAbstracts(){return HasArray(Abstracts());}
     }
 }

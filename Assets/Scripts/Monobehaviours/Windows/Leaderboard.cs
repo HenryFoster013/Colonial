@@ -112,7 +112,10 @@ public class Leaderboard : Window{
 
     public void UpdateFortresses(){
         fort_count = new Dictionary<Faction, int>();
-
+        if(_MapManager.GetCities() == null)
+            return;
+        if(_MapManager.GetCities().Length == 0)
+            return;
         foreach(Tile fort in _MapManager.GetCities()){
             if(fort.stats != null){
                 if(fort_count.ContainsKey(fort.owner))

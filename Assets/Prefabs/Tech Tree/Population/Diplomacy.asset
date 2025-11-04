@@ -20,5 +20,5 @@ MonoBehaviour:
   TroopUnlocks: []
   BuildingUnlocks: []
   AbstractUnlocks:
-  - PEACE OFFERINGS
-  - TELEGRAPH
+  - Offer Peace
+  - Telegraph

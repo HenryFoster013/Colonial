@@ -100,12 +100,18 @@ public class TT_UI_Node : MonoBehaviour{
     public string FormatUnlockString(){
 
         List<string> unlocks = new List<string>();
-        for(int i = 0; i < node.definition.Troops().Length; i++)
-            unlocks.Add("<i>" + node.definition.Troops()[i].Name() + "</i>");
-        for(int i = 0; i < node.definition.Buildings().Length; i++)
-            unlocks.Add("<i>" + node.definition.Buildings()[i].Name() + "</i>");
-        for(int i = 0; i < node.definition.Abstracts().Length; i++)
-            unlocks.Add("<i>" + node.definition.Abstracts()[i].ToLower() + "</i>");
+        if(node.definition.Troops() != null){
+            for(int i = 0; i < node.definition.Troops().Length; i++)
+                unlocks.Add("<i>" + node.definition.Troops()[i].Name() + "</i>");
+        }
+        if(node.definition.Buildings() != null){
+            for(int i = 0; i < node.definition.Buildings().Length; i++)
+                unlocks.Add("<i>" + node.definition.Buildings()[i].Name() + "</i>");
+        }
+        if(node.definition.Abstracts() != null){
+            for(int i = 0; i < node.definition.Abstracts().Length; i++)
+                unlocks.Add("<i>" + node.definition.Abstracts()[i] + "</i>");
+        }
 
         unlocks = unlocks.Distinct().ToList();
     

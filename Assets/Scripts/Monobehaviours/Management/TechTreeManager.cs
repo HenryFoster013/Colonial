@@ -17,10 +17,10 @@ public class TechTreeManager : MonoBehaviour{
     [SerializeField] SoundEffectLookup SFX_Lookup;
 
     TechNode[] root_nodes;
-    AbstractTechManager abstract_manager;
     Faction faction;
     Dictionary<TroopData, TechNode> TroopOwnershipMap = new Dictionary<TroopData, TechNode>();
     Dictionary<PieceData, TechNode> BuildingOwnershipMap = new Dictionary<PieceData, TechNode>();
+    Dictionary<string, TechNode> AbstractOwnershipMap = new Dictionary<string, TechNode>();
 
     // INTERACTION //
 
@@ -38,7 +38,6 @@ public class TechTreeManager : MonoBehaviour{
     // INSTANTIATION //
 
     public void Setup(Faction our_faction){
-        abstract_manager = new AbstractTechManager();
         PopulateTrees();
         SetDefaults();
         faction = our_faction;
@@ -86,6 +85,12 @@ public class TechTreeManager : MonoBehaviour{
                     BuildingOwnershipMap.Add(building, tech);
             }
         }
+        if(tech.HasAbstracts()){
+            foreach(string abstr in tech.Abstracts()){
+                if(!AbstractOwnershipMap.ContainsKey(abstr.ToUpper()))
+                    AbstractOwnershipMap.Add(abstr.ToUpper(), tech);
+            }
+        }
     }
 
     // TROOP / BUILDING / ABSTRACT VALIDATION //
@@ -93,26 +98,32 @@ public class TechTreeManager : MonoBehaviour{
     public bool Unlocked(TroopData troop){
         if(!TroopOwnershipMap.ContainsKey(troop))
             return false;
-        return (TroopOwnershipMap[troop].unlocked);
+        return (ParentNode(troop).unlocked);
     }
 
     public bool Unlocked(PieceData building){
         if(!BuildingOwnershipMap.ContainsKey(building))
             return false;
-        return (BuildingOwnershipMap[building].unlocked);
+        return (ParentNode(building).unlocked);
     }
 
     public bool Unlocked(string abstr){
-        return abstract_manager.Unlocked(abstr);
+        print(abstr + " 1");
+        abstr = abstr.ToUpper();
+        print(abstr + " 2");
+        if(!AbstractOwnershipMap.ContainsKey(abstr))
+            return false;
+        print(AbstractOwnershipMap[abstr].unlocked);
+        return (AbstractOwnershipMap[abstr].unlocked); 
     }
 
     public TechNode ParentNode(TroopData troop){return TroopOwnershipMap[troop];}
     public TechNode ParentNode(PieceData piece){return BuildingOwnershipMap[piece];}
+    public TechNode ParentNode(string abstr){return AbstractOwnershipMap[abstr.ToUpper()];}
 
     // SETTERS //
 
     public void Unlock(TechNode tech){tech.Unlock();}
-    public void Unlock(string abstr){abstract_manager.Unlock(abstr);}
     public void SpendMoney(int cost){_PlayerManager.SpendMoney(cost);}
 
     // GETTERS //
