@@ -108,12 +108,9 @@ public class TechTreeManager : MonoBehaviour{
     }
 
     public bool Unlocked(string abstr){
-        print(abstr + " 1");
         abstr = abstr.ToUpper();
-        print(abstr + " 2");
         if(!AbstractOwnershipMap.ContainsKey(abstr))
             return false;
-        print(AbstractOwnershipMap[abstr].unlocked);
         return (AbstractOwnershipMap[abstr].unlocked); 
     }
 

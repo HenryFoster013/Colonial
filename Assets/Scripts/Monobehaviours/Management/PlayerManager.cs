@@ -519,7 +519,6 @@ public class PlayerManager : MonoBehaviour
 
     void AttackTroop(Troop troop){
         if(ValidateTroop(troop) && ValidateTroop(current_troop)){
-            print("testing... testing");
             _EventManager.TestWar(_SessionManager.OurInstance.FactionData(), troop.FactionData());
             _GameplayManager.RPC_AttackTroop(current_troop.UniqueID, troop.UniqueID, true, current_troop.Faction_ID, troop.Faction_ID);
         }

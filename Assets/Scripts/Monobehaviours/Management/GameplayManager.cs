@@ -25,7 +25,7 @@ public class GameplayManager : NetworkBehaviour
     [SerializeField] GameObject DamageEffect;
     [SerializeField] GameObject DefeatEffect;
  
-    [Networked] public int current_turn { get; private set; }
+    [Networked] public int current_turn {get; private set;}
     public int player_sub_turn;
     int player_count;
     public bool our_first_turn;
@@ -87,6 +87,8 @@ public class GameplayManager : NetworkBehaviour
             _PlayerManager.UpdateTurnNameDisplay(_SessionManager.player_instances[player].GetUsername() + "'s turn.");
         else
             _PlayerManager.UpdateTurnNameDisplay("Our turn.");
+        
+        _PlayerCommunicationManager.RefreshAll();
     }
 
     void NewTurn(){

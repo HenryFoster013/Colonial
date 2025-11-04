@@ -92,7 +92,7 @@ public class PlayerCommunicationManager : NetworkBehaviour
     // UI INTERACTIONS //
 
     public void OpenFactionInformation(Faction faction){
-        if(!_PlayerManager.OurTurn || AreWe(faction)){
+        if(AreWe(faction)){
             PlaySFX("UI_4", SFX_Lookup);
             return;
         }
@@ -123,7 +123,7 @@ public class PlayerCommunicationManager : NetworkBehaviour
     }
 
     public void OfferPeace(Faction target){
-        if(!truce_manager.Truced(LocalFaction(), target) || !_TechTreeManager.Unlocked("OFFER PEACE"))
+        if(truce_manager.Truced(LocalFaction(), target) || !_TechTreeManager.Unlocked("OFFER PEACE"))
             return;
         
         LeaderboardWindow.SilentClose();
@@ -213,7 +213,7 @@ public class PlayerCommunicationManager : NetworkBehaviour
 
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_OfferTreaty(int offering_faction_id, int target_faction_id, string username){
-
+        
         Faction fac_offer = _FactionLookup.GetFaction(offering_faction_id);
         Faction fac_targ = _FactionLookup.GetFaction(target_faction_id);
 
