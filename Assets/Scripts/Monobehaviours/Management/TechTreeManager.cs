@@ -17,6 +17,7 @@ public class TechTreeManager : MonoBehaviour{
     [SerializeField] SoundEffectLookup SFX_Lookup;
 
     TechNode[] root_nodes;
+    OddTechManager odd_tech;
     Faction faction;
     Dictionary<TroopData, TechNode> TroopOwnershipMap = new Dictionary<TroopData, TechNode>();
     Dictionary<PieceData, TechNode> BuildingOwnershipMap = new Dictionary<PieceData, TechNode>();
@@ -37,6 +38,7 @@ public class TechTreeManager : MonoBehaviour{
     // INSTANTIATION //
 
     public void Setup(Faction our_faction){
+        odd_manager = new OddTechManager();
         PopulateTrees();
         SetDefaults();
         faction = our_faction;
@@ -86,17 +88,22 @@ public class TechTreeManager : MonoBehaviour{
         }
     }
 
-    // TROOP / BUILDING VALIDATION //
+    // TROOP / BUILDING / ODD VALIDATION //
 
     public bool Unlocked(TroopData troop){
         if(!TroopOwnershipMap.ContainsKey(troop))
             return false;
         return (TroopOwnershipMap[troop].unlocked);
     }
+
     public bool Unlocked(PieceData building){
         if(!BuildingOwnershipMap.ContainsKey(building))
             return false;
         return (BuildingOwnershipMap[building].unlocked);
+    }
+
+    public string Unlocked(string odd_technology){
+        return odd_manager.Unlocked(odd_technology);
     }
 
     public TechNode ParentNode(TroopData troop){return TroopOwnershipMap[troop];}
@@ -105,6 +112,7 @@ public class TechTreeManager : MonoBehaviour{
     // SETTERS //
 
     public void Unlock(TechNode tech){tech.Unlock();}
+    public void Unlock(string odd){odd_manager.Unlock(odd);}
     public void SpendMoney(int cost){_PlayerManager.SpendMoney(cost);}
 
     // GETTERS //
