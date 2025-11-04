@@ -349,7 +349,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 752af31ef677ce65cb0601b61b38bb65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _GameplayManager: {fileID: 236702219}
+  _PlayerCommunicationManager: {fileID: 1139654545}
+  _SessionManager: {fileID: 308904221}
   WindowHook: {fileID: 1704487418}
   NewspaperPrefab: {fileID: 4879357159098280742, guid: 5cd59412abc9c3373b5ee38b24f29d7a, type: 3}
   PeacePrefab: {fileID: 4245795694312073327, guid: 6b8ebb4577efa684f84ff479cf696268, type: 3}
@@ -2379,6 +2380,7 @@ Transform:
   - {fileID: 1889473987}
   - {fileID: 40861722}
   - {fileID: 2146075081}
+  - {fileID: 1139654546}
   - {fileID: 1018032999}
   - {fileID: 1470204294}
   m_Father: {fileID: 308904220}
@@ -2405,6 +2407,7 @@ MonoBehaviour:
   _ConnectionManager: {fileID: 0}
   _MapManager: {fileID: 1780067900}
   _EventManager: {fileID: 40861723}
+  _PlayerCommunicationManager: {fileID: 1139654545}
   DamageEffect: {fileID: 6489121289303637190, guid: fd7838d6f78d8f5489e83dca2f78c957, type: 3}
   DefeatEffect: {fileID: 8069163334187433995, guid: 640e563a24c5c8e41b14dc24075db742, type: 3}
   _current_turn: 0
@@ -3214,6 +3217,7 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 308904221}
   - {fileID: 236702219}
+  - {fileID: 1139654545}
   ForceRemoteRenderTimeframe: 0
 --- !u!1 &326029295
 GameObject:
@@ -5605,6 +5609,7 @@ MonoBehaviour:
   dragRectTransform: {fileID: 1801637055}
   canvas: {fileID: 656314378}
   offset: 10
+  IgnoreStartOpenClose: 0
   CloseOnSecondOpen: 1
   OpenedByDefault: 0
   DestroyOnClose: 0
@@ -5613,6 +5618,7 @@ MonoBehaviour:
   CloseSFX: {fileID: 11400000, guid: e1d03495680746c45ad91f90d29ed044, type: 2}
   _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
   _GameplayManager: {fileID: 236702219}
+  _PlayerCommunicationManager: {fileID: 1139654545}
   _PlayerManager: {fileID: 2146075082}
   _MapManager: {fileID: 1780067900}
   TabPrefab: {fileID: 8946122148475343062, guid: b601d9a3409afe44499ad3f6b628182a, type: 3}
@@ -5974,7 +5980,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -38.54, y: -35.8}
+  m_AnchoredPosition: {x: -38.54004, y: -35.80005}
   m_SizeDelta: {x: 43, y: 43}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &652179983
@@ -9113,7 +9119,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -90, y: -35.8}
+  m_AnchoredPosition: {x: -90, y: -35.80005}
   m_SizeDelta: {x: 43, y: 43}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &974128623
@@ -9671,7 +9677,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 236702218}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1018033000
 MonoBehaviour:
@@ -10737,6 +10743,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de3c3d9b125f8334eaff0f0b8e2fc3a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1139654544
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1139654546}
+  - component: {fileID: 1139654545}
+  m_Layer: 0
+  m_Name: Player Communications Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1139654545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1139654544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b3e965c5e00813b0b70b56dd505bba2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _PlayerManager: {fileID: 2146075082}
+  _SessionManager: {fileID: 308904221}
+  _GameplayManager: {fileID: 236702219}
+  _EventManager: {fileID: 40861723}
+  _FactionLookup: {fileID: 11400000, guid: 5d4ae8e729c79724da268c4581ea7655, type: 2}
+  SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
+  LeaderboardWindow: {fileID: 568403777}
+  FactionDisplayWindow: {fileID: 2973390158152884870}
+--- !u!4 &1139654546
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1139654544}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 236702218}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1156424514
 GameObject:
   m_ObjectHideFlags: 0
@@ -12929,7 +12987,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 236702218}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -13278,7 +13336,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -38.54, y: -35.8}
+  m_AnchoredPosition: {x: -38.54004, y: -35.80005}
   m_SizeDelta: {x: 43, y: 43}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1499557598
@@ -14026,6 +14084,7 @@ MonoBehaviour:
   dragRectTransform: {fileID: 1506744754}
   canvas: {fileID: 656314378}
   offset: 60
+  IgnoreStartOpenClose: 0
   CloseOnSecondOpen: 0
   OpenedByDefault: 0
   DestroyOnClose: 0
@@ -20127,6 +20186,7 @@ MonoBehaviour:
   _GameplayManager: {fileID: 236702219}
   _TechTreeManager: {fileID: 1329537895}
   _EventManager: {fileID: 40861723}
+  _PlayerCommunicationManager: {fileID: 1139654545}
   Mixer: {fileID: 24100000, guid: f7d701d4c51aa3642b25f9526ef105f5, type: 2}
   _Camera: {fileID: 86466292}
   CameraHook: {fileID: 776516041}
@@ -20137,8 +20197,6 @@ MonoBehaviour:
   EndTurnButton: {fileID: 661793618}
   CoinDisplay: {fileID: 503266993}
   EarningsDisplay: {fileID: 1802391634}
-  LeaderboardWindow: {fileID: 568403777}
-  FactionInfoWindow: {fileID: 2973390158152884870}
   TurnDisplay: {fileID: 1528910920}
   TurnNameAnim: {fileID: 1557543935}
   TurnNameText: {fileID: 528518315}
@@ -21537,6 +21595,7 @@ MonoBehaviour:
   dragRectTransform: {fileID: 2973390158120737610}
   canvas: {fileID: 656314378}
   offset: 60
+  IgnoreStartOpenClose: 0
   CloseOnSecondOpen: 0
   OpenedByDefault: 0
   DestroyOnClose: 0
@@ -21544,7 +21603,7 @@ MonoBehaviour:
   OpenSFX: {fileID: 11400000, guid: 1114402b4fe8cac4c9bd70b7f9a3312e, type: 2}
   CloseSFX: {fileID: 11400000, guid: e1d03495680746c45ad91f90d29ed044, type: 2}
   _PlayerManager: {fileID: 2146075082}
-  _GameplayManager: {fileID: 236702219}
+  _PlayerCommunicationManager: {fileID: 1139654545}
   PrivateMessageWindow: {fileID: 7651514571474721542}
   Colorised:
   - {fileID: 2973390158120737611}
@@ -22237,6 +22296,7 @@ MonoBehaviour:
   dragRectTransform: {fileID: 7651514571438187211}
   canvas: {fileID: 656314378}
   offset: 60
+  IgnoreStartOpenClose: 0
   CloseOnSecondOpen: 1
   OpenedByDefault: 0
   DestroyOnClose: 0
@@ -22245,7 +22305,7 @@ MonoBehaviour:
   CloseSFX: {fileID: 11400000, guid: e1d03495680746c45ad91f90d29ed044, type: 2}
   Field: {fileID: 1047384392}
   SendSFX: {fileID: 11400000, guid: d9ea35025f149304bb20942953a42889, type: 2}
-  _GameplayManager: {fileID: 236702219}
+  _PlayerCommunicationManager: {fileID: 1139654545}
 --- !u!114 &7651514572167999464
 MonoBehaviour:
   m_ObjectHideFlags: 0

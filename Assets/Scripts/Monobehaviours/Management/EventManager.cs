@@ -11,7 +11,8 @@ public class EventManager : MonoBehaviour{
     List<Window> turn_sensitive_windows = new List<Window>();
 
     [Header("- References -")]
-    [SerializeField] GameplayManager _GameplayManager;
+    [SerializeField] PlayerCommunicationManager _PlayerCommunicationManager;
+    [SerializeField] SessionManager _SessionManager;
 
     [Header(" - Alert UI - ")]
     [SerializeField] Transform WindowHook;
@@ -53,12 +54,12 @@ public class EventManager : MonoBehaviour{
                 break;
             case "PEACE":
                 PeaceOfferingWindow pow = CreateWindow(PeacePrefab).GetComponent<PeaceOfferingWindow>();
-                pow.Setup(_GameplayManager, message);
+                pow.Setup(_PlayerCommunicationManager, message);
                 turn_sensitive_windows.Add(pow);
                 break;
             case "PRIVATE MESSAGE":
                 MessageDisplayWindow mdw = CreateWindow(PrivateMessagePrefab).GetComponent<MessageDisplayWindow>();
-                mdw.Setup(_GameplayManager.LocalUsername(), message);
+                mdw.Setup(_SessionManager.OurInstance.GetUsername(), message);
                 break;
         }
     }

@@ -24,12 +24,12 @@ public class PlayerCommunicationManager : NetworkBehaviour
 
     // COMMON CHECKS //
 
-    string LocalUsername(){return _SessionManager.OurInstance.GetUsername();}
-    Faction LocalFaction(){return _SessionManager.OurInstance.FactionData();}
-    int LocalFactionID(){return LocalFactionID();}
+    public string LocalUsername(){return _SessionManager.OurInstance.GetUsername();}
+    public Faction LocalFaction(){return _SessionManager.OurInstance.FactionData();}
+    public int LocalFactionID(){return LocalFactionID();}
     public bool AtPeace(Faction faction){return truce_manager.Truced(LocalFaction(), faction);}
-    bool AreWe(Faction faction){return faction == LocalFaction();}
-    bool AreWe(int faction_id){return faction_id == LocalFactionID();}
+    public bool AreWe(Faction faction){return faction == LocalFaction();}
+    public bool AreWe(int faction_id){return faction_id == LocalFactionID();}
     
     public bool CanUseFactionUI(Faction target){
         if(!_PlayerManager.OurTurn)
@@ -68,20 +68,20 @@ public class PlayerCommunicationManager : NetworkBehaviour
         harassed_by = new bool[_FactionLookup.Length()];
     }
 
-    bool Harassed(Faction target){return CheckHarassment(_FactionLookup.ID(target), ref harassed_factions);}
-    bool HarassedBy(Faction target){return CheckHarassment(_FactionLookup.ID(target), ref harassed_by);}
-    bool Harassed(int target_id){return CheckHarassment(target_id, ref harassed_factions);}
-    bool HarassedBy(int target_id){return CheckHarassment(target_id, ref harassed_by);}
+    public bool Harassed(Faction target){return CheckHarassment(_FactionLookup.ID(target), ref harassed_factions);}
+    public bool HarassedBy(Faction target){return CheckHarassment(_FactionLookup.ID(target), ref harassed_by);}
+    public bool Harassed(int target_id){return CheckHarassment(target_id, ref harassed_factions);}
+    public bool HarassedBy(int target_id){return CheckHarassment(target_id, ref harassed_by);}
     bool CheckHarassment(int target_id, ref bool[] reference){
         if(target_id == LocalFactionID())
             return false;
         return reference[target_id];
     }
 
-    void MarkHarassed(int target){MarkHarrassment(target, ref harassed_factions);}
-    void MarkHarassed(Faction target){MarkHarrassment(_FactionLookup.ID(target), ref harassed_factions);}
-    void MarkHarassedBy(int target){MarkHarrassment(target, ref harassed_by);}
-    void MarkHarassedBy(Faction target){MarkHarrassment(_FactionLookup.ID(target), ref harassed_by);}
+    public void MarkHarassed(int target){MarkHarrassment(target, ref harassed_factions);}
+    public void MarkHarassed(Faction target){MarkHarrassment(_FactionLookup.ID(target), ref harassed_factions);}
+    public void MarkHarassedBy(int target){MarkHarrassment(target, ref harassed_by);}
+    public void MarkHarassedBy(Faction target){MarkHarrassment(_FactionLookup.ID(target), ref harassed_by);}
     void MarkHarrassment(int target, ref bool[] reference){
         if(target < 0 || target >= reference.Length)
             return;
@@ -95,11 +95,11 @@ public class PlayerCommunicationManager : NetworkBehaviour
             PlaySFX("UI_4", SFX_Lookup);
             return;
         }
-        FactionInfoWindow.Load(faction);
+        FactionDisplayWindow.Load(faction);
     }
 
-    public void LeaderboardWindowButton(){
-        LeaderboardWindowWindow.Open();
+    public void LeaderboardButton(){
+        LeaderboardWindow.Open();
     }
 
     public void FlipPeace(Faction target){
@@ -108,7 +108,7 @@ public class PlayerCommunicationManager : NetworkBehaviour
 
         MarkHarassed(target);
 
-        if(!_PlayerCommunicationManager.AtPeace(target))
+        if(!AtPeace(target))
             OfferPeace(target);
         else
             MakeWar(target);
@@ -120,7 +120,7 @@ public class PlayerCommunicationManager : NetworkBehaviour
         if(!truce_manager.Truced(LocalFaction(), target))
             return;
         
-        LeaderboardWindowWindow.SilentClose();
+        LeaderboardWindow.SilentClose();
         _PlayerManager.DisableAllTroops();
         RPC_OfferTreaty(LocalFactionID(), _FactionLookup.ID(target), LocalUsername());
     }
@@ -178,7 +178,7 @@ public class PlayerCommunicationManager : NetworkBehaviour
             return;
 
         truce_manager.BreakTruce(faction_declaring, faction_target);
-        DespawnTroopsInTerritory(faction_declaring, faction_target);
+        _GameplayManager.DespawnTroopsInTerritory(faction_declaring, faction_target);
         
         string[] war_titles = {"WAR DECLARED", "WAR!", "THE GREAT BACKSTAB", "ALLIANCE BREAKS!", "END OF ALL PEACE", "FIRST BLOOD", "CONQUEST BEGINS"};
         string title = war_titles[Random.Range(0, war_titles.Length)];

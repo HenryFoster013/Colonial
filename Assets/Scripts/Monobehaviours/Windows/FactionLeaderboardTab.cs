@@ -11,13 +11,19 @@ public class FactionLeaderboardTab : MonoBehaviour
     [SerializeField] GameObject WarIcon;
     [SerializeField] GameObject PeaceIcon;
     Faction faction;
-    PlayerManager player;
+    PlayerCommunicationManager player;
     
-    public void UpdateInfo(Faction _faction, float ownership_percentage, bool peaceful, bool us, PlayerManager pm){
-        WarIcon.SetActive(!peaceful && !us);
-        PeaceIcon.SetActive(peaceful && !us);
+    public void UpdateInfo(Faction _faction, float ownership_percentage, PlayerCommunicationManager pcm){
+        
+        player = pcm;
         faction = _faction;
-        player = pm;
+        
+        bool peaceful = player.AtPeace(faction);
+        bool are_we = player.AreWe(faction);
+        WarIcon.SetActive(!peaceful && !are_we);
+        PeaceIcon.SetActive(peaceful && !are_we);
+        
+        
         FlagDisplay.sprite = faction.Flag();
         string percentage_text = ((int)Mathf.Round(ownership_percentage)).ToString();
         TextDisplay.text = faction.Name() + " " + percentage_text + "%";

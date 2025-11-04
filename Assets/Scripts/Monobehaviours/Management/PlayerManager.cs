@@ -22,6 +22,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] GameplayManager _GameplayManager;
     [SerializeField] TechTreeManager _TechTreeManager;
     [SerializeField] EventManager _EventManager;
+    [SerializeField] PlayerCommunicationManager _PlayerCommunicationManager;
 
     [Header("--- SOUND ---")]
 
@@ -500,9 +501,9 @@ public class PlayerManager : MonoBehaviour
             return false;
         if(current_troop == null)
             return false;
-        if(_GameplayManager.AreWe(troop.FactionData()))
+        if(_PlayerCommunicationManager.AreWe(troop.FactionData()))
             return false;
-        if(_GameplayManager.AtPeace(troop.FactionData()))
+        if(_PlayerCommunicationManager.AtPeace(troop.FactionData()))
             return false;
 
         bool current_is_ours = current_troop.FactionID() == _SessionManager.OurInstance.Faction_ID;
@@ -513,7 +514,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     public bool AtPeace(Faction faction){
-        return _GameplayManager.truce_manager.Truced(_SessionManager.OurInstance.FactionData(), faction);
+        return _PlayerCommunicationManager.truce_manager.Truced(_SessionManager.OurInstance.FactionData(), faction);
     }
 
     void AttackTroop(Troop troop){

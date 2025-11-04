@@ -376,4 +376,5 @@ public class GameplayManager : NetworkBehaviour
 
     public void SpendMoney(int cost){_SessionManager.SpendMoney(cost);}
     public void SetConnection(ConnectionManager cm){_ConnectionManager = cm;}
+    public bool AtPeace(Faction faction){return _PlayerCommunicationManager.AtPeace(faction);}
 }

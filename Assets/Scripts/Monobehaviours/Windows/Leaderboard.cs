@@ -10,6 +10,7 @@ public class Leaderboard : Window{
     [Header("References")]
     [SerializeField] FactionLookup _FactionLookup;
     [SerializeField] GameplayManager _GameplayManager;
+    [SerializeField] PlayerCommunicationManager _PlayerCommunicationManager;
     [SerializeField] PlayerManager _PlayerManager;
     [SerializeField] MapManager _MapManager;
     [Header("Main")]
@@ -56,7 +57,7 @@ public class Leaderboard : Window{
                 GameObject new_tab = GameObject.Instantiate(TabPrefab);
                 Faction faction = _FactionLookup.GetFaction(i);
                 int location = 1 + genuine;
-                if(_GameplayManager.AreWe(faction))
+                if(_PlayerCommunicationManager.AreWe(faction))
                     location = 0;
                 else
                     genuine++;
@@ -66,7 +67,7 @@ public class Leaderboard : Window{
                 new_tab.transform.localScale = new Vector3(1,1,1);
 
                 new_tab.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, location * -30f);
-                new_tab.GetComponent<FactionLeaderboardTab>().UpdateInfo(faction, percentage, _GameplayManager.AtPeace(faction), _GameplayManager.AreWe(faction), _PlayerManager);
+                new_tab.GetComponent<FactionLeaderboardTab>().UpdateInfo(faction, percentage, _PlayerCommunicationManager);
             }
         }
     }

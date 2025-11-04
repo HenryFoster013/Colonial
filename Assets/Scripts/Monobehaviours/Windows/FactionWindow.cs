@@ -9,7 +9,7 @@ public class FactionWindow : Window {
 
     [Header("References")]
     [SerializeField] PlayerManager _PlayerManager;
-    [SerializeField] GameplayManager _GameplayManager;
+    [SerializeField] PlayerCommunicationManager _PlayerCommunicationManager;
     public MessageInputWindow PrivateMessageWindow;
 
     [Header("UI")]
@@ -41,7 +41,7 @@ public class FactionWindow : Window {
         PeaceWarText.text = "Offer Peace";
         if(_PlayerManager.AtPeace(faction))
             PeaceWarText.text = "Break Peace";
-        bool active_func = _GameplayManager.CanUseFactionUI(faction);
+        bool active_func = _PlayerCommunicationManager.CanUseFactionUI(faction);
         DarkenerEnabled.SetActive(active_func);
         DarkenerDisabled.SetActive(!active_func);
     }
@@ -53,7 +53,7 @@ public class FactionWindow : Window {
     }
 
     public bool CheckHarassed(){
-        if(!_GameplayManager.CanUseFactionUI(faction)){
+        if(!_PlayerCommunicationManager.CanUseFactionUI(faction)){
             PlaySFX("UI_4", SFX_Lookup);
             return true;
         }
@@ -69,7 +69,7 @@ public class FactionWindow : Window {
     public void PeaceWar(){
         if(CheckHarassed())
             return;
-        _GameplayManager.FlipPeace(faction);
+        _PlayerCommunicationManager.FlipPeace(faction);
         PlaySFX("Morse_Code", SFX_Lookup);
         SilentClose();
     }

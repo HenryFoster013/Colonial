@@ -10,7 +10,7 @@ public class MessageInputWindow : Window{
     [Header("Message Input Specifics")]
     [SerializeField] TMP_InputField Field; 
     [SerializeField] SoundEffect SendSFX;
-    [SerializeField] GameplayManager _GameplayManager;
+    [SerializeField] PlayerCommunicationManager _PlayerCommunicationManager;
     Faction faction;
 
     public void Setup(Faction target){
@@ -21,7 +21,7 @@ public class MessageInputWindow : Window{
 
     public void Send(){
         if(ValidateMessage(Field.text, 120)){
-            _GameplayManager.SendMessage(faction, Field.text);
+            _PlayerCommunicationManager.SendMessage(faction, Field.text);
         }
         PlaySFX(SendSFX);
         SilentClose();

@@ -16,13 +16,13 @@ public class PeaceOfferingWindow : Window
     Faction faction_two;
     string our_name;
     string their_name;
-    GameplayManager _GamePlayManager;
+    PlayerCommunicationManager _PlayerCommunicationManager;
 
-    public void Setup(GameplayManager manager, MessageContents message){
-        _GamePlayManager = manager;
+    public void Setup(PlayerCommunicationManager manager, MessageContents message){
+        _PlayerCommunicationManager = manager;
         faction_one = message.FactionOne();
         faction_two = message.FactionTwo();
-        our_name = _GamePlayManager.LocalUsername();
+        our_name = _PlayerCommunicationManager.LocalUsername();
         their_name = message.Header();
 
         Body.text = FormatMessage(BaseMessage);
@@ -36,7 +36,7 @@ public class PeaceOfferingWindow : Window
     }
 
     public void Accept(){
-        _GamePlayManager.MakePeace(faction_one, faction_two);
+        _PlayerCommunicationManager.MakePeace(faction_one, faction_two);
         PlaySFX(AcceptSFX);
         Destroy(this.gameObject);
     }
