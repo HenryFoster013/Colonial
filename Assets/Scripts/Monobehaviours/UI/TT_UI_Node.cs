@@ -104,6 +104,8 @@ public class TT_UI_Node : MonoBehaviour{
             unlocks.Add("<i>" + node.definition.Troops()[i].Name() + "</i>");
         for(int i = 0; i < node.definition.Buildings().Length; i++)
             unlocks.Add("<i>" + node.definition.Buildings()[i].Name() + "</i>");
+        for(int i = 0; i < node.definition.Abstracts().Length; i++)
+            unlocks.Add("<i>" + node.definition.Abstracts()[i].ToLower() + "</i>");
 
         unlocks = unlocks.Distinct().ToList();
     

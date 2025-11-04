@@ -88,7 +88,7 @@ public class TechTreeManager : MonoBehaviour{
         }
     }
 
-    // TROOP / BUILDING / ODD VALIDATION //
+    // TROOP / BUILDING / ABSTRACT VALIDATION //
 
     public bool Unlocked(TroopData troop){
         if(!TroopOwnershipMap.ContainsKey(troop))
@@ -102,8 +102,8 @@ public class TechTreeManager : MonoBehaviour{
         return (BuildingOwnershipMap[building].unlocked);
     }
 
-    public bool Unlocked(string odd_technology){
-        return abstract_manager.Unlocked(odd_technology);
+    public bool Unlocked(string abstr){
+        return abstract_manager.Unlocked(abstr);
     }
 
     public TechNode ParentNode(TroopData troop){return TroopOwnershipMap[troop];}
@@ -112,7 +112,7 @@ public class TechTreeManager : MonoBehaviour{
     // SETTERS //
 
     public void Unlock(TechNode tech){tech.Unlock();}
-    public void Unlock(string odd){abstract_manager.Unlock(odd);}
+    public void Unlock(string abstr){abstract_manager.Unlock(abstr);}
     public void SpendMoney(int cost){_PlayerManager.SpendMoney(cost);}
 
     // GETTERS //

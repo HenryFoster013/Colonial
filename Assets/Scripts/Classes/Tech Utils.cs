@@ -105,26 +105,15 @@ namespace TechUtils{
 
     public class AbstractTechManager{
 
-        List<AbstractTechnology> unlocked_odd_tech = new List<AbstractTechnology>();
+        List<string> unlocked_abstr_tech = new List<string>();
 
-        public AbstractTechManager(){unlocked_odd_tech = new List<AbstractTechnology>();}
+        public AbstractTechManager(){unlocked_abstr_tech = new List<string>();}
 
-        public bool Unlocked(AbstractTechnology tech){return unlocked_odd_tech.Contains(tech);}
-        public bool Unlocked(string tech_name){
-            
-            if(unlocked_odd_tech.Count == 0)
-                return false;
+        public bool Unlocked(string tech){return unlocked_abstr_tech.Contains(tech);}
 
-            tech_name = tech_name.ToUpper();
-            foreach(AbstractTechnology abstr in unlocked_odd_tech){
-                if(abstr.Reference().ToUpper() == tech_name)
-                    return true;
-            }
-        }
-
-        public void Unlock(AbstractTechnology tech){
-            if(!unlocked_odd_tech.Contains(tech))
-                unlocked_odd_tech.Add(tech);
+        public void Unlock(string tech){
+            if(!unlocked_abstr_tech.Contains(tech))
+                unlocked_abstr_tech.Add(tech);
         }
     }
 }

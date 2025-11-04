@@ -63,8 +63,8 @@ public class FactionWindow : Window {
         return false;
     }
 
-    public bool CheckDiplomacy(){
-        if(!_TechTreeManager.Unlocked("DIPLOMACY")){
+    public bool CheckAbstract(string abstr){
+        if(!_TechTreeManager.Unlocked(abstr)){
             PlaySFX("UI_4", SFX_Lookup);
             return true;
         }
@@ -74,13 +74,13 @@ public class FactionWindow : Window {
     // UI BUTTONS //
 
     public void PrivateMessageButton(){
-        if(CheckHarassed() || CheckDiplomacy())
+        if(CheckHarassed() || CheckAbstract("TELEGRAPH"))
             return;
         PrivateMessageWindow.Setup(faction);
     }
 
     public void PeaceWar(){
-        if(CheckHarassed())
+        if(CheckHarassed() || CheckAbstract("PEACE OFFERINGS"))
             return;
         _PlayerCommunicationManager.FlipPeace(faction);
         PlaySFX("Morse_Code", SFX_Lookup);

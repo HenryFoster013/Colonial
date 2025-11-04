@@ -18,7 +18,7 @@ MonoBehaviour:
   _Image: {fileID: 0}
   _Cost: 12
   TroopUnlocks: []
-  BuildingUnlocks:
-  - {fileID: 11400000, guid: f87b19ec801d6df4a9f603014ba03340, type: 2}
-  OddUnlocks:
-  - DIPLOMACY
+  BuildingUnlocks: []
+  AbstractUnlocks:
+  - PEACE OFFERINGS
+  - TELEGRAPH
