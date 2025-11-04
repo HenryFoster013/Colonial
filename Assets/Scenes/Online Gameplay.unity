@@ -6593,7 +6593,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &708547855
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21482,7 +21482,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2973390158120737610
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21604,6 +21604,7 @@ MonoBehaviour:
   CloseSFX: {fileID: 11400000, guid: e1d03495680746c45ad91f90d29ed044, type: 2}
   _PlayerManager: {fileID: 2146075082}
   _PlayerCommunicationManager: {fileID: 1139654545}
+  _TechTreeManager: {fileID: 0}
   PrivateMessageWindow: {fileID: 7651514571474721542}
   Colorised:
   - {fileID: 2973390158120737611}

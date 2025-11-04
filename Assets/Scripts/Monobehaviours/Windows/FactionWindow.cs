@@ -10,6 +10,7 @@ public class FactionWindow : Window {
     [Header("References")]
     [SerializeField] PlayerManager _PlayerManager;
     [SerializeField] PlayerCommunicationManager _PlayerCommunicationManager;
+    [SerializeField] TechTreeManager _TechTreeManager;
     public MessageInputWindow PrivateMessageWindow;
 
     [Header("UI")]
@@ -23,34 +24,36 @@ public class FactionWindow : Window {
 
     Faction faction;
 
+    // UI BASE //
+
     public void Load(Faction _faction){
         faction =_faction;
         RefreshUI();
         Open();
     }
 
+
     public void RefreshUI(){
         if(faction == null)
             return;
 
         Flag.sprite = faction.Flag();
-        foreach(Image colorised in Colorised)
-            colorised.color = faction.Colour();
         Header.text = faction.Name();
         NationName.text = faction.Name();
+
         PeaceWarText.text = "Offer Peace";
         if(_PlayerManager.AtPeace(faction))
             PeaceWarText.text = "Break Peace";
+
+        foreach(Image colorised in Colorised)
+            colorised.color = faction.Colour();
+
         bool active_func = _PlayerCommunicationManager.CanUseFactionUI(faction);
         DarkenerEnabled.SetActive(active_func);
         DarkenerDisabled.SetActive(!active_func);
     }
 
-    public void PrivateMessageButton(){
-        if(CheckHarassed())
-            return;
-        PrivateMessageWindow.Setup(faction);
-    }
+    // CHECKS //
 
     public bool CheckHarassed(){
         if(!_PlayerCommunicationManager.CanUseFactionUI(faction)){
@@ -60,23 +63,27 @@ public class FactionWindow : Window {
         return false;
     }
 
-    public void Embassy(){
-        if(CheckHarassed())
+    public bool CheckDiplomacy(){
+        if(!_TechTreeManager.Unlocked("DIPLOMACY")){
+            PlaySFX("UI_4", SFX_Lookup);
+            return true;
+        }
+        return false;    
+    }
+
+    // UI BUTTONS //
+
+    public void PrivateMessageButton(){
+        if(CheckHarassed() || CheckDiplomacy())
             return;
-        Close();
+        PrivateMessageWindow.Setup(faction);
     }
 
     public void PeaceWar(){
-        if(CheckHarassed())
+        if(CheckHarassed() || CheckDiplomacy())
             return;
         _PlayerCommunicationManager.FlipPeace(faction);
         PlaySFX("Morse_Code", SFX_Lookup);
         SilentClose();
-    }
-
-    public void Message(){
-        if(CheckHarassed())
-            return;
-        Close();
     }
 }

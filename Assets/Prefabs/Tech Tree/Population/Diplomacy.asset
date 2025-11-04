@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 96bcec0a3d1d0db4aa93a720cf24b5fd, type: 3}
-  m_Name: Logging
+  m_Name: Diplomacy
   m_EditorClassIdentifier: 
-  FollowingTech:
-  - {fileID: 11400000, guid: 8eee839c2f31e853ebb81d728992b491, type: 2}
-  _Name: Logging
+  FollowingTech: []
+  _Name: Diplomacy
   _Description: 
   _Image: {fileID: 0}
-  _Cost: 0
+  _Cost: 12
   TroopUnlocks: []
   BuildingUnlocks:
   - {fileID: 11400000, guid: f87b19ec801d6df4a9f603014ba03340, type: 2}
-  OddUnlocks: []
+  OddUnlocks:
+  - DIPLOMACY
