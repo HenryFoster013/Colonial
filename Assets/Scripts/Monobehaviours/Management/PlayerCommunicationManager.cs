@@ -110,7 +110,7 @@ public class PlayerCommunicationManager : NetworkBehaviour
         MarkHarassed(target);
 
         if(!AtPeace(target)){
-            if(!_TechTreeManager.Unlocked("DIPLOMACY")){
+            if(!_TechTreeManager.Unlocked("PEACE OFFERINGS")){
                 PlaySFX("UI_4", SFX_Lookup);
                 return;
             }
@@ -123,7 +123,7 @@ public class PlayerCommunicationManager : NetworkBehaviour
     }
 
     public void OfferPeace(Faction target){
-        if(!truce_manager.Truced(LocalFaction(), target))
+        if(!truce_manager.Truced(LocalFaction(), target) || !_TechTreeManager.Unlocked("PEACE OFFERINGS"))
             return;
         
         LeaderboardWindow.SilentClose();
@@ -151,7 +151,7 @@ public class PlayerCommunicationManager : NetworkBehaviour
     public void SendMessage(Faction faction, string message){
         int faction_id = _FactionLookup.ID(faction);
 
-        if(Harassed(faction_id) || !ValidateMessage(message, 120))
+        if(Harassed(faction_id) || !ValidateMessage(message, 120) || !_TechTreeManager.Unlocked("TELEGRAPH"))
             return;
         
         MarkHarassed(faction_id);
