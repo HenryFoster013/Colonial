@@ -80,7 +80,7 @@ public class FactionWindow : Window {
     }
 
     public void PeaceWar(){
-        if(CheckHarassed() || CheckDiplomacy())
+        if(CheckHarassed())
             return;
         _PlayerCommunicationManager.FlipPeace(faction);
         PlaySFX("Morse_Code", SFX_Lookup);

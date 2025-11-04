@@ -13,6 +13,7 @@ public class PlayerCommunicationManager : NetworkBehaviour
     [SerializeField] SessionManager _SessionManager;
     [SerializeField] GameplayManager _GameplayManager;
     [SerializeField] EventManager _EventManager;
+    [SerializeField] TechTreeManager _TechTreeManager;
     [SerializeField] FactionLookup _FactionLookup;
     [SerializeField] SoundEffectLookup SFX_Lookup;
 
@@ -108,8 +109,13 @@ public class PlayerCommunicationManager : NetworkBehaviour
 
         MarkHarassed(target);
 
-        if(!AtPeace(target))
+        if(!AtPeace(target)){
+            if(!_TechTreeManager.Unlocked("DIPLOMACY")){
+                PlaySFX("UI_4", SFX_Lookup);
+                return;
+            }
             OfferPeace(target);
+        }
         else
             MakeWar(target);
         

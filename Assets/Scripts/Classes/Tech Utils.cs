@@ -103,7 +103,7 @@ namespace TechUtils{
         public bool HasBuildings(){return definition.Buildings().Length > 0;}
     }
 
-    public class OddTechManager{
+    public class AbstractTechManager{
 
         List<string> unlocked_odd_tech = new List<string>();
 
