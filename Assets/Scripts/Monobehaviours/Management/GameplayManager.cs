@@ -19,6 +19,7 @@ public class GameplayManager : NetworkBehaviour
     [HideInInspector] public ConnectionManager _ConnectionManager;
     [SerializeField] MapManager _MapManager;
     [SerializeField] EventManager _EventManager;
+    [SerializeField] PlayerCommunicationManager _PlayerCommunicationManager;
 
     [Header("Visuals")]
     [SerializeField] GameObject DamageEffect;
@@ -32,17 +33,14 @@ public class GameplayManager : NetworkBehaviour
     int troop_counter = 1;
     public List<Troop> AllTroops;
 
-    public TruceManager truce_manager {get; private set;}
-
     // Defaults
 
     public void Setup(){
-        harassed_factions = new bool[_FactionLookup.Length()];
-        harassed_by = new bool[_FactionLookup.Length()];
+        _PlayerCommunicationManager.Setup();
+        _PlayerCommunicationManager.NewTurn();
         our_first_turn = true;
         current_turn = 1;
         player_sub_turn = 0;
-        truce_manager = new TruceManager();
         _EventManager.Setup();
         _SessionManager.SetMoney(5);
         player_count = _SessionManager.player_instances.Count;
@@ -92,10 +90,8 @@ public class GameplayManager : NetworkBehaviour
     }
 
     void NewTurn(){
+        _PlayerCommunicationManager.NewTurn();
         _MapManager.RecalculateTotalValue();
-        harassed_factions = new bool[_FactionLookup.Length()];
-        harassed_by = new bool[_FactionLookup.Length()];
-        _PlayerManager.CloseUnnecessaryWindows();
         _PlayerManager.Deselect();
         _PlayerManager.EnableAllTroops();
 
@@ -109,183 +105,6 @@ public class GameplayManager : NetworkBehaviour
         
         _EventManager.CleanTurnSensitiveAlerts();
         _EventManager.Tick();
-    }
-
-    // EVENTS //
-
-    // Spam avoidment
-
-    bool[] harassed_factions;
-    bool Harassed(int target_id){
-        if(target_id == _SessionManager.OurInstance.Faction_ID)
-            return false;
-        return harassed_factions[target_id];
-    }
-
-    bool[] harassed_by;
-    bool HarassedBy(int target_id){
-        if(target_id == _SessionManager.OurInstance.Faction_ID)
-            return false;
-        return harassed_by[target_id];
-    }
-
-    // Common calls
-
-    public string LocalUsername(){return _SessionManager.OurInstance.GetUsername();}
-    public Faction LocalFaction(){return _SessionManager.OurInstance.FactionData();}
-    public bool AtPeace(Faction faction){return truce_manager.Truced(LocalFaction(), faction);}
-    public bool AreWe(Faction faction){return LocalFaction() == faction;}
-
-    public bool CanUseFactionUI(Faction target){
-        if(!_PlayerManager.OurTurn)
-            return false;
-        if(Harassed(_FactionLookup.ID(target)))
-            return false;
-        return true;
-    }
-
-    // UI Buttons
-
-    public void FlipPeace(Faction target){
-        if(!CanUseFactionUI(target))
-            return;
-
-        harassed_factions[ _FactionLookup.ID(target)] = true;
-
-        if(!AtPeace(target))
-            OfferPeace(target);
-        else
-            MakeWar(target);
-        
-        _PlayerManager.LeaderboardWindow.RefreshUI();
-        _PlayerManager.FactionInfoWindow.RefreshUI();
-    }
-
-    public void OfferPeace(Faction target){
-        if(!truce_manager.Truced(LocalFaction(), target))
-            return;
-        _PlayerManager.LeaderboardWindow.Close();
-        _PlayerManager.DisableAllTroops();
-        RPC_OfferTreaty(_SessionManager.OurInstance.Faction_ID, _FactionLookup.ID(target), LocalUsername());
-    }
-
-    public void MakeWar(Faction target){
-        if(!truce_manager.Truced(LocalFaction(), target))
-            return;
-        RPC_MakeWar(_SessionManager.OurInstance.Faction_ID, _FactionLookup.ID(target));
-        _PlayerManager.DisableAllTroops();
-    }
-
-    public void MakePeace(Faction fac_one, Faction fac_two){
-        if(truce_manager.Truced(fac_one, fac_two))
-            return;
-        Faction our_faction = LocalFaction();
-        if(our_faction == fac_one)
-            harassed_factions[_FactionLookup.ID(fac_two)] = true;
-        if(our_faction == fac_two)
-            harassed_factions[_FactionLookup.ID(fac_one)] = true;
-        RPC_MakePeace(_FactionLookup.ID(fac_one), _FactionLookup.ID(fac_two));
-    }
-
-    public void SendMessage(Faction faction, string message){
-        int faction_id = _FactionLookup.ID(faction);
-        if(Harassed(faction_id) || !ValidateMessage(message, 120))
-            return;
-        harassed_factions[faction_id] = true;
-        _PlayerManager.FactionInfoWindow.RefreshUI();
-        RPC_SendMessage(faction_id, _FactionLookup.ID(LocalFaction()), message, LocalUsername());
-    }
-
-    // RPCS
-
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_SendMessage(int faction_id, int from_id, string message, string username){
-        if(_FactionLookup.GetFaction(faction_id) != LocalFaction())
-            return;
-        if(!ValidateMessage(message, 120))
-            return;
-        if(HarassedBy(from_id))
-            return;
-
-        harassed_by[from_id] = true;
-        _EventManager.Message(new MessageContents("PRIVATE MESSAGE", username, message, null, null));
-    }
-
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_MakeWar(int faction_declaring_id, int faction_target_id, RpcInfo info = default){
-        Faction faction_declaring = _FactionLookup.GetFaction(faction_declaring_id);
-        Faction faction_target = _FactionLookup.GetFaction(faction_target_id);
-        if(!truce_manager.Truced(faction_declaring, faction_target))
-            return;
-
-        truce_manager.BreakTruce(faction_declaring, faction_target);
-        DespawnTroopsInTerritory(faction_declaring, faction_target);
-        
-        string[] war_titles = {"WAR DECLARED", "WAR!", "THE GREAT BACKSTAB", "ALLIANCE BREAKS!", "END OF ALL PEACE", "FIRST BLOOD", "CONQUEST BEGINS"};
-        string title = war_titles[Random.Range(0, war_titles.Length)];
-        _EventManager.Message(new MessageContents("NEWSPAPER", title, "WAR", faction_declaring, faction_target));
-        _PlayerManager.LeaderboardWindow.RefreshUI();
-        _PlayerManager.FactionInfoWindow.RefreshUI();
-    }
-
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_MakePeace(int fac_one_id, int fac_two_id){
-        Faction faction_one = _FactionLookup.GetFaction(fac_one_id);
-        Faction faction_two = _FactionLookup.GetFaction(fac_two_id);
-        if(truce_manager.Truced(faction_one, faction_two))
-            return;
-
-        truce_manager.NewTruce(faction_one, faction_two);
-        string[] peace_titles = {"PEACE AT LAST", "UNEASY TRUCE", "WAR IS OVER", "WORTHY ALLIES"};
-        string title = peace_titles[Random.Range(0, peace_titles.Length)];
-        _EventManager.Message(new MessageContents("NEWSPAPER", title, "PEACE", faction_one, faction_two));
-
-        _PlayerManager.LeaderboardWindow.RefreshUI();
-        _PlayerManager.FactionInfoWindow.RefreshUI();
-    }
-
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_OfferTreaty(int offering_faction_id, int target_faction_id, string username){
-        Faction fac_offer = _FactionLookup.GetFaction(offering_faction_id);
-        Faction fac_targ = _FactionLookup.GetFaction(target_faction_id);
-        if(fac_offer == null || fac_targ == null)
-            return;        
-        if(truce_manager.Truced(fac_offer, fac_targ))
-            return;
-        if(target_faction_id != _SessionManager.OurInstance.Faction_ID)
-            return;
-        
-        _EventManager.Add(new MessageEvent(new MessageContents("PEACE", username, "", fac_offer, fac_targ)));
-        _PlayerManager.LeaderboardWindow.RefreshUI();
-        _PlayerManager.FactionInfoWindow.RefreshUI();
-    }
-
-    // Despawning
-
-    public void DespawnTroopsInTerritory(Faction faction_of, Faction faction_in){
-        if(AllTroops.Count == 0 || !_SessionManager.Hosting)
-            return;
-
-        List<int> locations = new List<int>();
-        foreach(Troop troop in AllTroops){
-            if(troop.FactionData() == faction_of){
-                Tile tile = _MapManager.GetTile(troop.current_tile);
-                if(tile.owner == faction_in){
-                    _ConnectionManager.Despawn(troop.gameObject.GetComponent<NetworkObject>());
-                    locations.Add(tile.ID);
-                }
-            }
-        }
-        RPC_SpawnDespawnEffects(locations.ToArray());
-    }
-
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPC_SpawnDespawnEffects(int[] locations, RpcInfo info = default){
-        if(locations.Length == 0)
-            return;
-        foreach(int i in locations){
-            _MapManager.SpawnParticleEffect(i);
-        }
     }
 
     // TROOPS //
@@ -318,7 +137,7 @@ public class GameplayManager : NetworkBehaviour
         foreach(Troop t in AllTroops){
             if(ValidateTroop(t)){
                 Tile tile = _MapManager.GetTile(t.current_tile);
-                if(tiles.Contains(tile) && tile.visible && t.FactionID() != _SessionManager.OurInstance.Faction_ID && !AtPeace(t.FactionData())){
+                if(tiles.Contains(tile) && tile.visible && t.FactionID() != _SessionManager.OurInstance.Faction_ID && !_PlayerCommunicationManager.AtPeace(t.FactionData())){
                     result.Add(tile);
                 }
             }
@@ -346,7 +165,7 @@ public class GameplayManager : NetworkBehaviour
         if(!ValidateTroop(attacking_troop))
             return;
         
-        if(truce_manager.Truced(_FactionLookup.GetFaction(fac_attk), _FactionLookup.GetFaction(fac_targ)))
+        if(_PlayerCommunicationManager.Truced(_FactionLookup.GetFaction(fac_attk), _FactionLookup.GetFaction(fac_targ)))
             return;
         
         attacking_troop.AttackAnim();
@@ -416,6 +235,34 @@ public class GameplayManager : NetworkBehaviour
         g.transform.position = _MapManager.CalcTileWorldPosition(tile);
     }
 
+    // Mass Despawning //
+
+    public void DespawnTroopsInTerritory(Faction faction_of, Faction faction_in){
+        if(AllTroops.Count == 0 || !_SessionManager.Hosting)
+            return;
+
+        List<int> locations = new List<int>();
+        foreach(Troop troop in AllTroops){
+            if(troop.FactionData() == faction_of){
+                Tile tile = _MapManager.GetTile(troop.current_tile);
+                if(tile.owner == faction_in){
+                    _ConnectionManager.Despawn(troop.gameObject.GetComponent<NetworkObject>());
+                    locations.Add(tile.ID);
+                }
+            }
+        }
+        RPC_SpawnDespawnEffects(locations.ToArray());
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_SpawnDespawnEffects(int[] locations, RpcInfo info = default){
+        if(locations.Length == 0)
+            return;
+        foreach(int i in locations){
+            _MapManager.SpawnParticleEffect(i);
+        }
+    }
+
     // Building Spawning //
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
@@ -464,13 +311,10 @@ public class GameplayManager : NetworkBehaviour
 
         if(!_SessionManager.Hosting)
             return;
-
         if(TroopOnTile(tile))
             return;
-
         if(!CheckTileOwnership(tile, _FactionLookup.GetFaction(_SessionManager.PlayerFactionID(owner))))
             return;
-
         if(!ValidTroopSpawn(troop_data, tile))
             return;
 

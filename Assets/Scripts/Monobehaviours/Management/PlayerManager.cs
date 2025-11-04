@@ -41,8 +41,6 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] GameObject EndTurnButton;
     [SerializeField] TMP_Text CoinDisplay;
     [SerializeField] TMP_Text EarningsDisplay;
-    public Leaderboard LeaderboardWindow;
-    public FactionWindow FactionInfoWindow;
 
     [Header("Turns")]
     [SerializeField] TMP_Text TurnDisplay;
@@ -610,26 +608,6 @@ public class PlayerManager : MonoBehaviour
     }
 
     // UI //
-
-    public void CloseUnnecessaryWindows(){
-        FactionInfoWindow.SilentClose();
-    }
-
-    public void OpenFactionInformation(Faction faction){
-        if(!OurTurn){
-            PlaySFX("UI_4", SFX_Lookup);
-            return;
-        }
-        if(faction == _SessionManager.OurInstance.FactionData()){
-            PlaySFX("UI_4", SFX_Lookup);
-            return;
-        }
-        FactionInfoWindow.Load(faction);
-    }
-
-    public void LeaderboardButton(){
-        LeaderboardWindow.Open();
-    }
 
     public void FortUpgradeButton(){
         UpgradeWindow.Setup(_SessionManager.LocalFactionData().CurrencyFormat(current_tile.stats.UpgradeCost()), this);
