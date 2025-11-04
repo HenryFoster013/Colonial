@@ -17,7 +17,7 @@ public class TechTreeManager : MonoBehaviour{
     [SerializeField] SoundEffectLookup SFX_Lookup;
 
     TechNode[] root_nodes;
-    OddTechManager odd_tech;
+    OddTechManager odd_manager;
     Faction faction;
     Dictionary<TroopData, TechNode> TroopOwnershipMap = new Dictionary<TroopData, TechNode>();
     Dictionary<PieceData, TechNode> BuildingOwnershipMap = new Dictionary<PieceData, TechNode>();
@@ -102,7 +102,7 @@ public class TechTreeManager : MonoBehaviour{
         return (BuildingOwnershipMap[building].unlocked);
     }
 
-    public string Unlocked(string odd_technology){
+    public bool Unlocked(string odd_technology){
         return odd_manager.Unlocked(odd_technology);
     }
 

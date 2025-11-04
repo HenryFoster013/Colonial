@@ -103,23 +103,17 @@ namespace TechUtils{
         public bool HasBuildings(){return definition.Buildings().Length > 0;}
     }
 
-    public class OddTechManager(){
+    public class OddTechManager{
 
         List<string> unlocked_odd_tech = new List<string>();
 
-        public OddTechManager(){
-            unlocked_odd_tech = new List<string>();
-        }
-
-        public bool Unlocked(string tech_name){
-            return unlocked_odd_tech.Contains(tech_name.ToUpper());
-        }
+        public OddTechManager(){unlocked_odd_tech = new List<string>();}
+        public bool Unlocked(string tech_name){return unlocked_odd_tech.Contains(tech_name.ToUpper());}
 
         public void Unlock(string tech_name){
             tech_name = tech_name.ToUpper();
-            if(!Unlocked.Contains(tech_name))
-                Unlocked.Add(tech_name);
+            if(!unlocked_odd_tech.Contains(tech_name))
+                unlocked_odd_tech.Add(tech_name);
         }
-
     }
 }
