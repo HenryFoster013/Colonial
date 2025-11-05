@@ -129,14 +129,13 @@ public class SessionManager : NetworkBehaviour
     }
 
     // PLAYER SETUP //
-
+    public List<int> faction_ids = new List<int>();
     void GetPlayers(){
         GameObject[] player_objects = GameObject.FindGameObjectsWithTag("Player");
         player_instances = new List<PlayerInstance>();
-        int initial_faction = -1;
-        bool can_war = true;
+        bool can_war = false;
         bool all_ready = true;
-        List<int> faction_ids = new List<int>();
+        faction_ids = new List<int>();
 
         for(int i = 0; i < player_objects.Length; i++){
             PlayerInstance player_inst_temp = player_objects[i].GetComponent<PlayerInstance>();
@@ -147,19 +146,16 @@ public class SessionManager : NetworkBehaviour
             if(!player_instances[i].Ready)
                 all_ready = false;
 
-            if(initial_faction == -1)
-                initial_faction = player_instances[i].Faction_ID;
-
-            if(faction_ids.Contains(initial_faction))
-                can_war = false;
-            else
-                faction_ids.Add(initial_faction);
+            faction_ids.Add(player_instances[i].Faction_ID);            
 
             if(NO.HasInputAuthority){
                 OurInstance = player_instances[i];
                 player_instances[i].SetManager(_PlayerManager);
             }
         }
+
+        can_war = !faction_ids.Contains(-1) && (faction_ids == faction_ids.Distinct()) && faction_ids.Count > 1;
+        print(faction_ids == faction_ids.Distinct());
 
         player_instances = player_instances.OrderBy(p => p.ID).ToList();
 
