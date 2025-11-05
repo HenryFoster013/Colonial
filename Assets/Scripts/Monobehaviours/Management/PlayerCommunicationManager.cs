@@ -92,7 +92,10 @@ public class PlayerCommunicationManager : NetworkBehaviour
     // UI INTERACTIONS //
 
     public void DonateFunds(Faction faction, int amount){
+        if(!_TechTreeManager.Unlocked("DONATIONS"))
+            return;
         if(amount > 0 && amount < 1000 && amount <= _SessionManager.Money()){
+            _SessionManager.SpendMoney(amount);
             RPC_DonateFunds(_FactionLookup.ID(faction), LocalFactionID(), amount);
         }
     }
@@ -171,7 +174,7 @@ public class PlayerCommunicationManager : NetworkBehaviour
     public void RPC_DonateFunds(int to_id, int from_id, int amount){
         if(to_id != LocalFactionID())
             return;
-        print("money got " + amount.ToString());
+        _EventManager.Message(new MessageContents("MONEY RECIEVED", amount.ToString(), "", _FactionLookup.GetFaction(from_id), null));
     }
 
     [Rpc(RpcSources.All, RpcTargets.All)]

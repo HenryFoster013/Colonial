@@ -81,6 +81,8 @@ public class FactionWindow : Window {
     // UI BUTTONS //
 
     public void OpenDonation(){
+        if(CheckHarassed() || CheckAbstract("DONATIONS"))
+            return;
         DonateWindow.Open();
         DonateWindow.SetFaction(faction);
     }

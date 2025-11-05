@@ -22,12 +22,16 @@ public class DonationWindow : Window{
         PlaySFX(OpenSFX);
     }
 
+    void Update(){
+        RefreshUI();
+    }
+
     public void SetFaction(Faction fact){faction = fact;}
 
     void RefreshUI(){
         bool valid = FieldToInt() != -1;
         CorrectButton.SetActive(valid);
-        IncorrectButton.SetActive(valid);
+        IncorrectButton.SetActive(!valid);
     }
 
     public void ValidButton(){
@@ -39,6 +43,7 @@ public class DonationWindow : Window{
 
         PlaySFX(PurchaseSFX);
         _PlayerCommunicationManager.DonateFunds(faction, value);
+        SilentClose();
     }
 
     public void InvalidButton(){

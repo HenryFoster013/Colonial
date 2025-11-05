@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9485103ad3e85e4e9280994a77c7be5, type: 3}
+  m_Name: Money_Spend
+  m_EditorClassIdentifier: 
+  Name: Money_Spend
+  BaseClip: {fileID: 8300000, guid: 1d0e81561c02a284199a7ee0f9f9e5c5, type: 3}
+  Mixer: {fileID: 8193749847766800399, guid: f7d701d4c51aa3642b25f9526ef105f5, type: 2}
+  ClipRange: []
+  BasePitch: 1
+  PitchVariation: 0.05
+  BaseVolume: 0.7
+  VolumeVariation: 0

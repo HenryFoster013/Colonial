@@ -19,7 +19,8 @@ public class EventManager : MonoBehaviour{
     [SerializeField] GameObject NewspaperPrefab;
     [SerializeField] GameObject PeacePrefab;
     [SerializeField] GameObject PrivateMessagePrefab;
-
+    [SerializeField] GameObject MoneyRecievedPrefab;
+ 
     public void Setup() {
         manager = new WorldEventManager(this);
     }
@@ -60,6 +61,10 @@ public class EventManager : MonoBehaviour{
             case "PRIVATE MESSAGE":
                 MessageDisplayWindow mdw = CreateWindow(PrivateMessagePrefab).GetComponent<MessageDisplayWindow>();
                 mdw.Setup(_SessionManager.OurInstance.GetUsername(), message);
+                break;
+            case "MONEY RECIEVED":
+                DonationRecievedWindow drw = CreateWindow(MoneyRecievedPrefab).GetComponent<DonationRecievedWindow>();
+                drw.Setup(message.FactionOne(), message.Header(), _SessionManager);
                 break;
         }
     }
