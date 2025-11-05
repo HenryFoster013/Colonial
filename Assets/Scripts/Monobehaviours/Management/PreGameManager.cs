@@ -17,7 +17,7 @@ public class PreGameManager : MonoBehaviour
     [SerializeField] GameObject InteractableButtonsHolder;
     [SerializeField] GameObject HostOnly_UI;
     [SerializeField] GameObject StartButton;
-    [SerializeField] GameObject CantStartText;
+    [SerializeField] TMP_Text CantStartText;
     [SerializeField] Image Flag;
 
     [Header("UI - Player Icons")]
@@ -73,9 +73,12 @@ public class PreGameManager : MonoBehaviour
         PlaySFX("UI_2", SFX_Lookup);
     }
 
-    public void SetStartButtons(bool can_war, bool all_ready){
-        CantStartText.SetActive(!can_war || !all_ready);
-        StartButton.SetActive(can_war && all_ready);
+    public void SetStartButtons(bool not_waiting, bool all_unique, bool all_ready){
+        CantStartText.gameObject.SetActive(!not_waiting || !all_unique);
+        CantStartText.text = "(waiting for players)";
+        if(not_waiting)
+            CantStartText.text = "(all players must be different factions)";
+        StartButton.SetActive(not_waiting && all_unique && all_ready);
     }
 
     public void ChangeFaction(int modifier){

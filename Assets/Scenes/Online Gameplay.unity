@@ -543,7 +543,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &54888802
 Transform:
   m_ObjectHideFlags: 0
@@ -582,7 +582,7 @@ MonoBehaviour:
   InteractableButtonsHolder: {fileID: 587031210}
   HostOnly_UI: {fileID: 589810320}
   StartButton: {fileID: 376889965}
-  CantStartText: {fileID: 1452406725}
+  CantStartText: {fileID: 1452406727}
   Flag: {fileID: 1546114817}
   PlayerIcons:
   - {fileID: 2109625810}
@@ -3332,6 +3332,7 @@ MonoBehaviour:
   _MapManager: {fileID: 1780067900}
   player_instances: []
   PregameBackground: {fileID: 1738350990}
+  faction_ids: 
 --- !u!114 &308904222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13319,7 +13320,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1452406726
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13393,7 +13394,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 2
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
