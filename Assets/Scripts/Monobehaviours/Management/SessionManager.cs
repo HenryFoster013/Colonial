@@ -154,8 +154,7 @@ public class SessionManager : NetworkBehaviour
             }
         }
 
-        can_war = !faction_ids.Contains(-1) && (faction_ids == faction_ids.Distinct()) && faction_ids.Count > 1;
-        print(faction_ids == faction_ids.Distinct());
+        can_war = !faction_ids.Contains(-1) && (faction_ids == faction_ids.Distinct().ToList()) && faction_ids.Count > 1;
 
         player_instances = player_instances.OrderBy(p => p.ID).ToList();
 
