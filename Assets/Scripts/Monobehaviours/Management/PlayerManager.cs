@@ -17,7 +17,6 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] TileLookup _TileLookup;
     [SerializeField] PieceLookup _PieceLookup;
     [SerializeField] TroopLookup _TroopLookup;
-    [SerializeField] SoundEffectLookup SFX_Lookup;
     [SerializeField] SessionManager _SessionManager;
     [SerializeField] GameplayManager _GameplayManager;
     [SerializeField] TechTreeManager _TechTreeManager;
@@ -25,7 +24,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] PlayerCommunicationManager _PlayerCommunicationManager;
 
     [Header("--- SOUND ---")]
-
+    [SerializeField] SoundEffectLookup SFX_Lookup;
     [SerializeField] AudioMixer Mixer;
     
     [Header(" --- CAMERA --- ")]
@@ -42,6 +41,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] GameObject EndTurnButton;
     [SerializeField] TMP_Text CoinDisplay;
     [SerializeField] TMP_Text EarningsDisplay;
+    [SerializeField] TMP_InputField[] PossibleFields;
 
     [Header("Turns")]
     [SerializeField] TMP_Text TurnDisplay;
@@ -865,7 +865,20 @@ public class PlayerManager : MonoBehaviour
         CameraSpine.position = target_camera_pos;
     }
 
+    public bool TypingInField(){
+        if(PossibleFields.Length == 0)
+            return false;
+        foreach(TMP_InputField field in PossibleFields){
+            if(field.isFocused)
+                return true;
+        }
+        return false;
+    }
+
     void KeyboardCameraControls(){
+        if(TypingInField())
+            return;
+
         Vector3 camera_pos = target_camera_pos;
 
         // Sprint multiplier
