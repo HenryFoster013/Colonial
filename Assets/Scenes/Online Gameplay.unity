@@ -1810,7 +1810,7 @@ RectTransform:
   - {fileID: 167322067}
   - {fileID: 1554710553}
   m_Father: {fileID: 587031211}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2499,7 +2499,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &236702218
 Transform:
   m_ObjectHideFlags: 0
@@ -4105,7 +4105,7 @@ RectTransform:
   - {fileID: 1392463669}
   - {fileID: 1816093618}
   m_Father: {fileID: 589810321}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -6012,6 +6012,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1452406726}
   - {fileID: 589810321}
   - {fileID: 172517420}
   m_Father: {fileID: 277091332}
@@ -6088,10 +6089,9 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1452406726}
   - {fileID: 376889966}
   m_Father: {fileID: 587031211}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -13332,7 +13332,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 589810321}
+  m_Father: {fileID: 587031211}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -13360,7 +13360,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: (need at least two opposing factions)
+  m_text: (all players must be different factions)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a338c095f9ae4b0429631468e384e4af, type: 2}
   m_sharedMaterial: {fileID: -2340918611432197366, guid: a338c095f9ae4b0429631468e384e4af, type: 2}
@@ -13653,7 +13653,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1471440088}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 916485919947335006}
+        m_TargetAssemblyTypeName: DonationWindow, Assembly-CSharp
+        m_MethodName: InvalidButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1471440088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15778,7 +15790,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1608239726}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 916485919947335006}
+        m_TargetAssemblyTypeName: DonationWindow, Assembly-CSharp
+        m_MethodName: ValidButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1608239726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21235,6 +21259,7 @@ MonoBehaviour:
   EarningsDisplay: {fileID: 1802391634}
   PossibleFields:
   - {fileID: 1047384392}
+  - {fileID: 1473215725}
   TurnDisplay: {fileID: 1528910920}
   TurnNameAnim: {fileID: 1557543935}
   TurnNameText: {fileID: 528518315}
@@ -21284,7 +21309,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 916485919947335004}
-  - component: {fileID: 916485919947335005}
   - component: {fileID: 916485919947335006}
   m_Layer: 5
   m_Name: Donate Currency
@@ -21314,28 +21338,6 @@ RectTransform:
   m_AnchoredPosition: {x: 136, y: -3}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &916485919947335005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 916485919947335003}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0dd0a773f18936247944856f25dcdbc6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dragRectTransform: {fileID: 916485919982099602}
-  canvas: {fileID: 0}
-  offset: 60
-  IgnoreStartOpenClose: 0
-  CloseOnSecondOpen: 1
-  OpenedByDefault: 0
-  DestroyOnClose: 0
-  SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
-  OpenSFX: {fileID: 11400000, guid: 1114402b4fe8cac4c9bd70b7f9a3312e, type: 2}
-  CloseSFX: {fileID: 11400000, guid: e1d03495680746c45ad91f90d29ed044, type: 2}
 --- !u!114 &916485919947335006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21348,6 +21350,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55136f94fb8708f578f7785b2d247783, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dragRectTransform: {fileID: 916485919982099602}
+  canvas: {fileID: 656314378}
+  offset: 60
+  IgnoreStartOpenClose: 0
+  CloseOnSecondOpen: 1
+  OpenedByDefault: 0
+  DestroyOnClose: 0
+  SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
+  OpenSFX: {fileID: 11400000, guid: 1114402b4fe8cac4c9bd70b7f9a3312e, type: 2}
+  CloseSFX: {fileID: 11400000, guid: e1d03495680746c45ad91f90d29ed044, type: 2}
+  MoneyInput: {fileID: 1473215725}
+  CorrectButton: {fileID: 1608239723}
+  IncorrectButton: {fileID: 1471440085}
+  _SessionManager: {fileID: 308904221}
+  _PlayerCommunicationManager: {fileID: 1139654545}
+  PurchaseSFX: {fileID: 11400000, guid: ceceb6d56de0c7e449649bdce588419f, type: 2}
 --- !u!1 &916485919982099601
 GameObject:
   m_ObjectHideFlags: 0
@@ -21365,7 +21383,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &916485919982099602
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21510,7 +21528,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 916485919947335005}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Window, Assembly-CSharp
         m_MethodName: Close
         m_Mode: 1
@@ -23220,6 +23238,7 @@ MonoBehaviour:
   _PlayerCommunicationManager: {fileID: 1139654545}
   _TechTreeManager: {fileID: 1329537895}
   PrivateMessageWindow: {fileID: 7651514571474721542}
+  DonateWindow: {fileID: 916485919947335006}
   Colorised:
   - {fileID: 2973390158120737611}
   - {fileID: 1319635977}

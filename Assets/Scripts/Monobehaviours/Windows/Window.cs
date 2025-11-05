@@ -76,7 +76,7 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
         dragRectTransform.parent.SetAsLastSibling();
     }
 
-    public void Close(){
+    public virtual void Close(){
         PlaySFX(CloseSFX);
         SilentClose();
     }

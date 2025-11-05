@@ -23,8 +23,8 @@ public class SessionManager : NetworkBehaviour
     public List<PlayerInstance> player_instances = new List<PlayerInstance>();
     public PlayerInstance OurInstance { get; private set; }
 
-    public bool Hosting { get; private set; }
-    public int game_state { get; private set; } // 0 = Lobby, 1 = Gameplay, 2 = Postmatch
+    public bool Hosting { get; private set;}
+    public int game_state { get; private set;} // 0 = Lobby, 1 = Gameplay, 2 = Postmatch
 
     [Header("Backgrounds")]
     [SerializeField] BackgroundColouring PregameBackground;
@@ -134,8 +134,9 @@ public class SessionManager : NetworkBehaviour
         GameObject[] player_objects = GameObject.FindGameObjectsWithTag("Player");
         player_instances = new List<PlayerInstance>();
         int initial_faction = -1;
-        bool can_war = false;
+        bool can_war = true;
         bool all_ready = true;
+        List<int> faction_ids = new List<int>();
 
         for(int i = 0; i < player_objects.Length; i++){
             PlayerInstance player_inst_temp = player_objects[i].GetComponent<PlayerInstance>();
@@ -149,8 +150,10 @@ public class SessionManager : NetworkBehaviour
             if(initial_faction == -1)
                 initial_faction = player_instances[i].Faction_ID;
 
-            if(initial_faction != player_instances[i].Faction_ID)
-                can_war = true;
+            if(faction_ids.Contains(initial_faction))
+                can_war = false;
+            else
+                faction_ids.Add(initial_faction);
 
             if(NO.HasInputAuthority){
                 OurInstance = player_instances[i];

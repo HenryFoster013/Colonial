@@ -91,6 +91,12 @@ public class PlayerCommunicationManager : NetworkBehaviour
 
     // UI INTERACTIONS //
 
+    public void DonateFunds(Faction faction, int amount){
+        if(amount > 0 && amount < 1000 && amount <= _SessionManager.Money()){
+            RPC_DonateFunds(_FactionLookup.ID(faction), LocalFactionID(), amount);
+        }
+    }
+
     public void OpenFactionInformation(Faction faction){
         if(AreWe(faction)){
             PlaySFX("UI_4", SFX_Lookup);
@@ -160,6 +166,13 @@ public class PlayerCommunicationManager : NetworkBehaviour
     }
 
     // RPCS
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPC_DonateFunds(int to_id, int from_id, int amount){
+        if(to_id != LocalFactionID())
+            return;
+        print("money got " + amount.ToString());
+    }
 
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_SendMessage(int faction_id, int from_id, string message, string username){

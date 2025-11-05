@@ -12,6 +12,7 @@ public class FactionWindow : Window {
     [SerializeField] PlayerCommunicationManager _PlayerCommunicationManager;
     [SerializeField] TechTreeManager _TechTreeManager;
     public MessageInputWindow PrivateMessageWindow;
+    public DonationWindow DonateWindow;
 
     [Header("UI")]
     [SerializeField] Image[] Colorised;
@@ -31,7 +32,6 @@ public class FactionWindow : Window {
         RefreshUI();
         Open();
     }
-
 
     public void RefreshUI(){
         if(faction == null)
@@ -53,6 +53,13 @@ public class FactionWindow : Window {
         DarkenerDisabled.SetActive(!active_func);
     }
 
+    public override void Close(){
+        SilentClose();
+        PlaySFX(CloseSFX);
+        PrivateMessageWindow.SilentClose();
+        DonateWindow.SilentClose();
+    }
+
     // CHECKS //
 
     public bool CheckHarassed(){
@@ -72,6 +79,11 @@ public class FactionWindow : Window {
     }
 
     // UI BUTTONS //
+
+    public void OpenDonation(){
+        DonateWindow.Open();
+        DonateWindow.SetFaction(faction);
+    }
 
     public void PrivateMessageButton(){
         if(CheckHarassed() || CheckAbstract("TELEGRAPH"))

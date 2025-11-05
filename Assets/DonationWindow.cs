@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using static GenericUtils;
 
 public class DonationWindow : Window{
 
     [Header("Donation Uniques")]
     [SerializeField] TMP_InputField MoneyInput;
     [SerializeField] GameObject CorrectButton;
-    [SerializeField] GameObject InvalidButton;
+    [SerializeField] GameObject IncorrectButton;
     [SerializeField] SessionManager _SessionManager;
-    [SerializeField] PlayerCommunicationManager _PlayeCommunicationManager;
+    [SerializeField] PlayerCommunicationManager _PlayerCommunicationManager;
     [SerializeField] SoundEffect PurchaseSFX;
     Faction faction;
 
@@ -24,9 +25,9 @@ public class DonationWindow : Window{
     public void SetFaction(Faction fact){faction = fact;}
 
     void RefreshUI(){
-        valid = FieldToInt() != -1;
+        bool valid = FieldToInt() != -1;
         CorrectButton.SetActive(valid);
-        InvalidButton.SetActive(valid);
+        IncorrectButton.SetActive(valid);
     }
 
     public void ValidButton(){
@@ -37,7 +38,7 @@ public class DonationWindow : Window{
         }
 
         PlaySFX(PurchaseSFX);
-        _PlayerCommunicationManager.DonateFunds(value);
+        _PlayerCommunicationManager.DonateFunds(faction, value);
     }
 
     public void InvalidButton(){
@@ -45,8 +46,9 @@ public class DonationWindow : Window{
     }
 
     int FieldToInt(){
-        if (int.TryParse(input, out result)){
-            if(result > 0 && result < 1000 && result < _SessionManager.Money()){
+        int result = -1;
+        if (int.TryParse(MoneyInput.text, out result)){
+            if(result > 0 && result < 1000 && result <= _SessionManager.Money()){
                 return result;
             }
             else
