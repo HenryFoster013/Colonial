@@ -116,7 +116,7 @@ Material:
     - _Color: {r: 1, g: 0.80166054, b: 0, a: 1}
     - _Darkest_Colour: {r: 0.915, g: 0.7593361, b: 0.54672205, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Fade_Colour: {r: 0.54509807, g: 0.49411768, b: 0.37647063, a: 1}
+    - _Fade_Colour: {r: 0.57254905, g: 0.4039216, b: 0.36078432, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &1583911685546243552

@@ -1633,8 +1633,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.3
-      minScalar: 0.1
+      scalar: 0.2
+      minScalar: 0.05
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -11389,11 +11389,11 @@ PrefabInstance:
       objectReference: {fileID: 8692776187272202361}
     - target: {fileID: 5246196606331389140, guid: feea387cda42c914c9b4d95d5d16aa9e, type: 3}
       propertyPath: m_Color.b
-      value: 0.38683796
+      value: 0.5019608
       objectReference: {fileID: 0}
     - target: {fileID: 5246196606331389140, guid: feea387cda42c914c9b4d95d5d16aa9e, type: 3}
       propertyPath: m_Color.g
-      value: 0.5019608
+      value: 0.4578701
       objectReference: {fileID: 0}
     - target: {fileID: 5246196606331389140, guid: feea387cda42c914c9b4d95d5d16aa9e, type: 3}
       propertyPath: m_Color.r
@@ -11401,15 +11401,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5246196607115951860, guid: feea387cda42c914c9b4d95d5d16aa9e, type: 3}
       propertyPath: m_Color.b
-      value: 0.3504361
+      value: 0.34901962
       objectReference: {fileID: 0}
     - target: {fileID: 5246196607115951860, guid: feea387cda42c914c9b4d95d5d16aa9e, type: 3}
       propertyPath: m_Color.g
-      value: 0.5112096
+      value: 0.39890018
       objectReference: {fileID: 0}
     - target: {fileID: 5246196607115951860, guid: feea387cda42c914c9b4d95d5d16aa9e, type: 3}
       propertyPath: m_Color.r
-      value: 0.5943396
+      value: 0.59607846
       objectReference: {fileID: 0}
     - target: {fileID: 5246196607332931424, guid: feea387cda42c914c9b4d95d5d16aa9e, type: 3}
       propertyPath: OverrideSaved
