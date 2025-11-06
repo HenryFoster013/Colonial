@@ -16026,6 +16026,8 @@ MonoBehaviour:
   - {fileID: 3194334460318131304}
   - {fileID: 3194334460088345416}
   - {fileID: 3194334458664075168}
+  SwooshUp: {fileID: 11400000, guid: 8dd45d9bb73167e45a8e196d1702feaa, type: 2}
+  Click: {fileID: 11400000, guid: c1a84e1fd20596c4d88ec9d37c4cadf6, type: 2}
 --- !u!1 &8733360442012765685
 GameObject:
   m_ObjectHideFlags: 0
