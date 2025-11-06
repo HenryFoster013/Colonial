@@ -18,5 +18,5 @@ MonoBehaviour:
   ClipRange: []
   BasePitch: 1
   PitchVariation: 0.1
-  BaseVolume: 0.3
+  BaseVolume: 0.4
   VolumeVariation: 0
