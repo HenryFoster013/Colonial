@@ -14,7 +14,8 @@ public class BuildDiorama : MonoBehaviour
     int click_counter;
 
     const float minimal = 4f;
-    const float offset = 1f;
+    const float offset = .3f;
+    const float bounce_offset = 0.01f;
     const float speed = 5f;
     const int nth_click = 4;
 
@@ -27,8 +28,8 @@ public class BuildDiorama : MonoBehaviour
         target_y = new float[Bricks.Length];
         sfx_checked = new bool[Bricks.Length];
         for(int i = 0; i < target_y.Length; i++){
-            target_y[i] = 0.1f + (offset * i / 100f);
-            Bricks[i].transform.localPosition = new Vector3(Bricks[i].transform.localPosition.x, -minimal + (-offset * i), Bricks[i].transform.localPosition.z);
+            target_y[i] = 0.1f + (bounce_offset * i);
+            Bricks[i].transform.localPosition = new Vector3(Bricks[i].transform.localPosition.x, -minimal + (-offset * (Bricks.Length - i - 1)), Bricks[i].transform.localPosition.z);
         }
     }
 
