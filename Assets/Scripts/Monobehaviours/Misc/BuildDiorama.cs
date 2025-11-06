@@ -13,8 +13,8 @@ public class BuildDiorama : MonoBehaviour
     bool[] sfx_checked;
     int click_counter;
 
-    const float minimal = -4f;
-    const float offset = -1f;
+    const float minimal = 4f;
+    const float offset = 1f;
     const float speed = 5f;
     const int nth_click = 4;
 
@@ -27,8 +27,8 @@ public class BuildDiorama : MonoBehaviour
         target_y = new float[Bricks.Length];
         sfx_checked = new bool[Bricks.Length];
         for(int i = 0; i < target_y.Length; i++){
-            target_y[i] = 0.1f;
-            Bricks[i].transform.localPosition = new Vector3(Bricks[i].transform.localPosition.x, minimal + (offset * i), Bricks[i].transform.localPosition.z);
+            target_y[i] = 0.1f + (offset * i / 100f);
+            Bricks[i].transform.localPosition = new Vector3(Bricks[i].transform.localPosition.x, -minimal + (-offset * i), Bricks[i].transform.localPosition.z);
         }
     }
 
@@ -38,7 +38,7 @@ public class BuildDiorama : MonoBehaviour
             Bricks[i].transform.localPosition = new Vector3(Bricks[i].transform.localPosition.x, new_y, Bricks[i].transform.localPosition.z);
             if(new_y > target_y[i] - 0.05f)
                 target_y[i] = 0;
-            if(target_y[i] == 0 && new_y < 0.02f && !sfx_checked[i]){
+            if(target_y[i] == 0 && new_y < 0.05f && !sfx_checked[i]){
                 sfx_checked[i] = true;
                 if(CanClick())
                     PlaySFX(Click);
