@@ -133,7 +133,6 @@ public class SessionManager : NetworkBehaviour
     void GetPlayers(){
         GameObject[] player_objects = GameObject.FindGameObjectsWithTag("Player");
         player_instances = new List<PlayerInstance>();
-        bool can_war = false;
         bool all_ready = true;
         faction_ids = new List<int>();
 
@@ -154,12 +153,12 @@ public class SessionManager : NetworkBehaviour
             }
         }
 
-        bool null_error = faction_ids.Contains(-1);
-        bool single_player = faction_ids.Count <= 1;
-        bool all_unique = (faction_ids.Count() == faction_ids.Distinct().ToList().Count());
+        bool can_war = !faction_ids.Contains(-1) && faction_ids.Count > 1;
+        bool all_unique = faction_ids.Count == faction_ids.Distinct().ToList().Count;
+
         player_instances = player_instances.OrderBy(p => p.ID).ToList();
 
-        _PreGameManager.SetStartButtons(!null_error && !single_player, all_unique, all_ready);
+        _PreGameManager.SetStartButtons(can_war, all_unique, all_ready);
     }
 
     void ReapplyPlayerIDs(){

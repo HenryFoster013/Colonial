@@ -7,7 +7,6 @@ public class BG_MusicNode : MonoBehaviour
     [SerializeField] AudioSource _AudioSource;
 
     float target_volume = 0;
-    float max_volume = -1;
     bool mark_for_death = false;
 
     void Start(){

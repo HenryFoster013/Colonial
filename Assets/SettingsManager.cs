@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
+using static GenericUtils;
 
 public class SettingsManager : MonoBehaviour{
     
@@ -41,6 +43,29 @@ public class SettingsManager : MonoBehaviour{
     }
 
     void ApplySettings(){
+        Mixer.SetFloat("", FloatToDecibel(PlayerPrefs.GetFloat("VOLUME.MASTER")));
+        Mixer.SetFloat("", FloatToDecibel(PlayerPrefs.GetFloat("VOLUME.SFX")));
+        Mixer.SetFloat("", FloatToDecibel(PlayerPrefs.GetFloat("VOLUME.BACKGROUND")));
         
+        if(PlayerPrefs.GetInt("FULLSCREEN") == 0)
+            Screen.SetResolution(PlayerPrefs.GetInt("SCREEN.WIDTH"), PlayerPrefs.GetInt("SCREEN.HEIGHT"), false);
+        else
+            Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, true);
+    }
+
+    public void SetVolume(string label, float amount){
+        amount = Mathf.Clamp(amount, 0f, 1f);
+        PlayerPrefs.SetFloat("VOLUME." + label.ToUpper(), amount);
+        ApplySettings();
+    }
+
+    public void SetResolution(int x, int y, bool fullscreen){
+        PlayerPrefs.SetInt("SCREEN.WIDTH", x);
+        PlayerPrefs.SetInt("SCREEN.HEIGHT", y);
+        int full_val = 0;
+        if(fullscreen)
+            full_val = 1;
+        PlayerPrefs.SetInt("FULLSCREEN", full_val);
+        ApplySettings();
     }
 }
