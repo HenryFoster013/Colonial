@@ -19,13 +19,13 @@ public class BG_MusicPlayer : MonoBehaviour
             return;
         }
 
-        bool song_exists = true;
+        bool song_exists = false;
         foreach(GameObject g in all_nodes){
             BG_MusicNode node = g.GetComponent<BG_MusicNode>();
             if(!node.Validate(Track))
                 node.Terminate();
             else
-                song_exists = true;
+                song_exists = !node.Deathly();
         }
 
         if(!song_exists)

@@ -39,4 +39,5 @@ public class BG_MusicNode : MonoBehaviour
     }
 
     public bool Validate(AudioClip clip){return _AudioSource.clip == clip;}
+    public bool Deathly(){return mark_for_death;}
 }
