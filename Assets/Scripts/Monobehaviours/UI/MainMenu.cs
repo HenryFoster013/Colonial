@@ -13,12 +13,14 @@ public class MainMenu : MonoBehaviour
     [SerializeField] SettingsWindow Settings;
     
     public void QuickPlay(){
+        PlayerPrefs.SetString("LOAD ORIGIN", "Title Screen");
         PlaySFX("UI_2", SFX_Lookup);
         SceneManager.LoadScene(QuickplayScene);
         BG.Save();
     }
 
     public void ServerBrowser(){
+        PlayerPrefs.SetString("LOAD ORIGIN", ServerBrowserScene);
         PlaySFX("UI_2", SFX_Lookup);
         SceneManager.LoadScene(ServerBrowserScene);
         BG.Save();

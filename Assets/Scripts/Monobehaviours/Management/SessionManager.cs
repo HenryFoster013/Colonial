@@ -17,6 +17,7 @@ public class SessionManager : NetworkBehaviour
     [SerializeField] GameplayManager _GameplayManager;
     [SerializeField] PlayerManager _PlayerManager;
     [SerializeField] MapManager _MapManager;
+    [SerializeField] SettingsWindow Settings;
     ConnectionManager _ConnectionManager;
     
     [Header("Player Instances")]
@@ -79,6 +80,17 @@ public class SessionManager : NetworkBehaviour
                 _ConnectionManager.DisconnectFromLobby("Network Error");
             }
         }
+    }
+
+    public void OpenSettings(){Settings.Open();}
+
+    public void HonourablyRageQuit(){
+        _ConnectionManager.DisconnectFromLobby(PlayerPrefs.GetString("LOAD ORIGIN"));
+    }
+
+    public void PreGameExit(){
+        _PreGameManager.CloseUI_NoSFX();
+        _ConnectionManager.DisconnectFromLobby(PlayerPrefs.GetString("LOAD ORIGIN"));
     }
 
     // LOBBY GAMEPLAY //

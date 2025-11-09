@@ -81,7 +81,7 @@ public class QuickQuit : MonoBehaviour{
         }
 
         if(scene_name == "ONLINE GAMEPLAY"){
-            //GameObject.FindGameObjectWithTag("Player").GetComponent<MainMenu>().SettingsMenu();
+            GameObject.FindGameObjectWithTag("Session Manager").GetComponent<SessionManager>().OpenSettings();
             return;
         }
     }
@@ -111,7 +111,7 @@ public class QuickQuit : MonoBehaviour{
     }
 
     void Disconnect(){
-        print("Connective Disconnect");
+        GameObject.FindGameObjectWithTag("Session Manager").GetComponent<SessionManager>().HonourablyRageQuit();
     }
 
     void MainMenu(){

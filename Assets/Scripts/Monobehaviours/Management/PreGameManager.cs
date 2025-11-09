@@ -73,6 +73,10 @@ public class PreGameManager : MonoBehaviour
         PlaySFX("UI_2", SFX_Lookup);
     }
 
+    public void CloseUI_NoSFX(){
+        UI_Holder.SetActive(false);
+    }
+
     public void SetStartButtons(bool not_waiting, bool all_unique, bool all_ready){
         CantStartText.gameObject.SetActive(!not_waiting || !all_unique);
         CantStartText.text = "(waiting for players)";
