@@ -13,7 +13,6 @@ public class SettingsManager : MonoBehaviour{
     bool fullscreen;
     
     public void Setup(){
-        DontDestroyOnLoad(this.gameObject);
         if(PlayerPrefs.GetInt("SETTINGS_SETUP") == 0)
             ResetSettings();
         RefreshSettings();
