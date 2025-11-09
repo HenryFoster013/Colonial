@@ -42,9 +42,9 @@ public class SettingsManager : MonoBehaviour{
     }
 
     void ApplySettings(){
-        Mixer.SetFloat("", FloatToDecibel(PlayerPrefs.GetFloat("VOLUME.MASTER")));
-        Mixer.SetFloat("", FloatToDecibel(PlayerPrefs.GetFloat("VOLUME.SFX")));
-        Mixer.SetFloat("", FloatToDecibel(PlayerPrefs.GetFloat("VOLUME.BACKGROUND")));
+        Mixer.SetFloat("MasterVolume", FloatToDecibel(PlayerPrefs.GetFloat("VOLUME.MASTER")));
+        Mixer.SetFloat("SFXVolume", FloatToDecibel(PlayerPrefs.GetFloat("VOLUME.SFX")));
+        Mixer.SetFloat("BackgroundVolume", FloatToDecibel(PlayerPrefs.GetFloat("VOLUME.BACKGROUND")));
         
         if(PlayerPrefs.GetInt("FULLSCREEN") == 0)
             Screen.SetResolution(PlayerPrefs.GetInt("SCREEN.WIDTH"), PlayerPrefs.GetInt("SCREEN.HEIGHT"), false);

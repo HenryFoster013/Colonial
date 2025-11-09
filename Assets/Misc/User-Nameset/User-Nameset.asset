@@ -12,8 +12,117 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa3534d78ecf4bdfeb3a12d255823c1e, type: 3}
   m_Name: User-Nameset
   m_EditorClassIdentifier: 
-  Prefixes_TXT: {fileID: 0}
-  Suffixes_TXT: {fileID: 0}
+  Prefixes_TXT: {fileID: 4900000, guid: c1348f1b0cb56c1499ab04549604aeb9, type: 3}
+  Suffixes_TXT: {fileID: 4900000, guid: f27343cc0feb7fe438b690cbe3d7716b, type: 3}
   Whitespace: 0
-  Prefixes: []
-  Suffixes: []
+  Prefixes:
+  - King
+  - Lord
+  - General
+  - Queen
+  - Prince
+  - Princess
+  - Duke
+  - Priest
+  - Great Leader
+  - President
+  - Prime Minister
+  - Baron
+  - Knight
+  - Kaiser
+  - Sir
+  - Mr
+  - Mrs
+  - Master
+  - Royal
+  - Captain
+  - Big
+  - Lil'
+  - The Great
+  - The Mid
+  Suffixes:
+  - Henry
+  - Chuck
+  - Ashley
+  - Finley
+  - Baiter
+  - William
+  - Samuel
+  - Paul
+  - Frederick
+  - Carlo
+  - Edward
+  - Athelstan
+  - Edgar
+  - Richard
+  - Mary
+  - Elizabeth
+  - Charles
+  - James
+  - Anne
+  - Morgan
+  - Thomas
+  - Jesse
+  - Dominick
+  - Rudolph
+  - Bartley
+  - Cormac
+  - Donald
+  - Ron
+  - Rufus
+  - Eugene
+  - Harvey
+  - Vincent
+  - Carl
+  - Friedrich
+  - Conrad
+  - Henry
+  - Otto
+  - Baldwin
+  - Felix
+  - Frank
+  - Hans
+  - Jonas
+  - Klaus
+  - Lukas
+  - Max
+  - Noah
+  - Paul
+  - Wolfgang
+  - Henri
+  - Hugues
+  - Isaac
+  - Jacques
+  - Jean
+  - "Jos\xE9"
+  - Jules
+  - Julian
+  - Louis
+  - "L\xE9on"
+  - Martin
+  - Maurice
+  - Nicolas
+  - "No\xEBl"
+  - Olivier
+  - "Th\xE9odore"
+  - "St\xE9phane"
+  - "Timoth\xE9e"
+  - Ansel
+  - Winston
+  - Anselm
+  - Bastian
+  - Jakob
+  - Bernhard
+  - Anton
+  - Adalbert
+  - Bertolt
+  - Christian
+  - Derek
+  - Helmuth
+  - Heinrich
+  - "G\xFCnter"
+  - Hans
+  - "G\xF6tz"
+  - Gerwin
+  - Gert
+  - Fritz

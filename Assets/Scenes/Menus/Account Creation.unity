@@ -1672,7 +1672,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NextScene: Title Screen
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
-  PlayerNameset: {fileID: 0}
+  PlayerNameset: {fileID: 11400000, guid: 430f65c03d46950368d61b1f06aefcc5, type: 2}
   BG: {fileID: 218682739}
   Menu: {fileID: 1412633481}
   Model: {fileID: 658885016917897278}

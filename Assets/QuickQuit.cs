@@ -71,7 +71,19 @@ public class QuickQuit : MonoBehaviour{
 
     // End Functions
     void RegularEscape(){
-        print("Reg Escape");
+        string scene_name = SceneManager.GetActiveScene().name.ToUpper();
+        print(scene_name);
+
+        if(scene_name == "TITLE SCREEN"){
+            print("WIGGER");
+            GameObject.FindGameObjectWithTag("Player").GetComponent<MainMenu>().SettingsMenu();
+            return;
+        }
+
+        if(scene_name == "ONLINE GAMEPLAY"){
+            //GameObject.FindGameObjectWithTag("Player").GetComponent<MainMenu>().SettingsMenu();
+            return;
+        }
     }
 
     void CallQuits(){
@@ -95,9 +107,7 @@ public class QuickQuit : MonoBehaviour{
     }
 
     void Desktop(){
-        print("Quit to Desktop");
         Application.Quit();
-        
     }
 
     void Disconnect(){
@@ -109,5 +119,4 @@ public class QuickQuit : MonoBehaviour{
         PlaySFX("UI_2", SFX_Lookup);
         SceneManager.LoadScene("Title Screen");
     }
-
 }

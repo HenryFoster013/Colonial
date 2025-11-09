@@ -10,6 +10,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] string ServerBrowserScene = "Server Browser";
     [SerializeField] SoundEffectLookup SFX_Lookup;
     [SerializeField] BackgroundColouring BG;
+    [SerializeField] SettingsWindow Settings;
     
     public void QuickPlay(){
         PlaySFX("UI_2", SFX_Lookup);
@@ -26,5 +27,9 @@ public class MainMenu : MonoBehaviour
     public void Exit(){
         Application.Quit();
         BG.Save();
+    }
+
+    public void SettingsMenu(){
+        Settings.Open();
     }
 }
