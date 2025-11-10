@@ -62,9 +62,8 @@ public class Window : MonoBehaviour, IDragHandler, IPointerDownHandler{
     }
 
     public virtual void Open(){
-        if(CloseOnSecondOpen && dragRectTransform.gameObject.activeSelf){
+        if(CloseOnSecondOpen && dragRectTransform.gameObject.activeSelf)
             Close();
-        }
         else{
             PlaySFX(OpenSFX);
             SilentOpen();

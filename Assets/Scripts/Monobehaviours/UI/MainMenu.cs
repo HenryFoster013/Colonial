@@ -10,14 +10,17 @@ public class MainMenu : MonoBehaviour
     [SerializeField] string ServerBrowserScene = "Server Browser";
     [SerializeField] SoundEffectLookup SFX_Lookup;
     [SerializeField] BackgroundColouring BG;
+    [SerializeField] SettingsWindow Settings;
     
     public void QuickPlay(){
+        PlayerPrefs.SetString("LOAD ORIGIN", "Title Screen");
         PlaySFX("UI_2", SFX_Lookup);
         SceneManager.LoadScene(QuickplayScene);
         BG.Save();
     }
 
     public void ServerBrowser(){
+        PlayerPrefs.SetString("LOAD ORIGIN", ServerBrowserScene);
         PlaySFX("UI_2", SFX_Lookup);
         SceneManager.LoadScene(ServerBrowserScene);
         BG.Save();
@@ -26,5 +29,9 @@ public class MainMenu : MonoBehaviour
     public void Exit(){
         Application.Quit();
         BG.Save();
+    }
+
+    public void SettingsMenu(){
+        Settings.Open();
     }
 }
