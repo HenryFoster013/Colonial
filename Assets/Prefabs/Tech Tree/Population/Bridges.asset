@@ -16,7 +16,7 @@ MonoBehaviour:
   _Name: Bridges
   _Description: 
   _Image: {fileID: 0}
-  _Cost: 5
+  _Cost: 0
   TroopUnlocks: []
   BuildingUnlocks:
   - {fileID: 11400000, guid: 5d862b2ba6485cbbdb4b5c5626ed88b5, type: 2}

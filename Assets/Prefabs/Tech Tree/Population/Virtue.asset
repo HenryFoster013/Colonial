@@ -17,7 +17,7 @@ MonoBehaviour:
   _Name: Virtue
   _Description: 
   _Image: {fileID: 0}
-  _Cost: 5
+  _Cost: 0
   TroopUnlocks: []
   BuildingUnlocks:
   - {fileID: 11400000, guid: b2c9f8bddda616740acfc60a78ce4be6, type: 2}

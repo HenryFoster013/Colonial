@@ -16,7 +16,7 @@ MonoBehaviour:
   _Name: Diplomacy
   _Description: 
   _Image: {fileID: 0}
-  _Cost: 12
+  _Cost: 0
   TroopUnlocks: []
   BuildingUnlocks: []
   AbstractUnlocks:

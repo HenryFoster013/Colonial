@@ -120,7 +120,7 @@ public class PlayerManager : MonoBehaviour
 
     int spawn_menu_offset = 0;
     PreviewRenderer[] troop_renders;
-    PreviewRenderer[] building_renders;
+    public PreviewRenderer[] building_renders;
     Camera[] troop_cameras;
     Camera[] building_cameras;
 
@@ -250,6 +250,7 @@ public class PlayerManager : MonoBehaviour
 
     public void SpawnBuildingButton(PieceData piece){
         if(CanAfford(piece.Cost())){
+            SpendMoney(piece.Cost());
             _GameplayManager.RPC_SpawnBuilding(current_tile.ID, _PieceLookup.ID(piece));
             CloseSpawnMenu();
             Deselect();
@@ -645,12 +646,14 @@ public class PlayerManager : MonoBehaviour
         PlaySFX("Drums_2", SFX_Lookup);
     }
 
+    public PieceData[] buildings;
+
     void GenerateRenderers(){
 
         RenderTextureDescriptor desc = new RenderTextureDescriptor(177, 256, RenderTextureFormat.ARGB32);
 
         TroopData[] troops = OurFaction().Troops();
-        PieceData[] buildings = _PieceLookup.Buildable();
+        buildings = _PieceLookup.Buildable();
         troop_renders = new PreviewRenderer[troops.Length];
         building_renders = new PreviewRenderer[buildings.Length];
     
@@ -684,7 +687,6 @@ public class PlayerManager : MonoBehaviour
         if(!SpawnMenu.activeSelf){
             spawn_menu_offset = 0;
         }
-
     }
 
     void CloseSpawnMenu(){
@@ -729,37 +731,37 @@ public class PlayerManager : MonoBehaviour
             SetupSpawnButtons(troop_renders);
 
         SpawnMenu.SetActive(true);
-    }
+    } 
 
     public void SetupSpawnButtons(PreviewRenderer[] prs){
         float offy = 95;
         int active_count = 0;
-        int total_items = 0;
+        List<PreviewRenderer> active_elements = new List<PreviewRenderer>();
 
         foreach(PreviewRenderer pr in prs){
-            if(pr.Unlocked())
-                total_items++;
+            pr.Validate(current_tile);
+            if(pr.Unlocked() && pr.Validate(current_tile)){
+                active_elements.Add(pr);
+            }
         }
         
-        ClampSpawnMenuOffset(total_items);
+        ClampSpawnMenuOffset(active_elements.Count);
         int start_point = spawn_menu_offset * 4;
-        int displayed_count = DisplayedItemCount(total_items, spawn_menu_offset);
+        int displayed_count = DisplayedItemCount(active_elements.Count, spawn_menu_offset);
         float centering = (-1 * offy * displayed_count) / 2;
         centering += (offy / 2);
         
         //BuildingValid(tile, building_renders[i].GetPieceData())
 
-        for(int i = start_point; i < prs.Length && i < start_point + 4; i++){
-            if(prs[i].Unlocked() && prs[i].Validate(current_tile)){
-                prs[i].SetAfford(Money());
-                prs[i].SetPosition(new Vector2((active_count * offy) + centering, 0));
-                prs[i].SetTile(current_tile);
-                prs[i].Enable();
-                active_count++;
-            }
-        }        
+        for(int i = start_point; i < active_elements.Count && i < start_point + 4; i++){
+            active_elements[i].SetAfford(Money());
+            active_elements[i].SetPosition(new Vector2((active_count * offy) + centering, 0));
+            active_elements[i].SetTile(current_tile);
+            active_elements[i].Enable();
+            active_count++;
+        }
 
-        SpawnMenuArrowsHolder.SetActive(total_items > 4);
+        SpawnMenuArrowsHolder.SetActive(active_elements.Count > 4);
     }
 
     public void SpawnModelHolderTroop(int troop, Transform holder){
