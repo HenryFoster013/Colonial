@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27076cdd8188395419b12c7eae2156a5, type: 3}
+  m_Name: Gunpowder Mill
+  m_EditorClassIdentifier: 
+  _Type: Gunpowder Mill
+  _Name: Gunpowder Mill
+  _Prefab: {fileID: 4065410536581613965, guid: 4b615c8bc6d43a74ab9f394e3b8e9fe7, type: 3}
+  _TroopOffset: 0
+  _RandomiseRotation: 1
+  _RandomiseFirstChildRotation: 0
+  _ContainsBillboards: 0
+  _Walkable: 1
+  _Fort: 0
+  _OwningFaction: {fileID: 0}
+  _Population: 0
+  _Produce: 0
+  _Industry: 3
+  _Cost: 5
+  _CompatibleTiles:
+  - {fileID: 11400000, guid: 7cb8fe8a787d4e849979c6ea5e635b99, type: 2}
+  - {fileID: 11400000, guid: b69a50aab74996543b51103888663fb7, type: 2}
+  - {fileID: 11400000, guid: d22f46fe7f142ea418ece81d0b739395, type: 2}
+  _CompatiblePieces:
+  - {fileID: 11400000, guid: 8a1879b64b3d3844f9fdfa0d010c02e8, type: 2}
+  - {fileID: 11400000, guid: 36871afea83f4e847b72a28748611859, type: 2}
+  - {fileID: 11400000, guid: 63dccfee067861a4d8e08a11e6256e71, type: 2}
+  _PlayConstructionSound: 1

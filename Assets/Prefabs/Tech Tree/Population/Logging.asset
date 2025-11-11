@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Logging
   m_EditorClassIdentifier: 
   FollowingTech:
-  - {fileID: 11400000, guid: 8eee839c2f31e853ebb81d728992b491, type: 2}
+  - {fileID: 11400000, guid: b3e00154bbf698530a3a33914233f66f, type: 2}
+  - {fileID: 11400000, guid: 485f7d8ddcc7f0fad87b1c52012f82a7, type: 2}
   _Name: Logging
   _Description: 
   _Image: {fileID: 0}
@@ -21,4 +22,4 @@ MonoBehaviour:
   TroopUnlocks: []
   BuildingUnlocks:
   - {fileID: 11400000, guid: f87b19ec801d6df4a9f603014ba03340, type: 2}
-  OddUnlocks: []
+  AbstractUnlocks: []

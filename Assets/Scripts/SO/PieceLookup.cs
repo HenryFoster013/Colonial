@@ -6,6 +6,11 @@ using UnityEngine;
 public class PieceLookup : ScriptableObject
 {
     [SerializeField] PieceData[] Pieces;
+    [SerializeField] PieceData[] Buildings;
+
+    public PieceData[] Buildable(){
+        return Buildings;
+    }
 
     public PieceData Piece(int i){
         return Pieces[i];

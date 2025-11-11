@@ -161,9 +161,9 @@ public class PlayerManager : MonoBehaviour
         target_ambience_vol = 1;
         target_music_vol = 0;
         pause_inputs = false;
-        _TechTreeManager.Setup(_SessionManager.LocalFactionData());
-        FactionName.text = _SessionManager.LocalFactionData().Name().Replace(' ', '\n');
-        FactionFlag.sprite = _SessionManager.LocalFactionData().Flag();
+        _TechTreeManager.Setup(OurFaction());
+        FactionName.text = OurFaction().Name().Replace(' ', '\n');
+        FactionFlag.sprite = OurFaction().Flag();
         UpgradeWindow.SilentClose();
     }
 
@@ -183,7 +183,7 @@ public class PlayerManager : MonoBehaviour
         SpawnInfoPopup.transform.position = Input.mousePosition;
         EndTurnButton.SetActive(OurTurn);
         TurnDisplay.text = "Turn " + _GameplayManager.current_turn.ToString();
-        CoinDisplay.text = _SessionManager.LocalFactionData().CurrencyFormat(_SessionManager.Money());
+        CoinDisplay.text = OurFaction().CurrencyFormat(_SessionManager.Money());
         EarningsDisplay.text = "(+ " + Map.TotalValue() + ")";
     }
 
@@ -259,7 +259,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void SpawnTroopButton(int i){
-        TroopData[] troops = _SessionManager.LocalFactionData().Troops();
+        TroopData[] troops = OurFaction().Troops();
         if(i > -1 && i < troops.Length){
 
             TroopData troop = troops[i];
@@ -277,7 +277,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     public bool CanSpawnTroop(int troop_id){
-        TroopData troop = _SessionManager.LocalFactionData().Troops()[troop_id];
+        TroopData troop = OurFaction().Troops()[troop_id];
         bool valid = _TechTreeManager.Unlocked(troop);
         if(valid)
             valid = CanAfford(troop.Cost());
@@ -470,7 +470,7 @@ public class PlayerManager : MonoBehaviour
     void CheckTileData(Tile tile){
         CloseSpawnMenu();
         FortStats.SetActive(false);
-        if(CheckTileOwnership(tile, _SessionManager.LocalFactionData())){
+        if(CheckTileOwnership(tile, OurFaction())){
             if(tile.piece.Fort()){
                 if(!_GameplayManager.TroopOnTile(tile) && OurTurn)
                     OpenSpawnMenu(false);
@@ -489,7 +489,7 @@ public class PlayerManager : MonoBehaviour
         
         FortStats.SetActive(true);
         UpgradeButton.SetActive(OurTurn && CanAfford(stats.UpgradeCost()) && stats.BelowLevelLimit());
-        FortName.text = stats.name + " (" + _SessionManager.LocalFactionData().CurrencyFormat(stats.Value()) + ")";
+        FortName.text = stats.name + " (" + OurFaction().CurrencyFormat(stats.Value()) + ")";
         FortName_BG.color = stats.tile.owner.Colour();
         StatBars[0].Refresh(stats.MaxPopulation(), stats.PopulationUsed());
         StatBars[1].Refresh(stats.MaxProduce(), stats.ProduceUsed());
@@ -607,10 +607,12 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    Faction OurFaction(){return _SessionManager.LocalFactionData();}
+
     // UI //
 
     public void FortUpgradeButton(){
-        UpgradeWindow.Setup(_SessionManager.LocalFactionData().CurrencyFormat(current_tile.stats.UpgradeCost()), this);
+        UpgradeWindow.Setup(OurFaction().CurrencyFormat(current_tile.stats.UpgradeCost()), this);
         UpgradeWindow.Open();
     }
 
@@ -647,22 +649,22 @@ public class PlayerManager : MonoBehaviour
 
         RenderTextureDescriptor desc = new RenderTextureDescriptor(177, 256, RenderTextureFormat.ARGB32);
 
-        TroopData[] troops = _SessionManager.LocalFactionData().Troops();
-        PieceData[] buildings = _SessionManager.LocalFactionData().Buildings();
+        TroopData[] troops = OurFaction().Troops();
+        PieceData[] buildings = _PieceLookup.Buildable();
         troop_renders = new PreviewRenderer[troops.Length];
         building_renders = new PreviewRenderer[buildings.Length];
     
         for(int count = 0; count < troops.Length; count++){
             PreviewRenderer new_render = GameObject.Instantiate(PreviewRendererPrefab, Vector3.zero, Quaternion.identity).GetComponent<PreviewRenderer>();
             troop_renders[count] = new_render;
-            new_render.Setup(TroopRendererHolder, TroopButtonHolder, count, desc, this, _SessionManager.LocalFactionData().Colour(), null, _SessionManager.LocalFactionData().Troops()[count], _TechTreeManager);
+            new_render.Setup(TroopRendererHolder, TroopButtonHolder, count, desc, this, OurFaction().Colour(), null, OurFaction().Troops()[count], _TechTreeManager);
             new_render.transform.SetParent(PreviewRendererHolder);
         }
 
         for(int count = 0; count < buildings.Length; count++){
             PreviewRenderer new_render = GameObject.Instantiate(PreviewRendererPrefab, Vector3.zero, Quaternion.identity).GetComponent<PreviewRenderer>();
             building_renders[count] = new_render;
-            new_render.Setup(BuildingRendererHolder, BuildingButtonHolder, count, desc, this, _SessionManager.LocalFactionData().Colour(), buildings[count], null, _TechTreeManager);
+            new_render.Setup(BuildingRendererHolder, BuildingButtonHolder, count, desc, this, OurFaction().Colour(), buildings[count], null, _TechTreeManager);
             new_render.transform.SetParent(PreviewRendererHolder);
         }
     }
@@ -761,13 +763,13 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void SpawnModelHolderTroop(int troop, Transform holder){
-        TroopData _troop = _SessionManager.LocalFactionData().Troops()[troop]; // Assume faction is the local player
+        TroopData _troop = OurFaction().Troops()[troop]; // Assume faction is the local player
         int fact = _SessionManager.LocalFactionID();
         SpawnModelHolderTroop(_troop, holder, fact);
     }
 
     public void SpawnModelHolderBuildng(int building, Transform holder){
-        PieceData _building = _SessionManager.LocalFactionData().Buildings()[building]; // Assume faction is the local player
+        PieceData _building = _PieceLookup.Buildable()[building]; // Assume faction is the local player
         GameObject b = GameObject.Instantiate(_building.Prefab(), holder.position, Quaternion.identity);
         b.transform.parent = holder;
         SetLayer(b, HiddenLayer);
@@ -809,9 +811,9 @@ public class PlayerManager : MonoBehaviour
             butt = obj.transform.parent.parent.GetComponent<SpawnButton>();
             if(butt != null){
                 if(butt.IsTroop())
-                    SpawnInfoPopup.Refresh(_SessionManager.LocalFactionData().Troops()[butt.Reference()], current_tile.stats, _SessionManager.LocalFactionData(), Money());
+                    SpawnInfoPopup.Refresh(OurFaction().Troops()[butt.Reference()], current_tile.stats, OurFaction(), Money());
                 else
-                    SpawnInfoPopup.Refresh(butt.Piece(), Money(), _SessionManager.LocalFactionData());
+                    SpawnInfoPopup.Refresh(butt.Piece(), Money(), OurFaction());
                 SpawnInfoPopup.gameObject.SetActive(true);
             }
         }
