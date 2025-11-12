@@ -124,7 +124,7 @@ public class MapManager : NetworkBehaviour
 
 
     public bool CheckWalkable(Tile tile){
-        return tile.type.Walkable() && tile.piece.Walkable();
+        return (tile.type.Walkable() && tile.EmptyPiece()) || (!tile.EmptyPiece() && tile.piece.Walkable());
     }
 
     List<Tile> WalkableFilter(List<Tile> Tiles){

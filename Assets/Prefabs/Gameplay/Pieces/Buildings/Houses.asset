@@ -15,14 +15,14 @@ MonoBehaviour:
   _Type: Houses
   _Name: Houses
   _Prefab: {fileID: 8899808409271379345, guid: 1d792bc628867c94eb8477553d93d9c9, type: 3}
-  _TroopOffset: 0
+  _TroopOffset: 0.5287
   _RandomiseRotation: 1
   _RandomiseFirstChildRotation: 0
   _ContainsBillboards: 0
   _Walkable: 1
   _Fort: 0
   _OwningFaction: {fileID: 0}
-  _Population: 2
+  _Population: 1
   _Produce: 0
   _Industry: 0
   _Cost: 5

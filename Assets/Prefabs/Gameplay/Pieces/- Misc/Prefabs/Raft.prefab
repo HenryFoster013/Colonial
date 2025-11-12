@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7991481935972327429}
   m_Layer: 8
   m_Name: Bridge
-  m_TagString: Untagged
+  m_TagString: Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -107,7 +107,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9006284301533903176}
   m_Layer: 0
-  m_Name: Bridge Piece
+  m_Name: Raft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

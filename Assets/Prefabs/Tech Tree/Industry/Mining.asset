@@ -10,13 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 96bcec0a3d1d0db4aa93a720cf24b5fd, type: 3}
-  m_Name: Start 1
+  m_Name: Mining
   m_EditorClassIdentifier: 
   FollowingTech:
-  - {fileID: 11400000, guid: c8ebad7f0605b9547ba4620dee0981f2, type: 2}
-  _Name: 
+  - {fileID: 11400000, guid: 98fd7ea1ba5321147a8dc5813124de29, type: 2}
+  - {fileID: 11400000, guid: a9a841a95bc83d083bb55de8cc0e83a7, type: 2}
+  _Name: Mining
   _Description: 
   _Image: {fileID: 0}
   _Cost: 0
   TroopUnlocks: []
-  BuildingUnlocks: []
+  BuildingUnlocks:
+  - {fileID: 11400000, guid: e5e5ea685a205384a8b7b18a89271d0e, type: 2}
+  AbstractUnlocks: []

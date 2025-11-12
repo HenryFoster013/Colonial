@@ -115,6 +115,10 @@ namespace MapUtils{
         public void SetType(TileData new_type){type = new_type;}
         public void SetPosition(Vector3 position_){world_position = position_;}
         public void SetStats(TileStats _stats){stats = _stats;}
+
+        // Getters //
+
+        public bool EmptyPiece(){return piece == null || piece.CheckType("Unmarked");}
     }
 
     public class TileStats{

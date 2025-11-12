@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96bcec0a3d1d0db4aa93a720cf24b5fd, type: 3}
   m_Name: Smithing
   m_EditorClassIdentifier: 
-  FollowingTech:
-  - {fileID: 11400000, guid: a9a841a95bc83d083bb55de8cc0e83a7, type: 2}
+  FollowingTech: []
   _Name: Smithing
   _Description: 
   _Image: {fileID: 0}
-  _Cost: 5
+  _Cost: 0
   TroopUnlocks:
   - {fileID: 11400000, guid: 80607047b9e0b824d93963c5fc2ce1c3, type: 2}
   - {fileID: 11400000, guid: cc874a814a8cef647bfc6cf3037738f3, type: 2}

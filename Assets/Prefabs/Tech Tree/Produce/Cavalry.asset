@@ -16,9 +16,11 @@ MonoBehaviour:
   _Name: Cavalry
   _Description: 
   _Image: {fileID: 0}
-  _Cost: 5
+  _Cost: 0
   TroopUnlocks:
   - {fileID: 11400000, guid: 0e152362814ac4b4eacae5aface73094, type: 2}
   - {fileID: 11400000, guid: 13bed1d916663004caee19a9756c1228, type: 2}
   - {fileID: 11400000, guid: 16604502f42efa14381509048511d412, type: 2}
-  BuildingUnlocks: []
+  BuildingUnlocks:
+  - {fileID: 11400000, guid: d0d6cb6ffe824af42b0d7a38cff7ed55, type: 2}
+  AbstractUnlocks: []

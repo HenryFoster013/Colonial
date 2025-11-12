@@ -17,7 +17,7 @@ MonoBehaviour:
   _Name: Gunpowder
   _Description: 
   _Image: {fileID: 0}
-  _Cost: 5
+  _Cost: 0
   TroopUnlocks: []
   BuildingUnlocks:
   - {fileID: 11400000, guid: 8481c568c99b88b6b8b5367d714fdd1d, type: 2}

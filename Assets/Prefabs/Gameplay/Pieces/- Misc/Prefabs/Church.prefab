@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 8455678809817473595}
   m_Layer: 8
   m_Name: Church
-  m_TagString: Untagged
+  m_TagString: Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -190,7 +190,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5426145202171636137}
   m_Layer: 0
-  m_Name: Church Piece
+  m_Name: Church
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

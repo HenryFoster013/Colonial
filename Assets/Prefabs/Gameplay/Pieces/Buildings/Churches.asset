@@ -15,7 +15,7 @@ MonoBehaviour:
   _Type: Churches
   _Name: Church
   _Prefab: {fileID: 7755291326178193403, guid: d0def12e3a1036446a9de3ff89653bf2, type: 3}
-  _TroopOffset: 0
+  _TroopOffset: 0.5930956
   _RandomiseRotation: 1
   _RandomiseFirstChildRotation: 0
   _ContainsBillboards: 0

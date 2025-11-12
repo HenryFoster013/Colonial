@@ -15,7 +15,7 @@ MonoBehaviour:
   _Type: Gunpowder Mill
   _Name: Gunpowder Mill
   _Prefab: {fileID: 4065410536581613965, guid: 4b615c8bc6d43a74ab9f394e3b8e9fe7, type: 3}
-  _TroopOffset: 0
+  _TroopOffset: 0.5770227
   _RandomiseRotation: 1
   _RandomiseFirstChildRotation: 0
   _ContainsBillboards: 0
@@ -24,7 +24,7 @@ MonoBehaviour:
   _OwningFaction: {fileID: 0}
   _Population: 0
   _Produce: 0
-  _Industry: 3
+  _Industry: 1
   _Cost: 5
   _CompatibleTiles:
   - {fileID: 11400000, guid: 7cb8fe8a787d4e849979c6ea5e635b99, type: 2}

@@ -556,6 +556,7 @@ public class PlayerManager : MonoBehaviour
 
         TileInfoDisplay.SetActive(true);
         TroopInfoDisplay.SetActive(true);
+        StatBars[3].Refresh(troop.Data.Health(), troop.health);
         TroopName.text = troop.Name;
         TroopName_BG.color = _SessionManager.PlayerFaction(troop.Owner).Colour();
         DisplayBG.color = _SessionManager.PlayerFaction(troop.Owner).Colour();

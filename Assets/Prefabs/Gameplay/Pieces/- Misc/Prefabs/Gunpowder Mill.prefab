@@ -93,7 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2336277255918293442}
   - component: {fileID: 4693350920953685740}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -148,9 +148,10 @@ GameObject:
   - component: {fileID: 1140277713339245356}
   - component: {fileID: 6252879440710032868}
   - component: {fileID: 28198971158588241}
-  m_Layer: 0
+  - component: {fileID: 7220430301898326729}
+  m_Layer: 8
   m_Name: Building
-  m_TagString: Untagged
+  m_TagString: Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -221,6 +222,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &7220430301898326729
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2933183064328242759}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.019131659, y: 0.014296372, z: 0.017043032}
+  m_Center: {x: 2.9669017e-15, y: -0.0000000010158437, z: 0.008521515}
 --- !u!1 &4065410536581613965
 GameObject:
   m_ObjectHideFlags: 0
@@ -265,7 +279,7 @@ GameObject:
   - component: {fileID: 8939076143382104691}
   - component: {fileID: 2352480051430406714}
   - component: {fileID: 6354289318417949252}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}

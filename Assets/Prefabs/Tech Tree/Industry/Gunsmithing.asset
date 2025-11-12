@@ -16,10 +16,11 @@ MonoBehaviour:
   _Name: Gunsmithing
   _Description: 
   _Image: {fileID: 0}
-  _Cost: 5
+  _Cost: 0
   TroopUnlocks:
   - {fileID: 11400000, guid: 67d643b8dc5429a44940e098e58a04f0, type: 2}
   - {fileID: 11400000, guid: dd81d14c8929a2d4eb002c7e6d2659db, type: 2}
   - {fileID: 11400000, guid: 3d80bec8ebe9291489ff56d68803403d, type: 2}
   - {fileID: 11400000, guid: 79036089f12eb8648a8bb8d34d549399, type: 2}
   BuildingUnlocks: []
+  AbstractUnlocks: []

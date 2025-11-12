@@ -132,6 +132,7 @@ public class Troop : NetworkBehaviour{
             return;    
         if(current_tile != tile_buffer)
             SetPosition();
+        transform.position = _MapManager.GetTroopPosition(current_tile);
     }
 
     void SetPosition(){
@@ -142,7 +143,6 @@ public class Troop : NetworkBehaviour{
         Tile the_tile = _MapManager.GetTile(current_tile);
 
         RotateAt(_MapManager.GetTroopPosition(current_tile));
-        transform.position = _MapManager.GetTroopPosition(the_tile);
 
         if(_SessionManager.OurInstance.ID == Owner){
             _MapManager.MarkRadiusAsVisible(the_tile, Data.Vision());
