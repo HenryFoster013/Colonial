@@ -16,6 +16,7 @@ public class PieceData : ScriptableObject
     [SerializeField] bool _ContainsBillboards;
     [SerializeField] Vector3 _RandomiseScale;
     [Header("Gameplay")]
+    [SerializeField] bool _Destructable;
     [SerializeField] bool _Walkable;
     [SerializeField] bool _Fort;
     [SerializeField] Faction _OwningFaction;
@@ -68,6 +69,7 @@ public class PieceData : ScriptableObject
     public Faction Owner(){return _OwningFaction;}
     public bool PlayConstructionSound(){return _PlayConstructionSound;}
     public Vector3 RandomiseScale(){return _RandomiseScale;}
+    public bool Destructable(){return _Destructable;}
 }
 
 
