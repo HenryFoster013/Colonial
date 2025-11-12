@@ -443,16 +443,18 @@ public class PlayerManager : MonoBehaviour
         t.transform.parent = TileModelHolder;
         SetLayer(t, HiddenLayer);
         
-        GameObject p = GameObject.Instantiate(current_tile.piece.Prefab(), TileModelHolder.position, TileModelHolder.rotation);
-        p.transform.parent = TileModelHolder;
-        SetLayer(p, HiddenLayer);
+        if(!current_tile.piece.CheckType("UNMARKED")){
+            GameObject p = GameObject.Instantiate(current_tile.piece.Prefab(), TileModelHolder.position, TileModelHolder.rotation);
+            p.transform.parent = TileModelHolder;
+            SetLayer(p, HiddenLayer);
 
-        if(current_tile.piece.ContainsBillboards()){
-            foreach(Transform _child in p.transform){
-                if(_child.tag == "Billboard"){
-                    Billboard b = _child.GetComponent<Billboard>();
-                    if(b != null)
-                        b.m_Camera = TileRenderCamera; 
+            if(current_tile.piece.ContainsBillboards()){
+                foreach(Transform _child in p.transform){
+                    if(_child.tag == "Billboard"){
+                        Billboard b = _child.GetComponent<Billboard>();
+                        if(b != null)
+                            b.m_Camera = TileRenderCamera; 
+                    }
                 }
             }
         }

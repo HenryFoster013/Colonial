@@ -19,4 +19,6 @@ MonoBehaviour:
   _Cost: 0
   TroopUnlocks:
   - {fileID: 11400000, guid: 257afc0480c85e04bb1fe939e7169d4a, type: 2}
-  BuildingUnlocks: []
+  BuildingUnlocks:
+  - {fileID: 11400000, guid: 8a1879b64b3d3844f9fdfa0d010c02e8, type: 2}
+  AbstractUnlocks: []

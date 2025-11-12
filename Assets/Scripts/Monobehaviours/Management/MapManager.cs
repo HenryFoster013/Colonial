@@ -612,8 +612,7 @@ public class MapManager : NetworkBehaviour
         if(!tile.visible)
             return;
             
-        if(piece.PlayConstructionSound())
-            PlaySFX("Build_Hammers", SFX_Lookup);
+        PlaySFX(piece.ConstructionSound());
         SpawnParticleEffect(tile);
     }
 
@@ -815,12 +814,15 @@ public class MapManager : NetworkBehaviour
 
     void GeneratePieceModel(Tile tile){
 
-        if(tile.piece.CheckType("UNMARKED") || !tile.created || !tile.visible)
+        if(!tile.created || !tile.visible)
             return;
 
         if(tile.piece_transform != null){
             GameObject.Destroy(tile.piece_transform.gameObject);
         }
+
+        if(tile.piece.CheckType("UNMARKED"))
+            return;
 
         GameObject g = GameObject.Instantiate(tile.piece.Prefab(), tile.world_position, Quaternion.identity);
         if(tile.piece.RandomRotation())

@@ -32,4 +32,4 @@ MonoBehaviour:
   _CompatiblePieces:
   - {fileID: 11400000, guid: 8a1879b64b3d3844f9fdfa0d010c02e8, type: 2}
   - {fileID: 11400000, guid: 2e6b3d754ca45084c851c7ec8f050415, type: 2}
-  _PlayConstructionSound: 1
+  _ConstructionSound: {fileID: 11400000, guid: 5b75a7724a59ea844a1e33e552d4b815, type: 2}
