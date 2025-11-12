@@ -14,6 +14,7 @@ public class PieceData : ScriptableObject
     [SerializeField] bool _RandomiseRotation;
     [SerializeField] bool _RandomiseFirstChildRotation;
     [SerializeField] bool _ContainsBillboards;
+    [SerializeField] Vector3 _RandomiseScale;
     [Header("Gameplay")]
     [SerializeField] bool _Walkable;
     [SerializeField] bool _Fort;
@@ -66,6 +67,7 @@ public class PieceData : ScriptableObject
     public bool Fort(){return _Fort;}
     public Faction Owner(){return _OwningFaction;}
     public bool PlayConstructionSound(){return _PlayConstructionSound;}
+    public Vector3 RandomiseScale(){return _RandomiseScale;}
 }
 
 

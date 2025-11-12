@@ -19,6 +19,7 @@ MonoBehaviour:
   _RandomiseRotation: 0
   _RandomiseFirstChildRotation: 1
   _ContainsBillboards: 0
+  _RandomiseScale: {x: 0, y: 0, z: 0}
   _Walkable: 1
   _Fort: 0
   _OwningFaction: {fileID: 0}
@@ -31,4 +32,5 @@ MonoBehaviour:
   _CompatiblePieces:
   - {fileID: 11400000, guid: 8a1879b64b3d3844f9fdfa0d010c02e8, type: 2}
   - {fileID: 11400000, guid: 36871afea83f4e847b72a28748611859, type: 2}
+  - {fileID: 11400000, guid: 2e6b3d754ca45084c851c7ec8f050415, type: 2}
   _PlayConstructionSound: 1

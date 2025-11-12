@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 27076cdd8188395419b12c7eae2156a5, type: 3}
-  m_Name: Churches
+  m_Name: Pathing
   m_EditorClassIdentifier: 
-  _Type: Churches
-  _Name: Church
-  _Prefab: {fileID: 7755291326178193403, guid: d0def12e3a1036446a9de3ff89653bf2, type: 3}
-  _TroopOffset: 0.5930956
-  _RandomiseRotation: 1
+  _Type: Pathing
+  _Name: Pathing
+  _Prefab: {fileID: 4709461443915157644, guid: 1a1152937330b0947a5125227c856d63, type: 3}
+  _TroopOffset: 0
+  _RandomiseRotation: 0
   _RandomiseFirstChildRotation: 0
   _ContainsBillboards: 0
-  _RandomiseScale: {x: 0, y: 0, z: 0}
+  _RandomiseScale: {x: 1, y: 0, z: 1}
   _Walkable: 1
   _Fort: 0
   _OwningFaction: {fileID: 0}
-  _Population: 1
+  _Population: 0
   _Produce: 0
   _Industry: 0
-  _Cost: 5
+  _Cost: 3
   _CompatibleTiles:
   - {fileID: 11400000, guid: 7cb8fe8a787d4e849979c6ea5e635b99, type: 2}
   - {fileID: 11400000, guid: b69a50aab74996543b51103888663fb7, type: 2}
@@ -35,5 +35,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8a1879b64b3d3844f9fdfa0d010c02e8, type: 2}
   - {fileID: 11400000, guid: 36871afea83f4e847b72a28748611859, type: 2}
   - {fileID: 11400000, guid: 63dccfee067861a4d8e08a11e6256e71, type: 2}
-  - {fileID: 11400000, guid: 2e6b3d754ca45084c851c7ec8f050415, type: 2}
   _PlayConstructionSound: 1

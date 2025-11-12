@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Type: Mineshaft
   _Name: Mineshaft
-  _Prefab: {fileID: 2841177641836370750, guid: d6edf9941d437154cae63ee5d339038d, type: 3}
+  _Prefab: {fileID: 8909630011251828766, guid: d6edf9941d437154cae63ee5d339038d, type: 3}
   _TroopOffset: 0.5619
   _RandomiseRotation: 1
   _RandomiseFirstChildRotation: 0
   _ContainsBillboards: 0
+  _RandomiseScale: {x: 0, y: 0, z: 0}
   _Walkable: 1
   _Fort: 0
   _OwningFaction: {fileID: 0}
@@ -30,4 +31,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d22f46fe7f142ea418ece81d0b739395, type: 2}
   _CompatiblePieces:
   - {fileID: 11400000, guid: 8a1879b64b3d3844f9fdfa0d010c02e8, type: 2}
+  - {fileID: 11400000, guid: 2e6b3d754ca45084c851c7ec8f050415, type: 2}
   _PlayConstructionSound: 1

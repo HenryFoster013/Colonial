@@ -827,8 +827,21 @@ public class MapManager : NetworkBehaviour
             g.transform.eulerAngles = new Vector3(0, seed.Range(0f, 360f), 0f);
         if(tile.piece.RandomChildRotation())
             g.transform.GetChild(0).eulerAngles = new Vector3(0, seed.Range(0f, 360f), 0f);
+        RandomiseScale(g.transform, tile.piece.RandomiseScale());
         tile.SetPieceTransform(g.transform);
         g.transform.parent = PieceHolder;
+    }
+
+    void RandomiseScale(Transform item, Vector3 directions){
+        Vector3 flippy_floppy = new Vector3(FlipFlop(), FlipFlop(), FlipFlop());
+        item.transform.localScale = new Vector3(directions.x * flippy_floppy.x, directions.y * flippy_floppy.y, directions.z * flippy_floppy.z) + Vector3.one - directions;
+    }
+
+    int FlipFlop(){
+        int result = 1;
+        if(seed.RangeInt(0, 2) == 1)
+            result = -1;
+        return result;
     }
 
     // NOISE GENERATION //
