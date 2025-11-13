@@ -103,7 +103,7 @@ public class GameplayManager : NetworkBehaviour
             our_first_turn = false;
         }
         else
-            _SessionManager.EarnMoney(_MapManager.TotalValue());
+            _SessionManager.EarnMoney(_MapManager.TotalValue() / 3);
         
         _EventManager.CleanTurnSensitiveAlerts();
         _EventManager.Tick();
