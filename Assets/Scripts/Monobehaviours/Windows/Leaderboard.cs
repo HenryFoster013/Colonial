@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using MapUtils;
 using static GenericUtils;
 using UnityEngine.UI;
+using Fusion;
 
 public class Leaderboard : Window{
 
@@ -102,11 +103,15 @@ public class Leaderboard : Window{
         troop_count = new Dictionary<Faction, int>();
 
         foreach(Troop troop in _GameplayManager.AllTroops){
-            faction = _FactionLookup.GetFaction(troop.Faction_ID);
-            if(troop_count.ContainsKey(faction))
-                troop_count[faction]++;
-            else
-                troop_count.Add(faction, 1);
+            if(troop != null){
+                if(troop.GetComponent<NetworkObject>()){
+                    faction = _FactionLookup.GetFaction(troop.Faction_ID);
+                    if(troop_count.ContainsKey(faction))
+                        troop_count[faction]++;
+                    else
+                        troop_count.Add(faction, 1);
+                }
+            }
         }
     }
 

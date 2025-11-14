@@ -21,6 +21,7 @@ MonoBehaviour:
   _ContainsBillboards: 0
   _RandomiseScale: {x: 0, y: 0, z: 0}
   _Walkable: 1
+  _PavedBonus: 0
   _Fort: 0
   _OwningFaction: {fileID: 0}
   _Population: 0
@@ -34,7 +35,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8a1879b64b3d3844f9fdfa0d010c02e8, type: 2}
   - {fileID: 11400000, guid: 36871afea83f4e847b72a28748611859, type: 2}
   - {fileID: 11400000, guid: 63dccfee067861a4d8e08a11e6256e71, type: 2}
-  - {fileID: 11400000, guid: 2e6b3d754ca45084c851c7ec8f050415, type: 2}
   - {fileID: 11400000, guid: ed3b94413cf755642abd68628bad1d7c, type: 2}
   - {fileID: 11400000, guid: 66313e19de5f3774490bc4991217a3ac, type: 2}
+  - {fileID: 11400000, guid: f6d39f46022997c4e87179b400fe44ef, type: 2}
+  - {fileID: 11400000, guid: 35437ba063b5b384bb9eaeea4c11266b, type: 2}
   _ConstructionSound: {fileID: 11400000, guid: 5b75a7724a59ea844a1e33e552d4b815, type: 2}

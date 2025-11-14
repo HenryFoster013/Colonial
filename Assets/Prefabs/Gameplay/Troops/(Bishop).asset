@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f515b31b64faf524992a34452a563d5a, type: 3}
+  m_Name: (Bishop)
+  m_EditorClassIdentifier: 
+  _Type: Bishop
+  _Name: Bishop
+  _Cost: 5
+  _PopulationCost: 1
+  _ProduceCost: 1
+  _IndustryCost: 0
+  _RequiredPiece: {fileID: 11400000, guid: b2c9f8bddda616740acfc60a78ce4be6, type: 2}
+  _MoveDistance: 2
+  _AttackDistance: 0
+  _Vision: 1
+  _Health: 3
+  _Damage: 0
+  _MoveOnCloseKill: 1
+  _Prefab: {fileID: 7115972115337629991, guid: aec7d4536e5377c43b6ccaaecabc9f05, type: 3}
+  _NetPrefabRef:
+    RawGuidValue: 174d9fad0f24f034ea5db917456833b0
+  _AttackAnim: TroopAttack

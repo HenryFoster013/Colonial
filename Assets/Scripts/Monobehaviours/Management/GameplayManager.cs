@@ -156,7 +156,10 @@ public class GameplayManager : NetworkBehaviour
 
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_AttackTroop(int attacking_id, int target_id, bool original, int fac_attk, int fac_targ, RpcInfo info = default){
-        AttackTroop(attacking_id, target_id, original, fac_attk, fac_targ, GetTroop(target_id).transform.position);
+        Vector3 pos =  GetTroop(attacking_id).transform.position;
+        if(GetTroop(target_id) != null)
+            pos = GetTroop(target_id).transform.position;
+        AttackTroop(attacking_id, target_id, original, fac_attk, fac_targ, pos);
     }
 
     void AttackTroop(int attacking_id, int target_id, bool original_attack, int fac_attk, int fac_targ, Vector3 old_target_pos){
@@ -181,9 +184,14 @@ public class GameplayManager : NetworkBehaviour
 
         if(attacking_troop.Owner == _SessionManager.OurInstance.ID){
             attacking_troop.UseMove();
-            attacking_troop.UseSpecial();
-            if(original_attack)
+            
+            if(original_attack){
                 _PlayerManager.Deselect();
+                if(target_troop.health - CalculateDamage(attacking_troop, true) > 0 || !attacking_troop.Data.ChainKills())
+                    attacking_troop.UseSpecial();
+            }
+            else
+                attacking_troop.UseSpecial();
         }
 
         if(_SessionManager.Hosting){

@@ -13,7 +13,6 @@ public class TechnologyDefinition : ScriptableObject{
     [SerializeField] TechnologyDefinition[] FollowingTech;
     [Header(" - Information - ")]
     [SerializeField] string _Name;
-    [SerializeField] string _Description;
     [SerializeField] Sprite _Image;
     [SerializeField] int _Cost;
     [Header(" - Unlocks - ")]
@@ -26,7 +25,6 @@ public class TechnologyDefinition : ScriptableObject{
     public TechnologyDefinition[] NextTech(){return FollowingTech;}
     public int Cost(){return _Cost;}
     public string Name(){return _Name;}
-    public string Description(){return _Description;}
     public Sprite Graphic(){return _Image;}
     public TroopData[] Troops(){return TroopUnlocks;}
     public PieceData[] Buildings(){return BuildingUnlocks;}

@@ -85,12 +85,12 @@ public class MapManager : NetworkBehaviour
 
     public bool TilesAreNeighbors(int tile_one, int tile_two){return TilesAreNeighbors(Tiles[tile_one], Tiles[tile_two]);}
     public bool TilesAreNeighbors(Tile tile_one, Tile tile_two){
-        List<Tile> neighbors = TilesByDistance(tile_one, 1, false);
+        List<Tile> neighbors = TilesByDistance(tile_one, 1, false, false);
         return neighbors.Contains(tile_two);
     }
 
-    public List<Tile> TilesByDistance(int id, int distance, bool walkable_only){return TilesByDistance(Tiles[id], distance, walkable_only);}
-    public List<Tile> TilesByDistance(Tile origin_tile, int distance, bool walkable_only){
+    public List<Tile> TilesByDistance(int id, int distance, bool walkable_only, bool visible_only){return TilesByDistance(Tiles[id], distance, walkable_only, visible_only);}
+    public List<Tile> TilesByDistance(Tile origin_tile, int distance, bool walkable_only, bool visible_only){
         List<Tile> result = new List<Tile>();
         List<Tile> checked_tiles = new List<Tile>();
         List<Tile> last_iteration = new List<Tile>();
@@ -107,8 +107,10 @@ public class MapManager : NetworkBehaviour
                 foreach(Tile neighbor in GetNeighbors(tile)){
                     if(!checked_tiles.Contains(neighbor)){   
                         if((walkable_only && CheckWalkable(neighbor)) || !walkable_only){
-                            result.Add(neighbor);
-                            last_iteration.Add(neighbor);
+                            if(!visible_only || (visible_only && neighbor.visible)){
+                                result.Add(neighbor);
+                                last_iteration.Add(neighbor);
+                            }
                         }
                         checked_tiles.Add(neighbor);
                     }
@@ -398,7 +400,7 @@ public class MapManager : NetworkBehaviour
         _FactionLookup.ShuffleLocationNames(seed.RandomInt(), seed.RandomInt());
         foreach(Tile tile in Tiles){
             if(tile.piece.CheckType("Tower")){
-                TileStats stats = new TileStats(tile, "temp", 5);
+                TileStats stats = new TileStats(tile, "temp", 5, this);
                 if(tile.piece == _SessionManager.OurInstance.FactionData().Tower()){
                     _SessionManager.OurInstance.SnapCameraToPosition(CalcTileWorldPosition(tile) + new Vector3(8,0,0));
                     MarkRadiusAsVisible(tile, stats.ownership_radius);
@@ -515,6 +517,13 @@ public class MapManager : NetworkBehaviour
 
     // TILE OWNERSHIP //
 
+    public bool Paved(int tile_id){
+        Tile tile = GetTile(tile_id);
+        if(tile.piece == null)
+            return false;
+        return tile.piece.PavedBonus();
+    }
+
     int total_value;
     public int TotalValue(){return total_value;}
     public void RecalculateTotalValue(){
@@ -584,7 +593,7 @@ public class MapManager : NetworkBehaviour
     void MarkRadiusAsOwned(Tile tile, int radius, Faction owner, bool do_not_overwrite){
         MarkTileAsOwned(tile, owner, do_not_overwrite);
         tile.stats.SetOwnershipRadius(radius);
-        foreach(Tile tile_ in TilesByDistance(tile, radius, false)){
+        foreach(Tile tile_ in TilesByDistance(tile, radius, false, false)){
             MarkTileAsOwned(tile_, owner, do_not_overwrite);
         }
 
@@ -662,12 +671,12 @@ public class MapManager : NetworkBehaviour
         ConquestSFX(Tiles[tile_id], faction);
         
         if(stats == null){
-            stats = new TileStats(Tiles[tile_id], "temp", 3);
+            stats = new TileStats(Tiles[tile_id], "temp", 3, this);
             towers_forts_stats.Add(stats);
         }
         else
             radius = stats.ownership_radius;
-
+ 
         MarkRadiusAsOwned(Tiles[tile_id], radius, faction, false);
         RefreshAllBorders();
         stats.SetName(TileToLocationName(Tiles[tile_id]));
@@ -682,7 +691,7 @@ public class MapManager : NetworkBehaviour
 
     public void MarkRadiusAsVisible(Tile tile, int radius){
         tile.Visible();
-        foreach(Tile tile_ in TilesByDistance(tile, radius, false)){
+        foreach(Tile tile_ in TilesByDistance(tile, radius, false, false)){
             tile_.Visible();
         }
     }
@@ -769,14 +778,14 @@ public class MapManager : NetworkBehaviour
 
                 // Grass fill
                 if(tile.type.CheckType("GRASS")){
-                    if(seed.Range(0.2f, 1f) + tile.raw >= 1){
+                    if(seed.Range(0.3f, 1f) + tile.raw >= 1){
                         CoinFlipPiece(tile, "Tree Large", "Tree Small");
                     }
 
-                    RandomChancePiece(tile, 40, "Piggie");
-                    RandomChancePiece(tile, 30, "Apples");
-                    RandomChancePiece(tile, 40, "Piggie (Grass)");
-                    RandomChancePiece(tile, 5, "Tall Grass");
+                    RandomChancePiece(tile, 22, "Piggie");
+                    RandomChancePiece(tile, 22, "Apples");
+                    RandomChancePiece(tile, 22, "Piggie (Grass)");
+                    RandomChancePiece(tile, 3, "Tall Grass");
                 }
 
                 // Sand fill

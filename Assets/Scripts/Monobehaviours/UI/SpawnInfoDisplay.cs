@@ -8,6 +8,9 @@ using MapUtils;
 public class SpawnInfoDisplay : MonoBehaviour{
     [SerializeField] GameObject FullBackground;
     [SerializeField] GameObject ShortenedBackground;
+    [SerializeField] TMP_Text RequirementText;
+    [SerializeField] GameObject RequirementFine;
+    [SerializeField] GameObject RequirementPoor;
     [SerializeField] TMP_Text Title;
     [SerializeField] TMP_Text Cost;
     [SerializeField] GameObject[] Ticks;
@@ -19,7 +22,7 @@ public class SpawnInfoDisplay : MonoBehaviour{
     TileStats last_tile;
     PieceData last_piece;
 
-    public void Refresh(TroopData troop, TileStats spawn_tile, Faction faction, int money){
+    public void Refresh(TroopData troop, TileStats spawn_tile, Faction faction, int money, bool requirement_met){
         if(troop == null || spawn_tile == null)
             return;
 
@@ -40,6 +43,13 @@ public class SpawnInfoDisplay : MonoBehaviour{
         Stats[0].Refresh(5, troop.PopulationCost());
         Stats[1].Refresh(5, troop.ProduceCost());
         Stats[2].Refresh(5, troop.IndustryCost());
+
+        RequirementText.transform.parent.gameObject.SetActive(troop.RequiredPiece() != null);
+        if(troop.RequiredPiece() != null){
+            RequirementText.text = "Requires " + troop.RequiredPiece().Name();
+            RequirementFine.SetActive(requirement_met);
+            RequirementPoor.SetActive(!requirement_met);
+        }
     }
 
     public void Refresh(PieceData piece, int money, Faction faction){
@@ -70,6 +80,7 @@ public class SpawnInfoDisplay : MonoBehaviour{
         Stats[2].Refresh(5, piece.Industry());
 
         last_piece = piece;
+        RequirementText.transform.parent.gameObject.SetActive(false);
     }
 
     void TicksCrosses(int money, TroopData troop, TileStats spawn_tile){

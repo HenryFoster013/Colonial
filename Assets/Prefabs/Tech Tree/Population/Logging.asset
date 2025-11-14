@@ -16,7 +16,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b3e00154bbf698530a3a33914233f66f, type: 2}
   - {fileID: 11400000, guid: 485f7d8ddcc7f0fad87b1c52012f82a7, type: 2}
   _Name: Logging
-  _Description: 
   _Image: {fileID: 0}
   _Cost: 0
   TroopUnlocks: []

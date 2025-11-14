@@ -184,7 +184,7 @@ public class PlayerManager : MonoBehaviour
         EndTurnButton.SetActive(OurTurn);
         TurnDisplay.text = "Turn " + _GameplayManager.current_turn.ToString();
         CoinDisplay.text = OurFaction().CurrencyFormat(_SessionManager.Money());
-        EarningsDisplay.text = "(+ " + Map.TotalValue() + ")";
+        EarningsDisplay.text = "(+ " + (Map.TotalValue() / 3) + ")";
     }
 
     void WateryHighlights(){
@@ -284,6 +284,8 @@ public class PlayerManager : MonoBehaviour
             valid = CanAfford(troop.Cost());
         if(valid)
             valid = _GameplayManager.ValidTroopSpawn(troop, current_tile);
+        if(valid)
+            valid = TroopRequirementMet(troop);
         return valid;
     }
 
@@ -332,13 +334,16 @@ public class PlayerManager : MonoBehaviour
             return;
 
         if(!troop.UsedSpecial()){
-            attackable_tiles = _GameplayManager.EnemyTileFilter(Map.TilesByDistance(troop.current_tile, troop.Data.AttackDistance(), false));
-            special_tiles = _GameplayManager.SpecialTileFilter(Map.TilesByDistance(troop.current_tile, 1, false));
+            attackable_tiles = _GameplayManager.EnemyTileFilter(Map.TilesByDistance(troop.current_tile, troop.Data.AttackDistance(), false, true));
+            special_tiles = _GameplayManager.SpecialTileFilter(Map.TilesByDistance(troop.current_tile, 1, false, true));
             special_tiles = special_tiles.Except(attackable_tiles).ToList();
         }
 
         if(!troop.UsedMove()){
-            walkable_tiles = _GameplayManager.WalkableTileFilter(Map.TilesByDistance(troop.current_tile, troop.Data.MoveDistance(), true));
+            int distance = troop.Data.MoveDistance();
+            if(Map.Paved(troop.current_tile))
+                distance += 1;
+            walkable_tiles = _GameplayManager.WalkableTileFilter(Map.TilesByDistance(troop.current_tile, distance, true, true));
             walkable_tiles = walkable_tiles.Except(attackable_tiles).ToList();
             walkable_tiles = walkable_tiles.Except(special_tiles).ToList();
         }
@@ -352,8 +357,8 @@ public class PlayerManager : MonoBehaviour
             return true;
 
         if(!troop.UsedSpecial()){
-            attackable_tiles = _GameplayManager.EnemyTileFilter(Map.TilesByDistance(troop.current_tile, troop.Data.AttackDistance(), false));
-            special_tiles = _GameplayManager.SpecialTileFilter(Map.TilesByDistance(troop.current_tile, 1, false));
+            attackable_tiles = _GameplayManager.EnemyTileFilter(Map.TilesByDistance(troop.current_tile, troop.Data.AttackDistance(), false, true));
+            special_tiles = _GameplayManager.SpecialTileFilter(Map.TilesByDistance(troop.current_tile, 1, false, true));
             special_tiles = special_tiles.Except(attackable_tiles).ToList();
         }
 
@@ -767,6 +772,13 @@ public class PlayerManager : MonoBehaviour
         SpawnMenuArrowsHolder.SetActive(active_elements.Count > 4);
     }
 
+    public bool TroopRequirementMet(TroopData td){
+        if(td.RequiredPiece() == null)
+            return true;
+        else
+            return (current_tile.stats.CityCotainsPiece(td.RequiredPiece()));
+    }
+
     public void SpawnModelHolderTroop(int troop, Transform holder){
         TroopData _troop = OurFaction().Troops()[troop]; // Assume faction is the local player
         int fact = _SessionManager.LocalFactionID();
@@ -784,7 +796,7 @@ public class PlayerManager : MonoBehaviour
         foreach(Transform trans in holder)
             Destroy(trans.gameObject);
         GameObject t = GameObject.Instantiate(troop.Prefab(), holder.position - (Vector3.up * 1f), Quaternion.identity);
-        t.transform.localScale = new Vector3(1,1,1) * 1.4f;
+        t.transform.localScale = new Vector3(1,1,-1) * 1.4f;
         t.transform.parent = holder;
         t.GetComponent<DisplayTroop>().DisplayInitialSetup(_SessionManager, fact_owner);
         SetLayer(t, HiddenLayer);
@@ -816,7 +828,7 @@ public class PlayerManager : MonoBehaviour
             butt = obj.transform.parent.parent.GetComponent<SpawnButton>();
             if(butt != null){
                 if(butt.IsTroop())
-                    SpawnInfoPopup.Refresh(OurFaction().Troops()[butt.Reference()], current_tile.stats, OurFaction(), Money());
+                    SpawnInfoPopup.Refresh(OurFaction().Troops()[butt.Reference()], current_tile.stats, OurFaction(), Money(), TroopRequirementMet(OurFaction().Troops()[butt.Reference()]));
                 else
                     SpawnInfoPopup.Refresh(butt.Piece(), Money(), OurFaction());
                 SpawnInfoPopup.gameObject.SetActive(true);

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96bcec0a3d1d0db4aa93a720cf24b5fd, type: 3}
   m_Name: Cavalry
   m_EditorClassIdentifier: 
-  FollowingTech: []
+  FollowingTech:
+  - {fileID: 11400000, guid: e5114a481a8e9dc41919554e3b115a57, type: 2}
   _Name: Cavalry
-  _Description: 
   _Image: {fileID: 0}
   _Cost: 0
   TroopUnlocks:

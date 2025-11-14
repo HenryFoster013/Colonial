@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f515b31b64faf524992a34452a563d5a, type: 3}
+  m_Name: (Sapper)
+  m_EditorClassIdentifier: 
+  _Type: Farmer
+  _Name: Farmer
+  _Cost: 2
+  _PopulationCost: 1
+  _ProduceCost: 1
+  _IndustryCost: 1
+  _RequiredPiece: {fileID: 11400000, guid: 7dea7803f9993034fbcfcad3a479fb9d, type: 2}
+  _MoveDistance: 2
+  _AttackDistance: 1
+  _Vision: 2
+  _Health: 2
+  _Damage: 1
+  _MoveOnCloseKill: 1
+  _ChainKills: 0
+  _Prefab: {fileID: 7115972115337629991, guid: b4b60a87d413a94419a92229386f671f, type: 3}
+  _NetPrefabRef:
+    RawGuidValue: b88da37d46b7778448c25815151906d7
+  _AttackAnim: TroopAttack

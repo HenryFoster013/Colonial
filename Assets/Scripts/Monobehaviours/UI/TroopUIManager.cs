@@ -16,6 +16,7 @@ public class TroopUIManager : MonoBehaviour
     [Header(" - Conquest - ")]
     [SerializeField] GameObject ConquerHolder;
     [SerializeField] GameObject PeaceIcon;
+    [SerializeField] GameObject DefenseBuffIcon;
 
     public void SetCamera(Camera cam){
         _Canvas.worldCamera = cam;
@@ -32,6 +33,7 @@ public class TroopUIManager : MonoBehaviour
     public void SetVisible(bool visible){UI_Holder.SetActive(visible);}
     public void ConquerVisible(bool visible){ConquerHolder.SetActive(visible);}
     public void PeaceVisible(bool visible){PeaceIcon.SetActive(visible);}
+    public void DefenseVisible(bool visible){DefenseBuffIcon.SetActive(visible);}
 
     public void ConquerButton(){
         troop.ConquestNow();

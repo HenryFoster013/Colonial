@@ -17,7 +17,8 @@ MonoBehaviour:
   _Cost: 3
   _PopulationCost: 1
   _ProduceCost: 0
-  _IndustryCost: 1
+  _IndustryCost: 2
+  _RequiredPiece: {fileID: 11400000, guid: 242c3eb4066b49b45be059a156888084, type: 2}
   _MoveDistance: 2
   _AttackDistance: 3
   _Vision: 2

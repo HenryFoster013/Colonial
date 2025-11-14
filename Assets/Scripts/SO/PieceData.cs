@@ -17,6 +17,7 @@ public class PieceData : ScriptableObject
     [SerializeField] Vector3 _RandomiseScale;
     [Header("Gameplay")]
     [SerializeField] bool _Walkable;
+    [SerializeField] bool _PavedBonus;
     [SerializeField] bool _Fort;
     [SerializeField] Faction _OwningFaction;
     [SerializeField] int _Population;
@@ -53,6 +54,7 @@ public class PieceData : ScriptableObject
     }
 
     public bool Walkable(){return _Walkable;}
+    public bool PavedBonus(){return _PavedBonus;}
     public int Cost(){return _Cost;}
     public int Population(){return _Population;}
     public int Produce(){return _Produce;}

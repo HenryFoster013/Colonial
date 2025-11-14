@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FollowingTech: []
   _Name: Gunsmithing
-  _Description: 
   _Image: {fileID: 0}
   _Cost: 0
   TroopUnlocks:
@@ -22,5 +21,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dd81d14c8929a2d4eb002c7e6d2659db, type: 2}
   - {fileID: 11400000, guid: 3d80bec8ebe9291489ff56d68803403d, type: 2}
   - {fileID: 11400000, guid: 79036089f12eb8648a8bb8d34d549399, type: 2}
-  BuildingUnlocks: []
+  BuildingUnlocks:
+  - {fileID: 11400000, guid: 242c3eb4066b49b45be059a156888084, type: 2}
   AbstractUnlocks: []

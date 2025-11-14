@@ -128,6 +128,9 @@ namespace MapUtils{
         public int ownership_radius {get; private set;}
         public int level {get; private set;}
 
+        MapManager _MapManager;
+        List<Tile> owned_tiles = new List<Tile>();
+
         private int max_population;
         private int population_used;
         private int max_produce;
@@ -140,11 +143,12 @@ namespace MapUtils{
         const int resources_per_level = 1;
         const int level_limit = 2;
 
-        public TileStats(Tile _tile, string _name, int money){
+        public TileStats(Tile _tile, string _name, int money, MapManager manager){
+            _MapManager = manager;
             tile = _tile;
             tile.SetStats(this);
 
-            ownership_radius = 2;
+            SetOwnershipRadius(2);
             name = _name;
 
             ResetMaxes();
@@ -165,7 +169,7 @@ namespace MapUtils{
 
         public void RefreshDetails(MapManager Map){
             ResetMaxes();
-            foreach(Tile searched_tile in Map.TilesByDistance(tile, ownership_radius, false)){
+            foreach(Tile searched_tile in Map.TilesByDistance(tile, ownership_radius, false, false)){
                 max_population += searched_tile.piece.Population();
                 max_produce += searched_tile.piece.Produce();
                 max_industry += searched_tile.piece.Industry();
@@ -182,9 +186,23 @@ namespace MapUtils{
             return level < level_limit;
         }
 
+        public bool CityCotainsPiece(PieceData piece){
+            if(owned_tiles.Count == 0)
+                return false;
+            foreach(Tile t in owned_tiles){
+                if(t.piece == piece)
+                    return true;
+            }
+            return false;
+        }
+
         // Setters //
 
-        public void SetOwnershipRadius(int rad){ownership_radius = rad;}
+        public void SetOwnershipRadius(int rad){
+            ownership_radius = rad;
+            owned_tiles = _MapManager.TilesByDistance(tile, ownership_radius, false, false);
+        }
+
         public void SetName(string _name){name = _name;}
 
         public void SetLevel(int lvl){
@@ -192,7 +210,7 @@ namespace MapUtils{
                 return;
             
             level = lvl;
-            ownership_radius = 2 + level;
+            SetOwnershipRadius(2 + level);
         }
 
         public void AddPopulation(int amount){population_used += amount;}

@@ -72,8 +72,6 @@ public class Troop : NetworkBehaviour{
         }
     }
 
-
-
     // SETUP //
 
     void Setup(){
@@ -168,6 +166,7 @@ public class Troop : NetworkBehaviour{
         Col.enabled = visible;
         DisplayModel(visible);
         UI.PeaceVisible(AtPeace());
+        UI.DefenseVisible(false);
     }
 
     bool AtPeace(){return _GameplayManager.AtPeace(faction);}
@@ -177,7 +176,8 @@ public class Troop : NetworkBehaviour{
         UI.SetVisible(visible);
         foreach(MeshRenderer mr in Meshes)
             mr.gameObject.SetActive(visible);
-        Face.SetActive(visible);
+        if(Face != null)
+            Face.SetActive(visible);
     }
 
     void UpdateModel(){

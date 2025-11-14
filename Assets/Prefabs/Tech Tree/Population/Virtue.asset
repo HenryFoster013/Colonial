@@ -18,7 +18,8 @@ MonoBehaviour:
   _Description: 
   _Image: {fileID: 0}
   _Cost: 0
-  TroopUnlocks: []
+  TroopUnlocks:
+  - {fileID: 11400000, guid: 9d5c6496abd40984b8db34af99ad2e0d, type: 2}
   BuildingUnlocks:
   - {fileID: 11400000, guid: b2c9f8bddda616740acfc60a78ce4be6, type: 2}
   AbstractUnlocks: []

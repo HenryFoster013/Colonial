@@ -79,7 +79,7 @@ public class PreviewRenderer : MonoBehaviour{
         if(piece_data != null)
             button_manager.SetAfford(money >= piece_data.Cost());
         else
-            button_manager.SetAfford(money >= troop_data.Cost());
+            button_manager.SetAfford(money >= troop_data.Cost() && player.TroopRequirementMet(troop_data));
     }
 
     public void SetPosition(Vector2 pos){button.GetComponent<RectTransform>().anchoredPosition = pos;}

@@ -14,6 +14,7 @@ public class TroopData : ScriptableObject
     [SerializeField] int _PopulationCost;
     [SerializeField] int _ProduceCost;
     [SerializeField] int _IndustryCost;
+    [SerializeField] PieceData _RequiredPiece;
     [Header("Gameplay")]
     [SerializeField] int _MoveDistance;  
     [SerializeField] int _AttackDistance;  
@@ -21,6 +22,7 @@ public class TroopData : ScriptableObject
     [SerializeField] int _Health;
     [SerializeField] int _Damage;
     [SerializeField] bool _MoveOnCloseKill;
+    [SerializeField] bool _ChainKills;
     [Header("Prefabs")]  
     [SerializeField] GameObject _Prefab;
     [SerializeField] NetworkPrefabRef _NetPrefabRef;
@@ -44,5 +46,7 @@ public class TroopData : ScriptableObject
     public int Damage(){return _Damage;}
     public int Health(){return _Health;}
     public string AttackAnim(){return _AttackAnim;}
+    public PieceData RequiredPiece(){return _RequiredPiece;}
     public bool MoveOnCloseKill(){return _MoveOnCloseKill;}
+    public bool ChainKills(){return _ChainKills;}
 }

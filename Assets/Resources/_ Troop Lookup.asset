@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Troops:
   - {fileID: 11400000, guid: 257afc0480c85e04bb1fe939e7169d4a, type: 2}
-  - {fileID: 11400000, guid: 19f52be431cf2da418d4950e5061470f, type: 2}
   - {fileID: 11400000, guid: 67d643b8dc5429a44940e098e58a04f0, type: 2}
   - {fileID: 11400000, guid: dd81d14c8929a2d4eb002c7e6d2659db, type: 2}
   - {fileID: 11400000, guid: 3d80bec8ebe9291489ff56d68803403d, type: 2}
@@ -25,3 +24,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 80607047b9e0b824d93963c5fc2ce1c3, type: 2}
   - {fileID: 11400000, guid: cc874a814a8cef647bfc6cf3037738f3, type: 2}
   - {fileID: 11400000, guid: 1e8563b6ba7cb6f42aa568b966f0b926, type: 2}
+  - {fileID: 11400000, guid: 9d5c6496abd40984b8db34af99ad2e0d, type: 2}
+  - {fileID: 11400000, guid: 864447a7b2dba4f44a5afa361a195e97, type: 2}
+  - {fileID: 11400000, guid: 19f52be431cf2da418d4950e5061470f, type: 2}

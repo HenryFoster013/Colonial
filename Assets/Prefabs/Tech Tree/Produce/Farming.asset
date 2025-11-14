@@ -16,11 +16,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b8fe6284a41ad1644b82bf25ce532353, type: 2}
   - {fileID: 11400000, guid: da527d7e4da80144aa585851eee51d23, type: 2}
   _Name: Farming
-  _Description: 
   _Image: {fileID: 0}
   _Cost: 0
-  TroopUnlocks:
-  - {fileID: 11400000, guid: 19f52be431cf2da418d4950e5061470f, type: 2}
+  TroopUnlocks: []
   BuildingUnlocks:
   - {fileID: 11400000, guid: 470e315ff2e18564595e3edbe1711c48, type: 2}
   - {fileID: 11400000, guid: f9cc5fd0a5fed8046a1855d1648945c9, type: 2}

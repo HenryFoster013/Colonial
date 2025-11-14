@@ -19,13 +19,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dd81d14c8929a2d4eb002c7e6d2659db, type: 2}
   - {fileID: 11400000, guid: 0e152362814ac4b4eacae5aface73094, type: 2}
   - {fileID: 11400000, guid: 80607047b9e0b824d93963c5fc2ce1c3, type: 2}
+  - {fileID: 11400000, guid: 19f52be431cf2da418d4950e5061470f, type: 2}
+  - {fileID: 11400000, guid: 864447a7b2dba4f44a5afa361a195e97, type: 2}
+  - {fileID: 11400000, guid: 9d5c6496abd40984b8db34af99ad2e0d, type: 2}
   _TroopNameset: {fileID: 11400000, guid: 9c65f57bb278ee38e84e3cae80afaa5c, type: 2}
   _Tower: {fileID: 11400000, guid: cdb56a843133bb842b9fbed0acae214e, type: 2}
   _Fort: {fileID: 11400000, guid: c0b810365e25f9748af4f7d809ee3b74, type: 2}
-  _Buildings:
-  - {fileID: 11400000, guid: f9cc5fd0a5fed8046a1855d1648945c9, type: 2}
-  - {fileID: 11400000, guid: 470e315ff2e18564595e3edbe1711c48, type: 2}
-  - {fileID: 11400000, guid: f87b19ec801d6df4a9f603014ba03340, type: 2}
   _LocationNameset: {fileID: 11400000, guid: e326585127f3f54738f64565d17936b6, type: 2}
   _Colour: {r: 0.69411767, g: 0.8802033, b: 1, a: 1}
   _BorderColour: {r: 0.2588235, g: 0.6477242, b: 1, a: 1}

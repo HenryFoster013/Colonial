@@ -15,9 +15,10 @@ MonoBehaviour:
   _Type: Cavalry
   _Name: Cavalry
   _Cost: 3
-  _PopulationCost: 1
+  _PopulationCost: 2
   _ProduceCost: 1
-  _IndustryCost: 0
+  _IndustryCost: 1
+  _RequiredPiece: {fileID: 11400000, guid: d0d6cb6ffe824af42b0d7a38cff7ed55, type: 2}
   _MoveDistance: 3
   _AttackDistance: 1
   _Vision: 10

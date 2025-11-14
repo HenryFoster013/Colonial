@@ -95,7 +95,6 @@ namespace TechUtils{
         public TechNode[] Next(){return following_nodes;}
 
         public string Name(){return definition.Name();}
-        public string Description(){return definition.Description();}
         public int Cost(){return definition.Cost();}
         public Sprite Graphic(){return definition.Graphic();}
         
