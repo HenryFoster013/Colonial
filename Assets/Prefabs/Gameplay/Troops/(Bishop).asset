@@ -25,6 +25,8 @@ MonoBehaviour:
   _Health: 3
   _Damage: 0
   _MoveOnCloseKill: 1
+  _ChainKills: 0
+  _DefensiveBuff: 1
   _Prefab: {fileID: 7115972115337629991, guid: aec7d4536e5377c43b6ccaaecabc9f05, type: 3}
   _NetPrefabRef:
     RawGuidValue: 174d9fad0f24f034ea5db917456833b0

@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FollowingTech:
   - {fileID: 11400000, guid: 47b5ee1b65f277447b7742eaf2711604, type: 2}
+  - {fileID: 11400000, guid: 08d22b0d15b894f4786a79945c2b53ca, type: 2}
   _Name: Gunpowder
-  _Description: 
   _Image: {fileID: 0}
   _Cost: 0
   TroopUnlocks: []
   BuildingUnlocks:
   - {fileID: 11400000, guid: 8481c568c99b88b6b8b5367d714fdd1d, type: 2}
+  - {fileID: 11400000, guid: c3159eb740528154593caf70f20c1bb6, type: 2}
   AbstractUnlocks: []

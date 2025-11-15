@@ -18135,7 +18135,7 @@ MonoBehaviour:
   _GameplayManager: {fileID: 236702219}
   SFX_Lookup: {fileID: 11400000, guid: 82e67cb833d2c2e40816646084c949ea, type: 2}
   AnimatedWater: 1
-  MapSize: 16
+  MapSize: 20
   TileHolder: {fileID: 2100177753}
   ColliderHolder: {fileID: 33991132}
   PieceHolder: {fileID: 2123985273}

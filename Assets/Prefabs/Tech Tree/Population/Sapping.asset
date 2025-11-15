@@ -20,4 +20,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 19f52be431cf2da418d4950e5061470f, type: 2}
   BuildingUnlocks:
   - {fileID: 11400000, guid: 7dea7803f9993034fbcfcad3a479fb9d, type: 2}
+  - {fileID: 11400000, guid: eb07c3e9ad93520488aed37b239b43b5, type: 2}
   AbstractUnlocks: []

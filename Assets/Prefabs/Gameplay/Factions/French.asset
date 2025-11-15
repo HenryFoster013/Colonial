@@ -22,6 +22,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 19f52be431cf2da418d4950e5061470f, type: 2}
   - {fileID: 11400000, guid: 864447a7b2dba4f44a5afa361a195e97, type: 2}
   - {fileID: 11400000, guid: 9d5c6496abd40984b8db34af99ad2e0d, type: 2}
+  - {fileID: 11400000, guid: bda706332cc122344acf1872861c45f6, type: 2}
   _TroopNameset: {fileID: 11400000, guid: 9c65f57bb278ee38e84e3cae80afaa5c, type: 2}
   _Tower: {fileID: 11400000, guid: cdb56a843133bb842b9fbed0acae214e, type: 2}
   _Fort: {fileID: 11400000, guid: c0b810365e25f9748af4f7d809ee3b74, type: 2}

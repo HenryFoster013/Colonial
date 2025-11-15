@@ -103,7 +103,7 @@ public class GameplayManager : NetworkBehaviour
             our_first_turn = false;
         }
         else
-            _SessionManager.EarnMoney(_MapManager.TotalValue() / 3);
+            _SessionManager.EarnMoney(_MapManager.TotalValue() / 2);
         
         _EventManager.CleanTurnSensitiveAlerts();
         _EventManager.Tick();
@@ -187,7 +187,7 @@ public class GameplayManager : NetworkBehaviour
             
             if(original_attack){
                 _PlayerManager.Deselect();
-                if(target_troop.health - CalculateDamage(attacking_troop, true) > 0 || !attacking_troop.Data.ChainKills())
+                if(target_troop.health - CalculateDamage(attacking_troop, true, target_troop.Defended) > 0 || !attacking_troop.Data.ChainKills())
                     attacking_troop.UseSpecial();
             }
             else
@@ -195,7 +195,7 @@ public class GameplayManager : NetworkBehaviour
         }
 
         if(_SessionManager.Hosting){
-            target_troop.health -= CalculateDamage(attacking_troop, original_attack);
+            target_troop.health -= CalculateDamage(attacking_troop, original_attack, target_troop.Defended);
             if(target_troop.health <= 0){
                 if(original_attack && attacking_troop.Data.MoveOnCloseKill()){
                     if(_MapManager.TilesAreNeighbors(attacking_troop.current_tile, target_troop.current_tile))
@@ -215,6 +215,16 @@ public class GameplayManager : NetworkBehaviour
         CleanAllTroops();
     }
 
+    public bool NoTroopsAt(Tile tile){
+        if(AllTroops.Count == 0)
+            return true;
+        foreach(Troop troop in AllTroops){
+            if(troop.current_tile == tile.ID)
+                return false;
+        }
+        return true;
+    }
+
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_KilledTroop(int tile, RpcInfo info = default){
         PlaySFX("Drums_4", SFX_Lookup);
@@ -231,8 +241,10 @@ public class GameplayManager : NetworkBehaviour
         RPC_AttackTroop(target_id, attacking_id, false, fac_attk, fac_targ);
     }
 
-    int CalculateDamage(Troop troop, bool original){
+    int CalculateDamage(Troop troop, bool original, bool defended){
         int damage = troop.Data.Damage();
+        if(defended)
+            damage = damage - 1;
         if(!original)
             damage = damage / 2;
         if(damage < 1)

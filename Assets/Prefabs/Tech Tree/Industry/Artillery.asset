@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96bcec0a3d1d0db4aa93a720cf24b5fd, type: 3}
+  m_Name: Artillery
+  m_EditorClassIdentifier: 
+  FollowingTech: []
+  _Name: Artillery
+  _Image: {fileID: 0}
+  _Cost: 0
+  TroopUnlocks:
+  - {fileID: 11400000, guid: 98701156c032f9847b8030264a4f714f, type: 2}
+  - {fileID: 11400000, guid: bda706332cc122344acf1872861c45f6, type: 2}
+  - {fileID: 11400000, guid: 89489b7ee6af7db40b51cec5104a9d63, type: 2}
+  - {fileID: 11400000, guid: 051409a187d561d4a8266b1061a3840e, type: 2}
+  BuildingUnlocks: []
+  AbstractUnlocks: []

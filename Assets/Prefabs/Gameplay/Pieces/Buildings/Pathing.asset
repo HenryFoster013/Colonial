@@ -23,6 +23,7 @@ MonoBehaviour:
   _Walkable: 1
   _PavedBonus: 1
   _Fort: 0
+  _SapperCompatible: 1
   _OwningFaction: {fileID: 0}
   _Population: 0
   _Produce: 0

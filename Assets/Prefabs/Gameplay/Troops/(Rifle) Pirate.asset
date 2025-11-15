@@ -17,14 +17,17 @@ MonoBehaviour:
   _Cost: 3
   _PopulationCost: 1
   _ProduceCost: 0
-  _IndustryCost: 2
+  _IndustryCost: 1
   _RequiredPiece: {fileID: 11400000, guid: 242c3eb4066b49b45be059a156888084, type: 2}
   _MoveDistance: 2
   _AttackDistance: 3
   _Vision: 2
-  _Health: 3
+  _Health: 4
   _Damage: 3
   _MoveOnCloseKill: 0
+  _ChainKills: 0
+  _DefensiveBuff: 0
+  _ExtraConstruction: 0
   _Prefab: {fileID: 7115972115337629991, guid: 22dd81a3c63f5d74f9cca8368f1f8bb9, type: 3}
   _NetPrefabRef:
     RawGuidValue: 52daaf7c394404041a94770e6706a768

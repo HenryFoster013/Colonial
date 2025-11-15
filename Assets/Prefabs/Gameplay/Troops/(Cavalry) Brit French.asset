@@ -21,10 +21,13 @@ MonoBehaviour:
   _RequiredPiece: {fileID: 11400000, guid: d0d6cb6ffe824af42b0d7a38cff7ed55, type: 2}
   _MoveDistance: 3
   _AttackDistance: 1
-  _Vision: 10
+  _Vision: 3
   _Health: 3
-  _Damage: 1
+  _Damage: 2
   _MoveOnCloseKill: 1
+  _ChainKills: 0
+  _DefensiveBuff: 0
+  _ExtraConstruction: 0
   _Prefab: {fileID: 5269036604996546843, guid: 408cf4ba78b764546b1fb9432ce3a9ae, type: 3}
   _NetPrefabRef:
     RawGuidValue: 3743c8c011681a14e8192025f403939c

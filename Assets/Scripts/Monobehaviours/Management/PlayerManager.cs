@@ -141,6 +141,8 @@ public class PlayerManager : MonoBehaviour
         SelectionLogic();
         Animate();
         BgMusic();
+        CleanOurTroops();
+        RefreshDefended();
     }
 
     // SETUP //
@@ -149,6 +151,14 @@ public class PlayerManager : MonoBehaviour
         GenerateRenderers();
         ResetCameraRot();
         ResetUI();
+    }
+
+    void CleanOurTroops(){
+        if(OurTroops.Count == 0)
+            return;
+        if(OurTroops.Contains(null)){
+            OurTroops.RemoveAll(item => item == null);
+        }
     }
 
     void ResetCameraRot(){
@@ -184,7 +194,7 @@ public class PlayerManager : MonoBehaviour
         EndTurnButton.SetActive(OurTurn);
         TurnDisplay.text = "Turn " + _GameplayManager.current_turn.ToString();
         CoinDisplay.text = OurFaction().CurrencyFormat(_SessionManager.Money());
-        EarningsDisplay.text = "(+ " + (Map.TotalValue() / 3) + ")";
+        EarningsDisplay.text = "(+ " + (Map.TotalValue() / 2) + ")";
     }
 
     void WateryHighlights(){
@@ -451,6 +461,10 @@ public class PlayerManager : MonoBehaviour
         if(!current_tile.piece.CheckType("UNMARKED")){
             GameObject p = GameObject.Instantiate(current_tile.piece.Prefab(), TileModelHolder.position, TileModelHolder.rotation);
             p.transform.parent = TileModelHolder;
+            if(p.GetComponent<Animator>())
+                p.GetComponent<Animator>().Play("Default", 0, 1f);
+            if(p.GetComponent<AnimationStopper>())
+                p.GetComponent<AnimationStopper>().Chill(true);
             SetLayer(p, HiddenLayer);
 
             if(current_tile.piece.ContainsBillboards()){
@@ -478,16 +492,14 @@ public class PlayerManager : MonoBehaviour
     void CheckTileData(Tile tile){
         CloseSpawnMenu();
         FortStats.SetActive(false);
-        if(CheckTileOwnership(tile, OurFaction())){
-            if(tile.piece.Fort()){
-                if(!_GameplayManager.TroopOnTile(tile) && OurTurn)
-                    OpenSpawnMenu(false);
-                SetupTileStats(Map.GetTile(tile.ID).stats);
-            }
-            else{
-                if(OurTurn)
-                    OpenSpawnMenu(true);
-            }
+        if(tile.piece.Fort() && CheckTileOwnership(tile, OurFaction())){
+            if(!_GameplayManager.TroopOnTile(tile) && OurTurn)
+                OpenSpawnMenu(false);
+            SetupTileStats(Map.GetTile(tile.ID).stats);
+        }
+        else{
+            if(OurTurn)
+                OpenSpawnMenu(true);
         }
     }
 
@@ -616,7 +628,57 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    Faction OurFaction(){return _SessionManager.LocalFactionData();}
+    public bool SapperNextdoor(Tile tile){
+        if(OurTroops.Count == 0)
+            return false;
+
+        bool valid = false;
+        for(int i = 0; i < OurTroops.Count() && !valid; i++){
+            if(OurTroops[i].Data.ExtraConstruction()){
+                valid = Map.TilesByDistance(OurTroops[i].current_tile, 1, false, false).Contains(tile);
+            }
+        }
+        return valid;
+    }
+
+    public bool NoTroopsAt(Tile tile){return _GameplayManager.NoTroopsAt(tile);}
+
+    public void RefreshDefended(){
+        if(OurTroops.Count == 0)
+            return;
+
+        // Reset Troops
+        foreach(Troop t in OurTroops)
+            t.SetDefended(false);
+
+        // Gather tiles with defenders on them
+        List<int> defender_tiles = new List<int>();
+        foreach(Troop t in OurTroops){
+            if(t.Data.DefenderBuff())
+                defender_tiles.Add(t.current_tile);
+        }
+        if(defender_tiles.Count == 0)
+            return;
+
+        // Gather tiles within the defense radius
+        List<Tile> defended_tiles = new List<Tile>();
+        List<int> defended_tiles_id = new List<int>();
+
+        foreach(int tt_id in defender_tiles){
+            defended_tiles_id.Add(tt_id);
+            defended_tiles.AddRange(Map.TilesByDistance(tt_id, 1, false, false));
+        }
+        foreach(Tile t in defended_tiles)
+            defended_tiles_id.Add(t.ID);
+
+        // Check troops to see if they are defended
+        foreach(Troop t in OurTroops){
+            if(defended_tiles_id.Contains(t.current_tile))
+                t.SetDefended(true);
+        }
+    }
+
+    public Faction OurFaction(){return _SessionManager.LocalFactionData();}
 
     // UI //
 
@@ -747,7 +809,6 @@ public class PlayerManager : MonoBehaviour
         List<PreviewRenderer> active_elements = new List<PreviewRenderer>();
 
         foreach(PreviewRenderer pr in prs){
-            pr.Validate(current_tile);
             if(pr.Unlocked() && pr.Validate(current_tile)){
                 active_elements.Add(pr);
             }
@@ -785,11 +846,13 @@ public class PlayerManager : MonoBehaviour
         SpawnModelHolderTroop(_troop, holder, fact);
     }
 
-    public void SpawnModelHolderBuildng(int building, Transform holder){
+    public void SpawnModelHolderBuilding(int building, Transform holder){
         PieceData _building = _PieceLookup.Buildable()[building]; // Assume faction is the local player
         GameObject b = GameObject.Instantiate(_building.Prefab(), holder.position, Quaternion.identity);
         b.transform.parent = holder;
         SetLayer(b, HiddenLayer);
+        if(b.GetComponent<AnimationStopper>())
+            b.GetComponent<AnimationStopper>().Chill(false);
     }
 
     void SpawnModelHolderTroop(TroopData troop, Transform holder, int fact_owner){

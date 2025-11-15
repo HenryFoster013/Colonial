@@ -71,7 +71,9 @@ public class SpawnInfoDisplay : MonoBehaviour{
             return;
 
         Title.text = piece.Name();
-        Cost.text = faction.CurrencyFormat(piece.Cost());
+        int cost = piece.Cost();
+        Cost.text = faction.CurrencyFormat(cost);
+        Cost.transform.parent.gameObject.SetActive(cost > 0);
         FullBackground.SetActive(false);
         ShortenedBackground.SetActive(true);
         

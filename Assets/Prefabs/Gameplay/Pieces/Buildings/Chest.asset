@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27076cdd8188395419b12c7eae2156a5, type: 3}
+  m_Name: Chest
+  m_EditorClassIdentifier: 
+  _Type: Chest
+  _Name: Chest
+  _Prefab: {fileID: 4025216290026474220, guid: 8f3bd44ca93aea94180bd19dbdacbf4b, type: 3}
+  _TroopOffset: 0.305
+  _RandomiseRotation: 1
+  _RandomiseFirstChildRotation: 0
+  _ContainsBillboards: 0
+  _RandomiseScale: {x: 0, y: 0, z: 0}
+  _Walkable: 1
+  _PavedBonus: 0
+  _Fort: 0
+  _SapperCompatible: 1
+  DoesntCareForBorders: 1
+  _OwningFaction: {fileID: 0}
+  _Population: 0
+  _Produce: 0
+  _Industry: 0
+  _Cost: -10
+  _CompatibleTiles:
+  - {fileID: 11400000, guid: b69a50aab74996543b51103888663fb7, type: 2}
+  _CompatiblePieces:
+  - {fileID: 11400000, guid: ed3b94413cf755642abd68628bad1d7c, type: 2}
+  _ConstructionSound: {fileID: 11400000, guid: b1e797689ffbde54988301f11ab83b2a, type: 2}
+  _ConstructionFX: 1

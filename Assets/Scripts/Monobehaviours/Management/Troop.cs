@@ -23,6 +23,7 @@ public class Troop : NetworkBehaviour{
     [SerializeField] MeshRenderer[] Meshes;
     [SerializeField] GameObject Face;
     [SerializeField] GameObject Shadow;
+    [SerializeField] GameObject Flames;
     
     [Networked] public int Owner {get; set;}
     [Networked] public int Faction_ID {get; set;}
@@ -31,6 +32,7 @@ public class Troop : NetworkBehaviour{
     [Networked] public int health {get; set;}
     [Networked] public string Name {get; set;}
     [Networked] public int HomeTile {get; set;}
+    [Networked] public bool Defended {get; set;}
     
     MapManager _MapManager;
     SessionManager _SessionManager;
@@ -42,7 +44,7 @@ public class Troop : NetworkBehaviour{
     const int mesh_default_layer = 0;
     const int mesh_highlight_layer = 9;
     public int tile_buffer = -1;
-    bool used_move, used_special, first_move_completed, selected;
+    bool used_move, used_special, first_move_completed, selected, defended_buffer;
 
     // SETUP //
 
@@ -75,6 +77,9 @@ public class Troop : NetworkBehaviour{
     // SETUP //
 
     void Setup(){
+        Defended = false;
+        UI.DefenseVisible(false);
+
         _SessionManager = GameObject.FindGameObjectWithTag("Session Manager").GetComponent<SessionManager>();
         _PlayerManager = GameObject.FindGameObjectWithTag("Player Manager").GetComponent<PlayerManager>();
         _MapManager = GameObject.FindGameObjectWithTag("Map Manager").GetComponent<MapManager>();
@@ -92,6 +97,13 @@ public class Troop : NetworkBehaviour{
         first_move_completed = false;
         selected = false;
         EnableConquest(false);
+    }
+
+    public void SetDefended(bool value){
+        if(!this.gameObject.GetComponent<NetworkObject>())
+            return;
+        Defended = value;
+        UI.DefenseVisible(Defended);
     }
 
     public void SetEventCamera(Camera cam){
@@ -130,6 +142,10 @@ public class Troop : NetworkBehaviour{
             return;    
         if(current_tile != tile_buffer)
             SetPosition();
+        if(defended_buffer != Defended){
+            defended_buffer = Defended;
+            UI.DefenseVisible(Defended);
+        }
         transform.position = _MapManager.GetTroopPosition(current_tile);
     }
 
@@ -152,7 +168,7 @@ public class Troop : NetworkBehaviour{
         
         if(_PlayerManager.CheckNoSpecials(this)){
             UseSpecial();
-        }
+        } 
     }
 
     // GRAPHICS //
@@ -166,7 +182,6 @@ public class Troop : NetworkBehaviour{
         Col.enabled = visible;
         DisplayModel(visible);
         UI.PeaceVisible(AtPeace());
-        UI.DefenseVisible(false);
     }
 
     bool AtPeace(){return _GameplayManager.AtPeace(faction);}
@@ -178,6 +193,8 @@ public class Troop : NetworkBehaviour{
             mr.gameObject.SetActive(visible);
         if(Face != null)
             Face.SetActive(visible);
+        if(Flames != null)
+            Flames.SetActive(visible);
     }
 
     void UpdateModel(){

@@ -46,7 +46,7 @@ public class PreviewRenderer : MonoBehaviour{
         if(!troop_building)
             player.SpawnModelHolderTroop(reference, g.transform.GetChild(0));
         else
-            player.SpawnModelHolderBuildng(reference, g.transform.GetChild(0));
+            player.SpawnModelHolderBuilding(reference, g.transform.GetChild(0));
 
         button_manager.Setup(this, colour, true, rend_text);
     }
@@ -108,7 +108,10 @@ public class PreviewRenderer : MonoBehaviour{
             return IsTileFortress(tile);
         }
         else if(piece_data != null){
-            return piece_data.Compatible(tile.type) && piece_data.Compatible(tile.piece);
+            bool troop_check = piece_data.Walkable() || (!piece_data.Walkable() && player.NoTroopsAt(tile));
+            bool valid_placement = piece_data.Compatible(tile.type) && piece_data.Compatible(tile.piece);
+            bool owned_land = (tile.owner == player.OurFaction()) || (piece_data.SapperCompatible() && player.SapperNextdoor(tile) && (tile.owner == null || piece_data.Borderless()));
+            return troop_check && valid_placement && owned_land;
         }
         return false;
     }

@@ -22,9 +22,12 @@ MonoBehaviour:
   _MoveDistance: 2
   _AttackDistance: 3
   _Vision: 2
-  _Health: 3
+  _Health: 4
   _Damage: 3
   _MoveOnCloseKill: 0
+  _ChainKills: 0
+  _DefensiveBuff: 0
+  _ExtraConstruction: 0
   _Prefab: {fileID: 7115972115337629991, guid: 9a7fcb3249d07fe4c99a74d66b3ec03c, type: 3}
   _NetPrefabRef:
     RawGuidValue: 8fc783f03d7916b4196b69207566e765

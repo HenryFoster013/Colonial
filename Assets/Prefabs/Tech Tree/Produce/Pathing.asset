@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96bcec0a3d1d0db4aa93a720cf24b5fd, type: 3}
   m_Name: Pathing
   m_EditorClassIdentifier: 
-  FollowingTech: []
+  FollowingTech:
+  - {fileID: 11400000, guid: 47d1fccd45a91ab48bd0044564c90b11, type: 2}
   _Name: Pavement
-  _Description: 
   _Image: {fileID: 0}
   _Cost: 0
   TroopUnlocks: []

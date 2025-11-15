@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f515b31b64faf524992a34452a563d5a, type: 3}
+  m_Name: (Artillery) French
+  m_EditorClassIdentifier: 
+  _Type: Artillery French
+  _Name: Artillery
+  _Cost: 6
+  _PopulationCost: 1
+  _ProduceCost: 1
+  _IndustryCost: 4
+  _RequiredPiece: {fileID: 11400000, guid: 8481c568c99b88b6b8b5367d714fdd1d, type: 2}
+  _MoveDistance: 1
+  _AttackDistance: 5
+  _Vision: 1
+  _Health: 3
+  _Damage: 5
+  _MoveOnCloseKill: 0
+  _ChainKills: 0
+  _DefensiveBuff: 0
+  _ExtraConstruction: 0
+  _Prefab: {fileID: 7115972115337629991, guid: ec648001f3bdee04a9a1c2eddd73e675, type: 3}
+  _NetPrefabRef:
+    RawGuidValue: 97fed8709bac59b4b8d094a0d0e47fa4
+  _AttackAnim: CannonFire

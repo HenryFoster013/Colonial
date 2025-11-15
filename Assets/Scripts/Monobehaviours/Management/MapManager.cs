@@ -622,7 +622,8 @@ public class MapManager : NetworkBehaviour
             return;
             
         PlaySFX(piece.ConstructionSound());
-        SpawnParticleEffect(tile);
+        if(piece.ConstructionFX())
+            SpawnParticleEffect(tile);
     }
 
 
@@ -782,16 +783,16 @@ public class MapManager : NetworkBehaviour
                         CoinFlipPiece(tile, "Tree Large", "Tree Small");
                     }
 
-                    RandomChancePiece(tile, 22, "Piggie");
-                    RandomChancePiece(tile, 22, "Apples");
-                    RandomChancePiece(tile, 22, "Piggie (Grass)");
-                    RandomChancePiece(tile, 3, "Tall Grass");
+                    RandomChancePiece(tile, 20, "Piggie");
+                    RandomChancePiece(tile, 20, "Apples");
+                    RandomChancePiece(tile, 20, "Piggie (Grass)");
+                    RandomChancePiece(tile, 2, "Tall Grass");
                 }
 
                 // Sand fill
                 if(tile.type.CheckType("SAND")){
-                    RandomChancePiece(tile, 20, "Palm Tree");
-                    RandomChancePiece(tile, 35, "X Mark");
+                    RandomChancePiece(tile, 18, "Palm Tree");
+                    RandomChancePiece(tile, 20, "X Mark");
                 }
                 
                 // Stone fill

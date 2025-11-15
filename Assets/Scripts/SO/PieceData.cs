@@ -19,6 +19,8 @@ public class PieceData : ScriptableObject
     [SerializeField] bool _Walkable;
     [SerializeField] bool _PavedBonus;
     [SerializeField] bool _Fort;
+    [SerializeField] bool _SapperCompatible;
+    [SerializeField] bool DoesntCareForBorders;
     [SerializeField] Faction _OwningFaction;
     [SerializeField] int _Population;
     [SerializeField] int _Produce;
@@ -28,7 +30,7 @@ public class PieceData : ScriptableObject
     [SerializeField] TileData[] _CompatibleTiles;
     [SerializeField] PieceData[] _CompatiblePieces;
     [SerializeField] SoundEffect _ConstructionSound;
-    
+    [SerializeField] bool _ConstructionFX = true;
 
     public bool CheckType(string s){
         return (s.ToUpper() == _Type.ToUpper());
@@ -70,6 +72,9 @@ public class PieceData : ScriptableObject
     public Faction Owner(){return _OwningFaction;}
     public SoundEffect ConstructionSound(){return _ConstructionSound;}
     public Vector3 RandomiseScale(){return _RandomiseScale;}
+    public bool SapperCompatible(){return _SapperCompatible;}
+    public bool Borderless(){return DoesntCareForBorders;}
+    public bool ConstructionFX(){return _ConstructionFX;}
 }
 
 
