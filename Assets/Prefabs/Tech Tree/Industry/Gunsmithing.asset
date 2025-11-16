@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FollowingTech: []
   _Name: Gun-smithing
-  _Image: {fileID: 0}
-  _Cost: 0
+  _Image: {fileID: 21300000, guid: 75b1359158f0a0d4d9dc9009dfb8fced, type: 3}
+  _Cost: 3
   TroopUnlocks:
   - {fileID: 11400000, guid: 67d643b8dc5429a44940e098e58a04f0, type: 2}
   - {fileID: 11400000, guid: dd81d14c8929a2d4eb002c7e6d2659db, type: 2}

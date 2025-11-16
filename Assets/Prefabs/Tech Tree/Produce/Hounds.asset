@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FollowingTech: []
   _Name: War Dogs
-  _Image: {fileID: 0}
-  _Cost: 0
+  _Image: {fileID: 21300000, guid: 62323f6bfbd33e84d902232cf0b02e80, type: 3}
+  _Cost: 7
   TroopUnlocks:
   - {fileID: 11400000, guid: 864447a7b2dba4f44a5afa361a195e97, type: 2}
   BuildingUnlocks: []

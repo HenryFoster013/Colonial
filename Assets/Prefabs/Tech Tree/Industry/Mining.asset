@@ -16,9 +16,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 98fd7ea1ba5321147a8dc5813124de29, type: 2}
   - {fileID: 11400000, guid: a9a841a95bc83d083bb55de8cc0e83a7, type: 2}
   _Name: Mining
-  _Description: 
-  _Image: {fileID: 0}
-  _Cost: 0
+  _Image: {fileID: 21300000, guid: 74b5e22e76512c14f89fb825e5f11e2f, type: 3}
+  _Cost: 3
   TroopUnlocks: []
   BuildingUnlocks:
   - {fileID: 11400000, guid: e5e5ea685a205384a8b7b18a89271d0e, type: 2}

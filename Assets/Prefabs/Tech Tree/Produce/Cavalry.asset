@@ -15,8 +15,8 @@ MonoBehaviour:
   FollowingTech:
   - {fileID: 11400000, guid: e5114a481a8e9dc41919554e3b115a57, type: 2}
   _Name: Cavalry
-  _Image: {fileID: 0}
-  _Cost: 0
+  _Image: {fileID: 21300000, guid: b48adf6827d80bf4db11a2c9c1fffdd0, type: 3}
+  _Cost: 4
   TroopUnlocks:
   - {fileID: 11400000, guid: 0e152362814ac4b4eacae5aface73094, type: 2}
   - {fileID: 11400000, guid: 13bed1d916663004caee19a9756c1228, type: 2}

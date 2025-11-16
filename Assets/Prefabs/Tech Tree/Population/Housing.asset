@@ -15,9 +15,8 @@ MonoBehaviour:
   FollowingTech:
   - {fileID: 11400000, guid: 02ef60de05fc828b5ad905ee13ba4058, type: 2}
   _Name: Housing
-  _Description: 
-  _Image: {fileID: 0}
-  _Cost: 0
+  _Image: {fileID: 21300000, guid: 3cfda9086a3156244bb1575d5556a5d9, type: 3}
+  _Cost: 5
   TroopUnlocks: []
   BuildingUnlocks:
   - {fileID: 11400000, guid: 77f12be189d16b048804dd6e8a5ed8de, type: 2}

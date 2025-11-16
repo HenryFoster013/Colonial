@@ -138,10 +138,10 @@ namespace MapUtils{
         private int max_industry;
         private int industry_used ;
 
-        const int upgrade_base = 30;
-        const int upgrade_additive = 35;
+        const int upgrade_base = 20;
+        const int upgrade_additive = 10;
         const int resources_per_level = 1;
-        const int level_limit = 2;
+        const int level_limit = 3;
 
         public TileStats(Tile _tile, string _name, int money, MapManager manager){
             _MapManager = manager;

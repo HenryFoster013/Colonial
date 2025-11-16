@@ -15,9 +15,8 @@ MonoBehaviour:
   FollowingTech:
   - {fileID: 11400000, guid: 8eee839c2f31e853ebb81d728992b491, type: 2}
   _Name: Virtue
-  _Description: 
-  _Image: {fileID: 0}
-  _Cost: 0
+  _Image: {fileID: 21300000, guid: ae49326957131124d9170091e2ef5be2, type: 3}
+  _Cost: 5
   TroopUnlocks:
   - {fileID: 11400000, guid: 9d5c6496abd40984b8db34af99ad2e0d, type: 2}
   BuildingUnlocks:

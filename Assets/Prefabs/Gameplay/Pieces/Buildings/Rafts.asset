@@ -24,13 +24,15 @@ MonoBehaviour:
   _PavedBonus: 0
   _Fort: 0
   _SapperCompatible: 1
+  DoesntCareForBorders: 0
   _OwningFaction: {fileID: 0}
   _Population: 0
   _Produce: 0
   _Industry: 0
-  _Cost: 5
+  _Cost: 3
   _CompatibleTiles:
   - {fileID: 11400000, guid: 571aa4f592cb26743a3eda22070476af, type: 2}
   _CompatiblePieces:
   - {fileID: 11400000, guid: 8a1879b64b3d3844f9fdfa0d010c02e8, type: 2}
   _ConstructionSound: {fileID: 11400000, guid: 5b75a7724a59ea844a1e33e552d4b815, type: 2}
+  _ConstructionFX: 1

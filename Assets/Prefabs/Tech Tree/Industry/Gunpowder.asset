@@ -16,8 +16,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 47b5ee1b65f277447b7742eaf2711604, type: 2}
   - {fileID: 11400000, guid: 08d22b0d15b894f4786a79945c2b53ca, type: 2}
   _Name: Blackpowder
-  _Image: {fileID: 0}
-  _Cost: 0
+  _Image: {fileID: 21300000, guid: 2057d79261cb937489939fcc6d1714f6, type: 3}
+  _Cost: 6
   TroopUnlocks: []
   BuildingUnlocks:
   - {fileID: 11400000, guid: 8481c568c99b88b6b8b5367d714fdd1d, type: 2}

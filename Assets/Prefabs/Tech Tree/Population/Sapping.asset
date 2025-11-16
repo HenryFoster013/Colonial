@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FollowingTech: []
   _Name: Sapping
-  _Image: {fileID: 0}
-  _Cost: 0
+  _Image: {fileID: 21300000, guid: 2988ded0107994b4d8445ae7504300d2, type: 3}
+  _Cost: 5
   TroopUnlocks:
   - {fileID: 11400000, guid: 19f52be431cf2da418d4950e5061470f, type: 2}
   BuildingUnlocks:

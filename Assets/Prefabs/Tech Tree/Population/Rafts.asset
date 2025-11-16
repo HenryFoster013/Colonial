@@ -15,8 +15,8 @@ MonoBehaviour:
   FollowingTech:
   - {fileID: 11400000, guid: e220e3695cd7f864eba7bd7df58c3d00, type: 2}
   _Name: Rafts
-  _Image: {fileID: 0}
-  _Cost: 0
+  _Image: {fileID: 21300000, guid: ff96c92948893934a8dab2f0d0d63a28, type: 3}
+  _Cost: 5
   TroopUnlocks: []
   BuildingUnlocks:
   - {fileID: 11400000, guid: 5d862b2ba6485cbbdb4b5c5626ed88b5, type: 2}

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FollowingTech: []
   _Name: Artillery
-  _Image: {fileID: 0}
-  _Cost: 0
+  _Image: {fileID: 21300000, guid: 95aa6cc2dd60738458b285e6dd7e6be1, type: 3}
+  _Cost: 10
   TroopUnlocks:
   - {fileID: 11400000, guid: 98701156c032f9847b8030264a4f714f, type: 2}
   - {fileID: 11400000, guid: bda706332cc122344acf1872861c45f6, type: 2}

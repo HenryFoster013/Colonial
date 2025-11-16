@@ -42,6 +42,7 @@ public class TT_UI_Node : MonoBehaviour{
     public void Setup(TechNode _node, TechTreeUI manag, int depth, int girth, int index, float parent_x){
         node = _node;
         manager = manag;
+        Icon.sprite = node.definition.Graphic();
         SetConnections(node.ChildrenCount());
         SetBounds(depth, girth, index, parent_x);
         RefreshColours();

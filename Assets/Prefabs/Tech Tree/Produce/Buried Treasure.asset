@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FollowingTech: []
   _Name: Buried Treasure
-  _Image: {fileID: 0}
-  _Cost: 0
+  _Image: {fileID: 21300000, guid: a1de176b09b2eea4cbd1539ac9ffdba9, type: 3}
+  _Cost: 4
   TroopUnlocks: []
   BuildingUnlocks:
   - {fileID: 11400000, guid: 70412e75822c97840b1ed3a0ee805c08, type: 2}

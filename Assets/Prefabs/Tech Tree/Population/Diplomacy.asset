@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FollowingTech: []
   _Name: Diplomacy
-  _Description: 
-  _Image: {fileID: 0}
-  _Cost: 0
+  _Image: {fileID: 21300000, guid: 62d42bb7c1658aa4ab36a8dec9dfd601, type: 3}
+  _Cost: 10
   TroopUnlocks: []
   BuildingUnlocks: []
   AbstractUnlocks:

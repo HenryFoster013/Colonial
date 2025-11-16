@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FollowingTech: []
   _Name: Sword-smithing
-  _Image: {fileID: 0}
-  _Cost: 0
+  _Image: {fileID: 21300000, guid: 3287bafafd36bc243a1c489a4bf45e14, type: 3}
+  _Cost: 3
   TroopUnlocks:
   - {fileID: 11400000, guid: 80607047b9e0b824d93963c5fc2ce1c3, type: 2}
   - {fileID: 11400000, guid: cc874a814a8cef647bfc6cf3037738f3, type: 2}

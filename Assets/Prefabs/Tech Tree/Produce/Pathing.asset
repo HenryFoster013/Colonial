@@ -15,8 +15,8 @@ MonoBehaviour:
   FollowingTech:
   - {fileID: 11400000, guid: 47d1fccd45a91ab48bd0044564c90b11, type: 2}
   _Name: Paving
-  _Image: {fileID: 0}
-  _Cost: 0
+  _Image: {fileID: 21300000, guid: 688a475a644a0c544b83421ba2fa6529, type: 3}
+  _Cost: 4
   TroopUnlocks: []
   BuildingUnlocks:
   - {fileID: 11400000, guid: 2e6b3d754ca45084c851c7ec8f050415, type: 2}
