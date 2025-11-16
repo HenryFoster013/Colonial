@@ -5,6 +5,7 @@ using UnityEngine;
 public class BG_MusicNode : MonoBehaviour
 {
     [SerializeField] AudioSource _AudioSource;
+    [HideInInspector] public AudioClip Clip;
 
     float target_volume = 0;
     bool mark_for_death = false;
@@ -13,11 +14,13 @@ public class BG_MusicNode : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
     }
 
-    public void Play(AudioClip clip){
+    public void Play(AudioClip clip, bool loop){
+        Clip = clip;
         if(clip == null)
             Destroy(this.gameObject);
         _AudioSource.clip = clip;
         _AudioSource.Play();
+        _AudioSource.loop = loop;
         target_volume = _AudioSource.volume;
         _AudioSource.volume = 0;
     }

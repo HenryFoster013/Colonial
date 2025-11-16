@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FollowingTech:
   - {fileID: 11400000, guid: 47d1fccd45a91ab48bd0044564c90b11, type: 2}
-  _Name: Pavement
+  _Name: Paving
   _Image: {fileID: 0}
   _Cost: 0
   TroopUnlocks: []

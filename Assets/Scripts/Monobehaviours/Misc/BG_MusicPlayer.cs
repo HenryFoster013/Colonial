@@ -6,6 +6,7 @@ public class BG_MusicPlayer : MonoBehaviour
 {
     [SerializeField] AudioClip Track;
     [SerializeField] GameObject NodePrefab;
+    [SerializeField] bool Loop = true;
 
     void Start(){
         SearchForTrack();
@@ -19,16 +20,19 @@ public class BG_MusicPlayer : MonoBehaviour
             return;
         }
 
+        AudioClip clip = null;
+
         bool song_exists = false;
         foreach(GameObject g in all_nodes){
             BG_MusicNode node = g.GetComponent<BG_MusicNode>();
+            clip = node.Clip;
             if(!node.Validate(Track))
                 node.Terminate();
             else
                 song_exists = !node.Deathly();
         }
 
-        if(!song_exists)
+        if(!song_exists || clip != Track)
             CreateSong();
     }
 
@@ -36,6 +40,6 @@ public class BG_MusicPlayer : MonoBehaviour
         if(Track == null)
             return;
         GameObject g = GameObject.Instantiate(NodePrefab);
-        g.GetComponent<BG_MusicNode>().Play(Track);
+        g.GetComponent<BG_MusicNode>().Play(Track, Loop);
     }
 }

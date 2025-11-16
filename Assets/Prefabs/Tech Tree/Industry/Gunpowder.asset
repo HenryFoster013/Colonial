@@ -15,7 +15,7 @@ MonoBehaviour:
   FollowingTech:
   - {fileID: 11400000, guid: 47b5ee1b65f277447b7742eaf2711604, type: 2}
   - {fileID: 11400000, guid: 08d22b0d15b894f4786a79945c2b53ca, type: 2}
-  _Name: Gunpowder
+  _Name: Blackpowder
   _Image: {fileID: 0}
   _Cost: 0
   TroopUnlocks: []

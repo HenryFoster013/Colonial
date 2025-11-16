@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Type: British
   _Name: British Empire
+  _VictoryText: Rule Britannia!
   _Troops:
   - {fileID: 11400000, guid: 257afc0480c85e04bb1fe939e7169d4a, type: 2}
   - {fileID: 11400000, guid: 67d643b8dc5429a44940e098e58a04f0, type: 2}

@@ -10,7 +10,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] string ServerBrowserScene = "Server Browser";
     [SerializeField] SoundEffectLookup SFX_Lookup;
     [SerializeField] BackgroundColouring BG;
-    [SerializeField] SettingsWindow Settings;
+    [SerializeField] Window Settings;
+    [SerializeField] Window Credits;
     
     public void QuickPlay(){
         PlayerPrefs.SetString("LOAD ORIGIN", "Title Screen");
@@ -33,5 +34,9 @@ public class MainMenu : MonoBehaviour
 
     public void SettingsMenu(){
         Settings.Open();
+    }
+
+    public void CreditsMenu(){
+        Credits.Open();
     }
 }

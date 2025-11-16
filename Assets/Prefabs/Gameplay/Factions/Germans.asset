@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Type: Germans
   _Name: Deutsches Reich
+  _VictoryText: "Deutschland \xFCber alles!"
   _Troops:
   - {fileID: 11400000, guid: 257afc0480c85e04bb1fe939e7169d4a, type: 2}
   - {fileID: 11400000, guid: 3d80bec8ebe9291489ff56d68803403d, type: 2}

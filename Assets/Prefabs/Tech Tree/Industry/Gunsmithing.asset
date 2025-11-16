@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Gunsmithing
   m_EditorClassIdentifier: 
   FollowingTech: []
-  _Name: Gunsmithing
+  _Name: Gun-smithing
   _Image: {fileID: 0}
   _Cost: 0
   TroopUnlocks:

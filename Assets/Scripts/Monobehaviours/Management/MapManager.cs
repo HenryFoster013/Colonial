@@ -15,6 +15,9 @@ public class MapManager : NetworkBehaviour
     [SerializeField] SessionManager _SessionManager;
     [SerializeField] GameplayManager _GameplayManager;
     [SerializeField] SoundEffectLookup SFX_Lookup;
+    [SerializeField] ConnectionChecker _ConnectionChecker;
+    [SerializeField] PlayerManager _PlayerManager;
+    [SerializeField] GameObject ExitFade;
     public bool AnimatedWater = true;
 
     [Header(" - Map - ")]
@@ -683,6 +686,46 @@ public class MapManager : NetworkBehaviour
         stats.SetName(TileToLocationName(Tiles[tile_id]));
         stats.RefreshDetails(this);
         RecalculateTotalValue();
+
+        if(TotalConquest()){
+            EndGame();
+        }
+    }
+
+    public bool TotalConquest(){
+        bool valid = true;
+        Faction facc = null;
+        
+        foreach(Tile t in city_tiles){
+            if(t.owner != null)
+                facc = t.owner;
+        }
+        PlayerPrefs.SetInt("WINNER", _FactionLookup.ID(facc));
+
+        foreach(Tile t in city_tiles){
+            if(t.owner != facc && t.owner != null)
+                valid = false;
+        }
+
+        wait_time = 3f;
+        if(valid && facc == _PlayerManager.OurFaction())
+            wait_time = 5f;
+
+        return valid;
+    }
+
+    float wait_time = 5f;
+    public void EndGame(){
+        ExitFade.SetActive(true);
+        _SessionManager.Game_Over = true;
+        _ConnectionChecker.SetOver(true);
+
+        StartCoroutine(GetOut(wait_time));
+    }
+
+    IEnumerator GetOut(float time){
+        yield return new WaitForSeconds(time);
+        _GameplayManager._ConnectionManager.DisconnectFromLobby("Game End");
     }
 
     void MarkTileAsOwned(Tile tile, Faction owner, bool do_not_overwrite){

@@ -43,7 +43,7 @@ public class LobbyUI : MonoBehaviour
     
     private static Random random = new Random();
     bool mcm_active, ep_active;
-    int mcm_player_count = 3;
+    int mcm_player_count = 4;
     string ep_session_name, ep_password, ep_user_name;
 
     // UI //

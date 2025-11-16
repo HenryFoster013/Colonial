@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Smithing
   m_EditorClassIdentifier: 
   FollowingTech: []
-  _Name: Smithing
-  _Description: 
+  _Name: Sword-smithing
   _Image: {fileID: 0}
   _Cost: 0
   TroopUnlocks:

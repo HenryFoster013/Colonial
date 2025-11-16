@@ -8,6 +8,7 @@ public class Faction : ScriptableObject
     [Header(" - Main - ")]
     [SerializeField] string _Type;
     [SerializeField] string _Name;
+    [SerializeField] string _VictoryText;
     [Header(" - Troops - ")]
     [SerializeField] TroopData[] _Troops;
     [SerializeField] Nameset _TroopNameset;
@@ -51,4 +52,5 @@ public class Faction : ScriptableObject
     public PieceData Fort(){return _Fort;}
     public int TextureOffset(){return _TextureOffset;}
     public SoundEffect Jingle(){return _Jingle;}
+    public string Victory(){return _VictoryText;}
 }

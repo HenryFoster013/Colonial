@@ -224,6 +224,8 @@ public class SessionManager : NetworkBehaviour
         CheckPlayers();
     }
 
+    public bool Game_Over = false;
+
     void CheckPlayers(){
         bool player_gone = false;
         foreach(PlayerInstance pi in player_instances){
@@ -231,7 +233,7 @@ public class SessionManager : NetworkBehaviour
                 player_gone = true;
         }
 
-        if(player_gone){
+        if(player_gone && !Game_Over){
             PlayerPrefs.SetString("Error Details", "Opponent suddenly disconnected.");
             _ConnectionManager.DisconnectFromLobby("Network Error");
         }

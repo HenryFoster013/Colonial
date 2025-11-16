@@ -20,10 +20,10 @@ MonoBehaviour:
   _IndustryCost: 1
   _RequiredPiece: {fileID: 11400000, guid: 7dea7803f9993034fbcfcad3a479fb9d, type: 2}
   _MoveDistance: 2
-  _AttackDistance: 1
+  _AttackDistance: 3
   _Vision: 2
   _Health: 3
-  _Damage: 1
+  _Damage: 2
   _MoveOnCloseKill: 1
   _ChainKills: 0
   _DefensiveBuff: 0

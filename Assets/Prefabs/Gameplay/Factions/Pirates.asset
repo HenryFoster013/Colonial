@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Type: Pirates
   _Name: Scallywags
+  _VictoryText: YYAAARRRR!!!
   _Troops:
   - {fileID: 11400000, guid: 257afc0480c85e04bb1fe939e7169d4a, type: 2}
   - {fileID: 11400000, guid: 79036089f12eb8648a8bb8d34d549399, type: 2}

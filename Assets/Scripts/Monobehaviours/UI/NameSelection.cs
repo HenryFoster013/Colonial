@@ -17,6 +17,8 @@ public class NameSelection : MonoBehaviour
     [SerializeField] GameObject Model;
     [SerializeField] TMP_Text TitleDisplay;
     [SerializeField] TMP_Text NameDisplay;
+    [SerializeField] Animator TroopAnim;
+    [SerializeField] GameObject[] Faces;
 
     string[] titles;
     string[] names;
@@ -40,13 +42,22 @@ public class NameSelection : MonoBehaviour
     public void RandomiseTitle(){
         PlaySFX("UI_1", SFX_Lookup);
         our_title = PlayerNameset.RandomPrefix();
+        ChangeFace();
         UpdateUI();
     }
 
     public void RandomiseName(){
         PlaySFX("UI_1", SFX_Lookup);
         our_name = PlayerNameset.RandomSuffix();
+        ChangeFace();
         UpdateUI();
+    }
+
+    void ChangeFace(){
+        TroopAnim.Play("Bop", 0, 0);
+        foreach(GameObject g in Faces)
+            g.SetActive(false);
+        Faces[Random.Range(0, Faces.Length)].SetActive(true);
     }
 
     // UI Interactions //
