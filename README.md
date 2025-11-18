@@ -1,42 +1,12 @@
 # Colonial
 ## Introduction
-Colonial is a turn-based multiplayer strategy game. Players must create and move pieces around a board of randomly generated terrain, settling and conquering territory until they are the only faction remaining.
-The game is online-multiplayer, made in Unity in C#, with the networking done in Photon Fusion 2.
+Colonial is a turn-based multiplayer strategy game. Players must create and move pieces around a board of randomly generated terrain, settling and conquering territory until they are the only faction remaining. The game is online-multiplayer, made in Unity in C#, with the networking done in Photon Fusion 2.
+## About the Project
+## Personal Comment
+I wanted to develop something akin to 'The Battle of Polytopia' in my free time, I'm a huge fan of the game and this project was less about making an open-source competitor but rather just trying to learn more about networking in Unity. I've made multiplayer games before, but haven't worked on any since 2021 and I was well aware starting this project that my toolset was out-of-date at best. My previous projects have all been chat-room styled games where players connect to a session and role-play as various characters, so I viewed a multiplayer strategy game as something complex enough to be a real challenge to develop.
 
-## Gameplay
-### Main Loop
-### Troops
-### Resource Management
-### Win Condition
+I've learned alot about networking, I'm very proud of this project and had alot of fun working on it. I do feel I made a few mistakes early-on that limited development however. Primarily the game uses the client-host p2p model. This creates issues communicating information and the game struggles to run on browser to the degree that I have avoided uploading a WebGL version. This is a particular shame as this was a real hope I had for the project that was lost due to poor research and planning. I've traditionally used photon and I have found them to be a reliable service, however the poor documentation for Photon Fusion 2, the clashing hosting styles and the empty forums made it very frustrating to work with compared to legacy versions. I want to continue making multiplayer games so these were valuable lessons to learn that I will be taking forward.
 
-## Comparative to _The Battle of Polytopia_
-Some may notice that this game is heavily inspired by _The Battle of Polytopia_. I love _The Battle of Polytopia_, my favourite aspect of the gameplay loop has always been the nation building, which sadly isn't the main focus. This is my attempt to capture what Polytopia has, whilst building upon the nation building mechanics. I've designed some key changes. I've chosen to list these below as these in the context of Polytopia best explain my thinking during development. 
+One huge takeaway for me though was how fun creating a procedural game was. I'm a programmer at heart and when developing video games I often find myself becoming burnt out at the level design and art stages of development. Having a project where I can quickly create a feature and see it's immediate effect on the game world was so much fun and is something I will 100% be taking further on future projects.
 
- - The game is 3D
- - The map takes place on a hexagonal grid.
- - The map is Minecraft-styled randomly generated terrain.
- - Players can be within the same faction and work together.
- - Each faction has a flag and identity for roleplay.
- - Resources are now split into four categories: currency, population, produce and materials.
- - Troops require different variable amounts of resources to be spawned and used.
- - Tech tree progression is dependant on resource availablity.
- - A more expansive peace treaty system, where players can set a turn limit for the treaty as well as demand successions from other players.
- - Gift/trade system, where players can gift or trade resources.
- - Coalition system where players can agree to attack a specific faction without defining final peace between them.
- - Roads are much more valuable as connected cities now share resources.
- - Roads and builings can be pillaged and/or destroyed.
- - Capitals are the only city that matters, players lose regardless if their capital is taken
- - A player can abandon a capital, for another city, designating that city as the new capital and leaving the previous capital unclaimed.
- - Engineer class can place certain buildings on unmarked territory.
- - Random world events such as storms.
- - Buffs and Debuffs to resource management via political decisions and random luck-based events.
-- Not all troops have a direct comparisons, some (such as 'knights', now 'dogs') have rebalanced counterparts, some are omitted entirely and some are new additions.
-- Troops have to interact with resources such as fruit for them to be claimed.
-
-Not all of these changes will make it into the final product, they are all dependant on how good they feel to play.
-This project is not finished, but will be updated regularily as I continue to progress on it.
-
-## Closing Thoughts and License
-This is easily the most fun I've ever had on a project. This is the second strategy game I've made and practicing my netcode and other good programming practices has been a great excercise.
-
-There is currently no license on the project, as I haven't decided which to use. Not that this project gets much attention anyway. I expect I'll add a license when I'm done developing.
+Overall, I had a lot of fun with this, I hope you find some enjoyment playing it. Thank you!
